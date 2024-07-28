@@ -1,0 +1,1555 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9A001C3D29B6122500BB42B9 /* CountApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A001C3C29B6122500BB42B9 /* CountApp.swift */; };
+		9A001C3F29B6122500BB42B9 /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A001C3E29B6122500BB42B9 /* Dashboard.swift */; };
+		9A0B0CC52C1FA08D00D94FB4 /* CircleBalanceGraphWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0B0CC42C1FA08D00D94FB4 /* CircleBalanceGraphWatch.swift */; };
+		9A0B0CC62C203FB400D94FB4 /* ReachableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9BC9BD2A7E9C7300A4404A /* ReachableView.swift */; };
+		9A0BAC062C244CA500622F9F /* CaloriesTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0BAC052C244CA500622F9F /* CaloriesTab.swift */; };
+		9A0BAC082C244D0E00622F9F /* CircleBalanceGraphOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0BAC072C244D0E00622F9F /* CircleBalanceGraphOverlay.swift */; };
+		9A0BAC0B2C244D6800622F9F /* CaloricTotalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0BAC0A2C244D6800622F9F /* CaloricTotalsView.swift */; };
+		9A0D04FE2C165E6B00AF7247 /* Connectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0D04FD2C165E6B00AF7247 /* Connectivity.swift */; };
+		9A0D04FF2C165E6B00AF7247 /* Connectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0D04FD2C165E6B00AF7247 /* Connectivity.swift */; };
+		9A0F2DC52AF6778D00780155 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AB83A272AF5879B00FBF3B3 /* WidgetKit.framework */; };
+		9A0F2DC62AF6778D00780155 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AB83A292AF5879B00FBF3B3 /* SwiftUI.framework */; };
+		9A0F2DCB2AF6778D00780155 /* BalanceWidgetCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0F2DCA2AF6778D00780155 /* BalanceWidgetCircle.swift */; };
+		9A0F2DD12AF6778E00780155 /* Count.kcal.widget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9A0F2DC42AF6778D00780155 /* Count.kcal.widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9A16C8D92C389E5200ED3B7E /* BarBalanceGraphWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8D82C389E5200ED3B7E /* BarBalanceGraphWatch.swift */; };
+		9A16C8DA2C389EC100ED3B7E /* BarBalanceGraphWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8D82C389E5200ED3B7E /* BarBalanceGraphWatch.swift */; };
+		9A16C8DC2C38A34400ED3B7E /* RectangleBalanceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DB2C38A34400ED3B7E /* RectangleBalanceBar.swift */; };
+		9A16C8DE2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DD2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift */; };
+		9A16C8E02C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DF2C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift */; };
+		9A16C8E12C38BBF200ED3B7E /* BarBalanceGraphWatchMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DF2C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift */; };
+		9A25A9282C1B7B29008AB1B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */; };
+		9A25A9292C1B7B29008AB1B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */; };
+		9A2A67F729CF96C4001E58DF /* PrognosisCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2A67F629CF96C4001E58DF /* PrognosisCard.swift */; };
+		9A2A67FA29CF9D7F001E58DF /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A2A67F929CF9D7F001E58DF /* Charts.framework */; };
+		9A2F7E672C34989100498A67 /* BalanceCornerTextNowMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F7E662C34989100498A67 /* BalanceCornerTextNowMidnight.swift */; };
+		9A31F9BD2B6AEBE800886BAE /* UnitsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A31F9BC2B6AEBE800886BAE /* UnitsCard.swift */; };
+		9A34AD4A2C2A1F4900A0C5A6 /* Connectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0D04FD2C165E6B00AF7247 /* Connectivity.swift */; };
+		9A34AD4B2C2A1F4A00A0C5A6 /* Connectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0D04FD2C165E6B00AF7247 /* Connectivity.swift */; };
+		9A368CA32A6E64F900280BF9 /* WeightDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */; };
+		9A3B60152C1E77E0006000B4 /* GraphCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* GraphCalculations.swift */; };
+		9A3B87832C30C8DD002D02D1 /* BalanceCircleGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B87822C30C8DD002D02D1 /* BalanceCircleGauge.swift */; };
+		9A3B87852C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B87842C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift */; };
+		9A3F8EAA2B348C1F00B0DC74 /* CaloriesMidnightCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */; };
+		9A480F6A2B19315600D79FAE /* ToggleViewModeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A480F692B19315600D79FAE /* ToggleViewModeIntent.swift */; };
+		9A4B47D92C17C10000F9168E /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A4B47D82C17C10000F9168E /* WatchConnectivity.framework */; };
+		9A4B47DB2C17C13300F9168E /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A4B47DA2C17C13300F9168E /* WatchConnectivity.framework */; };
+		9A4B728D2C13B639004853F0 /* HealhData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CBB2B3E2E7A0037628F /* HealhData.swift */; };
+		9A4B728E2C13B63E004853F0 /* HealthInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */; };
+		9A4B728F2C13B648004853F0 /* WeightDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */; };
+		9A4B72902C13B64B004853F0 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A59C1EB2B0A2E180058A502 /* Settings.swift */; };
+		9A4B72912C13B651004853F0 /* HKRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HKRepository.swift */; };
+		9A4B72922C13B653004853F0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A919DC22B233E380003C035 /* Extensions.swift */; };
+		9A4B72932C13B886004853F0 /* CircleBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */; };
+		9A4B72942C13B897004853F0 /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA785262B21CD9D007305F6 /* CircleProgressView.swift */; };
+		9A5460352B27C0D3009BF0A4 /* Pager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5460342B27C0D3009BF0A4 /* Pager.swift */; };
+		9A54D74A2C4FE79C0000A107 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A54D7492C4FE79C0000A107 /* Onboarding.swift */; };
+		9A57F5392B66813D00B8DF6D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9A57F5382B66813D00B8DF6D /* Localizable.xcstrings */; };
+		9A5828BD2C0A6683000AFE99 /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5828BC2C0A6683000AFE99 /* CircleProgressView.swift */; };
+		9A58E8E72C012F8A002C16D6 /* Streak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A58E8E62C012F8A002C16D6 /* Streak.swift */; };
+		9A59C1EC2B0A2E180058A502 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A59C1EB2B0A2E180058A502 /* Settings.swift */; };
+		9A5A005C2C3210C1002D548C /* BalanceCircleGraphMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5A005B2C3210C1002D548C /* BalanceCircleGraphMidnight.swift */; };
+		9A616F472A642A6C00B713C4 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A616F462A642A6C00B713C4 /* Card.swift */; };
+		9A616F492A642D3C00B713C4 /* CaloriesCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A616F482A642D3C00B713C4 /* CaloriesCard.swift */; };
+		9A6DA88D2B361ABF00585788 /* CaloriesCardTopRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA88C2B361ABF00585788 /* CaloriesCardTopRow.swift */; };
+		9A6DA88F2B361B3400585788 /* CaloriesCardTopRowCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA88E2B361B3400585788 /* CaloriesCardTopRowCenter.swift */; };
+		9A6DA8912B361D0700585788 /* BarBalanceGraphTopRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA8902B361D0700585788 /* BarBalanceGraphTopRow.swift */; };
+		9A6DA8932B361EC300585788 /* BarBalanceGraphBottomRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA8922B361EC300585788 /* BarBalanceGraphBottomRow.swift */; };
+		9A6DBD542C28CEE6000920DA /* BalanceCornerTextMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DBD532C28CEE6000920DA /* BalanceCornerTextMidnight.swift */; };
+		9A6DBD562C28D007000920DA /* BalanceCornerGaugeMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DBD552C28D007000920DA /* BalanceCornerGaugeMidnight.swift */; };
+		9A6DBD582C28D2E3000920DA /* BalanceCircleGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DBD572C28D2E3000920DA /* BalanceCircleGraph.swift */; };
+		9A6DBD592C28D35A000920DA /* CircleBalanceGraphWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0B0CC42C1FA08D00D94FB4 /* CircleBalanceGraphWatch.swift */; };
+		9A6DBD5A2C28D42E000920DA /* CircleBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */; };
+		9A6DBD5B2C28D452000920DA /* HealthInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */; };
+		9A6DBD5C2C28D464000920DA /* GraphCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* GraphCalculations.swift */; };
+		9A6DBD5D2C28D46F000920DA /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA785262B21CD9D007305F6 /* CircleProgressView.swift */; };
+		9A6DBD5F2C28D562000920DA /* ReachableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9BC9BD2A7E9C7300A4404A /* ReachableView.swift */; };
+		9A7A4DA22C28A8B70055C6CA /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9A57F5382B66813D00B8DF6D /* Localizable.xcstrings */; };
+		9A7A4DA32C28A9CB0055C6CA /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9A57F5382B66813D00B8DF6D /* Localizable.xcstrings */; };
+		9A7A4DA42C28A9EC0055C6CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */; };
+		9A7A4DA52C28AA1D0055C6CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */; };
+		9A85F1FA2C3756F1001FA5D0 /* RectangleBalanceMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A85F1F92C3756F1001FA5D0 /* RectangleBalanceMidnight.swift */; };
+		9A8BA4062B4054ED0011D412 /* BackgroundColorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BA4052B4054ED0011D412 /* BackgroundColorSection.swift */; };
+		9A8BA4092B4055B70011D412 /* ColorsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BA4082B4055B70011D412 /* ColorsCard.swift */; };
+		9A8BA40F2B4057720011D412 /* CalorieColorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BA40E2B4057720011D412 /* CalorieColorSection.swift */; };
+		9A8BA4122B40591D0011D412 /* ThemesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BA4112B40591D0011D412 /* ThemesSection.swift */; };
+		9A919DC32B233E380003C035 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A919DC22B233E380003C035 /* Extensions.swift */; };
+		9A92F1662B052023009C4A2A /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A92F1652B052023009C4A2A /* SettingsPage.swift */; };
+		9A92F1682B054C30009C4A2A /* IconPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A92F1672B054C2F009C4A2A /* IconPicker.swift */; };
+		9A92F16D2B06CE1D009C4A2A /* EnergySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A92F16C2B06CE1D009C4A2A /* EnergySettingsView.swift */; };
+		9A92F16F2B06CF06009C4A2A /* NutrientsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A92F16E2B06CF06009C4A2A /* NutrientsCard.swift */; };
+		9A9BC9BE2A7E9C7300A4404A /* ReachableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9BC9BD2A7E9C7300A4404A /* ReachableView.swift */; };
+		9AA412FF2C24D90D005B9D73 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AB83A272AF5879B00FBF3B3 /* WidgetKit.framework */; };
+		9AA413002C24D90D005B9D73 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AB83A292AF5879B00FBF3B3 /* SwiftUI.framework */; };
+		9AA413032C24D90D005B9D73 /* BalanceCornerGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA413022C24D90D005B9D73 /* BalanceCornerGauge.swift */; };
+		9AA413092C24D90E005B9D73 /* Count.kcal.complications.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9AA412FE2C24D90D005B9D73 /* Count.kcal.complications.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9AA413102C2630D5005B9D73 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA4130F2C2630D5005B9D73 /* Bundle.swift */; };
+		9AA413112C264C4D005B9D73 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A919DC22B233E380003C035 /* Extensions.swift */; };
+		9AA72DA82B02C33000E32650 /* BarBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA72DA72B02C33000E32650 /* BarBalanceGraph.swift */; };
+		9AA72DAB2B02EB8200E32650 /* BarBalanceGraphMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA72DAA2B02EB8200E32650 /* BarBalanceGraphMidnight.swift */; };
+		9AA72DAE2B04CAAD00E32650 /* NutritionWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA72DAD2B04CAAD00E32650 /* NutritionWidget.swift */; };
+		9AA785272B21CD9D007305F6 /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA785262B21CD9D007305F6 /* CircleProgressView.swift */; };
+		9AADF00F2B6FC28100774AE7 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9A57F5382B66813D00B8DF6D /* Localizable.xcstrings */; };
+		9AAF6E502B3F183900B9363E /* ThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAF6E4F2B3F183900B9363E /* ThemeButton.swift */; };
+		9AB4BA0A2B00D7DD00176682 /* BalanceDataLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB4BA092B00D7DD00176682 /* BalanceDataLabels.swift */; };
+		9AB9ABF02C344CEF00DEE2D8 /* BalanceCircleThickGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB9ABEF2C344CEF00DEE2D8 /* BalanceCircleThickGraph.swift */; };
+		9AB9ABF22C344F6200DEE2D8 /* BalanceCircleThickGraphMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB9ABF12C344F6200DEE2D8 /* BalanceCircleThickGraphMidnight.swift */; };
+		9ABBD8FF2BE8213F003EC608 /* WeekBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABBD8FE2BE8213F003EC608 /* WeekBalanceGraph.swift */; };
+		9ABFA7A22C0A3A6300024D2F /* CircleBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */; };
+		9ABFA7AE2C0A3BC700024D2F /* ReachableView#.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7AD2C0A3BC700024D2F /* ReachableView#.swift */; };
+		9ABFA7B02C0A3C5A00024D2F /* BarBalanceGraph#.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7AF2C0A3C5A00024D2F /* BarBalanceGraph#.swift */; };
+		9ABFA7B22C0A3C7100024D2F /* CaloriesCardTopRow#.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7B12C0A3C7100024D2F /* CaloriesCardTopRow#.swift */; };
+		9ABFA7B52C0A3C8300024D2F /* BarBalanceGraphBottomRow#.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7B32C0A3C8300024D2F /* BarBalanceGraphBottomRow#.swift */; };
+		9ABFA7B72C0A3CBA00024D2F /* BarBalanceGraphTopRow#.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7B62C0A3CBA00024D2F /* BarBalanceGraphTopRow#.swift */; };
+		9ABFA7B92C0A3D8200024D2F /* CaloriesCardTopRowCenter#.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7B82C0A3D8200024D2F /* CaloriesCardTopRowCenter#.swift */; };
+		9ABFA7BA2C0A411300024D2F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A59C1EB2B0A2E180058A502 /* Settings.swift */; };
+		9ABFA7BB2C0A412D00024D2F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A919DC22B233E380003C035 /* Extensions.swift */; };
+		9ABFA7BC2C0A413400024D2F /* HKRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HKRepository.swift */; };
+		9ABFA7BD2C0A413A00024D2F /* ToggleViewModeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A480F692B19315600D79FAE /* ToggleViewModeIntent.swift */; };
+		9ABFA7BE2C0A415400024D2F /* WeightDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */; };
+		9ABFA7C02C0A450500024D2F /* BalanceDataLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7BF2C0A450500024D2F /* BalanceDataLabels.swift */; };
+		9ABFA7C22C0A451A00024D2F /* BarBalanceGraphMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7C12C0A451A00024D2F /* BarBalanceGraphMidnight.swift */; };
+		9ABFA7C42C0A453B00024D2F /* CircleBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7C32C0A453B00024D2F /* CircleBalanceGraph.swift */; };
+		9AC2E2822C12742500B07EBE /* WatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC2E2812C12742500B07EBE /* WatchApp.swift */; };
+		9AC2E2842C12742500B07EBE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC2E2832C12742500B07EBE /* ContentView.swift */; };
+		9AC2E28C2C12742700B07EBE /* Count.kcal.watch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 9AC2E27F2C12742500B07EBE /* Count.kcal.watch.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9AC319DF2C073A1B0039E3C3 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 9AC319DE2C073A1B0039E3C3 /* PrivacyInfo.xcprivacy */; };
+		9AC319E02C073A1B0039E3C3 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 9AC319DE2C073A1B0039E3C3 /* PrivacyInfo.xcprivacy */; };
+		9AD25EBE2A656A5E00C6E6E1 /* HealthInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */; };
+		9AD25EC02A65A82000C6E6E1 /* WeightCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD25EBF2A65A82000C6E6E1 /* WeightCard.swift */; };
+		9AD5F54F2C277B6E003FE1C5 /* HealhData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CBB2B3E2E7A0037628F /* HealhData.swift */; };
+		9AD5F5502C277C2E003FE1C5 /* HKBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFAAA6E2B5FF9DC00034CA9 /* HKBridge.swift */; };
+		9AD5F5512C277C43003FE1C5 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A59C1EB2B0A2E180058A502 /* Settings.swift */; };
+		9AD5F5522C277C9D003FE1C5 /* HKRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HKRepository.swift */; };
+		9AD5F5532C277D14003FE1C5 /* WeightDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */; };
+		9AD5F5552C282616003FE1C5 /* HealthDataTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD5F5542C282616003FE1C5 /* HealthDataTimelineProvider.swift */; };
+		9AD5F5582C28279C003FE1C5 /* BalanceCornerText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD5F5572C28279C003FE1C5 /* BalanceCornerText.swift */; };
+		9ADC38112AF6FCBC005CCFEF /* CountWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC380F2AF6FC00005CCFEF /* CountWidgetBundle.swift */; };
+		9ADC38132AF6FD0C005CCFEF /* BalanceWidgetBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC38122AF6FD0C005CCFEF /* BalanceWidgetBar.swift */; };
+		9AE1804E2C35FCDA00C37AA9 /* RectangleBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE1804D2C35FCDA00C37AA9 /* RectangleBalance.swift */; };
+		9AE3D3A52B7970EC00483339 /* CDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE3D3A42B7970EC00483339 /* CDatePicker.swift */; };
+		9AEA55CA2A5B0081000AB057 /* HKRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HKRepository.swift */; };
+		9AEA55CC2A5D65DC000AB057 /* MacroCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55CB2A5D65DC000AB057 /* MacroCard.swift */; };
+		9AF309ED2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF309EC2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift */; };
+		9AF309EF2C32B3C70081FDCE /* BalanceCircleFullGraphMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF309EE2C32B3C70081FDCE /* BalanceCircleFullGraphMidnight.swift */; };
+		9AF39CB32B3DBA4C0037628F /* WeightTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CB22B3DBA4C0037628F /* WeightTopBar.swift */; };
+		9AF39CB62B3DC61A0037628F /* MonthlyChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CB52B3DC61A0037628F /* MonthlyChart.swift */; };
+		9AF39CB82B3DC9180037628F /* WeeklyChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CB72B3DC9180037628F /* WeeklyChart.swift */; };
+		9AF39CBA2B3DC9B20037628F /* CircleChartSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CB92B3DC9B20037628F /* CircleChartSymbol.swift */; };
+		9AF39CBC2B3E2E7A0037628F /* HealhData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CBB2B3E2E7A0037628F /* HealhData.swift */; };
+		9AF39CBD2B3E2E980037628F /* HealhData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CBB2B3E2E7A0037628F /* HealhData.swift */; };
+		9AF4DC922BF2C4B5000EF0A5 /* MacroSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF4DC912BF2C4B5000EF0A5 /* MacroSlider.swift */; };
+		9AFAAA6F2B5FF9DC00034CA9 /* HKBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFAAA6E2B5FF9DC00034CA9 /* HKBridge.swift */; };
+		9AFDBA992AF822FE003E8B9C /* HealthInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9A0F2DCF2AF6778E00780155 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9A001C3129B6122500BB42B9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9A0F2DC32AF6778C00780155;
+			remoteInfo = TestWidgetExtension;
+		};
+		9AA413072C24D90E005B9D73 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9A001C3129B6122500BB42B9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9AA412FD2C24D90D005B9D73;
+			remoteInfo = Count.kcal.complicationsExtension;
+		};
+		9AC2E28A2C12742700B07EBE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9A001C3129B6122500BB42B9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9AC2E27E2C12742500B07EBE;
+			remoteInfo = "Count.kcal.watch Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9AA4130A2C24D90E005B9D73 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				9AA413092C24D90E005B9D73 /* Count.kcal.complications.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AB83A392AF5879C00FBF3B3 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				9A0F2DD12AF6778E00780155 /* Count.kcal.widget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AC2E28D2C12742700B07EBE /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				9AC2E28C2C12742700B07EBE /* Count.kcal.watch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		9A001C3929B6122500BB42B9 /* Count.kcal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Count.kcal.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A001C3C29B6122500BB42B9 /* CountApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountApp.swift; sourceTree = "<group>"; };
+		9A001C3E29B6122500BB42B9 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
+		9A0B0CC42C1FA08D00D94FB4 /* CircleBalanceGraphWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleBalanceGraphWatch.swift; sourceTree = "<group>"; };
+		9A0BAC052C244CA500622F9F /* CaloriesTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaloriesTab.swift; sourceTree = "<group>"; };
+		9A0BAC072C244D0E00622F9F /* CircleBalanceGraphOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleBalanceGraphOverlay.swift; sourceTree = "<group>"; };
+		9A0BAC0A2C244D6800622F9F /* CaloricTotalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaloricTotalsView.swift; sourceTree = "<group>"; };
+		9A0D04FD2C165E6B00AF7247 /* Connectivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connectivity.swift; sourceTree = "<group>"; };
+		9A0F2DC42AF6778D00780155 /* Count.kcal.widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Count.kcal.widget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A0F2DCA2AF6778D00780155 /* BalanceWidgetCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceWidgetCircle.swift; sourceTree = "<group>"; };
+		9A0F2DCE2AF6778E00780155 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9A16C8D82C389E5200ED3B7E /* BarBalanceGraphWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphWatch.swift; sourceTree = "<group>"; };
+		9A16C8DB2C38A34400ED3B7E /* RectangleBalanceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleBalanceBar.swift; sourceTree = "<group>"; };
+		9A16C8DD2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleBalanceBarMidnight.swift; sourceTree = "<group>"; };
+		9A16C8DF2C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphWatchMidnight.swift; sourceTree = "<group>"; };
+		9A25A9222C1B7A4C008AB1B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9A2A67F629CF96C4001E58DF /* PrognosisCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrognosisCard.swift; sourceTree = "<group>"; };
+		9A2A67F929CF9D7F001E58DF /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = System/Library/Frameworks/Charts.framework; sourceTree = SDKROOT; };
+		9A2F7E662C34989100498A67 /* BalanceCornerTextNowMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCornerTextNowMidnight.swift; sourceTree = "<group>"; };
+		9A31F9BC2B6AEBE800886BAE /* UnitsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitsCard.swift; sourceTree = "<group>"; };
+		9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightDataViewModel.swift; sourceTree = "<group>"; };
+		9A3B60142C1E77E0006000B4 /* GraphCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphCalculations.swift; sourceTree = "<group>"; };
+		9A3B87822C30C8DD002D02D1 /* BalanceCircleGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGauge.swift; sourceTree = "<group>"; };
+		9A3B87842C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGaugeMidnight.swift; sourceTree = "<group>"; };
+		9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CaloriesMidnightCard.swift; path = Count.kcal/Dashboard/CaloriesMidnightCard.swift; sourceTree = SOURCE_ROOT; };
+		9A480F692B19315600D79FAE /* ToggleViewModeIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleViewModeIntent.swift; sourceTree = "<group>"; };
+		9A4B47D82C17C10000F9168E /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
+		9A4B47DA2C17C13300F9168E /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS10.5.sdk/System/Library/Frameworks/WatchConnectivity.framework; sourceTree = DEVELOPER_DIR; };
+		9A4B72952C13BFF2004853F0 /* Count.kcal.watch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Count.kcal.watch.entitlements; sourceTree = "<group>"; };
+		9A5460342B27C0D3009BF0A4 /* Pager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pager.swift; sourceTree = "<group>"; };
+		9A54D7492C4FE79C0000A107 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
+		9A57F5382B66813D00B8DF6D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		9A5828BC2C0A6683000AFE99 /* CircleProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleProgressView.swift; sourceTree = "<group>"; };
+		9A58E8E62C012F8A002C16D6 /* Streak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Streak.swift; sourceTree = "<group>"; };
+		9A59C1EB2B0A2E180058A502 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		9A5A005B2C3210C1002D548C /* BalanceCircleGraphMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGraphMidnight.swift; sourceTree = "<group>"; };
+		9A616F462A642A6C00B713C4 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		9A616F482A642D3C00B713C4 /* CaloriesCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaloriesCard.swift; sourceTree = "<group>"; };
+		9A6DA88C2B361ABF00585788 /* CaloriesCardTopRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaloriesCardTopRow.swift; sourceTree = "<group>"; };
+		9A6DA88E2B361B3400585788 /* CaloriesCardTopRowCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaloriesCardTopRowCenter.swift; sourceTree = "<group>"; };
+		9A6DA8902B361D0700585788 /* BarBalanceGraphTopRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphTopRow.swift; sourceTree = "<group>"; };
+		9A6DA8922B361EC300585788 /* BarBalanceGraphBottomRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphBottomRow.swift; sourceTree = "<group>"; };
+		9A6DBD532C28CEE6000920DA /* BalanceCornerTextMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCornerTextMidnight.swift; sourceTree = "<group>"; };
+		9A6DBD552C28D007000920DA /* BalanceCornerGaugeMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCornerGaugeMidnight.swift; sourceTree = "<group>"; };
+		9A6DBD572C28D2E3000920DA /* BalanceCircleGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGraph.swift; sourceTree = "<group>"; };
+		9A85F1F92C3756F1001FA5D0 /* RectangleBalanceMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleBalanceMidnight.swift; sourceTree = "<group>"; };
+		9A8BA4052B4054ED0011D412 /* BackgroundColorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundColorSection.swift; sourceTree = "<group>"; };
+		9A8BA4082B4055B70011D412 /* ColorsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsCard.swift; sourceTree = "<group>"; };
+		9A8BA40E2B4057720011D412 /* CalorieColorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieColorSection.swift; sourceTree = "<group>"; };
+		9A8BA4112B40591D0011D412 /* ThemesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesSection.swift; sourceTree = "<group>"; };
+		9A919DC22B233E380003C035 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		9A92F1652B052023009C4A2A /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
+		9A92F1672B054C2F009C4A2A /* IconPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPicker.swift; sourceTree = "<group>"; };
+		9A92F16C2B06CE1D009C4A2A /* EnergySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergySettingsView.swift; sourceTree = "<group>"; };
+		9A92F16E2B06CF06009C4A2A /* NutrientsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientsCard.swift; sourceTree = "<group>"; };
+		9A9BC9BD2A7E9C7300A4404A /* ReachableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachableView.swift; sourceTree = "<group>"; };
+		9AA412FE2C24D90D005B9D73 /* Count.kcal.complications.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Count.kcal.complications.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AA413022C24D90D005B9D73 /* BalanceCornerGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCornerGauge.swift; sourceTree = "<group>"; };
+		9AA413062C24D90E005B9D73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9AA4130E2C259ACB005B9D73 /* Count.kcal.complications.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Count.kcal.complications.entitlements; sourceTree = "<group>"; };
+		9AA4130F2C2630D5005B9D73 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
+		9AA72DA72B02C33000E32650 /* BarBalanceGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraph.swift; sourceTree = "<group>"; };
+		9AA72DAA2B02EB8200E32650 /* BarBalanceGraphMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphMidnight.swift; sourceTree = "<group>"; };
+		9AA72DAD2B04CAAD00E32650 /* NutritionWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionWidget.swift; sourceTree = "<group>"; };
+		9AA785262B21CD9D007305F6 /* CircleProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleProgressView.swift; sourceTree = "<group>"; };
+		9AAF6E4F2B3F183900B9363E /* ThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButton.swift; sourceTree = "<group>"; };
+		9AB4BA092B00D7DD00176682 /* BalanceDataLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceDataLabels.swift; sourceTree = "<group>"; };
+		9AB83A272AF5879B00FBF3B3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		9AB83A292AF5879B00FBF3B3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		9AB9ABEF2C344CEF00DEE2D8 /* BalanceCircleThickGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleThickGraph.swift; sourceTree = "<group>"; };
+		9AB9ABF12C344F6200DEE2D8 /* BalanceCircleThickGraphMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleThickGraphMidnight.swift; sourceTree = "<group>"; };
+		9ABBD8FE2BE8213F003EC608 /* WeekBalanceGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekBalanceGraph.swift; sourceTree = "<group>"; };
+		9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleBalanceGraph.swift; sourceTree = "<group>"; };
+		9ABFA7AD2C0A3BC700024D2F /* ReachableView#.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ReachableView#.swift"; sourceTree = "<group>"; };
+		9ABFA7AF2C0A3C5A00024D2F /* BarBalanceGraph#.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BarBalanceGraph#.swift"; sourceTree = "<group>"; };
+		9ABFA7B12C0A3C7100024D2F /* CaloriesCardTopRow#.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CaloriesCardTopRow#.swift"; sourceTree = "<group>"; };
+		9ABFA7B32C0A3C8300024D2F /* BarBalanceGraphBottomRow#.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BarBalanceGraphBottomRow#.swift"; sourceTree = "<group>"; };
+		9ABFA7B62C0A3CBA00024D2F /* BarBalanceGraphTopRow#.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BarBalanceGraphTopRow#.swift"; sourceTree = "<group>"; };
+		9ABFA7B82C0A3D8200024D2F /* CaloriesCardTopRowCenter#.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CaloriesCardTopRowCenter#.swift"; sourceTree = "<group>"; };
+		9ABFA7BF2C0A450500024D2F /* BalanceDataLabels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceDataLabels.swift; sourceTree = "<group>"; };
+		9ABFA7C12C0A451A00024D2F /* BarBalanceGraphMidnight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphMidnight.swift; sourceTree = "<group>"; };
+		9ABFA7C32C0A453B00024D2F /* CircleBalanceGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleBalanceGraph.swift; sourceTree = "<group>"; };
+		9AC2E27F2C12742500B07EBE /* Count.kcal.watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Count.kcal.watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AC2E2812C12742500B07EBE /* WatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WatchApp.swift; path = /Users/berken/Desktop/firstswift/Count.kcal/Count.kcal.watch/WatchApp.swift; sourceTree = "<absolute>"; };
+		9AC2E2832C12742500B07EBE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = /Users/berken/Desktop/firstswift/Count.kcal/Count.kcal.watch/ContentView.swift; sourceTree = "<absolute>"; };
+		9AC319DE2C073A1B0039E3C3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthInterface.swift; sourceTree = "<group>"; };
+		9AD25EBF2A65A82000C6E6E1 /* WeightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightCard.swift; sourceTree = "<group>"; };
+		9AD5F5542C282616003FE1C5 /* HealthDataTimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataTimelineProvider.swift; sourceTree = "<group>"; };
+		9AD5F5572C28279C003FE1C5 /* BalanceCornerText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCornerText.swift; sourceTree = "<group>"; };
+		9ADC380C2AF692C9005CCFEF /* Count.kcal.widget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Count.kcal.widget.entitlements; sourceTree = "<group>"; };
+		9ADC380F2AF6FC00005CCFEF /* CountWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountWidgetBundle.swift; sourceTree = "<group>"; };
+		9ADC38122AF6FD0C005CCFEF /* BalanceWidgetBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceWidgetBar.swift; sourceTree = "<group>"; };
+		9AE1804D2C35FCDA00C37AA9 /* RectangleBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleBalance.swift; sourceTree = "<group>"; };
+		9AE3D3A42B7970EC00483339 /* CDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDatePicker.swift; sourceTree = "<group>"; };
+		9AE457DC2B169C72009FA321 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9AEA55C42A5AD1F5000AB057 /* Count.kcal.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Count.kcal.entitlements; sourceTree = "<group>"; };
+		9AEA55C92A5B0081000AB057 /* HKRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKRepository.swift; sourceTree = "<group>"; };
+		9AEA55CB2A5D65DC000AB057 /* MacroCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacroCard.swift; sourceTree = "<group>"; };
+		9AF309EC2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleFullGraph.swift; sourceTree = "<group>"; };
+		9AF309EE2C32B3C70081FDCE /* BalanceCircleFullGraphMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleFullGraphMidnight.swift; sourceTree = "<group>"; };
+		9AF39CB22B3DBA4C0037628F /* WeightTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightTopBar.swift; sourceTree = "<group>"; };
+		9AF39CB52B3DC61A0037628F /* MonthlyChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyChart.swift; sourceTree = "<group>"; };
+		9AF39CB72B3DC9180037628F /* WeeklyChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyChart.swift; sourceTree = "<group>"; };
+		9AF39CB92B3DC9B20037628F /* CircleChartSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleChartSymbol.swift; sourceTree = "<group>"; };
+		9AF39CBB2B3E2E7A0037628F /* HealhData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealhData.swift; sourceTree = "<group>"; };
+		9AF4DC912BF2C4B5000EF0A5 /* MacroSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacroSlider.swift; sourceTree = "<group>"; };
+		9AFAAA6E2B5FF9DC00034CA9 /* HKBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKBridge.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9A001C3629B6122500BB42B9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A2A67FA29CF9D7F001E58DF /* Charts.framework in Frameworks */,
+				9A4B47D92C17C10000F9168E /* WatchConnectivity.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A0F2DC12AF6778C00780155 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A0F2DC62AF6778D00780155 /* SwiftUI.framework in Frameworks */,
+				9A0F2DC52AF6778D00780155 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AA412FB2C24D90D005B9D73 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9AA413002C24D90D005B9D73 /* SwiftUI.framework in Frameworks */,
+				9AA412FF2C24D90D005B9D73 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AC2E27C2C12742500B07EBE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A4B47DB2C17C13300F9168E /* WatchConnectivity.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9A001C3029B6122500BB42B9 = {
+			isa = PBXGroup;
+			children = (
+				9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */,
+				9A57F5382B66813D00B8DF6D /* Localizable.xcstrings */,
+				9AC319DE2C073A1B0039E3C3 /* PrivacyInfo.xcprivacy */,
+				9A001C3B29B6122500BB42B9 /* Count.kcal */,
+				9A0F2DC72AF6778D00780155 /* Count.kcal.widgets */,
+				9AC2E2802C12742500B07EBE /* Count.kcal.watch */,
+				9AA413012C24D90D005B9D73 /* Count.kcal.complications */,
+				9A001C3A29B6122500BB42B9 /* Products */,
+				9A2A67F829CF9D7F001E58DF /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		9A001C3A29B6122500BB42B9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9A001C3929B6122500BB42B9 /* Count.kcal.app */,
+				9A0F2DC42AF6778D00780155 /* Count.kcal.widget.appex */,
+				9AC2E27F2C12742500B07EBE /* Count.kcal.watch.app */,
+				9AA412FE2C24D90D005B9D73 /* Count.kcal.complications.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9A001C3B29B6122500BB42B9 /* Count.kcal */ = {
+			isa = PBXGroup;
+			children = (
+				9AE457DC2B169C72009FA321 /* Info.plist */,
+				9AEA55C42A5AD1F5000AB057 /* Count.kcal.entitlements */,
+				9AF39CBE2B3E2EC10037628F /* Abstract */,
+				9A001C3C29B6122500BB42B9 /* CountApp.swift */,
+				9A54D7492C4FE79C0000A107 /* Onboarding.swift */,
+				9A5460342B27C0D3009BF0A4 /* Pager.swift */,
+				9A6DA88A2B36194800585788 /* Dashboard */,
+				9AF39CB42B3DC57A0037628F /* WeightCard */,
+				9A92F16B2B06CD94009C4A2A /* Settings */,
+				9AD8FA0C2AF819CC0064D501 /* Views */,
+			);
+			path = Count.kcal;
+			sourceTree = "<group>";
+		};
+		9A0BAC042C244C4F00622F9F /* Tab.Calories */ = {
+			isa = PBXGroup;
+			children = (
+				9A0BAC052C244CA500622F9F /* CaloriesTab.swift */,
+				9A0BAC092C244D4600622F9F /* Views */,
+			);
+			path = Tab.Calories;
+			sourceTree = "<group>";
+		};
+		9A0BAC092C244D4600622F9F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9A0B0CC42C1FA08D00D94FB4 /* CircleBalanceGraphWatch.swift */,
+				9A16C8D82C389E5200ED3B7E /* BarBalanceGraphWatch.swift */,
+				9A16C8DF2C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift */,
+				9A0BAC072C244D0E00622F9F /* CircleBalanceGraphOverlay.swift */,
+				9A0BAC0A2C244D6800622F9F /* CaloricTotalsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9A0F2DC72AF6778D00780155 /* Count.kcal.widgets */ = {
+			isa = PBXGroup;
+			children = (
+				9A0F2DCE2AF6778E00780155 /* Info.plist */,
+				9ADC380C2AF692C9005CCFEF /* Count.kcal.widget.entitlements */,
+				9ABFA79C2C0A394000024D2F /* ExtensionBridge */,
+				9ADC380F2AF6FC00005CCFEF /* CountWidgetBundle.swift */,
+				9AFAAA702B5FFA6600034CA9 /* Widgets */,
+			);
+			path = Count.kcal.widgets;
+			sourceTree = "<group>";
+		};
+		9A2A67F829CF9D7F001E58DF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9A4B47D82C17C10000F9168E /* WatchConnectivity.framework */,
+				9A4B47DA2C17C13300F9168E /* WatchConnectivity.framework */,
+				9A2A67F929CF9D7F001E58DF /* Charts.framework */,
+				9AB83A272AF5879B00FBF3B3 /* WidgetKit.framework */,
+				9AB83A292AF5879B00FBF3B3 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9A6DA88A2B36194800585788 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				9A001C3E29B6122500BB42B9 /* Dashboard.swift */,
+				9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */,
+				9A6DA88B2B361A7D00585788 /* CaloriesCard */,
+				9AAF6E522B3F1F4300B9363E /* PrognosisCard */,
+				9AAF6E512B3F1E9E00B9363E /* NutritionCard */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		9A6DA88B2B361A7D00585788 /* CaloriesCard */ = {
+			isa = PBXGroup;
+			children = (
+				9A616F482A642D3C00B713C4 /* CaloriesCard.swift */,
+				9A6DA88C2B361ABF00585788 /* CaloriesCardTopRow.swift */,
+				9A6DA88E2B361B3400585788 /* CaloriesCardTopRowCenter.swift */,
+				9AA72DA72B02C33000E32650 /* BarBalanceGraph.swift */,
+				9A6DA8902B361D0700585788 /* BarBalanceGraphTopRow.swift */,
+				9A6DA8922B361EC300585788 /* BarBalanceGraphBottomRow.swift */,
+			);
+			path = CaloriesCard;
+			sourceTree = "<group>";
+		};
+		9A806A652C31825D00066CE6 /* Corner */ = {
+			isa = PBXGroup;
+			children = (
+				9AB9ABF82C345C8D00DEE2D8 /* Gauge */,
+				9AB9ABF72C345C8700DEE2D8 /* Text */,
+			);
+			path = Corner;
+			sourceTree = "<group>";
+		};
+		9A806A662C31826600066CE6 /* Circle */ = {
+			isa = PBXGroup;
+			children = (
+				9AB9ABF42C345C3200DEE2D8 /* Gauge */,
+				9AB9ABF32C345C2B00DEE2D8 /* Graph */,
+				9AB9ABF52C345C4400DEE2D8 /* Graph.thick */,
+				9AB9ABF62C345C5F00DEE2D8 /* Graph.full */,
+			);
+			path = Circle;
+			sourceTree = "<group>";
+		};
+		9A8BA4162B4079B90011D412 /* ColorsCard */ = {
+			isa = PBXGroup;
+			children = (
+				9A8BA4082B4055B70011D412 /* ColorsCard.swift */,
+				9A8BA4052B4054ED0011D412 /* BackgroundColorSection.swift */,
+				9A8BA40E2B4057720011D412 /* CalorieColorSection.swift */,
+				9A8BA4112B40591D0011D412 /* ThemesSection.swift */,
+				9AAF6E4F2B3F183900B9363E /* ThemeButton.swift */,
+			);
+			path = ColorsCard;
+			sourceTree = "<group>";
+		};
+		9A92F16B2B06CD94009C4A2A /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				9A92F1652B052023009C4A2A /* SettingsPage.swift */,
+				9A92F16C2B06CE1D009C4A2A /* EnergySettingsView.swift */,
+				9A92F16E2B06CF06009C4A2A /* NutrientsCard.swift */,
+				9A8BA4162B4079B90011D412 /* ColorsCard */,
+				9A31F9BC2B6AEBE800886BAE /* UnitsCard.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		9AA413012C24D90D005B9D73 /* Count.kcal.complications */ = {
+			isa = PBXGroup;
+			children = (
+				9AA4130E2C259ACB005B9D73 /* Count.kcal.complications.entitlements */,
+				9AA4130F2C2630D5005B9D73 /* Bundle.swift */,
+				9AD5F5542C282616003FE1C5 /* HealthDataTimelineProvider.swift */,
+				9AD5F5562C28269F003FE1C5 /* BalanceComplications */,
+				9AA413062C24D90E005B9D73 /* Info.plist */,
+			);
+			path = Count.kcal.complications;
+			sourceTree = "<group>";
+		};
+		9AAF6E512B3F1E9E00B9363E /* NutritionCard */ = {
+			isa = PBXGroup;
+			children = (
+				9AEA55CB2A5D65DC000AB057 /* MacroCard.swift */,
+				9A9BC9BD2A7E9C7300A4404A /* ReachableView.swift */,
+			);
+			path = NutritionCard;
+			sourceTree = "<group>";
+		};
+		9AAF6E522B3F1F4300B9363E /* PrognosisCard */ = {
+			isa = PBXGroup;
+			children = (
+				9A2A67F629CF96C4001E58DF /* PrognosisCard.swift */,
+			);
+			path = PrognosisCard;
+			sourceTree = "<group>";
+		};
+		9AB9ABF32C345C2B00DEE2D8 /* Graph */ = {
+			isa = PBXGroup;
+			children = (
+				9A6DBD572C28D2E3000920DA /* BalanceCircleGraph.swift */,
+				9A5A005B2C3210C1002D548C /* BalanceCircleGraphMidnight.swift */,
+			);
+			path = Graph;
+			sourceTree = "<group>";
+		};
+		9AB9ABF42C345C3200DEE2D8 /* Gauge */ = {
+			isa = PBXGroup;
+			children = (
+				9A3B87822C30C8DD002D02D1 /* BalanceCircleGauge.swift */,
+				9A3B87842C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift */,
+			);
+			path = Gauge;
+			sourceTree = "<group>";
+		};
+		9AB9ABF52C345C4400DEE2D8 /* Graph.thick */ = {
+			isa = PBXGroup;
+			children = (
+				9AB9ABEF2C344CEF00DEE2D8 /* BalanceCircleThickGraph.swift */,
+				9AB9ABF12C344F6200DEE2D8 /* BalanceCircleThickGraphMidnight.swift */,
+			);
+			path = Graph.thick;
+			sourceTree = "<group>";
+		};
+		9AB9ABF62C345C5F00DEE2D8 /* Graph.full */ = {
+			isa = PBXGroup;
+			children = (
+				9AF309EC2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift */,
+				9AF309EE2C32B3C70081FDCE /* BalanceCircleFullGraphMidnight.swift */,
+			);
+			path = Graph.full;
+			sourceTree = "<group>";
+		};
+		9AB9ABF72C345C8700DEE2D8 /* Text */ = {
+			isa = PBXGroup;
+			children = (
+				9AD5F5572C28279C003FE1C5 /* BalanceCornerText.swift */,
+				9A2F7E662C34989100498A67 /* BalanceCornerTextNowMidnight.swift */,
+				9A6DBD532C28CEE6000920DA /* BalanceCornerTextMidnight.swift */,
+			);
+			path = Text;
+			sourceTree = "<group>";
+		};
+		9AB9ABF82C345C8D00DEE2D8 /* Gauge */ = {
+			isa = PBXGroup;
+			children = (
+				9AA413022C24D90D005B9D73 /* BalanceCornerGauge.swift */,
+				9A6DBD552C28D007000920DA /* BalanceCornerGaugeMidnight.swift */,
+			);
+			path = Gauge;
+			sourceTree = "<group>";
+		};
+		9ABFA79C2C0A394000024D2F /* ExtensionBridge */ = {
+			isa = PBXGroup;
+			children = (
+				9AFAAA6E2B5FF9DC00034CA9 /* HKBridge.swift */,
+				9ABFA7BF2C0A450500024D2F /* BalanceDataLabels.swift */,
+				9ABFA7AF2C0A3C5A00024D2F /* BarBalanceGraph#.swift */,
+				9ABFA7B62C0A3CBA00024D2F /* BarBalanceGraphTopRow#.swift */,
+				9ABFA7B32C0A3C8300024D2F /* BarBalanceGraphBottomRow#.swift */,
+				9ABFA7B12C0A3C7100024D2F /* CaloriesCardTopRow#.swift */,
+				9ABFA7B82C0A3D8200024D2F /* CaloriesCardTopRowCenter#.swift */,
+				9ABFA7AD2C0A3BC700024D2F /* ReachableView#.swift */,
+				9ABFA7C12C0A451A00024D2F /* BarBalanceGraphMidnight.swift */,
+				9A5828BC2C0A6683000AFE99 /* CircleProgressView.swift */,
+				9ABFA7C32C0A453B00024D2F /* CircleBalanceGraph.swift */,
+			);
+			path = ExtensionBridge;
+			sourceTree = "<group>";
+		};
+		9AC2E2802C12742500B07EBE /* Count.kcal.watch */ = {
+			isa = PBXGroup;
+			children = (
+				9A25A9222C1B7A4C008AB1B4 /* Info.plist */,
+				9A4B72952C13BFF2004853F0 /* Count.kcal.watch.entitlements */,
+				9AC2E2812C12742500B07EBE /* WatchApp.swift */,
+				9AC2E2832C12742500B07EBE /* ContentView.swift */,
+				9A0BAC042C244C4F00622F9F /* Tab.Calories */,
+			);
+			name = Count.kcal.watch;
+			path = /Users/berken/Desktop/firstswift/Count.kcal/Count.kcal.watch;
+			sourceTree = "<absolute>";
+		};
+		9AD5F5562C28269F003FE1C5 /* BalanceComplications */ = {
+			isa = PBXGroup;
+			children = (
+				9A806A652C31825D00066CE6 /* Corner */,
+				9A806A662C31826600066CE6 /* Circle */,
+				9AE1804C2C35FCAF00C37AA9 /* Rectangle */,
+			);
+			path = BalanceComplications;
+			sourceTree = "<group>";
+		};
+		9AD8FA0A2AF819B40064D501 /* System */ = {
+			isa = PBXGroup;
+			children = (
+				9A59C1EB2B0A2E180058A502 /* Settings.swift */,
+				9AEA55C92A5B0081000AB057 /* HKRepository.swift */,
+				9A919DC22B233E380003C035 /* Extensions.swift */,
+				9A58E8E62C012F8A002C16D6 /* Streak.swift */,
+				9A0D04FD2C165E6B00AF7247 /* Connectivity.swift */,
+				9A480F692B19315600D79FAE /* ToggleViewModeIntent.swift */,
+				9A3B60142C1E77E0006000B4 /* GraphCalculations.swift */,
+			);
+			path = System;
+			sourceTree = "<group>";
+		};
+		9AD8FA0C2AF819CC0064D501 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9A616F462A642A6C00B713C4 /* Card.swift */,
+				9A92F1672B054C2F009C4A2A /* IconPicker.swift */,
+				9AB4BA092B00D7DD00176682 /* BalanceDataLabels.swift */,
+				9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */,
+				9AA785262B21CD9D007305F6 /* CircleProgressView.swift */,
+				9AA72DAA2B02EB8200E32650 /* BarBalanceGraphMidnight.swift */,
+				9ABBD8FE2BE8213F003EC608 /* WeekBalanceGraph.swift */,
+				9AE3D3A42B7970EC00483339 /* CDatePicker.swift */,
+				9AF4DC912BF2C4B5000EF0A5 /* MacroSlider.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9AE1804C2C35FCAF00C37AA9 /* Rectangle */ = {
+			isa = PBXGroup;
+			children = (
+				9AE1804D2C35FCDA00C37AA9 /* RectangleBalance.swift */,
+				9A85F1F92C3756F1001FA5D0 /* RectangleBalanceMidnight.swift */,
+				9A16C8DB2C38A34400ED3B7E /* RectangleBalanceBar.swift */,
+				9A16C8DD2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift */,
+			);
+			path = Rectangle;
+			sourceTree = "<group>";
+		};
+		9AF39CB42B3DC57A0037628F /* WeightCard */ = {
+			isa = PBXGroup;
+			children = (
+				9AD25EBF2A65A82000C6E6E1 /* WeightCard.swift */,
+				9AF39CB22B3DBA4C0037628F /* WeightTopBar.swift */,
+				9AF39CB72B3DC9180037628F /* WeeklyChart.swift */,
+				9AF39CB52B3DC61A0037628F /* MonthlyChart.swift */,
+				9AF39CB92B3DC9B20037628F /* CircleChartSymbol.swift */,
+			);
+			path = WeightCard;
+			sourceTree = "<group>";
+		};
+		9AF39CBE2B3E2EC10037628F /* Abstract */ = {
+			isa = PBXGroup;
+			children = (
+				9AF39CBB2B3E2E7A0037628F /* HealhData.swift */,
+				9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */,
+				9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */,
+				9AD8FA0A2AF819B40064D501 /* System */,
+			);
+			path = Abstract;
+			sourceTree = "<group>";
+		};
+		9AFAAA702B5FFA6600034CA9 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				9A0F2DCA2AF6778D00780155 /* BalanceWidgetCircle.swift */,
+				9ADC38122AF6FD0C005CCFEF /* BalanceWidgetBar.swift */,
+				9AA72DAD2B04CAAD00E32650 /* NutritionWidget.swift */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9A001C3829B6122500BB42B9 /* Count.kcal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A001C4729B6122700BB42B9 /* Build configuration list for PBXNativeTarget "Count.kcal" */;
+			buildPhases = (
+				9A001C3529B6122500BB42B9 /* Sources */,
+				9A001C3629B6122500BB42B9 /* Frameworks */,
+				9A001C3729B6122500BB42B9 /* Resources */,
+				9AB83A392AF5879C00FBF3B3 /* Embed Foundation Extensions */,
+				9AC2E28D2C12742700B07EBE /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9A0F2DD02AF6778E00780155 /* PBXTargetDependency */,
+				9AC2E28B2C12742700B07EBE /* PBXTargetDependency */,
+			);
+			name = Count.kcal;
+			packageProductDependencies = (
+			);
+			productName = SwiftTest;
+			productReference = 9A001C3929B6122500BB42B9 /* Count.kcal.app */;
+			productType = "com.apple.product-type.application";
+		};
+		9A0F2DC32AF6778C00780155 /* Count.kcal.widget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A0F2DD22AF6778E00780155 /* Build configuration list for PBXNativeTarget "Count.kcal.widget" */;
+			buildPhases = (
+				9A0F2DC02AF6778C00780155 /* Sources */,
+				9A0F2DC12AF6778C00780155 /* Frameworks */,
+				9A0F2DC22AF6778C00780155 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Count.kcal.widget;
+			packageProductDependencies = (
+			);
+			productName = TestWidgetExtension;
+			productReference = 9A0F2DC42AF6778D00780155 /* Count.kcal.widget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		9AA412FD2C24D90D005B9D73 /* Count.kcal.complications */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9AA4130D2C24D90E005B9D73 /* Build configuration list for PBXNativeTarget "Count.kcal.complications" */;
+			buildPhases = (
+				9AA412FA2C24D90D005B9D73 /* Sources */,
+				9AA412FB2C24D90D005B9D73 /* Frameworks */,
+				9AA412FC2C24D90D005B9D73 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Count.kcal.complications;
+			productName = Count.kcal.complicationsExtension;
+			productReference = 9AA412FE2C24D90D005B9D73 /* Count.kcal.complications.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		9AC2E27E2C12742500B07EBE /* Count.kcal.watch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9AC2E2902C12742700B07EBE /* Build configuration list for PBXNativeTarget "Count.kcal.watch" */;
+			buildPhases = (
+				9AC2E27B2C12742500B07EBE /* Sources */,
+				9AC2E27C2C12742500B07EBE /* Frameworks */,
+				9AC2E27D2C12742500B07EBE /* Resources */,
+				9AA4130A2C24D90E005B9D73 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9AA413082C24D90E005B9D73 /* PBXTargetDependency */,
+			);
+			name = Count.kcal.watch;
+			productName = "Count.kcal.watch Watch App";
+			productReference = 9AC2E27F2C12742500B07EBE /* Count.kcal.watch.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9A001C3129B6122500BB42B9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					9A001C3829B6122500BB42B9 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					9A0F2DC32AF6778C00780155 = {
+						CreatedOnToolsVersion = 15.0.1;
+					};
+					9AA412FD2C24D90D005B9D73 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					9AC2E27E2C12742500B07EBE = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = 9A001C3429B6122500BB42B9 /* Build configuration list for PBXProject "Count.kcal" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				de,
+				Base,
+				es,
+				fr,
+				"zh-Hans",
+			);
+			mainGroup = 9A001C3029B6122500BB42B9;
+			packageReferences = (
+			);
+			productRefGroup = 9A001C3A29B6122500BB42B9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9A001C3829B6122500BB42B9 /* Count.kcal */,
+				9A0F2DC32AF6778C00780155 /* Count.kcal.widget */,
+				9AC2E27E2C12742500B07EBE /* Count.kcal.watch */,
+				9AA412FD2C24D90D005B9D73 /* Count.kcal.complications */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9A001C3729B6122500BB42B9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9AC319DF2C073A1B0039E3C3 /* PrivacyInfo.xcprivacy in Resources */,
+				9A25A9282C1B7B29008AB1B4 /* Assets.xcassets in Resources */,
+				9A57F5392B66813D00B8DF6D /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A0F2DC22AF6778C00780155 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A25A9292C1B7B29008AB1B4 /* Assets.xcassets in Resources */,
+				9AC319E02C073A1B0039E3C3 /* PrivacyInfo.xcprivacy in Resources */,
+				9AADF00F2B6FC28100774AE7 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AA412FC2C24D90D005B9D73 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A7A4DA52C28AA1D0055C6CA /* Assets.xcassets in Resources */,
+				9A7A4DA22C28A8B70055C6CA /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AC2E27D2C12742500B07EBE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A7A4DA42C28A9EC0055C6CA /* Assets.xcassets in Resources */,
+				9A7A4DA32C28A9CB0055C6CA /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9A001C3529B6122500BB42B9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A3F8EAA2B348C1F00B0DC74 /* CaloriesMidnightCard.swift in Sources */,
+				9A9BC9BE2A7E9C7300A4404A /* ReachableView.swift in Sources */,
+				9A0D04FE2C165E6B00AF7247 /* Connectivity.swift in Sources */,
+				9A919DC32B233E380003C035 /* Extensions.swift in Sources */,
+				9AA72DAB2B02EB8200E32650 /* BarBalanceGraphMidnight.swift in Sources */,
+				9A6DA88F2B361B3400585788 /* CaloriesCardTopRowCenter.swift in Sources */,
+				9ABBD8FF2BE8213F003EC608 /* WeekBalanceGraph.swift in Sources */,
+				9A8BA4122B40591D0011D412 /* ThemesSection.swift in Sources */,
+				9AAF6E502B3F183900B9363E /* ThemeButton.swift in Sources */,
+				9AA72DA82B02C33000E32650 /* BarBalanceGraph.swift in Sources */,
+				9A6DA8912B361D0700585788 /* BarBalanceGraphTopRow.swift in Sources */,
+				9AE3D3A52B7970EC00483339 /* CDatePicker.swift in Sources */,
+				9AEA55CC2A5D65DC000AB057 /* MacroCard.swift in Sources */,
+				9A5460352B27C0D3009BF0A4 /* Pager.swift in Sources */,
+				9A480F6A2B19315600D79FAE /* ToggleViewModeIntent.swift in Sources */,
+				9A8BA4092B4055B70011D412 /* ColorsCard.swift in Sources */,
+				9ABFA7A22C0A3A6300024D2F /* CircleBalanceGraph.swift in Sources */,
+				9A59C1EC2B0A2E180058A502 /* Settings.swift in Sources */,
+				9A6DA8932B361EC300585788 /* BarBalanceGraphBottomRow.swift in Sources */,
+				9A8BA40F2B4057720011D412 /* CalorieColorSection.swift in Sources */,
+				9A92F16F2B06CF06009C4A2A /* NutrientsCard.swift in Sources */,
+				9AF39CB62B3DC61A0037628F /* MonthlyChart.swift in Sources */,
+				9A31F9BD2B6AEBE800886BAE /* UnitsCard.swift in Sources */,
+				9A54D74A2C4FE79C0000A107 /* Onboarding.swift in Sources */,
+				9A616F492A642D3C00B713C4 /* CaloriesCard.swift in Sources */,
+				9A001C3F29B6122500BB42B9 /* Dashboard.swift in Sources */,
+				9AEA55CA2A5B0081000AB057 /* HKRepository.swift in Sources */,
+				9AA785272B21CD9D007305F6 /* CircleProgressView.swift in Sources */,
+				9AD25EBE2A656A5E00C6E6E1 /* HealthInterface.swift in Sources */,
+				9AF39CB32B3DBA4C0037628F /* WeightTopBar.swift in Sources */,
+				9AF39CBA2B3DC9B20037628F /* CircleChartSymbol.swift in Sources */,
+				9A368CA32A6E64F900280BF9 /* WeightDataViewModel.swift in Sources */,
+				9AF4DC922BF2C4B5000EF0A5 /* MacroSlider.swift in Sources */,
+				9A92F1682B054C30009C4A2A /* IconPicker.swift in Sources */,
+				9AF39CB82B3DC9180037628F /* WeeklyChart.swift in Sources */,
+				9AB4BA0A2B00D7DD00176682 /* BalanceDataLabels.swift in Sources */,
+				9A2A67F729CF96C4001E58DF /* PrognosisCard.swift in Sources */,
+				9A001C3D29B6122500BB42B9 /* CountApp.swift in Sources */,
+				9A616F472A642A6C00B713C4 /* Card.swift in Sources */,
+				9AD25EC02A65A82000C6E6E1 /* WeightCard.swift in Sources */,
+				9A6DA88D2B361ABF00585788 /* CaloriesCardTopRow.swift in Sources */,
+				9A8BA4062B4054ED0011D412 /* BackgroundColorSection.swift in Sources */,
+				9A92F1662B052023009C4A2A /* SettingsPage.swift in Sources */,
+				9AF39CBC2B3E2E7A0037628F /* HealhData.swift in Sources */,
+				9A92F16D2B06CE1D009C4A2A /* EnergySettingsView.swift in Sources */,
+				9A58E8E72C012F8A002C16D6 /* Streak.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A0F2DC02AF6778C00780155 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9ABFA7B22C0A3C7100024D2F /* CaloriesCardTopRow#.swift in Sources */,
+				9AFDBA992AF822FE003E8B9C /* HealthInterface.swift in Sources */,
+				9ADC38132AF6FD0C005CCFEF /* BalanceWidgetBar.swift in Sources */,
+				9ABFA7B72C0A3CBA00024D2F /* BarBalanceGraphTopRow#.swift in Sources */,
+				9ABFA7AE2C0A3BC700024D2F /* ReachableView#.swift in Sources */,
+				9ABFA7BE2C0A415400024D2F /* WeightDataViewModel.swift in Sources */,
+				9ABFA7C22C0A451A00024D2F /* BarBalanceGraphMidnight.swift in Sources */,
+				9AA72DAE2B04CAAD00E32650 /* NutritionWidget.swift in Sources */,
+				9ABFA7BC2C0A413400024D2F /* HKRepository.swift in Sources */,
+				9ABFA7BA2C0A411300024D2F /* Settings.swift in Sources */,
+				9ABFA7BB2C0A412D00024D2F /* Extensions.swift in Sources */,
+				9AF39CBD2B3E2E980037628F /* HealhData.swift in Sources */,
+				9A34AD4A2C2A1F4900A0C5A6 /* Connectivity.swift in Sources */,
+				9A5828BD2C0A6683000AFE99 /* CircleProgressView.swift in Sources */,
+				9ABFA7B92C0A3D8200024D2F /* CaloriesCardTopRowCenter#.swift in Sources */,
+				9ABFA7C42C0A453B00024D2F /* CircleBalanceGraph.swift in Sources */,
+				9ABFA7B52C0A3C8300024D2F /* BarBalanceGraphBottomRow#.swift in Sources */,
+				9AFAAA6F2B5FF9DC00034CA9 /* HKBridge.swift in Sources */,
+				9ABFA7B02C0A3C5A00024D2F /* BarBalanceGraph#.swift in Sources */,
+				9ABFA7C02C0A450500024D2F /* BalanceDataLabels.swift in Sources */,
+				9A0F2DCB2AF6778D00780155 /* BalanceWidgetCircle.swift in Sources */,
+				9ADC38112AF6FCBC005CCFEF /* CountWidgetBundle.swift in Sources */,
+				9ABFA7BD2C0A413A00024D2F /* ToggleViewModeIntent.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AA412FA2C24D90D005B9D73 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9AF309EF2C32B3C70081FDCE /* BalanceCircleFullGraphMidnight.swift in Sources */,
+				9A2F7E672C34989100498A67 /* BalanceCornerTextNowMidnight.swift in Sources */,
+				9A6DBD582C28D2E3000920DA /* BalanceCircleGraph.swift in Sources */,
+				9AD5F5522C277C9D003FE1C5 /* HKRepository.swift in Sources */,
+				9A16C8DC2C38A34400ED3B7E /* RectangleBalanceBar.swift in Sources */,
+				9A16C8DE2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift in Sources */,
+				9A6DBD5A2C28D42E000920DA /* CircleBalanceGraph.swift in Sources */,
+				9AE1804E2C35FCDA00C37AA9 /* RectangleBalance.swift in Sources */,
+				9AD5F5512C277C43003FE1C5 /* Settings.swift in Sources */,
+				9A6DBD562C28D007000920DA /* BalanceCornerGaugeMidnight.swift in Sources */,
+				9AD5F5532C277D14003FE1C5 /* WeightDataViewModel.swift in Sources */,
+				9AB9ABF22C344F6200DEE2D8 /* BalanceCircleThickGraphMidnight.swift in Sources */,
+				9A5A005C2C3210C1002D548C /* BalanceCircleGraphMidnight.swift in Sources */,
+				9A16C8E12C38BBF200ED3B7E /* BarBalanceGraphWatchMidnight.swift in Sources */,
+				9AA413032C24D90D005B9D73 /* BalanceCornerGauge.swift in Sources */,
+				9A6DBD5C2C28D464000920DA /* GraphCalculations.swift in Sources */,
+				9A6DBD5B2C28D452000920DA /* HealthInterface.swift in Sources */,
+				9A16C8DA2C389EC100ED3B7E /* BarBalanceGraphWatch.swift in Sources */,
+				9AA413112C264C4D005B9D73 /* Extensions.swift in Sources */,
+				9A6DBD592C28D35A000920DA /* CircleBalanceGraphWatch.swift in Sources */,
+				9A6DBD5D2C28D46F000920DA /* CircleProgressView.swift in Sources */,
+				9AF309ED2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift in Sources */,
+				9A34AD4B2C2A1F4A00A0C5A6 /* Connectivity.swift in Sources */,
+				9AD5F5582C28279C003FE1C5 /* BalanceCornerText.swift in Sources */,
+				9AD5F54F2C277B6E003FE1C5 /* HealhData.swift in Sources */,
+				9A6DBD5F2C28D562000920DA /* ReachableView.swift in Sources */,
+				9A3B87852C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift in Sources */,
+				9AD5F5502C277C2E003FE1C5 /* HKBridge.swift in Sources */,
+				9AD5F5552C282616003FE1C5 /* HealthDataTimelineProvider.swift in Sources */,
+				9A85F1FA2C3756F1001FA5D0 /* RectangleBalanceMidnight.swift in Sources */,
+				9A6DBD542C28CEE6000920DA /* BalanceCornerTextMidnight.swift in Sources */,
+				9AA413102C2630D5005B9D73 /* Bundle.swift in Sources */,
+				9A3B87832C30C8DD002D02D1 /* BalanceCircleGauge.swift in Sources */,
+				9AB9ABF02C344CEF00DEE2D8 /* BalanceCircleThickGraph.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AC2E27B2C12742500B07EBE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A0B0CC62C203FB400D94FB4 /* ReachableView.swift in Sources */,
+				9A4B72912C13B651004853F0 /* HKRepository.swift in Sources */,
+				9A0BAC082C244D0E00622F9F /* CircleBalanceGraphOverlay.swift in Sources */,
+				9A0B0CC52C1FA08D00D94FB4 /* CircleBalanceGraphWatch.swift in Sources */,
+				9A4B72902C13B64B004853F0 /* Settings.swift in Sources */,
+				9A4B72932C13B886004853F0 /* CircleBalanceGraph.swift in Sources */,
+				9AC2E2842C12742500B07EBE /* ContentView.swift in Sources */,
+				9A16C8D92C389E5200ED3B7E /* BarBalanceGraphWatch.swift in Sources */,
+				9A4B72922C13B653004853F0 /* Extensions.swift in Sources */,
+				9A16C8E02C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift in Sources */,
+				9A4B728E2C13B63E004853F0 /* HealthInterface.swift in Sources */,
+				9A3B60152C1E77E0006000B4 /* GraphCalculations.swift in Sources */,
+				9A0BAC0B2C244D6800622F9F /* CaloricTotalsView.swift in Sources */,
+				9A4B728D2C13B639004853F0 /* HealhData.swift in Sources */,
+				9A0D04FF2C165E6B00AF7247 /* Connectivity.swift in Sources */,
+				9A4B72942C13B897004853F0 /* CircleProgressView.swift in Sources */,
+				9AC2E2822C12742500B07EBE /* WatchApp.swift in Sources */,
+				9A4B728F2C13B648004853F0 /* WeightDataViewModel.swift in Sources */,
+				9A0BAC062C244CA500622F9F /* CaloriesTab.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9A0F2DD02AF6778E00780155 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9A0F2DC32AF6778C00780155 /* Count.kcal.widget */;
+			targetProxy = 9A0F2DCF2AF6778E00780155 /* PBXContainerItemProxy */;
+		};
+		9AA413082C24D90E005B9D73 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9AA412FD2C24D90D005B9D73 /* Count.kcal.complications */;
+			targetProxy = 9AA413072C24D90E005B9D73 /* PBXContainerItemProxy */;
+		};
+		9AC2E28B2C12742700B07EBE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9AC2E27E2C12742500B07EBE /* Count.kcal.watch */;
+			targetProxy = 9AC2E28A2C12742700B07EBE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		9A001C4529B6122700BB42B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		9A001C4629B6122700BB42B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9A001C4829B6122700BB42B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Count.kcal/Count.kcal.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 4DXABR577J;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Count.kcal/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Count.kcal;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = NO;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		9A001C4929B6122700BB42B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Count.kcal/Count.kcal.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 4DXABR577J;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Count.kcal/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Count.kcal;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = NO;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		9A0F2DD32AF6778E00780155 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = BackGroundColor;
+				CODE_SIGN_ENTITLEMENTS = Count.kcal.widgets/Count.kcal.widget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 4DXABR577J;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Count.kcal.widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Count.kcal;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSSupportsLiveActivities = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		9A0F2DD42AF6778E00780155 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = BackGroundColor;
+				CODE_SIGN_ENTITLEMENTS = Count.kcal.widgets/Count.kcal.widget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 4DXABR577J;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Count.kcal.widgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Count.kcal;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSSupportsLiveActivities = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		9AA4130B2C24D90E005B9D73 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = "";
+				CODE_SIGN_ENTITLEMENTS = Count.kcal.complications/Count.kcal.complications.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 4DXABR577J;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Count.kcal.complications/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Count.kcal.complications;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app.watch.complications;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.5;
+			};
+			name = Debug;
+		};
+		9AA4130C2C24D90E005B9D73 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = "";
+				CODE_SIGN_ENTITLEMENTS = Count.kcal.complications/Count.kcal.complications.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 4DXABR577J;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Count.kcal.complications/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Count.kcal.complications;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app.watch.complications;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.5;
+			};
+			name = Release;
+		};
+		9AC2E28E2C12742700B07EBE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Count.kcal.watch/Count.kcal.watch.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 4DXABR577J;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Count.kcal.watch/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Count.kcal;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.count.kcal.app;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app.watch;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.5;
+			};
+			name = Debug;
+		};
+		9AC2E28F2C12742700B07EBE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Count.kcal.watch/Count.kcal.watch.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 4DXABR577J;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Count.kcal.watch/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Count.kcal;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.count.kcal.app;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app.watch;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.5;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9A001C3429B6122500BB42B9 /* Build configuration list for PBXProject "Count.kcal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A001C4529B6122700BB42B9 /* Debug */,
+				9A001C4629B6122700BB42B9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9A001C4729B6122700BB42B9 /* Build configuration list for PBXNativeTarget "Count.kcal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A001C4829B6122700BB42B9 /* Debug */,
+				9A001C4929B6122700BB42B9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9A0F2DD22AF6778E00780155 /* Build configuration list for PBXNativeTarget "Count.kcal.widget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A0F2DD32AF6778E00780155 /* Debug */,
+				9A0F2DD42AF6778E00780155 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9AA4130D2C24D90E005B9D73 /* Build configuration list for PBXNativeTarget "Count.kcal.complications" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9AA4130B2C24D90E005B9D73 /* Debug */,
+				9AA4130C2C24D90E005B9D73 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9AC2E2902C12742700B07EBE /* Build configuration list for PBXNativeTarget "Count.kcal.watch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9AC2E28E2C12742700B07EBE /* Debug */,
+				9AC2E28F2C12742700B07EBE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9A001C3129B6122500BB42B9 /* Project object */;
+}
