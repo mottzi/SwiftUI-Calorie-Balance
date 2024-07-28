@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum OnboardingState: Int, RawRepresentable, CaseIterable
+enum OnboardingState: Int, CaseIterable
 {
     case welcome = 0
     case applehealth = 1
@@ -9,39 +9,78 @@ enum OnboardingState: Int, RawRepresentable, CaseIterable
     case balancegoal = 4
 }
 
-let ButtonText =
+let OnboardingButtonText =
 [
-    "Start",
-    "Allow",
-    "Next",
-    "Next",
-    "Finish",
+    String(localized: "Start"),
+    String(localized: "Allow"),
+    String(localized: "Next"),
+    String(localized: "Next"),
+    String(localized: "Finish"),
 ]
 
 struct Onboarding: View
 {
+    @EnvironmentObject private var AppSettings: Settings
+
     @State private var selection: OnboardingState = .welcome
     @State private var showButton = false
     
-    @ViewBuilder
-    var Pages: some View
+    var body: some View
+    {
+        VStack(spacing: 0)
+        {
+            WelcomeIconText()
+                        
+            OnboardingContent(selection: selection)
+                        
+            ContinueButton(selection: $selection)
+                .offset(y: showButton ? 0 : 300)
+        }
+        .onAppear
+        {
+            selection = .welcome
+            AppSettings.setDefaultWeightUnit()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.6)
+            {
+                withAnimation(.smooth(duration: 1.5))
+                {
+                    showButton = true
+                }
+            }
+        }
+        .padding(.vertical, 60)
+    }
+}
+
+struct OnboardingContent: View 
+{
+    let selection: OnboardingState
+
+    var body: some View
     {
         Group
         {
             switch selection
             {
-                case .welcome:
+                case .welcome: do
+                {
                     WelcomeView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                         .padding(.top, -60)
                         .padding(.horizontal, -40)
                         .offset(y: -20)
+                }
+                    
                 case .applehealth:
                     AppleHealthView()
+                    
                 case .maingoal:
                     MaingoalView()
+                    
                 case .datasource:
                     DataSourceView()
+                    
                 case .balancegoal:
                     BalanceGoalView()
             }
@@ -50,71 +89,6 @@ struct Onboarding: View
         .padding(.horizontal, 40)
         .padding(.top, 60)
         .transition(.scale(scale: 0.1).combined(with: .opacity))
-    }
-    
-    var body: some View
-    {
-        VStack(spacing: 0)
-        {
-            WelcomeIconText()
-            
-            Spacer()
-            
-            Pages
-            
-            Spacer()
-            
-            ContinueButton(selection: $selection)
-                .offset(y: showButton ? 0 : 300)
-                .onAppear
-                {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.6)
-                    {
-                        withAnimation(.smooth(duration: 1.5))
-                        {
-                            showButton = true
-                        }
-                    }
-                }
-        }
-        .onAppear
-        {
-            selection = .welcome
-        }
-        .padding(.vertical, 60)
-    }
-}
-
-struct OnboardingCenterView: View
-{
-    @Binding var selection: OnboardingState
-    
-    var body: some View
-    {
-        TabView(selection: $selection)
-        {
-            Group
-            {
-                WelcomeView()
-                    .tag(OnboardingState.welcome)
-                
-                AppleHealthView()
-                    .tag(OnboardingState.applehealth)
-                
-                MaingoalView()
-                    .tag(OnboardingState.maingoal)
-                
-                DataSourceView()
-                    .tag(OnboardingState.datasource)
-                
-                BalanceGoalView()
-                    .tag(OnboardingState.balancegoal)
-            }
-            .padding(.horizontal, 30)
-            
-        }
-        .tabViewStyle(.page(indexDisplayMode: .never))
-        .scrollDisabled(true)
     }
 }
 
@@ -131,11 +105,26 @@ struct BalanceGoalView: View
         {
             VStack(spacing: 30)
             {
-                Text("What is your \(String(localized: AppSettings.weightGoal == .lose ? "Calorie Deficit" : "Calorie Surplus")) goal?")
-                    .font(.title)
-                    .fontWeight(.semibold)
-                    .fontDesign(.rounded)
-                    .foregroundStyle(Color("TextColor"))
+                (
+                    Text("What is your")
+                        .foregroundStyle(Color("TextColor").opacity(0.6))
+                    +
+                    Text(verbatim: " ")
+                    +
+                    Text((String(localized: AppSettings.weightGoal == .lose ? "Calorie Deficit" : "Calorie Surplus")))
+                    +
+                    Text(verbatim: " ")
+                    +
+                    Text("goal")
+                        .foregroundStyle(Color("TextColor").opacity(0.6))
+                    +
+                    Text(verbatim: "?")
+                        .foregroundStyle(Color("TextColor").opacity(0.6))
+                )
+                .font(.title)
+                .fontWeight(.semibold)
+                .fontDesign(.rounded)
+                .foregroundStyle(Color("TextColor"))
 
                 VStack(spacing: 10)
                 {
@@ -167,7 +156,6 @@ struct BalanceGoalView: View
                         }
                         .sensoryFeedback(.selection, trigger: balanceSlider)
                 }
-//                .padding(.top, 40)
                 
                 Text("\(balanceGoalDescription)")
                     .font(.headline)
@@ -184,24 +172,30 @@ struct BalanceGoalView: View
         switch AppSettings.weightGoal
         {
             case .lose:
-                "This deficit equates to a weight loss of \(weightChange7) per week or \(weightChange30) per month."
+                String(localized: "This deficit equates to a weight loss of \(weightChange7) per week or \(weightChange30) per month.")
             case .gain:
-                "This surplus equates to a weight gain of \(weightChange7) per week or \(weightChange30) per month."
+                String(localized: "This surplus equates to a weight gain of \(weightChange7) per week or \(weightChange30) per month.")
         }
     }
     
     var weightChange7: String
     {
-        let weightChangeInKg = Double(AppSettings.balanceGoal) * 7 / 7700.0
+        let unit = AppSettings.weightUnit
+        let conversionFactor = unit == .kg ? 1.0 : 2.20462
+        
+        let weightChange = Double(AppSettings.balanceGoal) * 7 / 7700.0 * conversionFactor
             
-        return String(format: "%.2f kg", weightChangeInKg)
+        return String(format: "%.2f \(unit.rawValue)", weightChange)
     }
     
     var weightChange30: String
     {
-        let weightChangeInKg = Double(AppSettings.balanceGoal) * 30 / 7700.0
+        let unit = AppSettings.weightUnit
+        let conversionFactor = unit == .kg ? 1.0 : 2.20462
+        
+        let weightChange = Double(AppSettings.balanceGoal) * 30 / 7700.0 * conversionFactor
             
-        return String(format: "%.2f kg", weightChangeInKg)
+        return String(format: "%.2f \(unit.rawValue)", weightChange)
     }
 }
 
@@ -285,7 +279,7 @@ struct DataSourceView: View
                         .font(.title2)
                         .fontWeight(.semibold)
                         
-                        Slider(value: $passiveSlider, in: 0...4000, step: 50 )
+                        Slider(value: $passiveSlider, in: 1000...4000, step: 50)
                             .onChange(of: passiveSlider)
                             { _, n in
                                 AppSettings.customCalPassive = Int(n)
@@ -328,7 +322,7 @@ struct DataSourceView: View
                         .font(.title2)
                         .fontWeight(.semibold)
                         
-                        Slider(value: $activeSlider, in: 0...4000, step: 50 )
+                        Slider(value: $activeSlider, in: 100...2000, step: 50)
                             .onChange(of: activeSlider)
                             { _, n in
                                 AppSettings.customCalActive = Int(n)
@@ -343,20 +337,6 @@ struct DataSourceView: View
                 .geometryGroup()
                 .transition(.slide.combined(with: .opacity))
                 .animation(.snappy, value: AppSettings.dataSource)
-//                .onAppear
-//                {
-//                    Task
-//                    {
-//                        await AppSettings.updateShow()
-//                    }
-//                }
-//                .onChange(of: AppSettings.dataSource)
-//                {
-//                    Task
-//                    {
-//                        await AppSettings.updateShow()
-//                    }
-//                }
             }
         }
     }
@@ -371,12 +351,23 @@ struct MaingoalView: View
     {
         VStack(spacing: 30)
         {
-            Text("My goal is to...")
-                .font(.title)
-                .fontWeight(.semibold)
-                .fontDesign(.rounded)
-                .foregroundStyle(Color("TextColor"))
-                .lineLimit(2, reservesSpace: true)
+            (
+                Text("My")
+                    .foregroundStyle(Color("TextColor").opacity(0.6))
+                +
+                Text(verbatim: " ")
+                +
+                Text("goal")
+                +
+                Text(verbatim: " ")
+                +
+                Text("is to ...")
+                    .foregroundStyle(Color("TextColor").opacity(0.6))
+            )
+            .font(.title)
+            .fontWeight(.semibold)
+            .fontDesign(.rounded)
+            .foregroundStyle(Color("TextColor"))
             
             IconPicker(firstIcon: "arrowshape.down.fill", secondIcon: "arrowshape.up.fill", selection: $AppSettings.weightGoal)
                 .frame(width: 120, height: 40)
@@ -601,7 +592,7 @@ struct ContinueButton: View
         }
         label:
         {
-            Text(ButtonText[selection.rawValue])
+            Text(OnboardingButtonText[selection.rawValue])
                 .font(.title3)
                 .fontWeight(.medium)
                 .fontDesign(.rounded)

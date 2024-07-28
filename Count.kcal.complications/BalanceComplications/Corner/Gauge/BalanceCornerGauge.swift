@@ -29,7 +29,7 @@ struct BalanceCornerGaugeComplicationView : View
                     }
             }
                 
-            default: Text("No support.")
+            default: Text(verbatim: "No support.")
         }
     }
 }

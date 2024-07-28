@@ -178,104 +178,95 @@ struct Pager: View
             .navigationBarTitleDisplayMode(.inline)
             .toolbar
             {
-                if !AppSettings.showWelcome
+                ToolbarItem(placement: .topBarLeading)
                 {
-                    ToolbarItem(placement: .topBarLeading)
-                    {
-                        todayButton
-                            .padding(.leading, 16)
-                            .offset(y: 0)
-                    }
-                    
-                    ToolbarItem(placement: .topBarTrailing)
-                    {
-                        Button(action:
-                                {
-                            streak.toggleStreaksView()
-                        },
-                               label:
-                                {
-                            let color = (AppSettings.weightGoal == .lose ? AppSettings.burnedColor : AppSettings.consumedColor)
-                            
-                            HStack(spacing: 4)
+                    todayButton
+                        .padding(.leading, 16)
+                        .offset(y: 0)
+                }
+                
+                ToolbarItem(placement: .topBarTrailing)
+                {
+                    Button(action:
                             {
-                                Image(systemName: "flame.fill")
-                                    .symbolRenderingMode(.palette) // Enable palette rendering mode
-                                    .foregroundStyle(color.brighten(-0.1).gradient)
-                                    .fontWeight(.bold)
-                                
-                                Text("\(streak.streaks)")
-                                    .font(.callout)
-                                    .fontDesign(.rounded)
-                                    .fontWeight(.bold)
-                                    .foregroundStyle(Color("TextColor"))
-                                    .offset(y: 2)
-                                    .task { await streak.updateStreaks() }
-                            }
-                        })
-                        .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
-                    }
-                    
-                    ToolbarItem(placement: .topBarLeading)
-                    {
-                        Text(selectedPage?.sample.date.relative ?? "")
-                            .fontWeight(.semibold)
-                            .fontDesign(.rounded)
-                            .foregroundColor(Color("TextColor"))
-                            .transaction { transaction in
-                                transaction.animation = nil
-                            }
+                        streak.toggleStreaksView()
+                    },
+                           label:
+                            {
+                        let color = (AppSettings.weightGoal == .lose ? AppSettings.burnedColor : AppSettings.consumedColor)
                         
-                        //                Button
-                        //                {
-                        //                    withAnimation(.snappy)
-                        //                    {
-                        //                       selectedPage?.randomizeHealthData()
-                        //
-                        //                       for page in FirstPages
-                        //                       {
-                        //                           page.randomizeHealthData()
-                        //                       }
-                        //
-                        //                       let start = Double.random(in: 60 ... 150)
-                        //                       let end = start + Double.random(in: 1 ... 5)
-                        //
-                        //                       WeightViewModel.randomizeWeightData(start: start, end: end)
-                        //                   }
-                        //                }
-                        //                label:
-                        //                {
-                        //                    Text(selectedPage?.sample.date.relative ?? "")
-                        //                    .fontWeight(.semibold)
-                        //                    .fontDesign(.rounded)
-                        //                    .foregroundColor(Color("TextColor"))
-                        //                    .transaction { transaction in
-                        //                        transaction.animation = nil
-                        //                    }
-                        //                }
-                    }
+                        HStack(spacing: 4)
+                        {
+                            Image(systemName: "flame.fill")
+                                .symbolRenderingMode(.palette) // Enable palette rendering mode
+                                .foregroundStyle(color.brighten(-0.1).gradient)
+                                .fontWeight(.bold)
+                            
+                            Text("\(streak.streaks)")
+                                .font(.callout)
+                                .fontDesign(.rounded)
+                                .fontWeight(.bold)
+                                .foregroundStyle(Color("TextColor"))
+                                .offset(y: 2)
+                                .task { await streak.updateStreaks() }
+                        }
+                    })
+                    .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
+                }
+                
+                ToolbarItem(placement: .topBarLeading)
+                {
+                    Text(selectedPage?.sample.date.relative ?? "")
+                        .fontWeight(.semibold)
+                        .fontDesign(.rounded)
+                        .foregroundColor(Color("TextColor"))
+                        .transaction { transaction in
+                            transaction.animation = nil
+                        }
                     
-                    ToolbarItem(placement: .topBarTrailing)
-                    {
-                        calendarButton
-                    }
-                    
-                    ToolbarItem(placement: .topBarTrailing)
-                    {
-                        settingsButton
-                            .padding(.trailing, 16)
-                    }
+                    //                Button
+                    //                {
+                    //                    withAnimation(.snappy)
+                    //                    {
+                    //                       selectedPage?.randomizeHealthData()
+                    //
+                    //                       for page in FirstPages
+                    //                       {
+                    //                           page.randomizeHealthData()
+                    //                       }
+                    //
+                    //                       let start = Double.random(in: 60 ... 150)
+                    //                       let end = start + Double.random(in: 1 ... 5)
+                    //
+                    //                       WeightViewModel.randomizeWeightData(start: start, end: end)
+                    //                   }
+                    //                }
+                    //                label:
+                    //                {
+                    //                    Text(selectedPage?.sample.date.relative ?? "")
+                    //                    .fontWeight(.semibold)
+                    //                    .fontDesign(.rounded)
+                    //                    .foregroundColor(Color("TextColor"))
+                    //                    .transaction { transaction in
+                    //                        transaction.animation = nil
+                    //                    }
+                    //                }
+                }
+                
+                ToolbarItem(placement: .topBarTrailing)
+                {
+                    calendarButton
+                }
+                
+                ToolbarItem(placement: .topBarTrailing)
+                {
+                    settingsButton
+                        .padding(.trailing, 16)
                 }
             }
             .safeAreaPadding(.top, 10)
             .onAppear
             {
-//                #warning("debug")
-//                withAnimation(.spring)
-//                {
-//                    AppSettings.showWelcome = true
-//                }
-                
                 selectedPage = findPage(for: .now)
                 
                 Task
@@ -392,25 +383,22 @@ struct Pager: View
             SettingsPage()
                 .environmentObject(AppSettings)
                 .environment(SliderData)
-////                .onAppear
-////                {
-////                    DispatchQueue.main.asyncAfter(deadline: .now() + 1)
-////                    {
-////                        if AppSettings.showWelcome { AppSettings.showWelcome = false }
-////                    }
-////                }
                 .onDisappear
                 {
-                    Task.detached
+                    AppSettings.closedSettings += 1
+                    
+                    Task
                     {
                         await selectedPage?.updateMetrics()
                         await WeightViewModel.fetchData()
                         
                         #if !DEBUG
-                        if await AppSettings.isSettingsInputValid
+                        if AppSettings.isSettingsInputValid && AppSettings.closedSettings >= 1
                         {
                             try? await Task.sleep(for: .seconds(0.2))
-                            await requestReview()
+                            requestReview()
+                            
+                            AppSettings.closedSettings = 0
                         }
                         #endif
                     }
@@ -495,5 +483,4 @@ var PreviewPager: some View
     .environmentObject(Settings.shared)
     .environment(WeightDataViewModel())
     .environment(Streak())
-//    .environment(HSlider())
 }

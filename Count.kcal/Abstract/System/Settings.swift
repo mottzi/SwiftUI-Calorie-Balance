@@ -56,6 +56,22 @@ extension Settings
 
 extension Settings
 {
+    func setDefaultWeightUnit()
+    {
+        switch Locale.current.measurementSystem
+        {
+            case .metric:
+                self.weightUnit = .kg
+            case .us, .uk:
+                self.weightUnit = .lbs
+            default:
+                break
+        }
+    }
+}
+
+extension Settings
+{
     func maxEatingEnergy(/*_ showActive: Int, _ showResting: Int*/) -> Int
     {
         var activeCalories: Int = 0
@@ -236,6 +252,8 @@ final class Settings: ObservableObject
     }
 
     @AppStorage("showWelcome", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var showWelcome: Bool = true
+    @AppStorage("closedSettings", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var closedSettings: Int = 0
+
 
     @AppStorage("weightGoal", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var weightGoal: WeightGoals = .lose
     @AppStorage("dataSource", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var dataSource: DataSources = .apple

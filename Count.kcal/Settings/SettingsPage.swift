@@ -206,7 +206,7 @@ struct SettingsPage: View
                     {
                         HStack
                         {
-                            Text("Set up")
+                            Text(verbatim: "Set up")
                             
                             Image(systemName: "doc.questionmark")
                                 .font(.callout)

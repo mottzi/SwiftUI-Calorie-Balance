@@ -44,7 +44,7 @@ struct BalanceCircleGaugeMidnightComplicationView : View
                 .gaugeStyle(CircularGaugeStyle(tint: Gradient(colors: [Settings.shared.consumedColor, Settings.shared.burnedColor])))
             }
                 
-            default: Text("No support.")
+            default: Text(verbatim: "No support.")
         }
     }
 }
