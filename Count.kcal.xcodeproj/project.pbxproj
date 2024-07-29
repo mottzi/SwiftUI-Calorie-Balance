@@ -26,6 +26,13 @@
 		9A16C8DE2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DD2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift */; };
 		9A16C8E02C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DF2C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift */; };
 		9A16C8E12C38BBF200ED3B7E /* BarBalanceGraphWatchMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DF2C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift */; };
+		9A206D772C5837F70079DE3D /* BalanceGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D762C5837F70079DE3D /* BalanceGoalView.swift */; };
+		9A206D792C58389B0079DE3D /* DataSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D782C58389B0079DE3D /* DataSourceView.swift */; };
+		9A206D7B2C5838C40079DE3D /* MainGoalVew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D7A2C5838C40079DE3D /* MainGoalVew.swift */; };
+		9A206D7D2C5838E50079DE3D /* AppleHealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D7C2C5838E50079DE3D /* AppleHealthView.swift */; };
+		9A206D7F2C5839170079DE3D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D7E2C5839170079DE3D /* WelcomeView.swift */; };
+		9A206D822C583ADA0079DE3D /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D812C583ADA0079DE3D /* Button.swift */; };
+		9A206D842C583B560079DE3D /* Welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D832C583B560079DE3D /* Welcome.swift */; };
 		9A25A9282C1B7B29008AB1B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */; };
 		9A25A9292C1B7B29008AB1B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */; };
 		9A2A67F729CF96C4001E58DF /* PrognosisCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2A67F629CF96C4001E58DF /* PrognosisCard.swift */; };
@@ -227,6 +234,13 @@
 		9A16C8DB2C38A34400ED3B7E /* RectangleBalanceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleBalanceBar.swift; sourceTree = "<group>"; };
 		9A16C8DD2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleBalanceBarMidnight.swift; sourceTree = "<group>"; };
 		9A16C8DF2C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphWatchMidnight.swift; sourceTree = "<group>"; };
+		9A206D762C5837F70079DE3D /* BalanceGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceGoalView.swift; sourceTree = "<group>"; };
+		9A206D782C58389B0079DE3D /* DataSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceView.swift; sourceTree = "<group>"; };
+		9A206D7A2C5838C40079DE3D /* MainGoalVew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGoalVew.swift; sourceTree = "<group>"; };
+		9A206D7C2C5838E50079DE3D /* AppleHealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleHealthView.swift; sourceTree = "<group>"; };
+		9A206D7E2C5839170079DE3D /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		9A206D812C583ADA0079DE3D /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		9A206D832C583B560079DE3D /* Welcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Welcome.swift; sourceTree = "<group>"; };
 		9A25A9222C1B7A4C008AB1B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A2A67F629CF96C4001E58DF /* PrognosisCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrognosisCard.swift; sourceTree = "<group>"; };
@@ -395,7 +409,6 @@
 				9AEA55C42A5AD1F5000AB057 /* Count.kcal.entitlements */,
 				9AF39CBE2B3E2EC10037628F /* Abstract */,
 				9A001C3C29B6122500BB42B9 /* CountApp.swift */,
-				9A54D7492C4FE79C0000A107 /* Onboarding.swift */,
 				9A5460342B27C0D3009BF0A4 /* Pager.swift */,
 				9A6DA88A2B36194800585788 /* Dashboard */,
 				9AF39CB42B3DC57A0037628F /* WeightCard */,
@@ -436,6 +449,29 @@
 				9AFAAA702B5FFA6600034CA9 /* Widgets */,
 			);
 			path = Count.kcal.widgets;
+			sourceTree = "<group>";
+		};
+		9A206D752C5837A50079DE3D /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				9A54D7492C4FE79C0000A107 /* Onboarding.swift */,
+				9A206D832C583B560079DE3D /* Welcome.swift */,
+				9A206D812C583ADA0079DE3D /* Button.swift */,
+				9A206D802C5839CE0079DE3D /* Content */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		9A206D802C5839CE0079DE3D /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				9A206D7E2C5839170079DE3D /* WelcomeView.swift */,
+				9A206D7C2C5838E50079DE3D /* AppleHealthView.swift */,
+				9A206D7A2C5838C40079DE3D /* MainGoalVew.swift */,
+				9A206D782C58389B0079DE3D /* DataSourceView.swift */,
+				9A206D762C5837F70079DE3D /* BalanceGoalView.swift */,
+			);
+			path = Content;
 			sourceTree = "<group>";
 		};
 		9A2A67F829CF9D7F001E58DF /* Frameworks */ = {
@@ -704,6 +740,7 @@
 				9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */,
 				9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */,
 				9AD8FA0A2AF819B40064D501 /* System */,
+				9A206D752C5837A50079DE3D /* Onboarding */,
 			);
 			path = Abstract;
 			sourceTree = "<group>";
@@ -900,8 +937,10 @@
 				9A0D04FE2C165E6B00AF7247 /* Connectivity.swift in Sources */,
 				9A919DC32B233E380003C035 /* Extensions.swift in Sources */,
 				9AA72DAB2B02EB8200E32650 /* BarBalanceGraphMidnight.swift in Sources */,
+				9A206D7D2C5838E50079DE3D /* AppleHealthView.swift in Sources */,
 				9A6DA88F2B361B3400585788 /* CaloriesCardTopRowCenter.swift in Sources */,
 				9ABBD8FF2BE8213F003EC608 /* WeekBalanceGraph.swift in Sources */,
+				9A206D7B2C5838C40079DE3D /* MainGoalVew.swift in Sources */,
 				9A8BA4122B40591D0011D412 /* ThemesSection.swift in Sources */,
 				9AAF6E502B3F183900B9363E /* ThemeButton.swift in Sources */,
 				9AA72DA82B02C33000E32650 /* BarBalanceGraph.swift in Sources */,
@@ -915,22 +954,27 @@
 				9A59C1EC2B0A2E180058A502 /* Settings.swift in Sources */,
 				9A6DA8932B361EC300585788 /* BarBalanceGraphBottomRow.swift in Sources */,
 				9A8BA40F2B4057720011D412 /* CalorieColorSection.swift in Sources */,
+				9A206D7F2C5839170079DE3D /* WelcomeView.swift in Sources */,
 				9A92F16F2B06CF06009C4A2A /* NutrientsCard.swift in Sources */,
 				9AF39CB62B3DC61A0037628F /* MonthlyChart.swift in Sources */,
 				9A31F9BD2B6AEBE800886BAE /* UnitsCard.swift in Sources */,
 				9A54D74A2C4FE79C0000A107 /* Onboarding.swift in Sources */,
 				9A616F492A642D3C00B713C4 /* CaloriesCard.swift in Sources */,
+				9A206D842C583B560079DE3D /* Welcome.swift in Sources */,
 				9A001C3F29B6122500BB42B9 /* Dashboard.swift in Sources */,
 				9AEA55CA2A5B0081000AB057 /* HKRepository.swift in Sources */,
 				9AA785272B21CD9D007305F6 /* CircleProgressView.swift in Sources */,
 				9AD25EBE2A656A5E00C6E6E1 /* HealthInterface.swift in Sources */,
+				9A206D822C583ADA0079DE3D /* Button.swift in Sources */,
 				9AF39CB32B3DBA4C0037628F /* WeightTopBar.swift in Sources */,
 				9AF39CBA2B3DC9B20037628F /* CircleChartSymbol.swift in Sources */,
 				9A368CA32A6E64F900280BF9 /* WeightDataViewModel.swift in Sources */,
 				9AF4DC922BF2C4B5000EF0A5 /* MacroSlider.swift in Sources */,
 				9A92F1682B054C30009C4A2A /* IconPicker.swift in Sources */,
 				9AF39CB82B3DC9180037628F /* WeeklyChart.swift in Sources */,
+				9A206D772C5837F70079DE3D /* BalanceGoalView.swift in Sources */,
 				9AB4BA0A2B00D7DD00176682 /* BalanceDataLabels.swift in Sources */,
+				9A206D792C58389B0079DE3D /* DataSourceView.swift in Sources */,
 				9A2A67F729CF96C4001E58DF /* PrognosisCard.swift in Sources */,
 				9A001C3D29B6122500BB42B9 /* CountApp.swift in Sources */,
 				9A616F472A642A6C00B713C4 /* Card.swift in Sources */,
