@@ -27,6 +27,11 @@ extension CGFloat
 
 extension Color
 {
+    func darken(_ level: Double) -> Color
+    {
+        return self.brighten(-level)
+    }
+    
     func brighten(_ level: Double) -> Color
     {
         if level == 0 { return self }

@@ -58,7 +58,8 @@ struct BalanceCircleGaugeMidnightComplication: Widget
             BalanceCircleGaugeMidnightComplicationView(entry: entry)
                 .containerBackground(.clear, for: .widget)
         }
-        .configurationDisplayName("Balance gauge - midnight")
+        .configurationDisplayName("Gauge (midnight)")
+//        .description("")
         .description("Shows caloric balance at midnight (gauge)")
         .supportedFamilies([.accessoryCircular])
     }

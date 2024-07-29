@@ -55,7 +55,8 @@ struct BalanceCircleThickGraphComplication: Widget
             BalanceCircleThickGraphComplicationView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }
-        .configurationDisplayName("Balance graph - now")
+        .configurationDisplayName("Graph #2 (now)")
+//        .description("")
         .description("Shows current caloric balance (thick graph)")
         .supportedFamilies([.accessoryCircular])
     }

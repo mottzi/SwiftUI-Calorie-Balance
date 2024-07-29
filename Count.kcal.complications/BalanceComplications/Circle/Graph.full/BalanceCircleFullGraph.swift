@@ -44,7 +44,8 @@ struct BalanceCircleFullGraphComplication: Widget
             BalanceCircleFullGraphComplicationView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }
-        .configurationDisplayName("Balance graph - now")
+        .configurationDisplayName("Graph #3 (now)")
+//        .description("")
         .description("Shows current caloric balance (full graph)")
         .supportedFamilies([.accessoryCircular])
     }

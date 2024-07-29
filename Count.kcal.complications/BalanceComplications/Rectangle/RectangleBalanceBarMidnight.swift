@@ -93,7 +93,8 @@ struct RectangleBalanceBarMidnightComplication: Widget
                 .containerBackground(Color(red: 30/255, green: 30/255, blue: 30/255), for: .widget)
 
         }
-        .configurationDisplayName("Balance bar (midnight)")
+        .configurationDisplayName("Bar (midnight)")
+//        .description("")
         .description("Shows caloric balance at midnight.")
         .supportedFamilies([.accessoryRectangular])
         .contentMarginsDisabled()

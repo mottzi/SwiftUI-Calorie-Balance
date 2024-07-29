@@ -15,10 +15,10 @@ struct CornerBundle: WidgetBundle
 {
     var body: some Widget
     {
-        BalanceCornerTextNowMidnightComplication()
         BalanceCornerTextComplication()
         BalanceCornerTextMidnightComplication()
-        
+        BalanceCornerTextNowMidnightComplication()
+
         BalanceCornerGaugeComplication()
         BalanceCornerGaugeMidnightComplication()
     }

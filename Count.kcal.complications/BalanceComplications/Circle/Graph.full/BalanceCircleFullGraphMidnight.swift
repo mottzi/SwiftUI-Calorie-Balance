@@ -44,7 +44,8 @@ struct BalanceCircleFullGraphMidnightComplication: Widget
             BalanceCircleFullGraphMidnightComplicationView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }
-        .configurationDisplayName("Balance graph - midnight")
+        .configurationDisplayName("Graph #3 (midnight)")
+//        .description("")
         .description("Shows caloric balance at midnight (full graph)")
         .supportedFamilies([.accessoryCircular])
     }

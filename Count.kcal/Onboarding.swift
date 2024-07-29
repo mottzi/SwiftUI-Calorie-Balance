@@ -25,15 +25,24 @@ struct Onboarding: View
     @State private var selection: OnboardingState = .welcome
     @State private var showButton = false
     
+    var smallScreen: Bool
+    {
+        UIScreen.main.bounds.height < 700
+    }
+    
     var body: some View
     {
         VStack(spacing: 0)
         {
-            WelcomeIconText()
+            if selection == .welcome
+            {
+                OnboardingWelcome()
+                    .transition(.opacity.combined(with: .offset(y: -200)))
+            }
                         
             OnboardingContent(selection: selection)
                         
-            ContinueButton(selection: $selection)
+            OnboardingButton(selection: $selection)
                 .offset(y: showButton ? 0 : 300)
         }
         .onAppear
@@ -49,7 +58,8 @@ struct Onboarding: View
                 }
             }
         }
-        .padding(.vertical, 60)
+        .padding(.top, smallScreen ? 30 : 60)
+        .padding(.bottom, 60)
     }
 }
 
@@ -67,7 +77,7 @@ struct OnboardingContent: View
                 {
                     WelcomeView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                        .padding(.top, -60)
+                        .padding(.top, -30)
                         .padding(.horizontal, -40)
                         .offset(y: -20)
                 }
@@ -87,7 +97,7 @@ struct OnboardingContent: View
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.horizontal, 40)
-        .padding(.top, 60)
+        .padding(.top, 30)
         .transition(.scale(scale: 0.1).combined(with: .opacity))
     }
 }
@@ -107,7 +117,8 @@ struct BalanceGoalView: View
             {
                 (
                     Text("What is your")
-                        .foregroundStyle(Color("TextColor").opacity(0.6))
+                        .foregroundStyle(Color("TextColor").opacity(0.8))
+                        .fontWeight(.light)
                     +
                     Text(verbatim: " ")
                     +
@@ -116,15 +127,17 @@ struct BalanceGoalView: View
                     Text(verbatim: " ")
                     +
                     Text("goal")
-                        .foregroundStyle(Color("TextColor").opacity(0.6))
+                        .foregroundStyle(Color("TextColor").opacity(0.8))
+                        .fontWeight(.light)
                     +
                     Text(verbatim: "?")
-                        .foregroundStyle(Color("TextColor").opacity(0.6))
+                        .foregroundStyle(Color("TextColor").opacity(0.8))
+                        .fontWeight(.light)
                 )
                 .font(.title)
                 .fontWeight(.semibold)
                 .fontDesign(.rounded)
-                .foregroundStyle(Color("TextColor"))
+                .foregroundStyle(Color("TextColor").gradient)
 
                 VStack(spacing: 10)
                 {
@@ -154,6 +167,7 @@ struct BalanceGoalView: View
                         {
                             balanceSlider = Double(AppSettings.balanceGoal)
                         }
+                        .tint(Color("ConsumedDefault"))
                         .sensoryFeedback(.selection, trigger: balanceSlider)
                 }
                 
@@ -217,26 +231,28 @@ struct DataSourceView: View
             {
                 (
                     Text("For")
-                        .foregroundStyle(Color("TextColor").opacity(0.6))
+                        .foregroundStyle(Color("TextColor").opacity(0.8))
+                        .fontWeight(.light)
                     +
                     Text(verbatim: " ")
                     +
                     Text("burned calories")
                     +
-                    Text(", use...")
-                        .foregroundStyle(Color("TextColor").opacity(0.6))
+                    Text(", use ...")
+                        .foregroundStyle(Color("TextColor").opacity(0.8))
+                        .fontWeight(.light)
                 )
                 .font(.title)
                 .fontWeight(.semibold)
                 .fontDesign(.rounded)
-                .foregroundStyle(Color("TextColor"))
+                .foregroundStyle(Color("TextColor").gradient)
                 
                 IconPicker(firstIcon: "heart.fill", secondIcon: "pencil.and.list.clipboard", selection: $AppSettings.dataSource.animation(.bouncy))
                     .frame(width: 120, height: 40)
                     .scaleEffect(1.4)
                     .sensoryFeedback(.selection, trigger: AppSettings.dataSource)
                 
-                Text(AppSettings.dataSource == .apple ? "Apple Health" : "Custom Data")
+                Text(AppSettings.dataSource == .apple ? String("Apple Health") : String(localized: "Custom Data"))
                     .font(.title)
                     .fontWeight(.semibold)
                     .fontDesign(.rounded)
@@ -353,7 +369,8 @@ struct MaingoalView: View
         {
             (
                 Text("My")
-                    .foregroundStyle(Color("TextColor").opacity(0.6))
+                    .foregroundStyle(Color("TextColor").opacity(0.8))
+                    .fontWeight(.light)
                 +
                 Text(verbatim: " ")
                 +
@@ -362,12 +379,13 @@ struct MaingoalView: View
                 Text(verbatim: " ")
                 +
                 Text("is to ...")
-                    .foregroundStyle(Color("TextColor").opacity(0.6))
+                    .foregroundStyle(Color("TextColor").opacity(0.8))
+                    .fontWeight(.light)
             )
             .font(.title)
             .fontWeight(.semibold)
             .fontDesign(.rounded)
-            .foregroundStyle(Color("TextColor"))
+            .foregroundStyle(Color("TextColor").gradient)
             
             IconPicker(firstIcon: "arrowshape.down.fill", secondIcon: "arrowshape.up.fill", selection: $AppSettings.weightGoal)
                 .frame(width: 120, height: 40)
@@ -401,13 +419,13 @@ struct AppleHealthView: View
                 Text("Allow access to")
                     .font(.title)
                     .fontWeight(.light)
-                    .opacity(0.8)
+                    .foregroundStyle(Color("TextColor").opacity(0.8))
                 
                 Text(verbatim: "Apple Health")
                     .font(.largeTitle)
                     .fontWeight(.semibold)
+                    .foregroundStyle(Color("TextColor").gradient)
             }
-            .foregroundStyle(Color("TextColor"))
             .fontDesign(.rounded)
         }
     }
@@ -459,6 +477,7 @@ struct WelcomeView: View
         .environment(onboardingInterface)
         .onAppear
         {
+            welcomeScale = 3.5
             onboardingInterface.randomizeHealthData()
             
             startAnimationCycle()
@@ -499,7 +518,7 @@ struct WelcomeView: View
         {
             guard welcomeAnimating else { return }
             
-            withAnimation(.bouncy(duration: 0.6))
+            withAnimation(.bouncy(duration: 1))
             {
                 onboardingInterface.randomizeHealthData()
             }
@@ -522,7 +541,7 @@ struct WelcomeView: View
     }
 }
 
-struct WelcomeIconText: View
+struct OnboardingWelcome: View
 {
     var body: some View
     {
@@ -550,7 +569,7 @@ struct WelcomeIconText: View
     }
 }
 
-struct ContinueButton: View
+struct OnboardingButton: View
 {
     @EnvironmentObject private var AppSettings: Settings
     
@@ -600,6 +619,7 @@ struct ContinueButton: View
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(.borderedProminent)
+        .tint(selection == .balancegoal ? Color("ConsumedDefault") : .blue)
         .padding(.horizontal, 55)
         .overlay(alignment: .top)
         {
@@ -636,6 +656,7 @@ struct ContinueButton: View
                 label:
                 {
                     Text("Back")
+                        .tint(selection == .balancegoal ? Color("ConsumedDefault").brighten(0.1) : .blue)
                 }
                 .offset(y: 40)
             }

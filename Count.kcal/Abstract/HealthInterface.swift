@@ -142,11 +142,11 @@ import WatchConnectivity
     {
 //        withAnimation(.snappy)
 //        {
-            self.sample.burnedActive = Int.random(in: 400...1000)
-            self.sample.burnedPassive = Int.random(in: 300...2300)
-            self.sample.burnedPassive7 = Int.random(in: 2200...2300)
-            self.sample.burnedActive7 = Int.random(in: 400...1000)
-            self.sample.consumed = Int.random(in: 1900...3600)
+            self.sample.burnedActive = Int.random(in: 100...1000)
+            self.sample.burnedPassive = Int.random(in: 200...2300)
+            self.sample.burnedPassive7 = Int.random(in: 1800...2500)
+            self.sample.burnedActive7 = Int.random(in: 200...1000)
+            self.sample.consumed = Int.random(in: 400...3600)
             self.sample.protein = Int.random(in: 70...200)
             self.sample.carbs = Int.random(in: 180...300)
             self.sample.fats = Int.random(in: 50...80)

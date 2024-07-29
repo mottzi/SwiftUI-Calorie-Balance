@@ -94,7 +94,8 @@ struct RectangleBalanceBarComplication: Widget
                 .containerBackground(Color(red: 30/255, green: 30/255, blue: 30/255), for: .widget)
 
         }
-        .configurationDisplayName("Balance bar (now)")
+        .configurationDisplayName("Bar (now)")
+//        .description("")
         .description("Shows current caloric balance.")
         .supportedFamilies([.accessoryRectangular])
         .contentMarginsDisabled()

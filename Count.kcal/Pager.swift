@@ -3,12 +3,6 @@ import Observation
 import WidgetKit
 import StoreKit
 
-enum CalendarModes 
-{
-    case off
-    case monthMode
-}
-
 struct Pager: View
 {    
     @State private var firstLaunch = Date.now
@@ -20,7 +14,7 @@ struct Pager: View
     
     @Environment(Streak.self) private var streak
         
-    @State private var calendarMode: CalendarModes = .off
+    @State private var showCalendar: Bool = false
     @State private var currentMonth: Date = .now
 
     @EnvironmentObject private var AppSettings: Settings
@@ -68,9 +62,9 @@ struct Pager: View
                 {
                     if AppSettings.isSettingsInputValid
                     {
-                        if calendarMode == .monthMode
+                        if showCalendar
                         {
-                            CDatePicker(Pages: $Pages, selectedPage: $selectedPage, ignoreChanges: $ignoreChanges, calendarMode: $calendarMode, currentMonth: $currentMonth)
+                            CDatePicker(Pages: $Pages, selectedPage: $selectedPage, ignoreChanges: $ignoreChanges, currentMonth: $currentMonth)
                         }
                         
                         if streak.showStreaksView
@@ -216,41 +210,43 @@ struct Pager: View
                 
                 ToolbarItem(placement: .topBarLeading)
                 {
-                    Text(selectedPage?.sample.date.relative ?? "")
+                    #if !DEBUG
+                    Text(selectedPage?.sample.date.relative ?? String(""))
                         .fontWeight(.semibold)
                         .fontDesign(.rounded)
                         .foregroundColor(Color("TextColor"))
                         .transaction { transaction in
                             transaction.animation = nil
                         }
-                    
-                    //                Button
-                    //                {
-                    //                    withAnimation(.snappy)
-                    //                    {
-                    //                       selectedPage?.randomizeHealthData()
-                    //
-                    //                       for page in FirstPages
-                    //                       {
-                    //                           page.randomizeHealthData()
-                    //                       }
-                    //
-                    //                       let start = Double.random(in: 60 ... 150)
-                    //                       let end = start + Double.random(in: 1 ... 5)
-                    //
-                    //                       WeightViewModel.randomizeWeightData(start: start, end: end)
-                    //                   }
-                    //                }
-                    //                label:
-                    //                {
-                    //                    Text(selectedPage?.sample.date.relative ?? "")
-                    //                    .fontWeight(.semibold)
-                    //                    .fontDesign(.rounded)
-                    //                    .foregroundColor(Color("TextColor"))
-                    //                    .transaction { transaction in
-                    //                        transaction.animation = nil
-                    //                    }
-                    //                }
+                    #else
+                    Button
+                    {
+                        withAnimation(.snappy)
+                        {
+                           selectedPage?.randomizeHealthData()
+    
+                           for page in FirstPages
+                           {
+                               page.randomizeHealthData()
+                           }
+    
+                           let start = Double.random(in: 60 ... 150)
+                           let end = start + Double.random(in: 1 ... 5)
+    
+                           WeightViewModel.randomizeWeightData(start: start, end: end)
+                       }
+                    }
+                    label:
+                    {
+                        Text(selectedPage?.sample.date.relative ?? "")
+                            .fontWeight(.semibold)
+                            .fontDesign(.rounded)
+                            .foregroundColor(Color("TextColor"))
+                            .transaction { transaction in
+                                transaction.animation = nil
+                            }
+                    }
+                    #endif
                 }
                 
                 ToolbarItem(placement: .topBarTrailing)
@@ -346,29 +342,18 @@ struct Pager: View
         selectedPage?.isTodayPage ?? false
     }
     
-    private func toggleCalendarMode()
-    {
-        switch calendarMode
-        {
-            case .off:
-                calendarMode = .monthMode
-            case .monthMode:
-                calendarMode = .off
-        }
-    }
-    
     private var calendarButton: some View
     {
         Button(action:
         {
             withAnimation(.snappy)
             {
-                toggleCalendarMode()
+                showCalendar.toggle()
             }
         }
         , label:
         {
-            Image(calendarMode == .off ? .customCalendar : .customCalendarSlash)
+            Image(showCalendar == false ? .customCalendar : .customCalendarSlash)
                 .symbolRenderingMode(.palette)
                 .foregroundStyle(Color("TextColor"))
                 .fontWeight(.medium)
@@ -396,8 +381,8 @@ struct Pager: View
                         if AppSettings.isSettingsInputValid && AppSettings.closedSettings >= 1
                         {
                             try? await Task.sleep(for: .seconds(0.2))
-                            requestReview()
                             
+                            requestReview()
                             AppSettings.closedSettings = 0
                         }
                         #endif

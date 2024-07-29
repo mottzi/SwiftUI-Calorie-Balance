@@ -66,7 +66,7 @@ struct EnergySettingsView: View
                         .frame(width: 100, height: 35)
                         .sensoryFeedback(.selection, trigger: AppSettings.dataSource)
                     
-                    Text(AppSettings.dataSource == .apple ? "Apple Health" : "Custom Data")
+                    Text(AppSettings.dataSource == .apple ? String("Apple Health") : String(localized: "Custom Data"))
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .animation(.linear, value: AppSettings.dataSource)
@@ -370,6 +370,8 @@ struct EnergySettingsView: View
                                 .offset(y: -1)
                         }
                     }
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
                     
                     Spacer()
                     

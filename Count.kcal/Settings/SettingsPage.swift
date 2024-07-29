@@ -191,7 +191,8 @@ struct SettingsPage: View
                     .padding(.leading, 16)
                 }
                 
-                ToolbarItem(placement: .topBarTrailing) 
+                #if DEBUG
+                ToolbarItem(placement: .topBarTrailing)
                 {
                     Button
                     {
@@ -204,18 +205,13 @@ struct SettingsPage: View
                     }
                     label:
                     {
-                        HStack
-                        {
-                            Text(verbatim: "Set up")
-                            
-                            Image(systemName: "doc.questionmark")
-                                .font(.callout)
-                        }
-                        .foregroundColor(Color("TextColor"))
-                        .fontWeight(.semibold)
+                        Text(verbatim: "Setup")
+                            .foregroundColor(Color("TextColor"))
+                            .fontWeight(.semibold)
                     }
-                    .padding(.trailing, 16)
+                    .padding(.trailing, 24)
                 }
+                #endif
             }
         }
 //        .environment(SliderData)

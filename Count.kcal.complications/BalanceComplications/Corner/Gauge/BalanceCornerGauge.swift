@@ -23,7 +23,7 @@ struct BalanceCornerGaugeComplicationView : View
                         Gauge(
                             value: CGFloat(entry.data.balanceNow).clamped(to: range),
                             in: range,
-                            label: { Text("") }
+                            label: { Text(verbatim: "") }
                         )
                         .tint(Gradient(colors: [Settings.shared.consumedColor, Settings.shared.burnedColor]))
                     }
@@ -43,7 +43,8 @@ struct BalanceCornerGaugeComplication: Widget
             BalanceCornerGaugeComplicationView(entry: entry)
                 .containerBackground(.clear, for: .widget)
         }
-        .configurationDisplayName("Balance gauge - now")
+        .configurationDisplayName("now")
+//        .description("")
         .description("Shows current caloric balance and a gauge.")
         .supportedFamilies([.accessoryCorner])
     }

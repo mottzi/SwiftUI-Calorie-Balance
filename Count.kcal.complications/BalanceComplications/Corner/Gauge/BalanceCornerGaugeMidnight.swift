@@ -20,7 +20,7 @@ struct BalanceCornerGaugeMidnightComplicationView : View
                     .widgetCurvesContent()
                     .widgetLabel
                     {
-                        Gauge(value: CGFloat(entry.data.balanceMidnight).clamped(to: range), in: range, label: { Text("") } )
+                        Gauge(value: CGFloat(entry.data.balanceMidnight).clamped(to: range), in: range, label: { Text(verbatim: "") } )
                             .tint(Gradient(colors: [Settings.shared.consumedColor, Settings.shared.burnedColor]))
                     }
             }
@@ -39,7 +39,8 @@ struct BalanceCornerGaugeMidnightComplication: Widget
             BalanceCornerGaugeMidnightComplicationView(entry: entry)
                 .containerBackground(.clear, for: .widget)
         }
-        .configurationDisplayName("Balance gauge - midnight")
+        .configurationDisplayName("midnight")
+//        .description("")
         .description("Shows caloric balance at midnight (gauge)")
         .supportedFamilies([.accessoryCorner])
     }

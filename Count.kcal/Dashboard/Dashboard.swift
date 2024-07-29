@@ -22,7 +22,7 @@ struct Dashboard: View
             }
         }
         
-        return ""
+        return String("")
     }
     
     var body: some View

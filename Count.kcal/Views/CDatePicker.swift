@@ -17,7 +17,6 @@ struct CDatePicker: View
     @Binding var selectedPage: HealthInterface?
     
     @Binding var ignoreChanges: Bool
-    @Binding var calendarMode: CalendarModes
     @Binding var currentMonth: Date
     
     @State private var days: [DayCell] = []

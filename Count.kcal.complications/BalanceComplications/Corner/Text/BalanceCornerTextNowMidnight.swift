@@ -46,7 +46,8 @@ struct BalanceCornerTextNowMidnightComplication: Widget
             BalanceCornerTextNowMidnightComplicationView(entry: entry)
                 .containerBackground(.clear, for: .widget)
         }
-        .configurationDisplayName("Balance text - now & midnight")
+        .configurationDisplayName("both")
+//        .description("")
         .description("Shows current caloric balance and at midnight with text.")
         .supportedFamilies([.accessoryCorner])
     }

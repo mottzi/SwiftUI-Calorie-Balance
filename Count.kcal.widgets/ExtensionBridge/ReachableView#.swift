@@ -8,7 +8,7 @@ extension Int
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .none
         
-        return numberFormatter.string(from: NSNumber(value: self)) ?? ""
+        return String(numberFormatter.string(from: NSNumber(value: self)) ?? "")
     }
 }
 

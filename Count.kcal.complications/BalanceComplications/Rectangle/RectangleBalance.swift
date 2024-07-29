@@ -140,7 +140,8 @@ struct RectangleBalanceComplication: Widget
             RectangleBalanceComplicationView(entry: entry)
                 .containerBackground(c.brighten(0.1).gradient, for: .widget)
         }
-        .configurationDisplayName("Balance (now)")
+        .configurationDisplayName("Circle (now)")
+//        .description("")
         .description("Shows current caloric balance.")
         .supportedFamilies([.accessoryRectangular])
         .contentMarginsDisabled()
