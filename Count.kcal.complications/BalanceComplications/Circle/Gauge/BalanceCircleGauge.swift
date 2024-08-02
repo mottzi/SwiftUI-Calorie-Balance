@@ -56,8 +56,8 @@ struct BalanceCircleGaugeComplication: Widget
             BalanceCircleGaugeComplicationView(entry: entry)
                 .containerBackground(.clear, for: .widget)
         }
-        .configurationDisplayName("Gauge (now)")
-        .description("Shows current caloric balance (gauge)")
+        .configurationDisplayName(String("Gauge (now)"))
+        .description(String("Shows current caloric balance (gauge)"))
         .supportedFamilies([.accessoryCircular])
     }
 }

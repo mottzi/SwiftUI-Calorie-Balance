@@ -145,9 +145,8 @@ struct RectangleBalanceMidnightComplication: Widget
             RectangleBalanceMidnightComplicationView(entry: entry)
                 .containerBackground(c.brighten(0.1).gradient, for: .widget)
         }
-        .configurationDisplayName("Circle (midnight)")
-//        .description("")
-        .description("Shows caloric balance at midnight.")
+        .configurationDisplayName(String("Circle (midnight)"))
+        .description(String("Shows caloric balance at midnight."))
         .supportedFamilies([.accessoryRectangular])
         .contentMarginsDisabled()
     }

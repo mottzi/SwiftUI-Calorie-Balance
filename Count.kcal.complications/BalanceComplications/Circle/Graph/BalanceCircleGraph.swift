@@ -57,9 +57,8 @@ struct BalanceCircleGraphComplication: Widget
             BalanceCircleGraphComplicationView(entry: entry)
                 .containerBackground(.background, for: .widget)
         }
-        .configurationDisplayName("Graph #1 (now)")
-//        .description("")
-        .description("Shows current caloric balance (graph)")
+        .configurationDisplayName(String("Graph #1 (now)"))
+        .description(String("Shows current caloric balance (graph)"))
         .supportedFamilies([.accessoryCircular])
     }
 }

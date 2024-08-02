@@ -43,9 +43,8 @@ struct BalanceCornerGaugeComplication: Widget
             BalanceCornerGaugeComplicationView(entry: entry)
                 .containerBackground(.clear, for: .widget)
         }
-        .configurationDisplayName("now")
-//        .description("")
-        .description("Shows current caloric balance and a gauge.")
+        .configurationDisplayName(String("Gauge (now)"))
+        .description(String("Shows current caloric balance and a gauge."))
         .supportedFamilies([.accessoryCorner])
     }
 }
