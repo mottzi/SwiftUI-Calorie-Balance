@@ -9,8 +9,6 @@ struct WeekBalanceGraph: View
     @Binding var selectedPage: HealthInterface?
     @Binding var ignoreChanges: Bool
     
-//    var selectedPage: HealthInterface?
-
     func findPage(for date: Date) -> HealthInterface?
     {
         Pages.first { $0.sample.date.isSameDay(as: date) }
@@ -158,11 +156,11 @@ struct WeekBalanceGraph: View
                                 .clipShape(UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(topLeading: barChartRatio > 0 ? cr : 0, bottomLeading: barChartRatio > 0 ? 0 : cr, bottomTrailing: barChartRatio > 0 ? 0 : cr, topTrailing: barChartRatio > 0 ? cr : 0)))
                         }
 
-                        .offset(y: barChartRatio > 0 ? -barChartHeight(graphHeight: geo.size.height) / 2 : barChartHeight(graphHeight: geo.size.height) / 2)
+                        .offset(y: barChartRatio > 0 ? -barChartHeight(graphHeight: geo.size.height) / 2 - 1: barChartHeight(graphHeight: geo.size.height) / 2 + 1)
                     
                     Rectangle()
                         .frame(width: geo.size.width, height: 2)
-                        .foregroundStyle(Color("TextColor"))
+                        .foregroundStyle(Color("TextColor").opacity(0.7))
                 }
                 .frame(width: geo.size.width, height: geo.size.height)
                 .overlay

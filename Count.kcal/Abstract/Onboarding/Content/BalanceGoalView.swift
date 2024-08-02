@@ -64,7 +64,7 @@ struct BalanceGoalView: View
                     .opacity(0.8)
             }
             
-            Slider(value: $balanceSlider, in: 0...2000, step: 50)
+            Slider(value: $balanceSlider, in: 0...1350, step: 50)
                 .onChange(of: balanceSlider)
             { _, n in
                 AppSettings.balanceGoal = Int(n)
