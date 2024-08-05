@@ -20,8 +20,14 @@ struct CaloriesTab: View
         {
             Button 
             {
+                #if !DEBUG
                 toggleMode()
-                //Interface.randomizeHealthData()
+                #else
+                withAnimation(.snappy)
+                {
+                    Interface.randomizeHealthData()
+                }
+                #endif
             }
             label:
             {
