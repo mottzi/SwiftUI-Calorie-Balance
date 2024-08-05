@@ -32,15 +32,31 @@ enum BalanceOption
 
 extension HealthData
 {
-    static func example(for date: Date, balance: BalanceOption = .deficit) -> HealthData
+    static func example(for date: Date, balance: BalanceOption = .deficit, random: Bool = false) -> HealthData
     {
+        if random
+        {
+            var data = HealthData.empty(for: date)
+            
+            data.burnedActive = Int.random(in: 100...1000)
+            data.burnedPassive = Int.random(in: 200...2300)
+            data.burnedPassive7 = Int.random(in: 1800...2500)
+            data.burnedActive7 = Int.random(in: 200...1000)
+            data.consumed = Int.random(in: 400...3600)
+            data.protein = Int.random(in: 70...200)
+            data.carbs = Int.random(in: 180...300)
+            data.fats = Int.random(in: 50...80)
+            
+            return data
+        }
+        
         if balance == .deficit
         {
-            HealthData(date: date, lastDataSync: nil, burnedActive: 500, burnedActive7: 0, burnedPassive: 2130, burnedPassive7: 2500, consumed: 1880, protein: 100, carbs: 80, fats: 100)
+            return HealthData(date: date, lastDataSync: nil, burnedActive: 1500, burnedActive7: 0, burnedPassive: 2130, burnedPassive7: 2500, consumed: 2380, protein: 100, carbs: 80, fats: 100)
         }
         else
         {
-            HealthData(date: date, lastDataSync: nil, burnedActive: 400, burnedActive7: 0, burnedPassive: 1850, burnedPassive7: 2200, consumed: 2700, protein: 100, carbs: 80, fats: 100)
+            return HealthData(date: date, lastDataSync: nil, burnedActive: 400, burnedActive7: 0, burnedPassive: 1850, burnedPassive7: 2200, consumed: 2700, protein: 100, carbs: 80, fats: 100)
         }
     }
     

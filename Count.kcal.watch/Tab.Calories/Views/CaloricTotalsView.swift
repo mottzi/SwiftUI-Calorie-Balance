@@ -31,9 +31,9 @@ struct CaloricTotalsView: View
                 {
                     Image(systemName: "bolt.fill")
                         .resizable()
-                        .fontWeight(.black)
                         .scaledToFit()
                         .frame(height: 16)
+                        .fontWeight(.black)
                         .foregroundStyle(AppSettings.burnedColor.brighten(0.3).gradient)
                     
                     Text("\(burnedTotal)")
@@ -41,7 +41,6 @@ struct CaloricTotalsView: View
                         .fontWeight(.semibold)
                         .fontDesign(.rounded)
                         .foregroundStyle(.primary.opacity(0.75))
-                        .lineLimit(1)
                         .contentTransition(.numericText(value: Double(burnedTotal)))
                 }
                 
@@ -57,7 +56,6 @@ struct CaloricTotalsView: View
                         .fontWeight(.semibold)
                         .fontDesign(.rounded)
                         .foregroundStyle(.primary.opacity(0.75))
-                        .lineLimit(1)
                         .contentTransition(.numericText(value: Double(Interface.sample.consumed)))
                     
                     Image(systemName: "fork.knife")
@@ -72,8 +70,10 @@ struct CaloricTotalsView: View
             .padding(.horizontal, 8)
             .background(in: .capsule)
             .backgroundStyle(.tertiary.opacity(0.8))
+            
             Spacer(minLength: 0)
         }
+        .dynamicTypeSize(...DynamicTypeSize.xxLarge)
     }
 }
 
@@ -81,5 +81,4 @@ struct CaloricTotalsView: View
 {
     ContentView(Interface: HealthInterface(.example(for: .now, balance: .deficit)))
         .environmentObject(Settings.shared)
-        .environment(HealthInterface(HealthData.example(for: .now)))
 }

@@ -39,6 +39,9 @@ struct CaloriesTab: View
             CaloricTotalsView(mode: mode)
                 .offset(y: 10)
         }
+        .compositingGroup()
+        .lineLimit(1)
+        .minimumScaleFactor(0.5)
         .containerBackground(bgColor.brighten(-0.3).gradient, for: .tabView)
         .padding(.top, 18)
         .scenePadding(.horizontal)

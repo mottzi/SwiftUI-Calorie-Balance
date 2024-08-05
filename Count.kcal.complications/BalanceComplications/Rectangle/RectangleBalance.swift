@@ -147,13 +147,11 @@ struct RectangleBalanceComplication: Widget
     }
 }
 
-
 #Preview(as: .accessoryRectangular)
 {
     RectangleBalanceComplication()
 }
 timeline:
 {
-    HealthDataEntry(date: .now, data: HealthData.example(for: .now))
+    HealthDataEntry(date: .now, data: HealthData.example(for: .now, random: true))
 }
-

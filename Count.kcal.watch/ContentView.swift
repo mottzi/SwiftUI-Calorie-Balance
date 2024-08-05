@@ -50,6 +50,7 @@ struct ContentView: View
                     
                     ReachableView("Protein", consumedValue: Interface.sample.protein, goalValue: AppSettings.proteinGoal, color: AppSettings.consumedColor, graphHeight: 10)
                 }
+                .dynamicTypeSize(...DynamicTypeSize.large)
                 .padding(.top, 10)
                 .scenePadding()
                 .containerBackground(bgColor.brighten(-0.3).gradient, for: .tabView)
