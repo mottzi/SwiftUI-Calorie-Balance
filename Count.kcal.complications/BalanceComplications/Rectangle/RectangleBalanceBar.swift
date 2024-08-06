@@ -58,14 +58,12 @@ struct RectangleBalanceBarComplicationView : View
                                 .foregroundStyle(.primary)
                                 .offset(y: 1)
 
-                            HStack(alignment: .lastTextBaseline, spacing: 2)
-                            {
-                                Text("\(entry.data.balanceNow)")
-                                    .fontWeight(.medium)
-                                    .foregroundStyle(.primary)
-                            }
+                            Text("\(entry.data.balanceNow)")
+                                .fontWeight(.medium)
+                                .foregroundStyle(.primary)
                         }
                     }
+                    .compositingGroup()
                     .minimumScaleFactor(0.5)
                     .padding(.top, 6)
                     .padding(.bottom, 2)

@@ -65,6 +65,7 @@ struct RectangleBalanceBarMidnightComplicationView : View
                             }
                         }
                     }
+                    .compositingGroup()
                     .minimumScaleFactor(0.5)
                     .padding(.top, 6)
                     .padding(.bottom, 2)

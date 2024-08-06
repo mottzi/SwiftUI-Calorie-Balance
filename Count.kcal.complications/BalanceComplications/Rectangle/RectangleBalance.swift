@@ -117,6 +117,9 @@ struct RectangleBalanceComplicationView : View
                             }
                         }
                         .padding(.trailing, 2)
+                        .compositingGroup()
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
                         .fixedSize()
                         
                         Spacer()

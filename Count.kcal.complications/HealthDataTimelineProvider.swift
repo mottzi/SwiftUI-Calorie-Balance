@@ -54,10 +54,24 @@ struct HealthDataTimelineProvider: TimelineProvider
         // default: fetch from HealthKit (if received data from phone is > 60s)
         Task
         {
-            let timeline = Timeline(
+            var timeline: Timeline<HealthDataEntry>
+            
+            timeline = Timeline(
                 entries: [HealthDataEntry(date: .now, data: try! await asyncFetchData())],
                 policy: .after(nextUpdateDate)
             )
+            
+//            #if !DEBUG
+//            timeline = Timeline(
+//                entries: [HealthDataEntry(date: .now, data: try! await asyncFetchData())],
+//                policy: .after(nextUpdateDate)
+//            )
+//            #else
+//            timeline = Timeline(
+//                entries: [HealthDataEntry(date: .now, data: HealthData.example(for: .now, random: true))],
+//                policy: .after(nextUpdateDate)
+//            )
+//            #endif
             
             completion(timeline)
         }
