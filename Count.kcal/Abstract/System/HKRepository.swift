@@ -17,6 +17,7 @@ final class HKRepository
         HKObjectType.quantityType(forIdentifier: .dietaryFatTotal)!,
         HKObjectType.quantityType(forIdentifier: .dietaryCarbohydrates)!,
         HKObjectType.quantityType(forIdentifier: .bodyMass)!,
+        HKObjectType.quantityType(forIdentifier: .stepCount)!,
     ])
     
     func fetchInitialAvgWeightData(for date: Date) async -> [WeightChartData]
@@ -114,9 +115,7 @@ final class HKRepository
     }
       
     func requestPermission() async -> Bool
-    {
-        //let res: ()? = try? await store.requestAuthorization(toShare: Set(), read: dataTypesToRead)
-        
+    {        
         if let _ = try? await store.requestAuthorization(toShare: Set(), read: dataTypesToRead)
         {
             return true
@@ -153,7 +152,8 @@ final class HKRepository
             case .dietaryProtein: unit = HKUnit.gram()
             case .dietaryFatTotal: unit = HKUnit.gram()
             case .dietaryCarbohydrates: unit = HKUnit.gram()
-            default: 
+            case .stepCount: unit = HKUnit.count()
+            default:
                 if Settings.shared.energyUnit == .kJ
                 {
                     unit = HKUnit.jouleUnit(with: .kilo)

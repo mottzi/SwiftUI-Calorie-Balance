@@ -254,7 +254,6 @@ final class Settings: ObservableObject
     @AppStorage("showWelcome", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var showWelcome: Bool = true
     @AppStorage("closedSettings", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var closedSettings: Int = 0
 
-
     @AppStorage("weightGoal", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var weightGoal: WeightGoals = .lose
     @AppStorage("dataSource", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var dataSource: DataSources = .apple
     
@@ -276,6 +275,8 @@ final class Settings: ObservableObject
     
     @AppStorage("energyUnit", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var energyUnit: EnergyUnit = .kcal
     @AppStorage("weightUnit", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var weightUnit: WeightUnit = .kg
+    
+    @AppStorage("stepsGoal", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var stepsGoal: Int = 10000
 }
 
 extension Date: RawRepresentable 

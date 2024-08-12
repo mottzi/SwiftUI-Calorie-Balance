@@ -3,7 +3,7 @@ import WidgetKit
 
 enum Field: Int, CaseIterable
 {
-    case balance, carbs, fats, protein, passive, active
+    case balance, carbs, fats, protein, passive, active, steps
 }
 
 struct SettingsPage: View
@@ -31,7 +31,8 @@ struct SettingsPage: View
 
                 VStack(spacing: 30)
                 {
-                    NutrientsCard(focusedField: _focusedField)
+                    NutrientsCard()
+                    StepsCard(focusedField: _focusedField)
                     UnitsCard()
                     ColorsCard()
                 }

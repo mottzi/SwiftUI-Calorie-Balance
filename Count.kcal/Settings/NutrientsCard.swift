@@ -4,9 +4,7 @@ struct NutrientsCard: View
 {
     @Environment(HSlider.self) private var SliderData
     @EnvironmentObject private var AppSettings: Settings
-    
-    @FocusState var focusedField: Field?
-    
+        
     var body: some View
     {
         Card("Nutrients", titlePadding: false)

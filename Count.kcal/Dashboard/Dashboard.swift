@@ -3,6 +3,7 @@ import WidgetKit
 
 struct Dashboard: View
 {
+    @EnvironmentObject private var AppSettings: Settings
     @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(HealthInterface.self) private var DataViewModel
 
@@ -31,13 +32,16 @@ struct Dashboard: View
         {
             Card("Calories", secondaryTitle: sTitle)
             {
-                if !DataViewModel.isTodayPage
+                VStack
                 {
-                    CaloriesCard()
-                }
-                else
-                {
-                    CaloriesMidnightCard(todayPageMode: $todayPageMode)
+                    if !DataViewModel.isTodayPage
+                    {
+                        CaloriesCard()
+                    }
+                    else
+                    {
+                        CaloriesMidnightCard(todayPageMode: $todayPageMode)
+                    }
                 }
             }
             .overlay(alignment: .init(horizontal: .center, vertical: .top))
@@ -76,6 +80,14 @@ struct Dashboard: View
             }
 
             MacroCard()
+            
+            Card("Steps")
+            {
+                ReachableView("Steps", context: .app, consumedValue: DataViewModel.sample.steps, goalValue: AppSettings.stepsGoal, unit: "", color: AppSettings.burnedColor, graphHeight: 10)
+                    .padding(.horizontal, 11)
+//                    .padding(.top, 4)
+                    .padding(.bottom, 6)
+            }
         }
     }
     

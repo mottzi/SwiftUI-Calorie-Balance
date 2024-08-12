@@ -83,6 +83,7 @@
 		9A7A4DA32C28A9CB0055C6CA /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9A57F5382B66813D00B8DF6D /* Localizable.xcstrings */; };
 		9A7A4DA42C28A9EC0055C6CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */; };
 		9A7A4DA52C28AA1D0055C6CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */; };
+		9A7CC5342C6A3F3E0061451D /* StepsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7CC5332C6A3F3E0061451D /* StepsCard.swift */; };
 		9A85F1FA2C3756F1001FA5D0 /* RectangleBalanceMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A85F1F92C3756F1001FA5D0 /* RectangleBalanceMidnight.swift */; };
 		9A8BA4062B4054ED0011D412 /* BackgroundColorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BA4052B4054ED0011D412 /* BackgroundColorSection.swift */; };
 		9A8BA4092B4055B70011D412 /* ColorsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BA4082B4055B70011D412 /* ColorsCard.swift */; };
@@ -272,6 +273,7 @@
 		9A6DBD532C28CEE6000920DA /* BalanceCornerTextMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCornerTextMidnight.swift; sourceTree = "<group>"; };
 		9A6DBD552C28D007000920DA /* BalanceCornerGaugeMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCornerGaugeMidnight.swift; sourceTree = "<group>"; };
 		9A6DBD572C28D2E3000920DA /* BalanceCircleGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGraph.swift; sourceTree = "<group>"; };
+		9A7CC5332C6A3F3E0061451D /* StepsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsCard.swift; sourceTree = "<group>"; };
 		9A85F1F92C3756F1001FA5D0 /* RectangleBalanceMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleBalanceMidnight.swift; sourceTree = "<group>"; };
 		9A8BA4052B4054ED0011D412 /* BackgroundColorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundColorSection.swift; sourceTree = "<group>"; };
 		9A8BA4082B4055B70011D412 /* ColorsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsCard.swift; sourceTree = "<group>"; };
@@ -549,6 +551,7 @@
 				9A92F1652B052023009C4A2A /* SettingsPage.swift */,
 				9A92F16C2B06CE1D009C4A2A /* EnergySettingsView.swift */,
 				9A92F16E2B06CF06009C4A2A /* NutrientsCard.swift */,
+				9A7CC5332C6A3F3E0061451D /* StepsCard.swift */,
 				9A8BA4162B4079B90011D412 /* ColorsCard */,
 				9A31F9BC2B6AEBE800886BAE /* UnitsCard.swift */,
 			);
@@ -935,6 +938,7 @@
 				9A3F8EAA2B348C1F00B0DC74 /* CaloriesMidnightCard.swift in Sources */,
 				9A9BC9BE2A7E9C7300A4404A /* ReachableView.swift in Sources */,
 				9A0D04FE2C165E6B00AF7247 /* Connectivity.swift in Sources */,
+				9A7CC5342C6A3F3E0061451D /* StepsCard.swift in Sources */,
 				9A919DC32B233E380003C035 /* Extensions.swift in Sources */,
 				9AA72DAB2B02EB8200E32650 /* BarBalanceGraphMidnight.swift in Sources */,
 				9A206D7D2C5838E50079DE3D /* AppleHealthView.swift in Sources */,
@@ -1257,7 +1261,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1301,7 +1305,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1339,7 +1343,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1378,7 +1382,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app.widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1414,7 +1418,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app.watch.complications;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1449,7 +1453,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app.watch.complications;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1489,7 +1493,7 @@
 					"@executable_path/Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1531,7 +1535,7 @@
 					"@executable_path/Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.app.watch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

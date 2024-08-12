@@ -34,6 +34,7 @@ import WatchConnectivity
                     self.sample.protein = c.protein
                     self.sample.carbs = c.carbs
                     self.sample.fats = c.fats
+                    self.sample.steps = c.steps
                 }
             }
             
@@ -49,9 +50,11 @@ import WatchConnectivity
         async let proteinFetch = hkRep.cumDataToday(fetch: .dietaryProtein, for: self.sample.date)
         async let carbsFetch = hkRep.cumDataToday(fetch: .dietaryCarbohydrates, for: self.sample.date)
         async let fatsFetch = hkRep.cumDataToday(fetch: .dietaryFatTotal, for: self.sample.date)
+        async let stepsFetch = hkRep.cumDataToday(fetch: .stepCount, for: self.sample.date)
+
         
         // execute all async calls concurrently
-        let (active, passive, passiveAvg, consumed, protein, carbs, fats) = await (activeFetch, passiveFetch, passiveAvgFetch, consumedFetch, proteinFetch, carbsFetch, fatsFetch)
+        let (active, passive, passiveAvg, consumed, protein, carbs, fats, steps) = await (activeFetch, passiveFetch, passiveAvgFetch, consumedFetch, proteinFetch, carbsFetch, fatsFetch, stepsFetch)
         
         // update UI on main "thread"
         await MainActor.run
@@ -72,6 +75,7 @@ import WatchConnectivity
                 self.sample.protein = protein
                 self.sample.carbs = carbs
                 self.sample.fats = fats
+                self.sample.steps = steps
                 
                 // custom energy data
                 if AppSettings.dataSource == .custom
@@ -119,6 +123,7 @@ import WatchConnectivity
         c.protein = protein
         c.carbs = carbs
         c.fats = fats
+        c.steps = steps
         
         self.CachedSample = c
         self.CacheDate = .now
@@ -135,6 +140,7 @@ import WatchConnectivity
         self.sample.protein = 0
         self.sample.carbs = 0
         self.sample.fats = 0
+        self.sample.steps = 0
     }
     
     @MainActor
@@ -150,6 +156,7 @@ import WatchConnectivity
             self.sample.protein = Int.random(in: 70...200)
             self.sample.carbs = Int.random(in: 180...300)
             self.sample.fats = Int.random(in: 50...80)
+            self.sample.steps = Int.random(in: 0...30000)
 //        }
     }
     

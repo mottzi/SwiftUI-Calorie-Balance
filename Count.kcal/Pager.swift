@@ -12,17 +12,14 @@ struct Pager: View
     @State private var ignoreChanges: Bool = false
     @State private var todayPageMode: PagerSelection? = .first
     
-    @Environment(Streak.self) private var streak
-        
     @State private var showCalendar: Bool = false
     @State private var currentMonth: Date = .now
 
     @EnvironmentObject private var AppSettings: Settings
     @Environment(WeightDataViewModel.self) private var WeightViewModel
+    @Environment(Streak.self) private var streak
     @Environment(\.scenePhase) var scenePhase
-    @Environment(\.dismiss) var dismiss
     @Environment(\.requestReview) private var requestReview
-    @Environment(\.colorScheme) private var scheme: ColorScheme
     
     @State private var SliderData = HSlider()
     

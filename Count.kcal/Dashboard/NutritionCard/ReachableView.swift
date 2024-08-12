@@ -41,10 +41,13 @@ struct ReachableView: View
     private let key: LocalizedStringKey
     private let color:  Color
     
+    private let unit: String
+    
     init(_  key:         LocalizedStringKey,
          context:        ViewContext = .app,
          consumedValue:  Int,
          goalValue:      Int,
+         unit:           String = "g",
          color:          Color = Color("SecondaryTextColor"),
          graphHeight:    CGFloat = 18.0)
     {
@@ -56,6 +59,8 @@ struct ReachableView: View
                 
         self.key = key
         self.color = color
+        
+        self.unit = unit
     }
     
     var body: some View
@@ -115,12 +120,12 @@ struct ReachableView: View
                     
                     HStack(spacing: 0)
                     {
-                        Text(verbatim: "\(consumedValue.stringFormat())")
+                        Text("\(consumedValue)")
                             .frame(minWidth: minWidthLeading[dynamicType, default: 30], alignment: .trailing)
                         
                         Text(verbatim: "   / ")
                         
-                        Text(verbatim: "\(goalValue.stringFormat()) g")
+                        Text("\(goalValue) \(String(unit))")
                             .frame(minWidth: minWidthTrailing[dynamicType, default: 40], alignment: .trailing)
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
