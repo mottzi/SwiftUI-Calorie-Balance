@@ -13,7 +13,7 @@ struct CountApp: App
     {
         WindowGroup
         {
-            NavigationView
+            NavigationStack
             {
                 ZStack
                 {
@@ -32,7 +32,7 @@ struct CountApp: App
 
 #Preview
 {    
-    NavigationView
+    NavigationStack
     {
         ZStack
         {

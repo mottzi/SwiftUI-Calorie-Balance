@@ -44,6 +44,8 @@ struct Pager: View
         return pages
     }
     
+    var iPad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
+    
     var body: some View
     {
         if AppSettings.showWelcome
@@ -88,7 +90,7 @@ struct Pager: View
                                 ForEach(Pages, id: \.self)
                                 { page in
                                     Dashboard(todayPageMode: $todayPageMode)
-                                        .containerRelativeFrame(.horizontal)
+                                        .containerRelativeFrame(.horizontal, count: iPad ? 2 : 1, span: 1, spacing: 10.0)
                                         .environment(page)
                                         .id(page)
                                 }
