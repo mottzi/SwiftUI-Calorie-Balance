@@ -16,12 +16,34 @@ struct WeekBalanceGraph: View
     
     var maxEnergy: Int
     {
-        if let highest = DataPoints.max(by: { abs($0.sample.balanceMidnight) < abs($1.sample.balanceMidnight) })
+        var highest: HealthInterface? = nil
+        
+        for point in DataPoints
         {
-            return Int(ceil(Double(abs(highest.sample.balanceMidnight))))/* / 1000) * 1000)*/
+            if highest != nil
+            {
+                let balance = point.isTodayPage ? point.sample.balanceMidnight : point.sample.balanceNow
+                let balanceHighest = highest!.isTodayPage ? highest!.sample.balanceMidnight : highest!.sample.balanceNow
+                
+                if balance > balanceHighest
+                {
+                    highest = point
+                }
+            }
+            else
+            {
+                highest = point
+            }
+        }
+        
+        if let highest
+        {
+            let balance = highest.isTodayPage ? highest.sample.balanceMidnight : highest.sample.balanceNow
+            
+            return Int(ceil(Double(abs(balance))))
         }
 
-      return 0
+        return 0
     }
 
     func isDaySelected(barDay: Date) -> Bool
@@ -57,7 +79,7 @@ struct WeekBalanceGraph: View
                             .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                     }
                     
-                    VBarBalanceGraph(balance: point.sample.balanceMidnight, consumed: point.sample.consumed, maxEnergy: maxEnergy, date: point.sample.date)
+                    VBarBalanceGraph(balance: point.isTodayPage ? point.sample.balanceMidnight : point.sample.balanceNow, consumed: point.sample.consumed, maxEnergy: maxEnergy, date: point.sample.date)
                         .frame(height: 60)
                 }
                 .contentShape(.rect)

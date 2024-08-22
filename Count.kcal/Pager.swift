@@ -72,13 +72,13 @@ struct Pager: View
                             {
                                 WeekBalanceGraph(DataPoints: FirstPages, Pages: $Pages, selectedPage: $selectedPage, ignoreChanges: $ignoreChanges)
                                     .task
-                                {
-                                    for page in FirstPages
                                     {
-                                        await page.updateMetrics(cache: false)
+                                        for page in FirstPages
+                                        {
+                                            await page.updateMetrics(cache: false)
+                                        }
                                     }
-                                }
-                                .padding(.horizontal, 12)
+                                    .padding(.horizontal, 12)
                             }
                             .padding(.bottom, 15)
                         }
@@ -224,10 +224,10 @@ struct Pager: View
                         {
                            selectedPage?.randomizeHealthData()
     
-                           for page in FirstPages
-                           {
-                               page.randomizeHealthData()
-                           }
+//                           for page in FirstPages
+//                           {
+//                               page.randomizeHealthData()
+//                           }
     
                            let start = Double.random(in: 60 ... 150)
                            let end = start + Double.random(in: 1 ... 5)
