@@ -37,7 +37,7 @@ struct SettingsPage: View
                     ColorsCard()
                 }
                 
-                VStack(spacing: 0)
+                VStack(spacing: 2)
                 {
                     HStack(spacing: 6)
                     {
@@ -102,47 +102,75 @@ struct SettingsPage: View
                     .foregroundStyle(Color("TextColor"))
                     
                     Divider()
-                        .frame(width: 100)
+                        .frame(width: 190)
                         .padding(.vertical, 16)
-                        .padding(.top, 2)
-                        .padding(.bottom, 4)
+                        .padding(.top, 4)
+                        .padding(.bottom, 6)
                 
-                    Button(action:
+                    HStack(spacing: 24)
                     {
-                        if let url = URL(string: "twitter://user?screen_name=BerkenSayilir"),
-                           UIApplication.shared.canOpenURL(url)
+                        Button
                         {
-                            UIApplication.shared.open(url)
+                            if let url = URL(string: "twitter://user?screen_name=BerkenSayilir"),
+                               UIApplication.shared.canOpenURL(url)
+                            {
+                                UIApplication.shared.open(url)
+                            }
                         }
-                    },
-                    label:
-                    {
-                        HStack(spacing: 3)
+                        label:
                         {
-//                            Text("Suggestions:")
-//                                .font(.caption)
-//                                .foregroundStyle(Color("SecondaryTextColor"))
-//                                .fontWeight(.medium)
-//                                .padding(.trailing, 4)
-                            
-                            Image(systemName: "bubble")
-                                .resizable()
-                                .scaledToFit()
-                                .foregroundStyle(Color("TextColor"))
-                                .frame(height: 14)
-                                .fontWeight(.medium)
-                                .offset(y: 1)
-                            
-                            Image(scheme == .dark ? "XAppWhite" : "XAppBlack")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 18)
-                                .opacity(0.9)
+                            HStack(spacing: 3)
+                            {
+                                Text("Contact")
+                                    .font(.caption)
+                                    .foregroundStyle(Color("SecondaryTextColor"))
+                                    .fontWeight(.medium)
+                                    .padding(.trailing, 4)
+                                
+                                Image(systemName: "bubble")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundStyle(Color("TextColor"))
+                                    .frame(height: 14)
+                                    .fontWeight(.medium)
+                                    .offset(y: 1)
+                                
+                                Image(scheme == .dark ? "XAppWhite" : "XAppBlack")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 18)
+                                    .opacity(0.9)
+                            }
                         }
-                    })
-                    .buttonStyle(.plain)
+                        .buttonStyle(.plain)
+                        
+                        Button
+                        {
+                            if let url = URL(string: "https://count.mottzi.de/help"),
+                               UIApplication.shared.canOpenURL(url)
+                            {
+                                UIApplication.shared.open(url)
+                            }
+                        }
+                        label:
+                        {
+                            HStack(spacing: 3)
+                            {
+                                Text("Support")
+                                    .font(.caption)
+                                    .foregroundStyle(Color("SecondaryTextColor"))
+                                    .fontWeight(.medium)
+                                
+                                Image(systemName: "questionmark.circle")
+                                    .foregroundStyle(Color("TextColor"))
+                                    .fontWeight(.medium)
+                            }
+                        }
+                        .buttonStyle(.plain)
+                    }
                     .padding(.bottom)
                 }
+                .padding(.top, 6)
             }
             .scrollIndicators(.hidden)
             .navigationBarTitleDisplayMode(.inline)
@@ -215,7 +243,6 @@ struct SettingsPage: View
                 #endif
             }
         }
-//        .environment(SliderData)
     }
 }
 

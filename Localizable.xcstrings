@@ -665,6 +665,9 @@
         }
       }
     },
+    "Contact" : {
+
+    },
     "Custom Data" : {
       "localizations" : {
         "de" : {
@@ -1634,6 +1637,9 @@
           }
         }
       }
+    },
+    "Support" : {
+
     },
     "Surplus" : {
       "localizations" : {

@@ -279,7 +279,7 @@ final class Settings: ObservableObject
     @AppStorage("stepsGoal", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var stepsGoal: Int = 10000
 }
 
-extension Date: RawRepresentable 
+extension Date: @retroactive RawRepresentable 
 {
     public var rawValue: String 
     {
@@ -354,7 +354,7 @@ extension View
     }
 }
 
-extension Color: RawRepresentable
+extension Color: @retroactive RawRepresentable
 {
     public init?(rawValue: String)
     {

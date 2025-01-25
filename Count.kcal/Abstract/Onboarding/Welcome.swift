@@ -6,7 +6,7 @@ struct OnboardingWelcome: View
     {
         HStack(alignment: .bottom, spacing: 16)
         {
-            Image(uiImage: UIImage(named: "AppIcon") ?? UIImage())
+            Image(uiImage: UIImage(named: "icon") ?? UIImage())
                 .resizable()
                 .frame(width: 70, height: 70)
                 .clipShape(.rect(cornerRadius: 13))

@@ -44,7 +44,7 @@ struct Pager: View
         return pages
     }
     
-    var iPad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
+    // var iPad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
     
     var body: some View
     {
@@ -90,7 +90,7 @@ struct Pager: View
                                 ForEach(Pages, id: \.self)
                                 { page in
                                     Dashboard(todayPageMode: $todayPageMode)
-                                        .containerRelativeFrame(.horizontal, count: iPad ? 2 : 1, span: 1, spacing: 10.0)
+                                        .containerRelativeFrame(.horizontal, count: /*iPad ? 2 : */1, span: 1, spacing: 10.0)
                                         .environment(page)
                                         .id(page)
                                 }
@@ -230,7 +230,7 @@ struct Pager: View
 //                           }
     
                            let start = Double.random(in: 60 ... 150)
-                           let end = start + Double.random(in: 1 ... 5)
+                           let end = start - Double.random(in: 1 ... 5)
     
                            WeightViewModel.randomizeWeightData(start: start, end: end)
                        }
@@ -398,7 +398,7 @@ struct Pager: View
     
     private var todayButton: some View
     {
-        Button(action:
+        Button
         {
             if !isTodaySelected
             {
@@ -438,14 +438,14 @@ struct Pager: View
                 }
             }
         }
-        , label:
+        label:
         {
             Image(systemName: !isTodaySelected ? "arrow.turn.down.left" : (todayPageMode ?? .first) == .first ? "sun.min.fill" : "moon.stars.fill")
                 .foregroundColor(Color("TextColor"))
                 .contentTransition(.symbolEffect(.replace))
                 .frame(width: 30)
                 .fontWeight(.medium)
-        })
+        }
         .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
     }
 }

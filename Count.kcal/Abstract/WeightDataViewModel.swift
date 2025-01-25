@@ -151,37 +151,46 @@ struct WeightChartData: Identifiable
     
     func randomizeWeightData(start: Double, end: Double)
     {
-        weightLatest = Double.random(in: start ... end)
+        assert(start > end, "Start weight must be greater than end weight")
+        
+        // Set latest weight to the target end weight (lowest)
+        weightLatest = end
         weightLatestDate = .now.subtractDays(Int.random(in: 1...20))
         
-        let numberOfEntries = self.WeightData.count
-
-        for (index, _) in self.WeightData.enumerated() 
+        let numberOfEntries: Int = self.WeightData.count
+        
+        // Iterate through the array from start to end
+        // Index 0 should be oldest (highest weight)
+        // Last index should be newest (lowest weight)
+        for index in 0..<numberOfEntries
         {
-            // Determine whether to set weightAvg to nil (25% chance)
-            let setNil = Double.random(in: 0.0...1.0) < 0.25
-
-            if setNil 
+            let setNil: Bool = Double.random(in: 0.0...1.0) < 0.25
+            
+            if setNil
             {
                 self.WeightData[index].weightAvg = nil
-            } 
+            }
             else
             {
-                let progress = Double(index) / Double(numberOfEntries - 1)
-                let wiggleAmplitude = (end - start) / 3.0
-                let frequencyMultiplier = 5.0  // Adjust the frequency of plateaus
-
-                let wiggleValue = wiggleAmplitude * sin(progress * frequencyMultiplier * Double.pi)
-
-                let linearProgression = start + progress * (end - start)
-
-                self.WeightData[index].weightAvg = linearProgression + wiggleValue
+                // Calculate progress where:
+                // index 0 = 0.0 (start/highest weight)
+                // last index = 1.0 (end/lowest weight)
+                let progress: Double = Double(index) / Double(numberOfEntries - 1)
+                
+                // Calculate the total weight difference
+                let weightDifference: Double = start - end
+                
+                // Calculate base weight trending down from start to end
+                let baseWeight: Double = start - (weightDifference * progress)
+                
+                // Add subtle variations
+                let wiggleAmplitude: Double = weightDifference / 10.0
+                let wiggle: Double = wiggleAmplitude * sin(progress * 4.0 * .pi)
+                
+                self.WeightData[index].weightAvg = baseWeight + wiggle
             }
         }
     }
-
-
-
     
     func printData()
     {
