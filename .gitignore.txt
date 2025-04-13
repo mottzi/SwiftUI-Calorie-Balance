@@ -1,0 +1,5 @@
+/Ablage/
+/Assets.xcassets/
+/Localizable.xcstrings
+/PrivacyInfo.xcprivacy
+/Count.kcal.xcodeproj
