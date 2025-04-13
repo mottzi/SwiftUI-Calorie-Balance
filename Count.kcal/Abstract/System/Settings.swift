@@ -21,7 +21,7 @@ extension Settings
         {
             if self.customCalPassive <= 0 { return false }
         }
-        
+                
         return true
     }
     
@@ -60,12 +60,9 @@ extension Settings
     {
         switch Locale.current.measurementSystem
         {
-            case .metric:
-                self.weightUnit = .kg
-            case .us, .uk:
-                self.weightUnit = .lbs
-            default:
-                break
+            case .metric: self.weightUnit = .kg
+            case .us, .uk: self.weightUnit = .lbs
+            default: break
         }
     }
 }
@@ -79,14 +76,7 @@ extension Settings
 
         if self.dataSource == .apple
         {
-//            if let showActive, let showResting
-//            {
             activeCalories = self.showActive + self.showResting
-//            }
-//            else
-//            {
-//                activeCalories = 0
-//            }
         }
         else
         {
@@ -143,14 +133,9 @@ extension Settings
     {
         switch self.appBackground
         {
-            case AppBackgrounds.black:
-                Color.backGroundColorBlack
-
-            case AppBackgrounds.dark:
-                Color.backGround
-            
-            case AppBackgrounds.light:
-                Color.backGroundColorLight
+            case AppBackgrounds.black: return Color.backGroundColorBlack
+            case AppBackgrounds.dark: return Color.backGround
+            case AppBackgrounds.light: return Color.backGroundColorLight
         }
     }
     
@@ -158,14 +143,9 @@ extension Settings
     {
         switch self.appBackground
         {
-            case Settings.AppBackgrounds.black:
-                return Color.cardColorBlack
-            
-            case Settings.AppBackgrounds.dark:
-                return Color.cardColorDark
-            
-            case Settings.AppBackgrounds.light:
-                return Color.cardColorLight
+            case Settings.AppBackgrounds.black: return Color.cardColorBlack
+            case Settings.AppBackgrounds.dark: return Color.cardColorDark
+            case Settings.AppBackgrounds.light: return Color.cardColorLight
         }
     }
     
@@ -178,14 +158,9 @@ extension Settings
         
         switch self.appBackground
         {
-            case Settings.AppBackgrounds.black:
-                return Color(white: 0.22)
-            
-            case Settings.AppBackgrounds.dark:
-                return Color(white: 0.27)
-            
-            case Settings.AppBackgrounds.light:
-                return Color(white: 0.32)
+            case Settings.AppBackgrounds.black: return Color(white: 0.22)
+            case Settings.AppBackgrounds.dark: return Color(white: 0.27)
+            case Settings.AppBackgrounds.light: return Color(white: 0.32)
         }
     }
 }
@@ -195,6 +170,7 @@ extension Settings
     struct Theme: Identifiable
     {
         var id = UUID()
+        
         let burned: Color
         let consumed: Color
     }
@@ -212,27 +188,6 @@ extension Settings
 
     ]
 }
-
-//enum Keys: String, CaseIterable
-//{
-//    case setting
-//    case context
-//    case date
-//    case colors
-//    case burnedColor
-//    case consumedColor
-//    
-//    case weightGoal
-//    case dataSource
-//    case customCalPassive
-//    case customCalActive
-//    case balanceGoal
-//    case proteinGoal
-//    case carbsGoal
-//    case fatsGoal
-//    case energyUnit
-//    case weightUnit
-//}
 
 final class Settings: ObservableObject
 {
@@ -314,42 +269,36 @@ extension View
     {
         switch to 
         {
-            case .bargraph:
+            case .bargraph: do
+            {
                 switch level
                 {
-                    case .primary:
-                        self.brightness(0.1)
-                    case .secondary:
-                        self.brightness(0.2)
-                    case .tertiary:
-                        self.brightness(0.3)
-                    case .none:
-                        self
+                    case .primary: self.brightness(0.1)
+                    case .secondary: self.brightness(0.2)
+                    case .tertiary: self.brightness(0.3)
+                    case .none: self
                 }
-            case .circlegraphNow:
+            }
+            case .circlegraphNow: do
+            {
                 switch level
                 {
-                    case .primary:
-                        self.brightness(0.0)
-                    case .secondary:
-                        self.brightness(0.2)
-                    case .tertiary:
-                        self.brightness(0.3)
-                    case .none:
-                        self
+                    case .primary: self.brightness(0.0)
+                    case .secondary: self.brightness(0.2)
+                    case .tertiary: self.brightness(0.3)
+                    case .none: self
                 }
-            case .circlegraphMidnight:
+            }
+            case .circlegraphMidnight: do
+            {
                 switch level
                 {
-                    case .primary:
-                        self.brightness(0.0)
-                    case .secondary:
-                        self.brightness(0.15)
-                    case .tertiary:
-                        self.brightness(0.35)
-                    case .none:
-                        self
+                    case .primary: self.brightness(0.0)
+                    case .secondary: self.brightness(0.15)
+                    case .tertiary: self.brightness(0.35)
+                    case .none: self
                 }
+            }
         }
     }
 }

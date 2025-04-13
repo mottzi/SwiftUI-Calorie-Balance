@@ -55,16 +55,46 @@ extension HealthData
         
         if balance == .deficit
         {
-            return HealthData(date: date, lastDataSync: nil, burnedActive: 1500, burnedActive7: 0, burnedPassive: 2130, burnedPassive7: 2500, consumed: 2380, protein: 100, carbs: 80, fats: 100, steps: 6809)
+            return HealthData(date: date,
+                              lastDataSync: nil,
+                              burnedActive: 1500,
+                              burnedActive7: 0,
+                              burnedPassive: 2130,
+                              burnedPassive7: 2500,
+                              consumed: 2380,
+                              protein: 100,
+                              carbs: 80,
+                              fats: 100,
+                              steps: 6809)
         }
         else
         {
-            return HealthData(date: date, lastDataSync: nil, burnedActive: 400, burnedActive7: 0, burnedPassive: 1850, burnedPassive7: 2200, consumed: 2700, protein: 100, carbs: 80, fats: 100, steps: 1270)
+            return HealthData(date: date,
+                              lastDataSync: nil,
+                              burnedActive: 400,
+                              burnedActive7: 0,
+                              burnedPassive: 1850,
+                              burnedPassive7: 2200,
+                              consumed: 2700,
+                              protein: 100,
+                              carbs: 80,
+                              fats: 100,
+                              steps: 1270)
         }
     }
     
     static func empty(for date: Date) -> HealthData
     {
-        HealthData(date: date, lastDataSync: nil, burnedActive: 0, burnedActive7: 0, burnedPassive: 0, burnedPassive7: 0, consumed: 0, protein: 0, carbs: 0, fats: 0, steps: 0)
+        return HealthData(date: date,
+                          lastDataSync: nil,
+                          burnedActive: 0,
+                          burnedActive7: 0,
+                          burnedPassive: 0,
+                          burnedPassive7: 0,
+                          consumed: 0,
+                          protein: 0,
+                          carbs: 0,
+                          fats: 0,
+                          steps: 0)
     }
 }

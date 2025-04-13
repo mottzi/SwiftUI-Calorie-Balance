@@ -9,6 +9,7 @@ enum WeightPage: Int, Hashable
 struct WeightChartData: Identifiable
 {
     let id = UUID()
+    
     var date: Date
     var weightAvg: Double?
 }
@@ -16,7 +17,7 @@ struct WeightChartData: Identifiable
 @Observable class WeightDataViewModel
 {
     @ObservationIgnored private let hk = HKRepository.shared
-    @ObservationIgnored private let referenceDate: Date = Date()
+    @ObservationIgnored private let referenceDate = Date.now
     
     var WeightData: [WeightChartData] = []
     
@@ -130,24 +131,24 @@ struct WeightChartData: Identifiable
         }
     }
     
-//    func randomizeWeightData(range: ClosedRange<Double>)
-//    {
-//        for (index, _) in self.WeightData.enumerated()
-//        {
-//            if WeightData[index].date > referenceDate
-//            {
-//                self.WeightData[index].weightAvg = nil
-//            }
-//            else if(Int.random(in: 1...100) <= 25)
-//            {
-//                self.WeightData[index].weightAvg = nil
-//            }
-//            else
-//            {
-//                self.WeightData[index].weightAvg = round(Double.random(in: range) * 10) / 10.0
-//            }
-//        }
-//    }
+    /*func randomizeWeightData(range: ClosedRange<Double>)
+    {
+        for (index, _) in self.WeightData.enumerated()
+        {
+            if WeightData[index].date > referenceDate
+            {
+                self.WeightData[index].weightAvg = nil
+            }
+            else if(Int.random(in: 1...100) <= 25)
+            {
+                self.WeightData[index].weightAvg = nil
+            }
+            else
+            {
+                self.WeightData[index].weightAvg = round(Double.random(in: range) * 10) / 10.0
+            }
+        }
+    }*/
     
     func randomizeWeightData(start: Double, end: Double)
     {
@@ -320,25 +321,19 @@ struct WeightChartData: Identifiable
 
     func getYTopRange(_ page: WeightPage) -> Int
     {
-        if page == .weekly
+        switch page
         {
-            return Int(floor(maxWeightData(page)?.weightAvg ?? 0.0) + 1.0)
-        }
-        else
-        {
-            return Int(round(maxWeightData(page)?.weightAvg ?? 0.0) + 1.0)
+            case .weekly:  Int(floor(maxWeightData(page)?.weightAvg ?? 0.0) + 1.0)
+            case .monthly: Int(round(maxWeightData(page)?.weightAvg ?? 0.0) + 1.0)
         }
     }
 
     func getYBottomRange(_ page: WeightPage) -> Int
     {
-        if page == .weekly
+        switch page
         {
-            return Int(ceil(minWeightData(page)?.weightAvg ?? 0.0) - 1.0)
-        }
-        else
-        {
-            return Int(round(minWeightData(page)?.weightAvg ?? 0.0) - 1.0)
+            case .weekly:  Int(ceil(minWeightData(page)?.weightAvg ?? 0.0) - 1.0)
+            case .monthly: Int(round(minWeightData(page)?.weightAvg ?? 0.0) - 1.0)
         }
     }
 }

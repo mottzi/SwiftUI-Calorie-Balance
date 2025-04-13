@@ -1,7 +1,6 @@
 import SwiftUI
 import WidgetKit
 import Observation
-import WatchConnectivity
 
 @Observable class HealthInterface: Hashable
 {
@@ -9,17 +8,12 @@ import WatchConnectivity
     @ObservationIgnored private let hkRep = HKRepository.shared
     @ObservationIgnored var CachedSample: HealthData?
     @ObservationIgnored var CacheDate: Date?
-//    @ObservationIgnored let RefreshWatchWhenReached = 200
     
     var sample: HealthData
     var isTodayPage: Bool { self.sample.date.isToday }
         
     func updateMetrics(cache: Bool = false) async
     {
-//        #if DEBUG
-//        await self.randomizeHealthData()
-//        return
-//        #endif
         // (1) use cached data if last cache is younger than 180 seconds
         if cache, let d = self.CacheDate, abs(d.timeIntervalSince(.now)) <  3 * 60, let c = self.CachedSample
         {
@@ -51,7 +45,6 @@ import WatchConnectivity
         async let carbsFetch = hkRep.cumDataToday(fetch: .dietaryCarbohydrates, for: self.sample.date)
         async let fatsFetch = hkRep.cumDataToday(fetch: .dietaryFatTotal, for: self.sample.date)
         async let stepsFetch = hkRep.cumDataToday(fetch: .stepCount, for: self.sample.date)
-
         
         // execute all async calls concurrently
         let (active, passive, passiveAvg, consumed, protein, carbs, fats, steps) = await (activeFetch, passiveFetch, passiveAvgFetch, consumedFetch, proteinFetch, carbsFetch, fatsFetch, stepsFetch)
@@ -59,15 +52,6 @@ import WatchConnectivity
         // update UI on main "thread"
         await MainActor.run
         {
-//            #if os(iOS)
-//            var caloricBalanceWillChange: Bool = false
-//            
-//            if self.sample.consumed != 0 && abs(self.sample.consumed - consumed) >= RefreshWatchWhenReached && self.sample.date.isToday
-//            {
-//                caloricBalanceWillChange = true
-//            }
-//            #endif
-            
             withAnimation(.snappy)
             {
                 // consumed energy is HealthKit-only at the moment
@@ -77,18 +61,18 @@ import WatchConnectivity
                 self.sample.fats = fats
                 self.sample.steps = steps
                 
-                // custom energy data
                 if AppSettings.dataSource == .custom
                 {
-                    // today -> calculate current energy proportional to linear day progress
+                    // custom energy data
                     if self.sample.date.isToday
                     {
+                        // today: calculate current energy proportional to linear day progress
                         self.sample.burnedActive = Int((Double(AppSettings.customCalActive) * Date.getDayProgress).rounded())
                         self.sample.burnedPassive = Int((Double(AppSettings.customCalPassive) * Date.getDayProgress).rounded())
                     }
-                    // other -> fill energy to max
                     else
                     {
+                        // not today: fill energy to max
                         self.sample.burnedActive = AppSettings.customCalActive
                         self.sample.burnedPassive = AppSettings.customCalPassive
                     }
@@ -96,20 +80,13 @@ import WatchConnectivity
                     self.sample.burnedActive7 = AppSettings.customCalActive
                     self.sample.burnedPassive7 = AppSettings.customCalPassive
                 }
-                // HealthKit energy data
                 else
                 {
+                    // HealthKit energy data
                     self.sample.burnedActive = active
                     self.sample.burnedPassive = passive
                     self.sample.burnedPassive7 = passiveAvg
                 }
-                
-//                #if os(iOS)
-//                if caloricBalanceWillChange
-//                {
-//                    Connectivity.shared.sendBalanceContext(sample: self.sample)
-//                }
-//                #endif
             }
         }
         
@@ -146,18 +123,15 @@ import WatchConnectivity
     @MainActor
     func randomizeHealthData()
     {
-//        withAnimation(.snappy)
-//        {
-            self.sample.burnedActive = Int.random(in: 100...1000)
-            self.sample.burnedPassive = Int.random(in: 200...2300)
-            self.sample.burnedPassive7 = Int.random(in: 1800...2500)
-            self.sample.burnedActive7 = Int.random(in: 200...1000)
-            self.sample.consumed = Int.random(in: 400...3600)
-            self.sample.protein = Int.random(in: 70...200)
-            self.sample.carbs = Int.random(in: 180...300)
-            self.sample.fats = Int.random(in: 50...80)
-            self.sample.steps = Int.random(in: 0...30000)
-//        }
+        self.sample.burnedActive = Int.random(in: 100...1000)
+        self.sample.burnedPassive = Int.random(in: 200...2300)
+        self.sample.burnedPassive7 = Int.random(in: 1800...2500)
+        self.sample.burnedActive7 = Int.random(in: 200...1000)
+        self.sample.consumed = Int.random(in: 400...3600)
+        self.sample.protein = Int.random(in: 70...200)
+        self.sample.carbs = Int.random(in: 180...300)
+        self.sample.fats = Int.random(in: 50...80)
+        self.sample.steps = Int.random(in: 0...30000)
     }
     
     init(data: HealthData) { self.sample = data }

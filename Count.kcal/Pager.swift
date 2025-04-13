@@ -35,17 +35,13 @@ struct Pager: View
         
         for i in (0...5).reversed()
         {
-            if let p = findPage(for: current.subtractDays(i))
-            {
-                pages.append(p)
-            }
+            guard let p = findPage(for: current.subtractDays(i)) else { continue }
+            pages.append(p)
         }
         
         return pages
     }
-    
-    // var iPad: Bool { UIDevice.current.userInterfaceIdiom == .pad }
-    
+        
     var body: some View
     {
         if AppSettings.showWelcome
@@ -88,11 +84,11 @@ struct Pager: View
                             LazyHStack(spacing: 0)
                             {
                                 ForEach(Pages, id: \.self)
-                                { page in
+                                {
                                     Dashboard(todayPageMode: $todayPageMode)
-                                        .containerRelativeFrame(.horizontal, count: /*iPad ? 2 : */1, span: 1, spacing: 10.0)
-                                        .environment(page)
-                                        .id(page)
+                                        .containerRelativeFrame(.horizontal, count: 1, span: 1, spacing: 10.0)
+                                        .environment($0)
+                                        .id($0)
                                 }
                             }
                             .scrollTargetLayout()
@@ -103,7 +99,7 @@ struct Pager: View
                         .scrollPosition(id: $selectedPage)
                         
                         WeightCard()
-                            .onAppear
+                        .onAppear
                         {
                             Task.detached(priority: .userInitiated)
                             {
@@ -180,18 +176,18 @@ struct Pager: View
                 
                 ToolbarItem(placement: .topBarTrailing)
                 {
-                    Button(action:
-                            {
+                    Button
+                    {
                         streak.toggleStreaksView()
-                    },
-                           label:
-                            {
+                    }
+                    label:
+                    {
                         let color = (AppSettings.weightGoal == .lose ? AppSettings.burnedColor : AppSettings.consumedColor)
                         
                         HStack(spacing: 4)
                         {
                             Image(systemName: "flame.fill")
-                                .symbolRenderingMode(.palette) // Enable palette rendering mode
+                                .symbolRenderingMode(.palette)
                                 .foregroundStyle(color.brighten(-0.1).gradient)
                                 .fontWeight(.bold)
                             
@@ -203,7 +199,7 @@ struct Pager: View
                                 .offset(y: 2)
                                 .task { await streak.updateStreaks() }
                         }
-                    })
+                    }
                     .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
                 }
                 
@@ -224,10 +220,10 @@ struct Pager: View
                         {
                            selectedPage?.randomizeHealthData()
     
-//                           for page in FirstPages
-//                           {
-//                               page.randomizeHealthData()
-//                           }
+                           /*for page in FirstPages
+                           {
+                               page.randomizeHealthData()
+                           }*/
     
                            let start = Double.random(in: 60 ... 150)
                            let end = start - Double.random(in: 1 ... 5)
@@ -280,22 +276,23 @@ struct Pager: View
                     // if selected page is today
                     if newPage.isTodayPage
                     {
-                        // Fetch data of newly selected today page.
+                        // fetch data of newly selected today page
                         await newPage.updateMetrics(cache: false)
-                        // Reload widgets.
+                        
+                        // reload widgets.
                         WidgetCenter.shared.reloadAllTimelines()
                     }
                     else
                     {
-                        // Restore cached data of newly selected page.
+                        // restore cached data of newly selected page
                         await newPage.updateMetrics(cache: false)
                     }
                     
-                    // Reset data of old page. Data will reload (from cache) on next selection. This ensures new load animations.
-                    //                await oldPage?.clearData()
+                    // reset data of old page, data will reload (from cache) on next selection, ensures load animations
+                    // await oldPage?.clearData()
                 }
                 
-                // Manipulation of Pages on main "thread".
+                // manipulation of Pages
                 if !ignoreChanges
                 {
                     if let lastPage = Pages.last, newPage == lastPage
