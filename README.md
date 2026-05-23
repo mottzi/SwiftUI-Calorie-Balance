@@ -2,9 +2,6 @@
 
 Count.kcal is a calorie balance, body weight and macro-nutrition visualization app that integrates with Apple Health to help users monitor their weight loss or gain over time.
 
-- Landing Page: https://count.mottzi.de/
-- App Store Page: https://apps.apple.com/us/app/calorie-deficit-tracker/id6476797015
-
 <img width="535" alt="1" src="https://github.com/user-attachments/assets/ebe81322-0781-432c-ac82-599dfff6efa1" />
 
 ## Features
