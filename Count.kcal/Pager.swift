@@ -109,6 +109,7 @@ struct Pager: View {
                     }
                 }
             }
+            .softTopScrollEdge()
             .scrollDisabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
             .frame(maxHeight: .infinity)
             .onChange(of: scenePhase) { _, newPhase in
@@ -151,11 +152,24 @@ struct Pager: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    todayButton
-                        .padding(.leading, 16)
-                        .offset(y: 0)
+                    if #available(iOS 26, *) {
+                        todayButton
+                    } else {
+                        todayButton.padding(.leading, 16)
+                    }
                 }
                 
+                if #available(iOS 26, *) {
+                    ToolbarItem(placement: .topBarLeading) {
+                        selectedDateLabel
+                    }
+                    .sharedBackgroundVisibility(.hidden)
+                } else {
+                    ToolbarItem(placement: .topBarLeading) {
+                        selectedDateLabel
+                    }
+                }
+
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         streak.toggleStreaksView()
@@ -173,56 +187,26 @@ struct Pager: View {
                                 .fontDesign(.rounded)
                                 .fontWeight(.bold)
                                 .foregroundStyle(Color("TextColor"))
-                                .offset(y: 2)
                                 .task { await streak.updateStreaks() }
                         }
                     }
                     .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
                 }
                 
-                ToolbarItem(placement: .topBarLeading) {
-                    #if !DEBUG
-                    Text(selectedPage?.sample.date.relative ?? String(""))
-                        .fontWeight(.semibold)
-                        .fontDesign(.rounded)
-                        .foregroundColor(Color("TextColor"))
-                        .transaction { transaction in
-                            transaction.animation = nil
-                        }
-                    #else
-                    Button {
-                        withAnimation(.snappy) {
-                           selectedPage?.randomizeHealthData()
-    
-                           /*for page in FirstPages
-                           {
-                               page.randomizeHealthData()
-                           }*/
-    
-                           let start = Double.random(in: 60 ... 150)
-                           let end = start - Double.random(in: 1 ... 5)
-    
-                           WeightViewModel.randomizeWeightData(start: start, end: end)
-                       }
-                    } label: {
-                        Text(selectedPage?.sample.date.relative ?? "")
-                            .fontWeight(.semibold)
-                            .fontDesign(.rounded)
-                            .foregroundColor(Color("TextColor"))
-                            .transaction { transaction in
-                                transaction.animation = nil
-                            }
-                    }
-                    #endif
+                if #available(iOS 26, *) {
+                    ToolbarSpacer(.fixed, placement: .topBarTrailing)
                 }
-                
+
                 ToolbarItem(placement: .topBarTrailing) {
                     calendarButton
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    settingsButton
-                        .padding(.trailing, 16)
+                    if #available(iOS 26, *) {
+                        settingsButton
+                    } else {
+                        settingsButton.padding(.trailing, 16)
+                    }
                 }
             }
             .safeAreaPadding(.top, 10)
@@ -286,6 +270,39 @@ extension Pager {
         }
         
         return pages
+    }
+
+    // The date describes the selected page; it does not share a glass background
+    // with the adjacent day/night action. Keep the development shortcut available.
+    private var selectedDateLabel: some View {
+        #if !DEBUG
+        Text(selectedPage?.sample.date.relative ?? "")
+            .fontWeight(.semibold)
+            .fontDesign(.rounded)
+            .foregroundColor(Color("TextColor"))
+            .transaction { transaction in
+                transaction.animation = nil
+            }
+        #else
+        Button {
+            withAnimation(.snappy) {
+                selectedPage?.randomizeHealthData()
+
+                let start = Double.random(in: 60 ... 150)
+                let end = start - Double.random(in: 1 ... 5)
+
+                WeightViewModel.randomizeWeightData(start: start, end: end)
+            }
+        } label: {
+            Text(selectedPage?.sample.date.relative ?? "")
+                .fontWeight(.semibold)
+                .fontDesign(.rounded)
+                .foregroundColor(Color("TextColor"))
+                .transaction { transaction in
+                    transaction.animation = nil
+                }
+        }
+        #endif
     }
 
     private var isTodaySelected: Bool {
@@ -365,20 +382,40 @@ extension Pager {
                 }
             }
         } label: {
-            Image(
-                systemName: !isTodaySelected
-                    ? "arrow.turn.down.left"
-                    : (todayPageMode ?? .first) == .first ? "sun.min.fill" : "moon.stars.fill"
-            )
-                .foregroundColor(Color("TextColor"))
-                .contentTransition(.symbolEffect(.replace))
-                .frame(width: 30)
-                .fontWeight(.medium)
+            if #available(iOS 26, *) {
+                todaySymbol
+            } else {
+                todaySymbol.frame(width: 30)
+            }
         }
         .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
+    }
+
+    private var todaySymbol: some View {
+        Image(
+            systemName: !isTodaySelected
+                ? "arrow.turn.down.left"
+                : (todayPageMode ?? .first) == .first ? "sun.min.fill" : "moon.stars.fill"
+        )
+        .foregroundColor(Color("TextColor"))
+        .contentTransition(.symbolEffect(.replace))
+        .fontWeight(.medium)
     }
 
 }
 
 
 #Preview { PreviewPager }
+
+// The navigation bar reads the top edge of its scroll view.
+// Keep the default effect on older iOS releases.
+extension View {
+    @ViewBuilder
+    func softTopScrollEdge() -> some View {
+        if #available(iOS 26, *) {
+            scrollEdgeEffectStyle(.soft, for: .top)
+        } else {
+            self
+        }
+    }
+}

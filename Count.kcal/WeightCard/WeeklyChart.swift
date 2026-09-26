@@ -27,7 +27,9 @@ struct WeeklyChart: View {
                     endPoint: .leading
                 )
                 
-                ForEach(Array(WeightViewModel.validData(.weekly).enumerated()), id: \.element.id) { (index, item) in
+                let validData = WeightViewModel.validData(.weekly)
+
+                ForEach(Array(validData.enumerated()), id: \.element.id) { (index, item) in
                     // data point label
                     BarMark(
                         x: .value("Date", item.date, unit: .weekday),
@@ -37,22 +39,30 @@ struct WeeklyChart: View {
                     .annotation(spacing: 8) {
                         Text(verbatim: String(format: "%.1f", item.weightAvg!))
                             .font(.system(size: 11, weight: .semibold))
-                            .foregroundColor(Color("SecondaryTextColor1").opacity((index == WeightViewModel.validData(.weekly).count - 1) ? 1 : 0.6))
+                            .foregroundColor(Color("SecondaryTextColor1").opacity((index == validData.count - 1) ? 1 : 0.6))
                     }
                     
                     LineMark(
                         x: .value("Date", item.date, unit: .weekday),
                         y: .value("Value", item.weightAvg!)
                     )
-                    // data point symbol
-                    .symbol {
-                        CircleChartSymbol(index: index, page: .weekly)
-                            .environment(WeightViewModel)
-                            .environmentObject(AppSettings)
-                    }
                     .foregroundStyle(gradient)
                     .interpolationMethod(.catmullRom)
                     .lineStyle(StrokeStyle(lineWidth: 8))
+
+                    PointMark(
+                        x: .value("Date", item.date, unit: .weekday),
+                        y: .value("Value", item.weightAvg!)
+                    )
+                    .foregroundStyle(Color(index == validData.count - 1 ? "SecondaryTextColor1" : "SecondaryTextColor"))
+                    .symbolSize(index == validData.count - 1 ? 113 : 50)
+
+                    PointMark(
+                        x: .value("Date", item.date, unit: .weekday),
+                        y: .value("Value", item.weightAvg!)
+                    )
+                    .foregroundStyle(AppSettings.CardBackground)
+                    .symbolSize(index == validData.count - 1 ? 28 : 13)
                 }
             }
             .dynamicTypeSize(...DynamicTypeSize.xxxLarge)

@@ -25,19 +25,30 @@ struct MonthlyChart: View {
                     endPoint: .leading
                 )
                 
-                ForEach(Array(WeightViewModel.validData(.monthly).enumerated()), id: \.element.id) { (index, item) in
+                let validData = WeightViewModel.validData(.monthly)
+
+                ForEach(Array(validData.enumerated()), id: \.element.id) { (index, item) in
                     LineMark(
                         x: .value("Date", item.date, unit: .day),
                         y: .value("Value", item.weightAvg!)
                     )
-                    .symbol {
-                        CircleChartSymbol(index: index, page: .monthly)
-                            .environment(WeightViewModel)
-                            .environmentObject(AppSettings)
-                    }
                     .foregroundStyle(gradient)
                     .interpolationMethod(.catmullRom)
                     .lineStyle(StrokeStyle(lineWidth: 8))
+
+                    PointMark(
+                        x: .value("Date", item.date, unit: .day),
+                        y: .value("Value", item.weightAvg!)
+                    )
+                    .foregroundStyle(Color(index == validData.count - 1 ? "SecondaryTextColor1" : "SecondaryTextColor"))
+                    .symbolSize(index == validData.count - 1 ? 113 : 28)
+
+                    PointMark(
+                        x: .value("Date", item.date, unit: .day),
+                        y: .value("Value", item.weightAvg!)
+                    )
+                    .foregroundStyle(AppSettings.CardBackground)
+                    .symbolSize(index == validData.count - 1 ? 28 : 7)
                 }
             }
             .dynamicTypeSize(...DynamicTypeSize.xxxLarge)

@@ -130,7 +130,8 @@ extension WeightDataViewModel {
         weightLatest = end
         weightLatestDate = .now.subtractDays(Int.random(in: 1...20))
         
-        let numberOfEntries: Int = self.WeightData.count
+        var updatedData = WeightData
+        let numberOfEntries = updatedData.count
         
         // Iterate through the array from start to end
         // Index 0 should be oldest (highest weight)
@@ -139,7 +140,7 @@ extension WeightDataViewModel {
             let setNil: Bool = Double.random(in: 0.0...1.0) < 0.25
             
             if setNil {
-                self.WeightData[index].weightAvg = nil
+                updatedData[index].weightAvg = nil
             } else {
                 // Calculate progress where:
                 // index 0 = 0.0 (start/highest weight)
@@ -156,9 +157,12 @@ extension WeightDataViewModel {
                 let wiggleAmplitude: Double = weightDifference / 10.0
                 let wiggle: Double = wiggleAmplitude * sin(progress * 4.0 * .pi)
                 
-                self.WeightData[index].weightAvg = baseWeight + wiggle
+                updatedData[index].weightAvg = baseWeight + wiggle
             }
         }
+
+        // Publish the completed series once so chart marks do not see partial data.
+        WeightData = updatedData
     }
     
     func printData() {

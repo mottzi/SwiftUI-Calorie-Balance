@@ -148,9 +148,13 @@ struct SettingsPage: View {
                 .padding(.top, 6)
             }
             .scrollIndicators(.hidden)
+            .softTopScrollEdge()
+            .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden()
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarBackButtonHidden(usesLegacyToolbar)
+            .onDisappear {
+                WidgetCenter.shared.reloadAllTimelines()
+            }
             .sendContextOnChange(of: AppSettings.customCalActive)
             .sendContextOnChange(of: AppSettings.customCalPassive)
             .sendContextOnChange(of: AppSettings.balanceGoal)
@@ -168,23 +172,22 @@ struct SettingsPage: View {
                     }
                     .foregroundStyle(Color("TextColor"))
                 }
-                
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        WidgetCenter.shared.reloadAllTimelines()
-                                                
-                        dismiss()
-                    } label: {
-                        HStack {
-                            Image(systemName: "chevron.left")
-                                .font(.callout)
-                                
-                            Text("Back")
+
+                if usesLegacyToolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            HStack {
+                                Image(systemName: "chevron.left")
+                                    .font(.callout)
+                                Text("Back")
+                            }
+                            .foregroundColor(Color("TextColor"))
+                            .fontWeight(.semibold)
                         }
-                        .foregroundColor(Color("TextColor"))
-                        .fontWeight(.semibold)
+                        .padding(.leading, 16)
                     }
-                    .padding(.leading, 16)
                 }
                 
                 #if DEBUG
@@ -196,15 +199,25 @@ struct SettingsPage: View {
                             dismiss()
                         }
                     } label: {
-                        Text(verbatim: "Setup")
-                            .foregroundColor(Color("TextColor"))
-                            .fontWeight(.semibold)
+                        if #available(iOS 26, *) {
+                            Label("Setup", systemImage: "arrow.counterclockwise")
+                                .labelStyle(.iconOnly)
+                        } else {
+                            Text(verbatim: "Setup")
+                                .foregroundColor(Color("TextColor"))
+                                .fontWeight(.semibold)
+                        }
                     }
-                    .padding(.trailing, 24)
+                    .accessibilityHint("Restart onboarding")
+                    .padding(.trailing, usesLegacyToolbar ? 24 : 0)
                 }
                 #endif
             }
         }
+    }
+
+    private var usesLegacyToolbar: Bool {
+        if #available(iOS 26, *) { false } else { true }
     }
 }
 
