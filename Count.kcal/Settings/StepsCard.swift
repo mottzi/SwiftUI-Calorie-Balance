@@ -1,16 +1,13 @@
 import SwiftUI
 
-struct StepsCard: View
-{
+struct StepsCard: View {
     @EnvironmentObject private var AppSettings: Settings
+
     @FocusState var focusedField: Field?
     
-    var body: some View
-    {
-        Card("Steps")
-        {
-            HStack
-            {
+    var body: some View {
+        Card("Steps") {
+            HStack {
                 Text("Daily Goal")
                     .font(.subheadline)
                     .fontWeight(.semibold)
@@ -35,10 +32,8 @@ struct StepsCard: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
+#Preview {
+    NavigationView {
         SettingsPage()
             .environmentObject(Settings.shared)
             .environment(HSlider())

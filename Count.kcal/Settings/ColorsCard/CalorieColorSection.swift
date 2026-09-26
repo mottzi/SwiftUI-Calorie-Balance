@@ -1,13 +1,10 @@
 import SwiftUI
 
-struct CalorieColorSection: View
-{
+struct CalorieColorSection: View {
     @EnvironmentObject private var AppSettings: Settings
 
-    var body: some View
-    {
-        HStack
-        {
+    var body: some View {
+        HStack {
             Text("Burned Calories")
                 .font(.subheadline)
                 .fontWeight(.semibold)
@@ -21,8 +18,7 @@ struct CalorieColorSection: View
 
         Divider()
 
-        HStack
-        {
+        HStack {
             Text("Consumed Calories")
                 .font(.subheadline)
                 .fontWeight(.semibold)

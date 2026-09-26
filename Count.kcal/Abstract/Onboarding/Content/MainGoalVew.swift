@@ -1,14 +1,12 @@
 import SwiftUI
 
-struct MaingoalView: View
-{
+struct MaingoalView: View {
     @EnvironmentObject private var AppSettings: Settings
+
     @Environment(\.colorScheme) private var scheme: ColorScheme
     
-    var body: some View
-    {
-        VStack(spacing: 30)
-        {
+    var body: some View {
+        VStack(spacing: 30) {
             (
                 Text("My")
                     .foregroundStyle(Color("TextColor").opacity(0.8))
@@ -29,7 +27,11 @@ struct MaingoalView: View
             .fontDesign(.rounded)
             .foregroundStyle(Color("TextColor").gradient)
             
-            IconPicker(firstIcon: "arrowshape.down.fill", secondIcon: "arrowshape.up.fill", selection: $AppSettings.weightGoal)
+            IconPicker(
+                firstIcon: "arrowshape.down.fill",
+                secondIcon: "arrowshape.up.fill",
+                selection: $AppSettings.weightGoal
+            )
                 .frame(width: 120, height: 40)
                 .scaleEffect(1.4)
                 .sensoryFeedback(.selection, trigger: AppSettings.weightGoal)
@@ -44,12 +46,9 @@ struct MaingoalView: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
-        ZStack
-        {
+#Preview {
+    NavigationView {
+        ZStack {
             Settings.shared.AppBackground
                 .ignoresSafeArea(.all)
             

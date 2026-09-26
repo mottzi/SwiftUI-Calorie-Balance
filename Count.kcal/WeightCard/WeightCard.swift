@@ -1,27 +1,21 @@
 import SwiftUI
 import Charts
 
-struct WeightCard: View
-{
+/// Weight history with weekly and monthly chart pages.
+struct WeightCard: View {
     @EnvironmentObject private var AppSettings: Settings
 
     @State private var pageSelection: PagerSelection? = .first
     
-    var body: some View
-    {
-        VStack(spacing: 0)
-        {
-            Card("Weight") 
-            {
-                VStack(spacing: 0)
-                {
+    var body: some View {
+        VStack(spacing: 0) {
+            Card("Weight") {
+                VStack(spacing: 0) {
                     WeightTopBar(pageSelection: $pageSelection)
                         .padding(.top, 4)
                     
-                    ScrollView(.horizontal)
-                    {
-                        HStack(spacing: 0)
-                        {
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 0) {
                             WeeklyChart()
                                 .id(PagerSelection.first)
                                 .containerRelativeFrame(.horizontal)
@@ -44,12 +38,9 @@ struct WeightCard: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
-        ZStack
-        {
+#Preview {
+    NavigationView {
+        ZStack {
             Settings.shared.AppBackground.ignoresSafeArea(.all)
             
             Pager(lb: 6, tb: 1)

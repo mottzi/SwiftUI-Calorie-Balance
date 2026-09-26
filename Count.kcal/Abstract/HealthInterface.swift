@@ -2,25 +2,25 @@ import SwiftUI
 import WidgetKit
 import Observation
 
-@Observable class HealthInterface: Hashable
-{
+@Observable
+/// Health metrics for one day and their cached values.
+class HealthInterface: Hashable {
     @ObservationIgnored private let AppSettings = Settings.shared
     @ObservationIgnored private let hkRep = HKRepository.shared
     @ObservationIgnored var CachedSample: HealthData?
     @ObservationIgnored var CacheDate: Date?
     
     var sample: HealthData
-    var isTodayPage: Bool { self.sample.date.isToday }
-        
-    func updateMetrics(cache: Bool = false) async
-    {
+    init(data: HealthData) { self.sample = data }
+    
+    init(_ healthData: HealthData) { self.sample = healthData }
+
+    /// Loads daily metrics and applies the selected energy source to the visible sample.
+    func updateMetrics(cache: Bool = false) async {
         // (1) use cached data if last cache is younger than 180 seconds
-        if cache, let d = self.CacheDate, abs(d.timeIntervalSince(.now)) <  3 * 60, let c = self.CachedSample
-        {
-            await MainActor.run
-            {
-                withAnimation(.snappy)
-                {
+        if cache, let d = self.CacheDate, abs(d.timeIntervalSince(.now)) <  3 * 60, let c = self.CachedSample {
+            await MainActor.run {
+                withAnimation(.snappy) {
                     self.sample.burnedActive = c.burnedActive
                     self.sample.burnedPassive = c.burnedPassive
                     self.sample.burnedPassive7 = c.burnedPassive7
@@ -50,10 +50,8 @@ import Observation
         let (active, passive, passiveAvg, consumed, protein, carbs, fats, steps) = await (activeFetch, passiveFetch, passiveAvgFetch, consumedFetch, proteinFetch, carbsFetch, fatsFetch, stepsFetch)
         
         // update UI on main "thread"
-        await MainActor.run
-        {
-            withAnimation(.snappy)
-            {
+        await MainActor.run {
+            withAnimation(.snappy) {
                 // consumed energy is HealthKit-only at the moment
                 self.sample.consumed = consumed
                 self.sample.protein = protein
@@ -61,17 +59,13 @@ import Observation
                 self.sample.fats = fats
                 self.sample.steps = steps
                 
-                if AppSettings.dataSource == .custom
-                {
+                if AppSettings.dataSource == .custom {
                     // custom energy data
-                    if self.sample.date.isToday
-                    {
+                    if self.sample.date.isToday {
                         // today: calculate current energy proportional to linear day progress
                         self.sample.burnedActive = Int((Double(AppSettings.customCalActive) * Date.getDayProgress).rounded())
                         self.sample.burnedPassive = Int((Double(AppSettings.customCalPassive) * Date.getDayProgress).rounded())
-                    }
-                    else
-                    {
+                    } else {
                         // not today: fill energy to max
                         self.sample.burnedActive = AppSettings.customCalActive
                         self.sample.burnedPassive = AppSettings.customCalPassive
@@ -79,9 +73,7 @@ import Observation
                     
                     self.sample.burnedActive7 = AppSettings.customCalActive
                     self.sample.burnedPassive7 = AppSettings.customCalPassive
-                }
-                else
-                {
+                } else {
                     // HealthKit energy data
                     self.sample.burnedActive = active
                     self.sample.burnedPassive = passive
@@ -105,10 +97,22 @@ import Observation
         self.CachedSample = c
         self.CacheDate = .now
     }
-    
+
+    static func == (lhs: HealthInterface, rhs: HealthInterface) -> Bool {
+         lhs.sample.date.isSameDay(as: rhs.sample.date)
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.sample.date)
+    }
+}
+
+extension HealthInterface {
+
+    var isTodayPage: Bool { self.sample.date.isToday }
+
     @MainActor
-    func clearData()
-    {
+    func clearData() {
         self.sample.burnedActive = 0
         self.sample.burnedActive7 = 0
         self.sample.burnedPassive = 0
@@ -121,8 +125,7 @@ import Observation
     }
     
     @MainActor
-    func randomizeHealthData()
-    {
+    func randomizeHealthData() {
         self.sample.burnedActive = Int.random(in: 100...1000)
         self.sample.burnedPassive = Int.random(in: 200...2300)
         self.sample.burnedPassive7 = Int.random(in: 1800...2500)
@@ -133,18 +136,5 @@ import Observation
         self.sample.fats = Int.random(in: 50...80)
         self.sample.steps = Int.random(in: 0...30000)
     }
-    
-    init(data: HealthData) { self.sample = data }
-    
-    init(_ healthData: HealthData) { self.sample = healthData }
-    
-    static func == (lhs: HealthInterface, rhs: HealthInterface) -> Bool
-    {
-         lhs.sample.date.isSameDay(as: rhs.sample.date)
-    }
 
-    func hash(into hasher: inout Hasher)
-    {
-        hasher.combine(self.sample.date)
-    }
 }

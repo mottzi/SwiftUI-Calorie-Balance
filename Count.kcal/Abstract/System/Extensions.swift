@@ -1,10 +1,8 @@
 import Foundation
 import SwiftUI
 
-extension Text
-{
-    func graphLabelStyle(_ schema: ColorScheme) -> some View
-    {
+extension Text {
+    func graphLabelStyle(_ schema: ColorScheme) -> some View {
         self
             .foregroundColor(Color("GraphTextColor"))
             .font(.caption)
@@ -15,25 +13,20 @@ extension Text
     }
 }
 
-extension CGFloat
-{
+extension CGFloat {
     // Function to clamp the value within the provided range
-    func clamped(to range: ClosedRange<CGFloat>) -> CGFloat
-    {
+    func clamped(to range: ClosedRange<CGFloat>) -> CGFloat {
         // Return the clamped value
         return Swift.min(Swift.max(self, range.lowerBound), range.upperBound)
     }
 }
 
-extension Color
-{
-    func darken(_ level: Double) -> Color
-    {
+extension Color {
+    func darken(_ level: Double) -> Color {
         return self.brighten(-level)
     }
     
-    func brighten(_ level: Double) -> Color
-    {
+    func brighten(_ level: Double) -> Color {
         if level == 0 { return self }
         
         let uiColor = UIColor(self)
@@ -53,10 +46,8 @@ extension Color
     }
 }
 
-extension Calendar
-{
-    var shortWeekdaySymbolsLocalized: [String]
-    {
+extension Calendar {
+    var shortWeekdaySymbolsLocalized: [String] {
         let firstWeekday = self.firstWeekday
         let symbols = self.shortWeekdaySymbols
         
@@ -64,38 +55,31 @@ extension Calendar
     }
 }
 
-extension Date
-{
-    func isSameMonth(as date: Date) -> Bool
-    {
+extension Date {
+    func isSameMonth(as date: Date) -> Bool {
         return Calendar.current.isDate(self, equalTo: date, toGranularity: .month)
     }
     
-    var year: Int
-    {
+    var year: Int {
         return Calendar.current.dateComponents([.year], from: self).year!
     }
     
-    var month: Int
-    {
+    var month: Int {
         return Calendar.current.dateComponents([.month], from: self).month!
     }
     
-    var day: Int
-    {
+    var day: Int {
         return Calendar.current.dateComponents([.day], from: self).day!
     }
     
-    var monthString: String
-    {
+    var monthString: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM"
         
         return dateFormatter.string(from: self)
     }
     
-    var weekStartDate: Date
-    {
+    var weekStartDate: Date {
         let weekday = Calendar.current.component(.weekday, from: self)
         let firstWeekday = Calendar.current.firstWeekday
         let daysToSubtract = (weekday - firstWeekday + 7) % 7
@@ -103,8 +87,7 @@ extension Date
         return Calendar.current.date(byAdding: .day, value: -daysToSubtract, to: self)!
     }
     
-    var weekEndDate: Date
-    {
+    var weekEndDate: Date {
         let weekday = Calendar.current.component(.weekday, from: self)
         let firstWeekday = Calendar.current.firstWeekday
         let lastWeekdayIndex = (firstWeekday + 5) % 7 + 1
@@ -114,8 +97,7 @@ extension Date
         return Calendar.current.date(byAdding: .day, value: daysToAdd, to: self)!
     }
     
-    var lastDayOfMonth: Date
-    {
+    var lastDayOfMonth: Date {
         let nextMonth = Calendar.current.date(byAdding: .month, value: 1, to: self)!
         let firstDayNextMonth = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: nextMonth))!
         
@@ -124,20 +106,16 @@ extension Date
 }
 
 #if DEBUG
-extension View
-{
-    func debug(_ color: Color = .orange) -> some View
-    {
+extension View {
+    func debug(_ color: Color = .orange) -> some View {
         self
             .border(color, width: 1)
     }
 }
 #endif
 
-extension Date
-{
-    static var getDayProgress: Double 
-    {
+extension Date {
+    static var getDayProgress: Double {
         let now = Date.now
     
         let startOfDay = Calendar.current.startOfDay(for: now)
@@ -147,44 +125,38 @@ extension Date
         return secondsSinceStartOfDay / totalSecondsInDay
     }
     
-    var nextSunday: Date
-    {
+    var nextSunday: Date {
         var components = DateComponents()
         components.day = 8 - Calendar.current.component(.weekday, from: self)
         
         return Calendar.current.date(byAdding: components, to: self)!
     }
     
-    var lastMonday: Date
-    {
+    var lastMonday: Date {
         var components = DateComponents()
         components.day = -(Calendar.current.component(.weekday, from: self) - 2)
         
         return Calendar.current.date(byAdding: components, to: self)!
     }
     
-    var isToday: Bool
-    {
+    var isToday: Bool {
         return self.isSameDay(as: .now)
     }
     
-    func isSameDay(as date: Date) -> Bool
-    {
+    func isSameDay(as date: Date) -> Bool {
         return Calendar.current.isDate(self, inSameDayAs: date)
 
 //        return Calendar.current.dateComponents([.year, .month, .day], from: self) == Calendar.current.d*/ateComponents([.year, .month, .day], from: date)
     }
     
-    var shortTime: String
-    {
+    var shortTime: String {
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = .short
             
         return dateFormatter.string(from: self)
     }
     
-    var shortDate: String
-    {
+    var shortDate: String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.current
         dateFormatter.setLocalizedDateFormatFromTemplate("EddMM")
@@ -192,8 +164,7 @@ extension Date
         return dateFormatter.string(from: self)
     }
     
-    var workday: String
-    {
+    var workday: String {
         let dateFormatter = DateFormatter()
         
         dateFormatter.locale = Locale.current
@@ -202,8 +173,7 @@ extension Date
         return dateFormatter.string(from: self)
     }
     
-    var dayOfMonth: String
-    {
+    var dayOfMonth: String {
         let dateFormatter = DateFormatter()
         
         dateFormatter.locale = Locale.current
@@ -212,43 +182,31 @@ extension Date
         return dateFormatter.string(from: self)
     }
     
-    var relative: String
-    {
-        if Calendar.current.isDateInToday(self)
-        {
+    var relative: String {
+        if Calendar.current.isDateInToday(self) {
             return String(localized: "Today")
-        }
-        else if Calendar.current.isDateInYesterday(self)
-        {
+        } else if Calendar.current.isDateInYesterday(self) {
             return String(localized: "Yesterday")
-        }
-        else if Calendar.current.isDateInTomorrow(self)
-        {
+        } else if Calendar.current.isDateInTomorrow(self) {
             return String(localized: "Tomorrow")
-        }
-        else
-        {
+        } else {
             return self.shortDate
         }
     }
     
-    func addDays(_ days: Int) -> Date
-    {
+    func addDays(_ days: Int) -> Date {
         return Calendar.current.date(byAdding: .day, value: days, to: self)!
     }
     
-    func subtractDays(_ days: Int) -> Date
-    {
+    func subtractDays(_ days: Int) -> Date {
         return Calendar.current.date(byAdding: .day, value: -days, to: self)!
     }
     
-    var yesterday: Date
-    {
+    var yesterday: Date {
         return self.subtractDays(1)
     }
     
-    var tomorrow: Date
-    {
+    var tomorrow: Date {
         return self.addDays(1)
     }
 }

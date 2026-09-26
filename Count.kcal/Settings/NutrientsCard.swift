@@ -1,16 +1,13 @@
 import SwiftUI
 
-struct NutrientsCard: View
-{
+struct NutrientsCard: View {
     @Environment(HSlider.self) private var SliderData
+
     @EnvironmentObject private var AppSettings: Settings
         
-    var body: some View
-    {
-        Card("Nutrients", titlePadding: false)
-        {
-            VStack(spacing: 12)
-            {
+    var body: some View {
+        Card("Nutrients", titlePadding: false) {
+            VStack(spacing: 12) {
                 MacroSlider()
                     .padding(.vertical, 2)
                     .padding(.horizontal, 8)
@@ -122,18 +119,15 @@ struct NutrientsCard: View
 //                }
 //                .padding(.bottom, 8)
                 
-                HStack(spacing: 12)
-                {
-                    VStack(spacing: 6)
-                    {
+                HStack(spacing: 12) {
+                    VStack(spacing: 6) {
                         Text("Carbs")
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(Color("TextColor"))
                             .fixedSize()
 
-                        HStack(spacing: 4)
-                        {
+                        HStack(spacing: 4) {
                             Text("\(AppSettings.carbsGoal)")
                                 .multilineTextAlignment(.trailing)
                                 .font(.subheadline)
@@ -153,16 +147,14 @@ struct NutrientsCard: View
                     
                     Spacer()
                     
-                    VStack(spacing: 6)
-                    {
+                    VStack(spacing: 6) {
                         Text("Fats")
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(Color("TextColor"))
                             .fixedSize()
 
-                        HStack(spacing: 4)
-                        {
+                        HStack(spacing: 4) {
                             Text("\(AppSettings.fatsGoal)")
                                 .multilineTextAlignment(.trailing)
                                 .font(.subheadline)
@@ -182,16 +174,14 @@ struct NutrientsCard: View
                     
                     Spacer()
                     
-                    VStack(spacing: 6)
-                    {
+                    VStack(spacing: 6) {
                         Text("Protein")
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(Color("TextColor"))
                             .fixedSize()
 
-                        HStack(spacing: 4)
-                        {
+                        HStack(spacing: 4) {
                             Text("\(AppSettings.proteinGoal)")
                                 .multilineTextAlignment(.trailing)
                                 .font(.subheadline)
@@ -216,10 +206,8 @@ struct NutrientsCard: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
+#Preview {
+    NavigationView {
         SettingsPage()
             .environmentObject(Settings.shared)
             .environment(HSlider())

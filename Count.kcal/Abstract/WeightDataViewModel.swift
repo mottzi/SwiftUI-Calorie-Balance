@@ -1,56 +1,55 @@
 import SwiftUI
 
-enum WeightPage: Int, Hashable
-{
-    case weekly = 0
-    case monthly = 1
-}
-
-struct WeightChartData: Identifiable
-{
-    let id = UUID()
-    
-    var date: Date
-    var weightAvg: Double?
-}
-
-@Observable class WeightDataViewModel
-{
+@Observable
+/// Weight history and values used by the weekly and monthly charts.
+class WeightDataViewModel {
     @ObservationIgnored private let hk = HKRepository.shared
     @ObservationIgnored private let referenceDate = Date.now
     
     var WeightData: [WeightChartData] = []
     
-    var dataLoaded: Bool
-    {
+    var weightLatest: Double?
+    var weightLatestDate: Date?
+
+    /// Loads daily weight averages and the latest weight sample from HealthKit.
+    func fetchData() async {
+        let data = await hk.fetchInitialAvgWeightData(for: self.referenceDate)
+        
+        let (latestValue, latestDate) = await hk.fetchLatestWeightData()
+            
+        await MainActor.run {
+            self.WeightData = data
+            self.weightLatest = latestValue
+            self.weightLatestDate = latestDate
+        }
+        
+        // printData()
+    }
+}
+extension WeightDataViewModel {
+
+    var dataLoaded: Bool {
         return WeightData.count >= 30
     }
     
-    var WeeklyWeightData: [WeightChartData]
-    {
+    var WeeklyWeightData: [WeightChartData] {
         if !dataLoaded { return [] }
         
         var returnData: [WeightChartData] = []
     
-        for index in (WeightData.count - 1 - 6) ... WeightData.count - 1
-        {
+        for index in (WeightData.count - 1 - 6) ... WeightData.count - 1 {
             returnData.append(WeightData[index])
         }
 
         return returnData
     }
-    
-    var weightLatest: Double?
-    var weightLatestDate: Date?
-    
-    var weightAvg30: Double
-    {
+
+    var weightAvg30: Double {
         if !dataLoaded { return 0.0 }
         
         var data: [WeightChartData] = []
         
-        for index in (WeightData.count - 1 - 29) ... WeightData.count - 1
-        {
+        for index in (WeightData.count - 1 - 29) ... WeightData.count - 1 {
             data.append(WeightData[index])
         }
         
@@ -58,12 +57,10 @@ struct WeightChartData: Identifiable
         
         var avg: Double = 0.0
         
-        if data.count > 0
-        {
+        if data.count > 0 {
             var cum: Double = 0.0
             
-            for validData in data
-            {
+            for validData in data {
                 cum += validData.weightAvg!
             }
             
@@ -73,14 +70,12 @@ struct WeightChartData: Identifiable
         return avg
     }
     
-    var weightAvg7: Double
-    {
+    var weightAvg7: Double {
         if !dataLoaded { return 0.0 }
         
         var data: [WeightChartData] = []
         
-        for index in (WeightData.count - 1 - 6) ... WeightData.count - 1
-        {
+        for index in (WeightData.count - 1 - 6) ... WeightData.count - 1 {
             data.append(WeightData[index])
         }
         
@@ -88,12 +83,10 @@ struct WeightChartData: Identifiable
         
         var avg: Double = 0.0
         
-        if data.count > 0
-        {
+        if data.count > 0 {
             var cum: Double = 0.0
             
-            for validData in data
-            {
+            for validData in data {
                 cum += validData.weightAvg!
             }
                         
@@ -102,31 +95,11 @@ struct WeightChartData: Identifiable
         
         return avg
     }
-    
-    func fetchData() async
-    {
-        let data = await hk.fetchInitialAvgWeightData(for: self.referenceDate)
-        
-        let (latestValue, latestDate) = await hk.fetchLatestWeightData()
-            
-        await MainActor.run
-        {
-            self.WeightData = data
-            self.weightLatest = latestValue
-            self.weightLatestDate = latestDate
-        }
-        
-        // printData()
-    }
-    
-    func validData(_ page: WeightPage) -> [WeightChartData]
-    {
-        if page == .weekly
-        {
+
+    func validData(_ page: WeightPage) -> [WeightChartData] {
+        if page == .weekly {
             return WeeklyWeightData.filter({ $0.weightAvg != nil })
-        }
-        else // if page == .monthly
-        {
+        } else { // if page == .monthly
             return WeightData.filter({ $0.weightAvg != nil })
         }
     }
@@ -150,8 +123,7 @@ struct WeightChartData: Identifiable
         }
     }*/
     
-    func randomizeWeightData(start: Double, end: Double)
-    {
+    func randomizeWeightData(start: Double, end: Double) {
         assert(start > end, "Start weight must be greater than end weight")
         
         // Set latest weight to the target end weight (lowest)
@@ -163,16 +135,12 @@ struct WeightChartData: Identifiable
         // Iterate through the array from start to end
         // Index 0 should be oldest (highest weight)
         // Last index should be newest (lowest weight)
-        for index in 0..<numberOfEntries
-        {
+        for index in 0..<numberOfEntries {
             let setNil: Bool = Double.random(in: 0.0...1.0) < 0.25
             
-            if setNil
-            {
+            if setNil {
                 self.WeightData[index].weightAvg = nil
-            }
-            else
-            {
+            } else {
                 // Calculate progress where:
                 // index 0 = 0.0 (start/highest weight)
                 // last index = 1.0 (end/lowest weight)
@@ -193,21 +161,16 @@ struct WeightChartData: Identifiable
         }
     }
     
-    func printData()
-    {
+    func printData() {
         if !dataLoaded { return }
         
         var str = ""
         
         print("*** printing all data:")
-        for (index, element) in self.WeightData.enumerated()
-        {
-            if element.weightAvg == nil
-            {
+        for (index, element) in self.WeightData.enumerated() {
+            if element.weightAvg == nil {
                 str = "nil"
-            }
-            else
-            {
+            } else {
                 str = String(element.weightAvg!)
             }
 
@@ -215,14 +178,10 @@ struct WeightChartData: Identifiable
         }
         
         print("*** printing weekly data:")
-        for (index, element) in self.WeeklyWeightData.enumerated()
-        {
-            if element.weightAvg == nil
-            {
+        for (index, element) in self.WeeklyWeightData.enumerated() {
+            if element.weightAvg == nil {
                 str = "nil"
-            }
-            else
-            {
+            } else {
                 str = String(element.weightAvg!)
             }
 
@@ -230,15 +189,11 @@ struct WeightChartData: Identifiable
         }
     }
 
-    func firstWeightValue(_ page: WeightPage) -> Double?
-    {
-        if page == .weekly
-        {
+    func firstWeightValue(_ page: WeightPage) -> Double? {
+        if page == .weekly {
             if let firstValidElement = WeeklyWeightData.first(where: { $0.weightAvg != nil })
             { return firstValidElement.weightAvg }
-        }
-        else // if page == .monthly
-        {
+        } else { // if page == .monthly
             if let firstValidElement = WeightData.first(where: { $0.weightAvg != nil })
             { return firstValidElement.weightAvg }
         }
@@ -246,15 +201,11 @@ struct WeightChartData: Identifiable
         return nil
     }
     
-    func lastWeightValue(_ page: WeightPage) -> Double?
-    {
-        if page == .weekly
-        {
+    func lastWeightValue(_ page: WeightPage) -> Double? {
+        if page == .weekly {
             if let lastValidElement = WeeklyWeightData.last(where: { $0.weightAvg != nil })
             { return lastValidElement.weightAvg }
-        }
-        else // if page == .monthly
-        {
+        } else { // if page == .monthly
             if let lastValidElement = WeightData.last(where: { $0.weightAvg != nil })
             { return lastValidElement.weightAvg }
         }
@@ -262,23 +213,17 @@ struct WeightChartData: Identifiable
         return nil
     }
     
-    func minWeightData(_ page: WeightPage) -> WeightChartData?
-    {
-        if page == .weekly
-        {
+    func minWeightData(_ page: WeightPage) -> WeightChartData? {
+        if page == .weekly {
             if !dataLoaded { return nil }
             
-            if let lowestWeightData = WeeklyWeightData.min(by: { $0.weightAvg ?? .greatestFiniteMagnitude < $1.weightAvg ?? .greatestFiniteMagnitude })
-            {
+            if let lowestWeightData = WeeklyWeightData.min(by: { $0.weightAvg ?? .greatestFiniteMagnitude < $1.weightAvg ?? .greatestFiniteMagnitude }) {
                 return lowestWeightData
             }
-        }
-        else // if page == .monthly
-        {
+        } else { // if page == .monthly
             if !dataLoaded { return nil }
             
-            if let lowestWeightData = WeightData.min(by: { $0.weightAvg ?? .greatestFiniteMagnitude < $1.weightAvg ?? .greatestFiniteMagnitude })
-            {
+            if let lowestWeightData = WeightData.min(by: { $0.weightAvg ?? .greatestFiniteMagnitude < $1.weightAvg ?? .greatestFiniteMagnitude }) {
                 return lowestWeightData
             }
         }
@@ -286,54 +231,56 @@ struct WeightChartData: Identifiable
         return nil
     }
     
-    func maxWeightData(_ page: WeightPage) -> WeightChartData?
-    {
-        if page == .weekly
-        {
+    func maxWeightData(_ page: WeightPage) -> WeightChartData? {
+        if page == .weekly {
             if !dataLoaded { return nil }
 
             return WeeklyWeightData.max(by: { $0.weightAvg ?? 0.0 < $1.weightAvg ?? 0.0})
-        }
-        else // if page == .monthly
-        {
+        } else { // if page == .monthly
             if !dataLoaded { return nil }
 
             return WeightData.max(by: { $0.weightAvg ?? 0.0 < $1.weightAvg ?? 0.0})
         }        
     }
     
-    func getYRange(_ page: WeightPage) -> ClosedRange<Int>
-    {
+    func getYRange(_ page: WeightPage) -> ClosedRange<Int> {
         return getYBottomRange(page) ... getYTopRange(page)
     }
 
-    func createYRangeArray(_ page: WeightPage) -> [Int]
-    {
+    func createYRangeArray(_ page: WeightPage) -> [Int] {
         var rangeArray: [Int] = []
 
-        for num in getYBottomRange(page) ... getYTopRange(page)
-        {
+        for num in getYBottomRange(page) ... getYTopRange(page) {
             rangeArray.append(num)
         }
         
         return rangeArray
     }
 
-    func getYTopRange(_ page: WeightPage) -> Int
-    {
-        switch page
-        {
+    func getYTopRange(_ page: WeightPage) -> Int {
+        switch page {
             case .weekly:  Int(floor(maxWeightData(page)?.weightAvg ?? 0.0) + 1.0)
             case .monthly: Int(round(maxWeightData(page)?.weightAvg ?? 0.0) + 1.0)
         }
     }
 
-    func getYBottomRange(_ page: WeightPage) -> Int
-    {
-        switch page
-        {
+    func getYBottomRange(_ page: WeightPage) -> Int {
+        switch page {
             case .weekly:  Int(ceil(minWeightData(page)?.weightAvg ?? 0.0) - 1.0)
             case .monthly: Int(round(minWeightData(page)?.weightAvg ?? 0.0) - 1.0)
         }
     }
+
+}
+
+enum WeightPage: Int, Hashable {
+    case weekly = 0
+    case monthly = 1
+}
+
+struct WeightChartData: Identifiable {
+    let id = UUID()
+    
+    var date: Date
+    var weightAvg: Double?
 }

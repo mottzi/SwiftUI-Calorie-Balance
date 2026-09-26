@@ -1,23 +1,17 @@
 import SwiftUI
 
-struct OnboardingButton: View
-{
+struct OnboardingButton: View {
     @EnvironmentObject private var AppSettings: Settings
     
     @Binding var selection: OnboardingState
     
     @State private var showButton = false
     
-    var body: some View
-    {
-        Button
-        {
-            if selection == .applehealth
-            {
-                HKRepository.shared.store.requestAuthorization(toShare: Set(), read: HKRepository.shared.dataTypesToRead)
-                { success, error in
-                    withAnimation
-                    {
+    var body: some View {
+        Button {
+            if selection == .applehealth {
+                HKRepository.shared.store.requestAuthorization(toShare: Set(), read: HKRepository.shared.dataTypesToRead) { success, error in
+                    withAnimation {
                         selection = .maingoal
                     }
                 }
@@ -25,23 +19,16 @@ struct OnboardingButton: View
                 return
             }
             
-            if let new = OnboardingState(rawValue: selection.rawValue + 1)
-            {
-                withAnimation
-                {
+            if let new = OnboardingState(rawValue: selection.rawValue + 1) {
+                withAnimation {
                     selection = new
                 }
-            }
-            else
-            {
-                withAnimation(.smooth(duration: 4))
-                {
+            } else {
+                withAnimation(.smooth(duration: 4)) {
                     AppSettings.showWelcome = false
                 }
             }
-        }
-        label:
-        {
+        } label: {
             Text(selection.buttonText)
                 .font(.title3)
                 .fontWeight(.medium)
@@ -52,14 +39,10 @@ struct OnboardingButton: View
         .buttonStyle(.borderedProminent)
         .tint(selection == .balancegoal ? Color("ConsumedDefault") : .blue)
         .padding(.horizontal, 55)
-        .overlay(alignment: .top)
-        {
-            VStack
-            {
-                HStack(spacing: 8)
-                {
-                    ForEach(1..<OnboardingState.allCases.count, id: \.self)
-                    { i in
+        .overlay(alignment: .top) {
+            VStack {
+                HStack(spacing: 8) {
+                    ForEach(1..<OnboardingState.allCases.count, id: \.self) { i in
                         Circle()
                             .fill(Color("TextColor"))
                             .frame(width: 8, height: 8)
@@ -70,22 +53,15 @@ struct OnboardingButton: View
             .offset(y: -20)
         }
         .foregroundStyle(Color("TextColor"))
-        .overlay(alignment: .bottom)
-        {
-            if selection != .welcome
-            {
-                Button
-                {
-                    if let new = OnboardingState(rawValue: selection.rawValue - 1)
-                    {
-                        withAnimation(.bouncy)
-                        {
+        .overlay(alignment: .bottom) {
+            if selection != .welcome {
+                Button {
+                    if let new = OnboardingState(rawValue: selection.rawValue - 1) {
+                        withAnimation(.bouncy) {
                             selection = new
                         }
                     }
-                }
-                label:
-                {
+                } label: {
                     Text("Back")
                         .tint(selection == .balancegoal ? Color("ConsumedDefault").brighten(0.1) : .blue)
                 }
@@ -96,12 +72,9 @@ struct OnboardingButton: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
-        ZStack
-        {
+#Preview {
+    NavigationView {
+        ZStack {
             Settings.shared.AppBackground
                 .ignoresSafeArea(.all)
             

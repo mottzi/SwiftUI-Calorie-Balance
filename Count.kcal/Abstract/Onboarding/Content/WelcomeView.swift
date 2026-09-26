@@ -1,7 +1,6 @@
 import SwiftUI
 
-struct WelcomeView: View
-{
+struct WelcomeView: View {
     @EnvironmentObject private var AppSettings: Settings
     
     @State private var onboardingInterface = HealthInterface(.empty(for: .now))
@@ -10,16 +9,12 @@ struct WelcomeView: View
     @State private var welcomeAnimating = false
     @State private var welcomeAnimationWorkItem: DispatchWorkItem?
     
-    var body: some View
-    {
-        VStack(spacing: 0)
-        {
+    var body: some View {
+        VStack(spacing: 0) {
             CircleBalanceGraph(lineWidth: 20, mode: .now)
                 .frame(width: 255, height: 255)
-                .overlay
-            {
-                VStack(spacing: 0)
-                {
+                .overlay {
+                VStack(spacing: 0) {
                     Text("\(abs(onboardingInterface.sample.balanceNow))")
                         .font(.system(size: 30))
                         .fontWeight(.semibold)
@@ -44,26 +39,22 @@ struct WelcomeView: View
         .geometryGroup()
         .environmentObject(AppSettings)
         .environment(onboardingInterface)
-        .onAppear
-        {
+        .onAppear {
             welcomeScale = 3.5
             onboardingInterface.randomizeHealthData()
             
             startAnimationCycle()
             
-            withAnimation(.smooth(duration: 2))
-            {
+            withAnimation(.smooth(duration: 2)) {
                 welcomeScale = 1
             }
         }
-        .onDisappear
-        {
+        .onDisappear {
             stopAnimationCycle()
         }
     }
     
-    private func startAnimationCycle()
-    {
+    private func startAnimationCycle() {
         welcomeAnimationWorkItem?.cancel()
         welcomeAnimationWorkItem = nil
         
@@ -71,28 +62,23 @@ struct WelcomeView: View
         tickWelcomeAnimation()
     }
     
-    private func stopAnimationCycle()
-    {
+    private func stopAnimationCycle() {
         welcomeAnimating = false
         welcomeAnimationWorkItem?.cancel()
         welcomeAnimationWorkItem = nil
     }
     
-    private func tickWelcomeAnimation()
-    {
+    private func tickWelcomeAnimation() {
         guard welcomeAnimating else { return }
         
         // prepare delayed refresk
-        welcomeAnimationWorkItem = DispatchWorkItem
-        {
+        welcomeAnimationWorkItem = DispatchWorkItem {
             guard welcomeAnimating else { return }
             
-            withAnimation(.bouncy(duration: 1))
-            {
+            withAnimation(.bouncy(duration: 1)) {
                 onboardingInterface.randomizeHealthData()
             }
-        completion:
-            {
+        completion: {
                 guard welcomeAnimating else { return }
                 
                 // restart the animation cycle
@@ -101,8 +87,7 @@ struct WelcomeView: View
         }
         
         // Schedule the work item after a delay of 0.5 seconds
-        if let workItem = welcomeAnimationWorkItem
-        {
+        if let workItem = welcomeAnimationWorkItem {
             guard welcomeAnimating else { return }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: workItem)
@@ -110,12 +95,9 @@ struct WelcomeView: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
-        ZStack
-        {
+#Preview {
+    NavigationView {
+        ZStack {
             Settings.shared.AppBackground
                 .ignoresSafeArea(.all)
             

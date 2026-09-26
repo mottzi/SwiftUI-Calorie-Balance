@@ -1,9 +1,10 @@
 import SwiftUI
 
-struct CaloriesCard: View
-{
+struct CaloriesCard: View {
     @Environment(\.dynamicTypeSize) private var dynamicType
+
     @EnvironmentObject private var AppSettings: Settings
+
     @Environment(HealthInterface.self) private var DataViewModel
     
     let sizeMapping: [DynamicTypeSize: CGFloat] = 
@@ -22,10 +23,8 @@ struct CaloriesCard: View
         .accessibility5: 60,
     ]
     
-    var body: some View
-    {
-        VStack(spacing: dynamicType <= .xxxLarge ? 0 : 8)
-        {
+    var body: some View {
+        VStack(spacing: dynamicType <= .xxxLarge ? 0 : 8) {
             CaloriesCardTopRow()
                 .padding(.top, 2)
 
@@ -39,12 +38,9 @@ struct CaloriesCard: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
-        ZStack
-        {
+#Preview {
+    NavigationView {
+        ZStack {
             Settings.shared.AppBackground.ignoresSafeArea(.all)
             
             Pager(lb: 6, tb: 1)

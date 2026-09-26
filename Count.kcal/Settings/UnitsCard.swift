@@ -1,44 +1,33 @@
 import SwiftUI
 
-struct UnitsCard: View
-{
+struct UnitsCard: View {
     @EnvironmentObject private var AppSettings: Settings
 
     //@State private var selectedFlavor: BalanceLayout
 
-    var body: some View
-    {
-        Card("Units", titlePadding: false)
-        {
-            VStack(spacing: 8)
-            {
-                HStack
-                {
+    var body: some View {
+        Card("Units", titlePadding: false) {
+            VStack(spacing: 8) {
+                HStack {
                     Text("Energy")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     
                     Spacer()
                     
-                    Picker(String(""), selection: $AppSettings.energyUnit)
-                    {
-                        ForEach(Settings.EnergyUnit.allCases)
-                        {
+                    Picker(String(""), selection: $AppSettings.energyUnit) {
+                        ForEach(Settings.EnergyUnit.allCases) {
                             Text(verbatim: "\($0.rawValue)")
                         }
                     }
                     .pickerStyle(.palette)
                     .frame(width: 180)
-                    .onChange(of: AppSettings.energyUnit)
-                    { o, n in
-                        if o == .kcal
-                        {
+                    .onChange(of: AppSettings.energyUnit) { o, n in
+                        if o == .kcal {
                             AppSettings.balanceGoal = Int((Double(AppSettings.balanceGoal) * 4.184).rounded())
                             AppSettings.customCalPassive = Int((Double(AppSettings.customCalPassive) * 4.184).rounded())
                             AppSettings.customCalActive = Int((Double(AppSettings.customCalActive) * 4.184).rounded())
-                        }
-                        else
-                        {
+                        } else {
                             AppSettings.balanceGoal = Int((Double(AppSettings.balanceGoal) / 4.184).rounded())
                             AppSettings.customCalPassive = Int((Double(AppSettings.customCalPassive) / 4.184).rounded())
                             AppSettings.customCalActive = Int((Double(AppSettings.customCalActive) / 4.184).rounded())
@@ -49,18 +38,15 @@ struct UnitsCard: View
                 Divider()
                     .padding(.vertical, 4)
                 
-                HStack
-                {
+                HStack {
                     Text("Body weight")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     
                     Spacer()
                     
-                    Picker(String(""), selection: $AppSettings.weightUnit)
-                    {
-                        ForEach(Settings.WeightUnit.allCases)
-                        {
+                    Picker(String(""), selection: $AppSettings.weightUnit) {
+                        ForEach(Settings.WeightUnit.allCases) {
                             Text(verbatim: "\($0.rawValue)")
                         }
                     }
@@ -73,10 +59,8 @@ struct UnitsCard: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
+#Preview {
+    NavigationView {
         SettingsPage()
             .environmentObject(Settings.shared)
     }

@@ -1,32 +1,25 @@
 #if DEBUG && targetEnvironment(simulator)
 import HealthKit
 
-enum SimulatorHealthSeeder
-{
-    private enum SeedError: Error
-    {
+enum SimulatorHealthSeeder {
+    private enum SeedError: Error {
         case healthKitUnavailable
         case writePermissionDenied
         case saveFailed
     }
 
-    static func runIfRequested() async
-    {
+    static func runIfRequested() async {
         guard ProcessInfo.processInfo.arguments.contains("--seed-simulator-health") else { return }
 
-        do
-        {
+        do {
             let count = try await seed()
             print("[SimulatorHealthSeed] Submitted \(count) HealthKit samples")
-        }
-        catch
-        {
+        } catch {
             print("[SimulatorHealthSeed] Failed: \(error)")
         }
     }
 
-    private static func seed() async throws -> Int
-    {
+    private static func seed() async throws -> Int {
         guard HKHealthStore.isHealthDataAvailable() else { throw SeedError.healthKitUnavailable }
 
         let store = HKHealthStore()
@@ -41,8 +34,7 @@ enum SimulatorHealthSeeder
         let readTypes = Set(types.map { $0 as HKObjectType })
 
         try await store.requestAuthorization(toShare: shareTypes, read: readTypes)
-        guard types.allSatisfy({ store.authorizationStatus(for: $0) == .sharingAuthorized }) else
-        {
+        guard types.allSatisfy({ store.authorizationStatus(for: $0) == .sharingAuthorized }) else {
             throw SeedError.writePermissionDenied
         }
 
@@ -52,19 +44,30 @@ enum SimulatorHealthSeeder
         let syncVersion = Int(now.timeIntervalSince1970)
         var samples: [HKObject] = []
 
-        func quantitySample(_ identifier: HKQuantityTypeIdentifier, value: Double, unit: HKUnit, from start: Date, to end: Date, day: Date) -> HKQuantitySample
-        {
+        func quantitySample(
+            _ identifier: HKQuantityTypeIdentifier,
+            value: Double,
+            unit: HKUnit,
+            from start: Date,
+            to end: Date,
+            day: Date
+        ) -> HKQuantitySample {
             let metadata: [String: Any] =
             [
                 HKMetadataKeySyncIdentifier: "CountKcal.Simulator.\(identifier.rawValue).\(Int(day.timeIntervalSince1970))",
                 HKMetadataKeySyncVersion: NSNumber(value: syncVersion)
             ]
 
-            return HKQuantitySample(type: HKQuantityType(identifier), quantity: HKQuantity(unit: unit, doubleValue: value), start: start, end: end, metadata: metadata)
+            return HKQuantitySample(
+                type: HKQuantityType(identifier),
+                quantity: HKQuantity(unit: unit, doubleValue: value),
+                start: start,
+                end: end,
+                metadata: metadata
+            )
         }
 
-        for daysAgo in (0..<37).reversed()
-        {
+        for daysAgo in (0..<37).reversed() {
             guard let day = calendar.date(byAdding: .day, value: -daysAgo, to: today),
                   let nextDay = calendar.date(byAdding: .day, value: 1, to: day) else { continue }
 
@@ -94,8 +97,7 @@ enum SimulatorHealthSeeder
         }
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            store.save(samples)
-            { saved, error in
+            store.save(samples) { saved, error in
                 if let error { continuation.resume(throwing: error) }
                 else if saved { continuation.resume() }
                 else { continuation.resume(throwing: SeedError.saveFailed) }

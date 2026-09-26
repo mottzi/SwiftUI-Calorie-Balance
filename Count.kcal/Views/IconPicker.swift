@@ -1,13 +1,11 @@
 import SwiftUI
 
-enum IconPickerStyle
-{
+enum IconPickerStyle {
     case rectangle
     case capsule
 }
 
-struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int
-{
+struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int {
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
     var firstIcon: String
@@ -22,21 +20,15 @@ struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int
 
     @Binding var selection: T
 
-    var body: some View
-    {
-        GeometryReader
-        { geo in
+    var body: some View {
+        GeometryReader { geo in
             
-            Group
-            {
-                if style == .rectangle
-                {
+            Group {
+                if style == .rectangle {
                     RoundedRectangle(cornerRadius: 6)
                         .fill(bgColor.opacity(scheme == .light ? 0.2 : 1))
-                        .overlay(alignment: selection.rawValue == 0 ? .leading : .trailing)
-                        {
-                            ZStack
-                            {
+                        .overlay(alignment: selection.rawValue == 0 ? .leading : .trailing) {
+                            ZStack {
                                 RoundedRectangle(cornerRadius: 6)
                                     .fill(bgColorSelected.brighten(scheme == .light ? 0.1 : 0))
                                     .padding([.leading, .vertical], selection.rawValue == 0 ? 2 : 0)
@@ -44,23 +36,18 @@ struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int
                                     .frame(width: geo.size.width / 2, height: geo.size.height)
                             }
                         }
-                }
-                else
-                {
+                } else {
                     Capsule()
                         .fill(bgColor.opacity(scheme == .light ? 0.2 : 1))
-                        .overlay(alignment: selection.rawValue == 0 ? .leading : .trailing)
-                        {
-                            ZStack
-                            {
+                        .overlay(alignment: selection.rawValue == 0 ? .leading : .trailing) {
+                            ZStack {
                                 Capsule()
                                     .fill(bgColorSelected.brighten(scheme == .light ? 0.1 : 0))
                                     .padding([.leading, .vertical], selection.rawValue == 0 ? 2 : 0)
                                     .padding([.trailing, .vertical], selection.rawValue == 1 ? 2 : 0)
                                     .frame(width: geo.size.width / 2, height: geo.size.height)
                                 
-                                if exclusiveLabel
-                                {
+                                if exclusiveLabel {
                                     Image(systemName: selection.rawValue == 0 ? firstIcon : secondIcon)
                                         .resizable()
                                         .scaledToFit()
@@ -73,12 +60,9 @@ struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int
                         }
                 }
             }
-            .overlay
-            {
-                if !exclusiveLabel
-                {
-                    HStack(spacing: 0)
-                    {
+            .overlay {
+                if !exclusiveLabel {
+                    HStack(spacing: 0) {
                         Spacer()
 
                         Image(systemName: firstIcon)
@@ -107,26 +91,17 @@ struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int
             }
             .animation(.spring(duration: 0.3), value: selection.rawValue)
             .contentShape(.rect)
-            .onTapGesture
-            {
-                if selection.rawValue == 0
-                {
-                    if let v = T(rawValue: 1)
-                    {
+            .onTapGesture {
+                if selection.rawValue == 0 {
+                    if let v = T(rawValue: 1) {
                         selection = v
                     }
-                }
-                else if selection.rawValue == 1 
-                {
-                    if let v = T(rawValue: 0)
-                    {
+                } else if selection.rawValue == 1 {
+                    if let v = T(rawValue: 0) {
                         selection = v
                     }
-                }
-                else 
-                {
-                    if let v = T(rawValue: 0)
-                    {
+                } else {
+                    if let v = T(rawValue: 0) {
                         selection = v
                     }
                 }
@@ -135,27 +110,21 @@ struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int
     }
 }
 
-enum PagerSelection: String, Hashable
-{
+enum PagerSelection: String, Hashable {
     case first
     case second
     
-    mutating func toggle()
-    {
-        if self == .first
-        {
+    mutating func toggle() {
+        if self == .first {
             self = .second
-        }
-        else
-        {
+        } else {
             self = .first
         }
         
     }
 }
 
-struct PageSelector: View
-{
+struct PageSelector: View {
     var firstIcon: String
     var secondIcon: String
     var pickedColor: Color = Color(white: 0.1)
@@ -166,24 +135,19 @@ struct PageSelector: View
 
     @Binding var selection: PagerSelection?
     
-    var body: some View
-    {
-        GeometryReader
-        { geo in
+    var body: some View {
+        GeometryReader { geo in
             RoundedRectangle(cornerRadius: 6)
                 .fill(bgColor)
-                .overlay(alignment: selection == .first ? .leading : .trailing)
-                {
+                .overlay(alignment: selection == .first ? .leading : .trailing) {
                     RoundedRectangle(cornerRadius: 6)
                         .fill(bgColorSelected)
                         .padding([.leading, .vertical], selection == .first ? 2 : 0)
                         .padding([.trailing, .vertical], selection == .second ? 2 : 0)
                         .frame(width: geo.size.width / 2, height: geo.size.height)
                 }
-                .overlay
-                {
-                    HStack(spacing: 0)
-                    {
+                .overlay {
+                    HStack(spacing: 0) {
                         Spacer()
 
                         Image(systemName: firstIcon)
@@ -209,11 +173,9 @@ struct PageSelector: View
                 .contentShape(.rect)
                 // animate picker on scroll
                 .animation(.default, value: selection)
-                .onTapGesture
-                {
+                .onTapGesture {
                     // animate scrollview on pick
-                    withAnimation
-                    {
+                    withAnimation {
                         if selection == .first { selection = .second }
                         else if selection == .second { selection = .first }
                         else { selection = .first }
@@ -223,10 +185,8 @@ struct PageSelector: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
+#Preview {
+    NavigationView {
         SettingsPage()
             .environmentObject(Settings.shared)
     }

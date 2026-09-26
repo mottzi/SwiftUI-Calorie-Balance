@@ -1,18 +1,14 @@
 import SwiftUI
 
-struct OnboardingWelcome: View
-{
-    var body: some View
-    {
-        HStack(alignment: .bottom, spacing: 16)
-        {
+struct OnboardingWelcome: View {
+    var body: some View {
+        HStack(alignment: .bottom, spacing: 16) {
             Image(uiImage: UIImage(named: "icon") ?? UIImage())
                 .resizable()
                 .frame(width: 70, height: 70)
                 .clipShape(.rect(cornerRadius: 13))
             
-            VStack(alignment: .leading, spacing: -6)
-            {
+            VStack(alignment: .leading, spacing: -6) {
                 Text("Welcome to")
                     .font(.title)
                     .fontWeight(.light)
@@ -28,12 +24,9 @@ struct OnboardingWelcome: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
-        ZStack
-        {
+#Preview {
+    NavigationView {
+        ZStack {
             Settings.shared.AppBackground
                 .ignoresSafeArea(.all)
             

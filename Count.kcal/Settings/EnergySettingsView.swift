@@ -1,8 +1,9 @@
 import SwiftUI
 
-struct EnergySettingsView: View
-{
+/// Controls for the weight goal, energy source, and daily balance target.
+struct EnergySettingsView: View {
     @Environment(\.colorScheme) private var scheme: ColorScheme
+
     @EnvironmentObject private var AppSettings: Settings
     
     @FocusState var focusedField: Field?
@@ -12,22 +13,22 @@ struct EnergySettingsView: View
     
     @Environment(HSlider.self) private var SliderData
         
-    var body: some View
-    {
-        VStack(spacing: 22)
-        {
-            HStack(alignment: .bottom)
-            {
+    var body: some View {
+        VStack(spacing: 22) {
+            HStack(alignment: .bottom) {
                 Spacer()
                 
-                VStack(spacing: 12)
-                {
+                VStack(spacing: 12) {
                     Text("I want to...")
                         .font(.subheadline)
                         .fontDesign(.rounded)
                         .foregroundStyle(Color("TextColor"))
                     
-                    IconPicker(firstIcon: "arrowshape.down.fill", secondIcon: "arrowshape.up.fill", selection: $AppSettings.weightGoal)
+                    IconPicker(
+                        firstIcon: "arrowshape.down.fill",
+                        secondIcon: "arrowshape.up.fill",
+                        selection: $AppSettings.weightGoal
+                    )
                         .frame(width: 100, height: 35)
                         .sensoryFeedback(.selection, trigger: AppSettings.weightGoal)
 
@@ -50,19 +51,27 @@ struct EnergySettingsView: View
                         )
                         .foregroundColor(AppSettings.CardBackground)
                 )
-                .shadow(color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0), radius: 4, x: 0, y: 4)
+                .shadow(
+                    color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0),
+                    radius: 4,
+                    x: 0,
+                    y: 4
+                )
 
                 Spacer()
                 
-                VStack(spacing: 12)
-                {
+                VStack(spacing: 12) {
                     Text("For burned calories, use...")
                         .font(.subheadline)
                         .fontDesign(.rounded)
                         .foregroundStyle(Color("TextColor"))
                         .frame(width: 100)
                     
-                    IconPicker(firstIcon: "heart.fill", secondIcon: "pencil.and.list.clipboard", selection: $AppSettings.dataSource)
+                    IconPicker(
+                        firstIcon: "heart.fill",
+                        secondIcon: "pencil.and.list.clipboard",
+                        selection: $AppSettings.dataSource
+                    )
                         .frame(width: 100, height: 35)
                         .sensoryFeedback(.selection, trigger: AppSettings.dataSource)
                     
@@ -84,22 +93,23 @@ struct EnergySettingsView: View
                         )
                         .foregroundColor(AppSettings.CardBackground)
                 )
-                .shadow(color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0), radius: 4, x: 0, y: 4)
+                .shadow(
+                    color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0),
+                    radius: 4,
+                    x: 0,
+                    y: 4
+                )
 
                 Spacer()
             }
                         
-            VStack(spacing: 12)
-            {
-                HStack(alignment: .lastTextBaseline)
-                {
-                    HStack(spacing: 8)
-                    {
+            VStack(spacing: 12) {
+                HStack(alignment: .lastTextBaseline) {
+                    HStack(spacing: 8) {
                         Text("Resting Calories")
                             .foregroundStyle(Color("TextColor"))
                         
-                        if !AppSettings.isPassiveValid
-                        {
+                        if !AppSettings.isPassiveValid {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundStyle(Color.red.gradient)
                                 .offset(y: -1)
@@ -111,10 +121,8 @@ struct EnergySettingsView: View
 
                     Spacer()
                     
-                    HStack(alignment: .lastTextBaseline)
-                    {
-                        if AppSettings.dataSource == .custom
-                        {
+                    HStack(alignment: .lastTextBaseline) {
+                        if AppSettings.dataSource == .custom {
                             TextField(String("0"), value: $AppSettings.customCalPassive, format: .number)
                                 .focused($focusedField, equals: .active)
                                 .keyboardType(.numberPad)
@@ -127,15 +135,12 @@ struct EnergySettingsView: View
                                 .foregroundStyle(Color("TextColor"))
                                 .offset(x: 3)
                                 .underline()
-                                .onChange(of: AppSettings.customCalPassive)
-                                {
+                                .onChange(of: AppSettings.customCalPassive) {
                                     AppSettings.customCalPassive = abs(AppSettings.customCalPassive)
                                     
                                     Task { await SliderData.updateMacroWeights() }
                                 }
-                        }
-                        else
-                        {
+                        } else {
                             Text("\(AppSettings.showResting)")
                                 .frame(width: 50, alignment: .trailing)
                                 .font(.subheadline)
@@ -158,15 +163,12 @@ struct EnergySettingsView: View
                 .padding(.horizontal, 15)
                 .padding(.bottom, 8)
 
-                HStack(alignment: .lastTextBaseline)
-                {
-                    HStack(spacing: 8)
-                    {
+                HStack(alignment: .lastTextBaseline) {
+                    HStack(spacing: 8) {
                         Text("Active Calories")
                             .foregroundStyle(Color("TextColor"))
                         
-                        if !AppSettings.isActiveValid
-                        {
+                        if !AppSettings.isActiveValid {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundStyle(Color.red.gradient)
                                 .offset(y: -1)
@@ -178,10 +180,8 @@ struct EnergySettingsView: View
                     
                     Spacer()
                     
-                    HStack(alignment: .lastTextBaseline)
-                    {
-                        if AppSettings.dataSource == .custom
-                        {
+                    HStack(alignment: .lastTextBaseline) {
+                        if AppSettings.dataSource == .custom {
                             TextField(String("0"), value: $AppSettings.customCalActive, format: .number)
                                 .focused($focusedField, equals: .active)
                                 .keyboardType(.numberPad)
@@ -195,16 +195,13 @@ struct EnergySettingsView: View
                                 .foregroundStyle(Color("TextColor"))
                                 .offset(x: 3)
                                 .underline()
-                                .onChange(of: AppSettings.customCalActive)
-                                {
+                                .onChange(of: AppSettings.customCalActive) {
                                     AppSettings.customCalActive = abs(AppSettings.customCalActive)
                                     
                                     Task { await SliderData.updateMacroWeights() }
                                 }
 //                                .onSubmit { Connectivity.shared.sendSettingsContext() }
-                        }
-                        else
-                        {
+                        } else {
                             Text("\(AppSettings.showActive)")
                                 .frame(width: 50, alignment: .trailing)
                                 .font(.subheadline)
@@ -225,15 +222,12 @@ struct EnergySettingsView: View
                 .frame(height: 20)
                 .padding(.horizontal, 15)
                 
-                HStack(alignment: .lastTextBaseline)
-                {
-                    HStack(spacing: 8)
-                    {
+                HStack(alignment: .lastTextBaseline) {
+                    HStack(spacing: 8) {
                         Text("Total Burned")
                             .foregroundStyle(Color("TextColor"))
                         
-                        if !AppSettings.isBurnedValid
-                        {
+                        if !AppSettings.isBurnedValid {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundStyle(Color.red.gradient)
                                 .offset(y: -1)
@@ -245,8 +239,7 @@ struct EnergySettingsView: View
                     
                     Spacer()
                     
-                    HStack(alignment: .lastTextBaseline)
-                    {
+                    HStack(alignment: .lastTextBaseline) {
                         Text("\(AppSettings.dataSource == .apple ? (AppSettings.showActive + AppSettings.showResting) : (AppSettings.customCalActive + AppSettings.customCalPassive))")
                             .lineLimit(1)
                             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -265,14 +258,18 @@ struct EnergySettingsView: View
                 }
                 .frame(height: 20)
 //                .padding(.bottom, 6)
-                .background
-                {
+                .background {
                     RoundedRectangle(cornerRadius: 40)
                         .fill(AppSettings.AppBackground)
                         .stroke(Color("SecondaryTextColor").opacity(0.05), style: StrokeStyle(lineWidth: 0.5))
                         .padding(-10)
                         .padding(.horizontal, -5)
-                        .shadow(color: Color(white: scheme == .light ? 0.8 : 0.2).opacity(scheme == .dark ? 0 : 0.1), radius: 4, x: 0, y: 4)
+                        .shadow(
+                            color: Color(white: scheme == .light ? 0.8 : 0.2).opacity(scheme == .dark ? 0 : 0.1),
+                            radius: 4,
+                            x: 0,
+                            y: 4
+                        )
                 }
                 .padding(10)
                 .padding(.horizontal, 5)
@@ -288,11 +285,14 @@ struct EnergySettingsView: View
                     )
                     .foregroundColor(AppSettings.CardBackground)
             )
-            .shadow(color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0), radius: 4, x: 0, y: 4)
-            .overlay(alignment: .topLeading)
-            {
-                ZStack
-                {
+            .shadow(
+                color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0),
+                radius: 4,
+                x: 0,
+                y: 4
+            )
+            .overlay(alignment: .topLeading) {
+                ZStack {
                     Circle()
                         .fill(Color(white: scheme == .dark ? 0.2 : 1).gradient)
                         .shadow(color: .init(white: 0.1).opacity(0.2), radius: 1, x: 2, y: 2)
@@ -310,10 +310,8 @@ struct EnergySettingsView: View
             .padding(.top, 10)
             .animation(.snappy, value: AppSettings.dataSource)
             
-            VStack(spacing: 12)
-            {
-                HStack(alignment: .lastTextBaseline)
-                {
+            VStack(spacing: 12) {
+                HStack(alignment: .lastTextBaseline) {
                     Text(AppSettings.weightGoal == .lose ? "Calorie Deficit" : "Calorie Surplus")
                         .font(.subheadline)
                         .fontWeight(.semibold)
@@ -324,8 +322,7 @@ struct EnergySettingsView: View
                     
                     Spacer()
                     
-                    HStack(alignment: .lastTextBaseline)
-                    {
+                    HStack(alignment: .lastTextBaseline) {
                         TextField(String("0"), value: $AppSettings.balanceGoal, format: .number)
                             .focused($focusedField, equals: .balance)
                             .keyboardType(.numberPad)
@@ -338,8 +335,7 @@ struct EnergySettingsView: View
                             .offset(x: 3)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .underline()
-                            .onChange(of: AppSettings.balanceGoal)
-                            { /*o, n in*/
+                            .onChange(of: AppSettings.balanceGoal) { /*o, n in*/
                                 AppSettings.balanceGoal = abs(AppSettings.balanceGoal)
 
                                 Task { await SliderData.updateMacroWeights() }
@@ -356,15 +352,12 @@ struct EnergySettingsView: View
                 .padding(.horizontal, 15)
 
                 
-                HStack(alignment: .lastTextBaseline)
-                {
-                    HStack(alignment: .center, spacing: 8)
-                    {
+                HStack(alignment: .lastTextBaseline) {
+                    HStack(alignment: .center, spacing: 8) {
                         Text("Eating goal")
                             .foregroundStyle(Color("TextColor"))
                         
-                        if AppSettings.maxEatingEnergy() <= 0
-                        {
+                        if AppSettings.maxEatingEnergy() <= 0 {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundStyle(Color.red.gradient)
                                 .offset(y: -1)
@@ -375,8 +368,7 @@ struct EnergySettingsView: View
                     
                     Spacer()
                     
-                    HStack(alignment: .lastTextBaseline)
-                    {
+                    HStack(alignment: .lastTextBaseline) {
                         Text("\(AppSettings.maxEatingEnergy())")
                             .lineLimit(1)
                             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -394,14 +386,18 @@ struct EnergySettingsView: View
                     }
                 }
                 .frame(height: 20)
-                .background
-                {
+                .background {
                     RoundedRectangle(cornerRadius: 40)
                         .fill(AppSettings.AppBackground)
                         .stroke(Color("SecondaryTextColor").opacity(0.05), style: StrokeStyle(lineWidth: 0.5))
                         .padding(-10)
                         .padding(.horizontal, -5)
-                        .shadow(color: Color(white: scheme == .light ? 0.8 : 0.2).opacity(scheme == .dark ? 0 : 0.1), radius: 4, x: 0, y: 4)
+                        .shadow(
+                            color: Color(white: scheme == .light ? 0.8 : 0.2).opacity(scheme == .dark ? 0 : 0.1),
+                            radius: 4,
+                            x: 0,
+                            y: 4
+                        )
                 }
                 .padding(10)
                 .padding(.horizontal, 5)
@@ -417,11 +413,14 @@ struct EnergySettingsView: View
                     )
                     .foregroundColor(AppSettings.CardBackground)
             )
-            .shadow(color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0), radius: 4, x: 0, y: 4)
-            .overlay(alignment: .topLeading)
-            {
-                ZStack
-                {
+            .shadow(
+                color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0),
+                radius: 4,
+                x: 0,
+                y: 4
+            )
+            .overlay(alignment: .topLeading) {
+                ZStack {
                     Circle()
                         .fill(Color(white: scheme == .dark ? 0.2 : 1).gradient)
                         .shadow(color: .init(white: 0.1).opacity(0.2), radius: 1, x: 2, y: 2)
@@ -442,34 +441,26 @@ struct EnergySettingsView: View
 //        {
 //            await AppSettings.updateShow()
 //        }
-        .onAppear
-        {
-            Task
-            {
+        .onAppear {
+            Task {
                 await AppSettings.updateShow()
             }
         }
-        .onChange(of: AppSettings.dataSource)
-        {
-            Task 
-            {
+        .onChange(of: AppSettings.dataSource) {
+            Task {
                 await AppSettings.updateShow()
             }
         }
-        .onChange(of: AppSettings.energyUnit) 
-        {
-            Task
-            {
+        .onChange(of: AppSettings.energyUnit) {
+            Task {
                 await AppSettings.updateShow()
             }
         }
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
+#Preview {
+    NavigationView {
         SettingsPage()
             .environmentObject(Settings.shared)
             .environment(HSlider())

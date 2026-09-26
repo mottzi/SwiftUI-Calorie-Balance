@@ -1,7 +1,8 @@
 import SwiftUI
 
-@Observable class HSlider
-{
+@Observable
+/// Macro slider widths and saved goal ratios.
+class HSlider {
     var carbsWidthLast: CGFloat = 0
     var fatsWidthLast: CGFloat = 0
     var protsWidthLast: CGFloat = 0
@@ -11,17 +12,14 @@ import SwiftUI
     var protsWidth: CGFloat = 0
     
     var minSegmentRatio: CGFloat = 0.1
-    var maxSegmentRatio: CGFloat { 1 - minSegmentRatio - minSegmentRatio }
-    
     var snapTo = 0.05
-    
+
     @MainActor
-    func updateMacroWeights() async
-    {
+    /// Updates macro weight goals from the current energy budget and ratios.
+    func updateMacroWeights() async {
         var maxEnergy = 0
 
-        if Settings.shared.dataSource == .apple
-        {
+        if Settings.shared.dataSource == .apple {
             Settings.shared.showResting = await HKRepository.shared.cumDataWeek(fetch: .basalEnergyBurned, for: .now)
             Settings.shared.showActive = await HKRepository.shared.cumDataWeek(fetch: .activeEnergyBurned, for: .now)
         }
@@ -29,19 +27,30 @@ import SwiftUI
         maxEnergy = Settings.shared.maxEatingEnergy()
 
 
-        Settings.shared.carbsGoal = ratioToWeight(maxEatingEnergy: maxEnergy, ratio: Settings.shared.carbsRatio, type: .carbohydrates)
+        Settings.shared.carbsGoal = ratioToWeight(
+            maxEatingEnergy: maxEnergy,
+            ratio: Settings.shared.carbsRatio,
+            type: .carbohydrates
+        )
         Settings.shared.fatsGoal = ratioToWeight(maxEatingEnergy: maxEnergy, ratio: Settings.shared.fatsRatio, type: .fats)
-        Settings.shared.proteinGoal = ratioToWeight(maxEatingEnergy: maxEnergy, ratio: Settings.shared.proteinRatio, type: .proteins)
+        Settings.shared.proteinGoal = ratioToWeight(
+            maxEatingEnergy: maxEnergy,
+            ratio: Settings.shared.proteinRatio,
+            type: .proteins
+        )
     }
-    
-    func ratioToWidth(_ maxSlider: CGFloat)
-    {
+}
+
+extension HSlider {
+
+    var maxSegmentRatio: CGFloat { 1 - minSegmentRatio - minSegmentRatio }
+
+    func ratioToWidth(_ maxSlider: CGFloat) {
         let minSegment = maxSlider * minSegmentRatio
 
         if Settings.shared.carbsRatio * maxSlider < minSegment
             || Settings.shared.fatsRatio * maxSlider < minSegment
-            || Settings.shared.proteinRatio * maxSlider < minSegment
-        {
+            || Settings.shared.proteinRatio * maxSlider < minSegment {
             Settings.shared.carbsRatio = 0.4
             Settings.shared.fatsRatio = 0.35
             Settings.shared.proteinRatio = 0.25
@@ -57,60 +66,44 @@ import SwiftUI
         protsWidthLast = protsWidth
     }
     
-    func widthToRatio(_ maxSlider: CGFloat)
-    {
+    func widthToRatio(_ maxSlider: CGFloat) {
         Settings.shared.carbsRatio = carbsWidth / maxSlider
         Settings.shared.fatsRatio = fatsWidth / maxSlider
         Settings.shared.proteinRatio = protsWidth / maxSlider
     }
     
-    func ratioToWeight(maxEatingEnergy: Int, ratio: Double, type: MacroType) -> Int
-    {
+    func ratioToWeight(maxEatingEnergy: Int, ratio: Double, type: MacroType) -> Int {
         var energyDensity: Double
         
-        switch type
-        {
-            case .carbohydrates:
-                energyDensity = 4
-            case .fats:
-                energyDensity = 9
-            case .proteins:
-                energyDensity = 4
+        switch type {
+            case .carbohydrates: energyDensity = 4
+            case .fats: energyDensity = 9
+            case .proteins: energyDensity = 4
         }
         
         energyDensity = Settings.shared.energyUnit == .kcal ? energyDensity : energyDensity * 4.184
         
         return Int((Double(maxEatingEnergy) * ratio / Double(energyDensity)).rounded())
     }
+
 }
 
-enum MacroType
-{
-    case carbohydrates
-    case fats
-    case proteins
-}
-
-struct MacroSlider: View
-{
+/// Slider for adjusting carbohydrate, fat, and protein goal shares.
+struct MacroSlider: View {
     @EnvironmentObject private var AppSettings: Settings
     
     @Environment(HSlider.self) private var SliderData
     
-    var body: some View
-    {
-        GeometryReader
-        { geo in
+    var body: some View {
+        GeometryReader { geo in
             let maxSlider = geo.size.width
             
-            ZStack(alignment: .leading)
-            {
+            ZStack(alignment: .leading) {
                 // Carbs slider segment
                 Rectangle()
                     .fill(.orange.gradient)
                     .frame(width: SliderData.carbsWidth)
-                    .overlay(alignment: .topLeading)
-                    {
+                    .overlay(alignment: .topLeading) {
                         Text("\(String(format: "%.0f", SliderData.carbsWidth / maxSlider * 100))\(SliderData.carbsWidth / maxSlider <= 0.11 ? "" : "%")")
                             .font(.caption)
                             .fontWeight(.bold)
@@ -123,8 +116,7 @@ struct MacroSlider: View
                 Rectangle()
                     .fill(Color(red: 217/255, green: 220/255, blue: 214/255).gradient)
                     .frame(width: SliderData.fatsWidth)
-                    .overlay(alignment: .topLeading)
-                    {
+                    .overlay(alignment: .topLeading) {
                         Text("\(String(format: "%.0f", SliderData.fatsWidth / maxSlider * 100))\(SliderData.fatsWidth / maxSlider <= 0.11 ? "" : "%")")
                             .font(.caption)
                             .fontWeight(.bold)
@@ -139,8 +131,7 @@ struct MacroSlider: View
                 Rectangle()
                     .fill(.red.gradient)
                     .frame(width: SliderData.protsWidth)
-                    .overlay(alignment: .topLeading)
-                    {
+                    .overlay(alignment: .topLeading) {
                         Text("\(String(format: "%.0f", SliderData.protsWidth / maxSlider * 100))\(SliderData.protsWidth / maxSlider <= 0.11 ? "" : "%")")
                             .font(.caption)
                             .fontWeight(.bold)
@@ -167,23 +158,19 @@ struct MacroSlider: View
                 .offset(x: (SliderData.carbsWidth + SliderData.fatsWidth) - 20)
                 .gesture(getTrailingGesture(maxSlider: maxSlider))
             }
-            .task
-            {
+            .task {
                 // use appsotrage ratio for control width init
                 SliderData.ratioToWidth(maxSlider)
                 
                 Task { await SliderData.updateMacroWeights() }
             }
-            .onChange(of: AppSettings.weightGoal)
-            {
+            .onChange(of: AppSettings.weightGoal) {
                 Task { await SliderData.updateMacroWeights() }
             }
-            .onChange(of: AppSettings.dataSource)
-            {
+            .onChange(of: AppSettings.dataSource) {
                 Task { await SliderData.updateMacroWeights() }
             }
-            .onChange(of: AppSettings.energyUnit)
-            {
+            .onChange(of: AppSettings.energyUnit) {
                 Task { await SliderData.updateMacroWeights() }
             }
         }
@@ -192,11 +179,13 @@ struct MacroSlider: View
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
     
-    func getTrailingGesture(maxSlider: Double) -> _EndedGesture<_ChangedGesture<DragGesture>>
-    {
+}
+
+extension MacroSlider {
+
+    func getTrailingGesture(maxSlider: Double) -> _EndedGesture<_ChangedGesture<DragGesture>> {
         return DragGesture(minimumDistance: 0)
-            .onChanged
-            { value in
+            .onChanged { value in
                 let minSegment = maxSlider * SliderData.minSegmentRatio
                 let maxSegment = maxSlider * SliderData.maxSegmentRatio
                 
@@ -211,14 +200,12 @@ struct MacroSlider: View
                 let widthAdded = widthNew - SliderData.protsWidth
 
                 // If fats width would stay within constraints ...
-                if SliderData.fatsWidth - widthAdded >= minSegment
-                {
+                if SliderData.fatsWidth - widthAdded >= minSegment {
                     // ... take dragged width from fats bar
                     SliderData.fatsWidth -= widthAdded
                 }
                 // If fats bar is too small to donate in full ...
-                else
-                {
+                else {
                     // ... take as much from fats as possible, setting it to the minimum
                     let availableFromFats = SliderData.fatsWidth - minSegment
                     SliderData.fatsWidth = minSegment
@@ -226,14 +213,12 @@ struct MacroSlider: View
                     let neededFromCarbs = widthAdded - availableFromFats
 
                     // If carbs width would stay within constraints ...
-                    if SliderData.carbsWidth - neededFromCarbs >= minSegment
-                    {
+                    if SliderData.carbsWidth - neededFromCarbs >= minSegment {
                         // ... take rest from carbs bar
                         SliderData.carbsWidth -= neededFromCarbs
                     }
                     // If prots bar has been expanded maximally ...
-                    else
-                    {
+                    else {
                         // ... collapse carbs maximally
                         SliderData.carbsWidth = minSegment
 
@@ -247,8 +232,7 @@ struct MacroSlider: View
                 Task { await SliderData.updateMacroWeights() }
                 
             }
-            .onEnded
-            { _ in
+            .onEnded { _ in
                 SliderData.carbsWidthLast = SliderData.carbsWidth
                 SliderData.fatsWidthLast = SliderData.fatsWidth
                 SliderData.protsWidthLast = SliderData.protsWidth
@@ -258,14 +242,12 @@ struct MacroSlider: View
             }
     }
     
-    func getLeadingGesture(maxSlider: Double) -> _EndedGesture<_ChangedGesture<DragGesture>>
-    {
+    func getLeadingGesture(maxSlider: Double) -> _EndedGesture<_ChangedGesture<DragGesture>> {
         let minSegment = maxSlider * SliderData.minSegmentRatio
         let maxSegment = maxSlider * SliderData.maxSegmentRatio
         
         let r = DragGesture(minimumDistance: 0)
-            .onChanged
-            { value in
+            .onChanged { value in
                 // Add dragged width to latest carb segment width and clamp to constraints
                 let snapWidth = maxSlider * SliderData.snapTo  // Calculate width for 5% snap
                 var widthNew = SliderData.carbsWidthLast + value.translation.width
@@ -277,14 +259,12 @@ struct MacroSlider: View
                 let widthAdded = widthNew - SliderData.carbsWidth
                 
                 // If fats width would stay within constraints ...
-                if SliderData.fatsWidth - widthAdded >= minSegment
-                {
+                if SliderData.fatsWidth - widthAdded >= minSegment {
                     // ... take dragged width from fats bar
                     SliderData.fatsWidth -= widthAdded
                 }
                 // If fats bar is too small to donate in full ...
-                else
-                {
+                else {
                     // ... take as much from fats as possible, setting it to the minimum
                     let availableFromFats = SliderData.fatsWidth - minSegment
                     SliderData.fatsWidth = minSegment
@@ -292,14 +272,12 @@ struct MacroSlider: View
                     let neededFromProts = widthAdded - availableFromFats
                     
                     // If prots width would stay within constraints ...
-                    if SliderData.protsWidth - neededFromProts >= minSegment
-                    {
+                    if SliderData.protsWidth - neededFromProts >= minSegment {
                         // ... take rest from prots bar
                         SliderData.protsWidth -= neededFromProts
                     }
                     // If carbs bar has been expanded maximally ...
-                    else
-                    {
+                    else {
                         // ... collapse prots maximally
                         SliderData.protsWidth = minSegment
                         
@@ -312,8 +290,7 @@ struct MacroSlider: View
                 
                 Task { await SliderData.updateMacroWeights() }
             }
-            .onEnded
-            { value in
+            .onEnded { value in
                 SliderData.carbsWidthLast = SliderData.carbsWidth
                 SliderData.fatsWidthLast = SliderData.fatsWidth
                 SliderData.protsWidthLast = SliderData.protsWidth
@@ -325,12 +302,17 @@ struct MacroSlider: View
         
         return r
     }
+
 }
 
-#Preview
-{
-    NavigationView
-    {
+enum MacroType {
+    case carbohydrates
+    case fats
+    case proteins
+}
+
+#Preview {
+    NavigationView {
         SettingsPage()
             .environmentObject(Settings.shared)
             .environment(HSlider())

@@ -1,34 +1,18 @@
 import SwiftUI
 
-struct CaloriesCardTopRowCenter: View 
-{
+struct CaloriesCardTopRowCenter: View {
     @Environment(\.dynamicTypeSize) private var dynamicType
+
     @EnvironmentObject private var AppSettings: Settings
+
     @Environment(HealthInterface.self) private var DataViewModel
     
-    private var goalReached: Bool 
-    {
-        // loose weight goal
-        if AppSettings.weightGoal == .lose
-        {
-            return DataViewModel.sample.balanceNow >= Int(AppSettings.balanceGoal)
-        }
-        // gain weight goal
-        else
-        {
-            return DataViewModel.sample.balanceNow <= -Int(AppSettings.balanceGoal)
-        }
-    }
-    
-    var body: some View
-    {
-        ZStack
-        {
+    var body: some View {
+        ZStack {
             CircleBalanceGraph(mode: .now)
                 .frame(width: 130, height: 130)
 
-            VStack(spacing: 0)
-            {
+            VStack(spacing: 0) {
                 Text("\(abs(DataViewModel.sample.balanceNow))")
                     .font(.system(size: 26))
                     .fontWeight(.semibold)
@@ -54,12 +38,24 @@ struct CaloriesCardTopRowCenter: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
-        ZStack
-        {
+extension CaloriesCardTopRowCenter {
+
+    private var goalReached: Bool {
+        // loose weight goal
+        if AppSettings.weightGoal == .lose {
+            return DataViewModel.sample.balanceNow >= Int(AppSettings.balanceGoal)
+        }
+        // gain weight goal
+        else {
+            return DataViewModel.sample.balanceNow <= -Int(AppSettings.balanceGoal)
+        }
+    }
+
+}
+
+#Preview {
+    NavigationView {
+        ZStack {
             Settings.shared.AppBackground.ignoresSafeArea(.all)
             
             Pager(lb: 6, tb: 1)

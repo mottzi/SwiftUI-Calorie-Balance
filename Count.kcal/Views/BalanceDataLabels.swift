@@ -1,7 +1,6 @@
 import SwiftUI
 
-struct BalanceDataLabelSimple: View
-{
+struct BalanceDataLabelSimple: View {
     @Environment(\.colorScheme) var scheme: ColorScheme
 
     let icon: String
@@ -9,10 +8,8 @@ struct BalanceDataLabelSimple: View
     let label: String
     let data: Int
     
-    var body: some View
-    {
-        VStack(spacing: 0)
-        {
+    var body: some View {
+        VStack(spacing: 0) {
             Image(systemName: "\(icon)")
                 .resizable()
                 .scaledToFit()
@@ -36,8 +33,7 @@ struct BalanceDataLabelSimple: View
     }
 }
 
-struct BalanceDataLabelExtra: View
-{
+struct BalanceDataLabelExtra: View {
     @Environment(\.colorScheme) var scheme: ColorScheme
     
     let icon: String
@@ -47,12 +43,9 @@ struct BalanceDataLabelExtra: View
     let dataTop: Int
     let dataBottom: Int
     
-    var body: some View
-    {
-        VStack(spacing: 0)
-        {
-            HStack(spacing: 2)
-            {
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 2) {
                 Image(systemName: "\(icon)")
                     .resizable()
                     .scaledToFit()

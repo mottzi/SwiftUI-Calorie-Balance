@@ -1,16 +1,14 @@
 import SwiftUI
 
-struct BalanceGoalView: View
-{
+struct BalanceGoalView: View {
     @EnvironmentObject private var AppSettings: Settings
+
     @Environment(HSlider.self) private var SliderData
     
     @State private var balanceSlider = 0.0
     
-    var body: some View
-    {
-        VStack(spacing: 30)
-        {
+    var body: some View {
+        VStack(spacing: 30) {
             TitleSegment
             ControllerSegment
             InfoSegment
@@ -43,12 +41,9 @@ struct BalanceGoalView: View
         .foregroundStyle(Color("TextColor").gradient)
     }
     
-    var ControllerSegment: some View
-    {
-        VStack(spacing: 10)
-        {
-            HStack(alignment: .lastTextBaseline, spacing: 8)
-            {
+    var ControllerSegment: some View {
+        VStack(spacing: 10) {
+            HStack(alignment: .lastTextBaseline, spacing: 8) {
                 Text("\(AppSettings.balanceGoal)")
                     .font(.title2)
                     .fontWeight(.semibold)
@@ -65,12 +60,10 @@ struct BalanceGoalView: View
             }
             
             Slider(value: $balanceSlider, in: 0...1350, step: 50)
-                .onChange(of: balanceSlider)
-            { _, n in
+                .onChange(of: balanceSlider) { _, n in
                 AppSettings.balanceGoal = Int(n)
             }
-            .onAppear
-            {
+            .onAppear {
                 balanceSlider = Double(AppSettings.balanceGoal)
             }
             .tint(Color("ConsumedDefault"))
@@ -78,8 +71,7 @@ struct BalanceGoalView: View
         }
     }
     
-    var InfoSegment: some View
-    {
+    var InfoSegment: some View {
         Text("\(balanceGoalDescription)")
             .font(.headline)
             .foregroundStyle(Color("TextColor"))
@@ -88,10 +80,8 @@ struct BalanceGoalView: View
             .padding(.top, 25)
     }
     
-    var balanceGoalDescription: String
-    {
-        switch AppSettings.weightGoal
-        {
+    var balanceGoalDescription: String {
+        switch AppSettings.weightGoal {
             case .lose:
                 String(localized: "This deficit equates to a weight loss of \(weightChange7) per week or \(weightChange30) per month.")
             case .gain:
@@ -99,8 +89,7 @@ struct BalanceGoalView: View
         }
     }
     
-    var weightChange7: String
-    {
+    var weightChange7: String {
         let unit = AppSettings.weightUnit
         let conversionFactor = unit == .kg ? 1.0 : 2.20462
         
@@ -109,8 +98,7 @@ struct BalanceGoalView: View
         return String(format: "%.2f \(unit.rawValue)", weightChange)
     }
     
-    var weightChange30: String
-    {
+    var weightChange30: String {
         let unit = AppSettings.weightUnit
         let conversionFactor = unit == .kg ? 1.0 : 2.20462
         
@@ -120,12 +108,9 @@ struct BalanceGoalView: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
-        ZStack
-        {
+#Preview {
+    NavigationView {
+        ZStack {
             Settings.shared.AppBackground
                 .ignoresSafeArea(.all)
             

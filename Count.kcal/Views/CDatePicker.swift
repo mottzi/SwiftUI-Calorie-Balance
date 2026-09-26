@@ -1,14 +1,7 @@
 import SwiftUI
 
-struct DayCell: Identifiable, Hashable
-{
-    let id = UUID().uuidString
-    let date: Date
-    let vm: HealthInterface
-}
-
-struct CDatePicker: View
-{
+/// Calendar that selects a day and adds visible dates to page navigation.
+struct CDatePicker: View {
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
@@ -21,78 +14,14 @@ struct CDatePicker: View
     
     @State private var days: [DayCell] = []
     
-    func findPage(for date: Date) -> HealthInterface?
-    {
-        Pages.first { $0.sample.date.isSameDay(as: date) }
-    }
-    
-    func isDaySelected(_ d: Date) -> Bool
-    {
-        if let selectedPage, d.isSameDay(as: selectedPage.sample.date)
-        {
-            return true
-        }
-        
-        return false
-    }
-        
-    var weekdays: [String]
-    {
-        return Calendar.current.shortWeekdaySymbolsLocalized
-    }
-    
-    func getDayCellStrokeStyle(d: Date) -> StrokeStyle
-    {
-        if isDaySelected(d)
-        {
-            return StrokeStyle(lineWidth: 2)
-        }
-        
-        return StrokeStyle(lineWidth: 0)
-    }
-    
-    func getDayCellStrokeOpacity(d: Date) -> Double
-    {
-        if isDaySelected(d)
-        {
-            return 1
-        }
-        
-        return 0
-    }
-    
-    func getDayCellBrightness(d: Date) -> BrightnessLevel
-    {
-        if d.isToday
-        {
-            return .primary
-        }
-        
-        return .none
-    }
-    
-    func getDayCellBackground(d: Date) -> Color
-    {
-        if Calendar.current.isDate(d, equalTo: currentMonth, toGranularity: .month)
-        {
-            return AppSettings.CardBackground
-        }
-        
-        return Color.clear
-    }
-    
-    var body: some View
-    {
+    var body: some View {
         let columns = Array(repeating: GridItem(.flexible()), count: 7)
         let width = 43.0
         let spacing = 2.0
             
-        VStack(spacing: 8)
-        {
-            HStack(spacing: 20)
-            {
-                HStack(alignment: .lastTextBaseline, spacing: 8)
-                {
+        VStack(spacing: 8) {
+            HStack(spacing: 20) {
+                HStack(alignment: .lastTextBaseline, spacing: 8) {
                     Text(verbatim: "\(currentMonth.monthString)")
                         .fontWeight(.medium)
                         .dynamicTypeSize(...DynamicTypeSize.xxLarge)
@@ -107,12 +36,9 @@ struct CDatePicker: View
                 
                 Spacer()
                 
-                Button
-                {
+                Button {
                     currentMonth = Calendar.current.date(byAdding: .month, value: -1, to: currentMonth)!
-                }
-                label:
-                {
+                } label: {
                     Image(systemName: "chevron.left")
                         .font(.callout)
                         .fontWeight(.semibold)
@@ -122,12 +48,9 @@ struct CDatePicker: View
                 }
                 .padding(.trailing, 12)
                 
-                Button
-                {
+                Button {
                     currentMonth = Calendar.current.date(byAdding: .month, value: 1, to: currentMonth)!
-                }
-                label:
-                {
+                } label: {
                     Image(systemName: "chevron.right")
                         .font(.callout)
                         .fontWeight(.semibold)
@@ -139,10 +62,8 @@ struct CDatePicker: View
             .padding(.horizontal, 5)
             .padding(.trailing, 4)
             
-            LazyVGrid(columns: columns, spacing: spacing + 1)
-            {
-                ForEach(weekdays, id: \.self)
-                { day in
+            LazyVGrid(columns: columns, spacing: spacing + 1) {
+                ForEach(weekdays, id: \.self) { day in
                     Text(verbatim: day)
                         .font(.callout)
                         .fontWeight(.medium)
@@ -152,10 +73,8 @@ struct CDatePicker: View
                         .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                 }
                 
-                ForEach(days, id: \.self)
-                { d in
-                    VStack(spacing: 2)
-                    {
+                ForEach(days, id: \.self) { d in
+                    VStack(spacing: 2) {
                         Text(verbatim: "\(d.date.day)")
                             .font(.callout)
                             .opacity(d.date.isSameMonth(as: currentMonth) ? 1 : 0.7)
@@ -169,43 +88,71 @@ struct CDatePicker: View
                     }
                     .offset(y: -1)
                     .frame(width: width, height: width)
-                    .background
-                    {
-                        Group
-                        {
-                            if days.first! == d
-                            {
-                                UnevenRoundedRectangle(topLeadingRadius: 10, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 0, style: .circular)
+                    .background {
+                        Group {
+                            if days.first! == d {
+                                UnevenRoundedRectangle(
+                                    topLeadingRadius: 10,
+                                    bottomLeadingRadius: 0,
+                                    bottomTrailingRadius: 0,
+                                    topTrailingRadius: 0,
+                                    style: .circular
+                                )
                                     .fill(getDayCellBackground(d: d.date))
-                                    .stroke(Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)), style: getDayCellStrokeStyle(d: d.date))
+                                    .stroke(
+                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)),
+                                        style: getDayCellStrokeStyle(d: d.date)
+                                    )
                                     .brightness(level: getDayCellBrightness(d: d.date))
-                            }
-                            else if days.last! == d
-                            {
-                                UnevenRoundedRectangle(topLeadingRadius: 0, bottomLeadingRadius: 0, bottomTrailingRadius: 10, topTrailingRadius: 0, style: .circular)
+                            } else if days.last! == d {
+                                UnevenRoundedRectangle(
+                                    topLeadingRadius: 0,
+                                    bottomLeadingRadius: 0,
+                                    bottomTrailingRadius: 10,
+                                    topTrailingRadius: 0,
+                                    style: .circular
+                                )
                                     .fill(getDayCellBackground(d: d.date))
-                                    .stroke(Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)), style: getDayCellStrokeStyle(d: d.date))
+                                    .stroke(
+                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)),
+                                        style: getDayCellStrokeStyle(d: d.date)
+                                    )
                                     .brightness(level: getDayCellBrightness(d: d.date))
-                            }
-                            else if days.firstIndex(of: d) == 6
-                            {
-                                UnevenRoundedRectangle(topLeadingRadius: 0, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 10, style: .circular)
+                            } else if days.firstIndex(of: d) == 6 {
+                                UnevenRoundedRectangle(
+                                    topLeadingRadius: 0,
+                                    bottomLeadingRadius: 0,
+                                    bottomTrailingRadius: 0,
+                                    topTrailingRadius: 10,
+                                    style: .circular
+                                )
                                     .fill(getDayCellBackground(d: d.date))
-                                    .stroke(Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)), style: getDayCellStrokeStyle(d: d.date))
+                                    .stroke(
+                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)),
+                                        style: getDayCellStrokeStyle(d: d.date)
+                                    )
                                     .brightness(level: getDayCellBrightness(d: d.date))
-                            }
-                            else if days.firstIndex(of: d) == days.count - 7
-                            {
-                                UnevenRoundedRectangle(topLeadingRadius: 0, bottomLeadingRadius: 10, bottomTrailingRadius: 0, topTrailingRadius: 0, style: .circular)
+                            } else if days.firstIndex(of: d) == days.count - 7 {
+                                UnevenRoundedRectangle(
+                                    topLeadingRadius: 0,
+                                    bottomLeadingRadius: 10,
+                                    bottomTrailingRadius: 0,
+                                    topTrailingRadius: 0,
+                                    style: .circular
+                                )
                                     .fill(getDayCellBackground(d: d.date))
-                                    .stroke(Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)), style: getDayCellStrokeStyle(d: d.date))
+                                    .stroke(
+                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)),
+                                        style: getDayCellStrokeStyle(d: d.date)
+                                    )
                                     .brightness(level: getDayCellBrightness(d: d.date))
-                            }
-                            else
-                            {
+                            } else {
                                 Rectangle()
                                     .fill(getDayCellBackground(d: d.date))
-                                    .stroke(Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)), style: getDayCellStrokeStyle(d: d.date))
+                                    .stroke(
+                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)),
+                                        style: getDayCellStrokeStyle(d: d.date)
+                                    )
                                     .brightness(level: getDayCellBrightness(d: d.date))
                             }
                         }
@@ -214,14 +161,11 @@ struct CDatePicker: View
                         }
                     }
                     .contentShape(.rect)
-                    .onTapGesture
-                    {
+                    .onTapGesture {
                         ignoreChanges = true
 
-                        if let page = findPage(for: d.date)
-                        {
-                            withAnimation(.snappy)
-                            {
+                        if let page = findPage(for: d.date) {
+                            withAnimation(.snappy) {
                                 selectedPage = page
                             }
                         }
@@ -237,21 +181,16 @@ struct CDatePicker: View
         .foregroundStyle(Color("TextColor"))
         .fontDesign(.rounded)
         .geometryGroup()
-        .onChange(of: selectedPage)
-        { o, n in
+        .onChange(of: selectedPage) { o, n in
             guard let n else { return }
             
-            if n.sample.date < days.first!.date
-            {
+            if n.sample.date < days.first!.date {
                 currentMonth = n.sample.date
-            }
-            else if n.sample.date > days.last!.date.tomorrow
-            {
+            } else if n.sample.date > days.last!.date.tomorrow {
                 currentMonth = n.sample.date
             }
         }
-        .onChange(of: currentMonth, initial: true)
-        { oldValue, newValue in
+        .onChange(of: currentMonth, initial: true) { oldValue, newValue in
             let firstDay = Calendar.current.date(from: DateComponents(year: newValue.year, month: newValue.month, day: 1))!.weekStartDate
             let lastDay = newValue.lastDayOfMonth.weekEndDate
                                     
@@ -259,34 +198,28 @@ struct CDatePicker: View
             
             var currentDate = firstDay
             
-            while currentDate <= lastDay
-            {
+            while currentDate <= lastDay {
                 let new = DayCell(date: currentDate, vm: HealthInterface(HealthData.empty(for: currentDate)))
                 d.append(new)
                 
                 currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate)!
             }
             
-            withAnimation(.snappy)
-            {
+            withAnimation(.snappy) {
                 days = d
             }
             
-            for d in days
-            {
-                Task.detached
-                {
+            for d in days {
+                Task.detached {
                     await d.vm.updateMetrics()
                 }
             }
             
             // prepend days of calendar to Pages for navigation
-            if findPage(for: firstDay) == nil
-            {
+            if findPage(for: firstDay) == nil {
                 var nextDate = Pages[0].sample.date.yesterday
                 
-                while firstDay.yesterday < nextDate
-                {
+                while firstDay.yesterday < nextDate {
                     Pages.insert(HealthInterface(.empty(for: nextDate)), at: 0)
                     
                     nextDate = nextDate.yesterday
@@ -294,12 +227,10 @@ struct CDatePicker: View
             }
             
             // append days of calendar to Pages for navigation
-            if findPage(for: lastDay) == nil
-            {
+            if findPage(for: lastDay) == nil {
                 var nextDate = Pages[Pages.count - 1].sample.date.tomorrow
                 
-                while !nextDate.isSameDay(as: lastDay.tomorrow.tomorrow)
-                {
+                while !nextDate.isSameDay(as: lastDay.tomorrow.tomorrow) {
                     Pages.append(HealthInterface(.empty(for: nextDate)))
                     
                     nextDate = nextDate.tomorrow
@@ -310,7 +241,64 @@ struct CDatePicker: View
     }
 }
 
-#Preview 
-{
+extension CDatePicker {
+
+    func findPage(for date: Date) -> HealthInterface? {
+        Pages.first { $0.sample.date.isSameDay(as: date) }
+    }
+    
+    func isDaySelected(_ d: Date) -> Bool {
+        if let selectedPage, d.isSameDay(as: selectedPage.sample.date) {
+            return true
+        }
+        
+        return false
+    }
+        
+    var weekdays: [String] {
+        return Calendar.current.shortWeekdaySymbolsLocalized
+    }
+    
+    func getDayCellStrokeStyle(d: Date) -> StrokeStyle {
+        if isDaySelected(d) {
+            return StrokeStyle(lineWidth: 2)
+        }
+        
+        return StrokeStyle(lineWidth: 0)
+    }
+    
+    func getDayCellStrokeOpacity(d: Date) -> Double {
+        if isDaySelected(d) {
+            return 1
+        }
+        
+        return 0
+    }
+    
+    func getDayCellBrightness(d: Date) -> BrightnessLevel {
+        if d.isToday {
+            return .primary
+        }
+        
+        return .none
+    }
+    
+    func getDayCellBackground(d: Date) -> Color {
+        if Calendar.current.isDate(d, equalTo: currentMonth, toGranularity: .month) {
+            return AppSettings.CardBackground
+        }
+        
+        return Color.clear
+    }
+
+}
+
+struct DayCell: Identifiable, Hashable {
+    let id = UUID().uuidString
+    let date: Date
+    let vm: HealthInterface
+}
+
+#Preview {
     PreviewPager
 }

@@ -1,19 +1,15 @@
 import SwiftUI
 
-struct AppleHealthView: View
-{
+struct AppleHealthView: View {
     @EnvironmentObject private var AppSettings: Settings
     
-    var body: some View
-    {
-        VStack(spacing: 16)
-        {
+    var body: some View {
+        VStack(spacing: 16) {
             Image("Health")
                 .resizable()
                 .frame(width: 90, height: 90)
             
-            VStack(spacing: -4)
-            {
+            VStack(spacing: -4) {
                 Text("Allow access to")
                     .font(.title)
                     .fontWeight(.light)
@@ -29,12 +25,9 @@ struct AppleHealthView: View
     }
 }
 
-#Preview 
-{
-    NavigationView
-    {
-        ZStack
-        {
+#Preview {
+    NavigationView {
+        ZStack {
             Settings.shared.AppBackground
                 .ignoresSafeArea(.all)
             

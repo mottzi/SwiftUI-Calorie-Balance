@@ -2,13 +2,11 @@ import SwiftUI
 
 // A self-contained Canvas fixture. It renders the app's real dashboard views
 // without querying HealthKit or changing the simulator's saved data.
-var PreviewPager: some View
-{
+var PreviewPager: some View {
     DashboardSamplePreview()
 }
 
-private struct DashboardSamplePreview: View
-{
+private struct DashboardSamplePreview: View {
     @State private var pages: [HealthInterface]
     @State private var selectedPage: HealthInterface?
     @State private var todayPageMode: PagerSelection? = .first
@@ -16,11 +14,9 @@ private struct DashboardSamplePreview: View
     @State private var weightModel: WeightDataViewModel
     @State private var streak: Streak
 
-    init()
-    {
+    init() {
         let today = Calendar.current.startOfDay(for: .now)
-        let samplePages = (0...5).reversed().map
-        { daysAgo in
+        let samplePages = (0...5).reversed().map { daysAgo in
             let date = today.subtractDays(daysAgo)
             var data = HealthData.example(for: date)
             data.burnedActive = daysAgo == 0 ? 257 : 340 + daysAgo * 48
@@ -38,8 +34,7 @@ private struct DashboardSamplePreview: View
         _selectedPage = State(initialValue: samplePages.last)
 
         let weights = WeightDataViewModel()
-        weights.WeightData = (0..<37).reversed().map
-        { daysAgo in
+        weights.WeightData = (0..<37).reversed().map { daysAgo in
             WeightChartData(
                 date: today.subtractDays(daysAgo),
                 weightAvg: 81.5 - Double(36 - daysAgo) * 0.05
@@ -54,21 +49,15 @@ private struct DashboardSamplePreview: View
         _streak = State(initialValue: sampleStreak)
     }
 
-    var body: some View
-    {
-        NavigationStack
-        {
-            ZStack
-            {
+    var body: some View {
+        NavigationStack {
+            ZStack {
                 Settings.shared.AppBackground
                     .ignoresSafeArea(.all)
 
-                ScrollView(showsIndicators: false)
-                {
-                    VStack(spacing: 0)
-                    {
-                        Card(level: .clear, innerPadding: 0, subtitle: { EmptyView() })
-                        {
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        Card(level: .clear, innerPadding: 0, subtitle: { EmptyView() }) {
                             WeekBalanceGraph(
                                 DataPoints: pages,
                                 Pages: $pages,
@@ -79,8 +68,7 @@ private struct DashboardSamplePreview: View
                         }
                         .padding(.bottom, 15)
 
-                        if let selectedPage
-                        {
+                        if let selectedPage {
                             Dashboard(
                                 todayPageMode: $todayPageMode,
                                 nutrientGoals: NutrientGoals(carbs: 177, fats: 69, protein: 111)
@@ -93,15 +81,12 @@ private struct DashboardSamplePreview: View
                     }
                 }
                 .safeAreaPadding(.top, 10)
-                .toolbar
-                {
-                    ToolbarItem(placement: .topBarLeading)
-                    {
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
                         Label("Today", systemImage: "sun.min.fill")
                     }
 
-                    ToolbarItem(placement: .topBarTrailing)
-                    {
+                    ToolbarItem(placement: .topBarTrailing) {
                         Image(systemName: "flame.fill")
                         Text("\(streak.streaks)")
                         Image(systemName: "calendar")

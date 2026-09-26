@@ -1,7 +1,7 @@
 import Foundation
 
-struct HealthData
-{
+/// Daily energy, nutrient, step, and calculated balance values.
+struct HealthData {
     var date: Date
     var lastDataSync: Date?
     
@@ -26,18 +26,14 @@ struct HealthData
     var burnedPassiveRemaining: Int { max(burnedPassive7 - burnedPassive, 0) }
 }
 
-enum BalanceOption 
-{
+enum BalanceOption {
     case deficit
     case surplus
 }
 
-extension HealthData
-{
-    static func example(for date: Date, balance: BalanceOption = .deficit, random: Bool = false) -> HealthData
-    {
-        if random
-        {
+extension HealthData {
+    static func example(for date: Date, balance: BalanceOption = .deficit, random: Bool = false) -> HealthData {
+        if random {
             var data = HealthData.empty(for: date)
             
             data.burnedActive = Int.random(in: 100...1000)
@@ -53,8 +49,7 @@ extension HealthData
             return data
         }
         
-        if balance == .deficit
-        {
+        if balance == .deficit {
             return HealthData(date: date,
                               lastDataSync: nil,
                               burnedActive: 1500,
@@ -66,9 +61,7 @@ extension HealthData
                               carbs: 80,
                               fats: 100,
                               steps: 6809)
-        }
-        else
-        {
+        } else {
             return HealthData(date: date,
                               lastDataSync: nil,
                               burnedActive: 400,
@@ -83,8 +76,7 @@ extension HealthData
         }
     }
     
-    static func empty(for date: Date) -> HealthData
-    {
+    static func empty(for date: Date) -> HealthData {
         return HealthData(date: date,
                           lastDataSync: nil,
                           burnedActive: 0,

@@ -1,8 +1,8 @@
 import SwiftUI
 
-struct BarBalanceGraphMidnight: View
-{
+struct BarBalanceGraphMidnight: View {
     @Environment(\.colorScheme) private var scheme: ColorScheme
+
     @EnvironmentObject private var AppSettings: Settings
 
     var context: ViewContext = .app
@@ -23,21 +23,16 @@ struct BarBalanceGraphMidnight: View
     var passiveGraphRatio: CGFloat { graphTotal == 0 ? 0.0 : CGFloat(Double(burnedPassive) / Double(graphTotal)) }
     var passiveRemainingRatio: CGFloat { graphTotal == 0 ? 0.0 : CGFloat(Double(self.burnedPassiveRemaining) / Double(graphTotal)) }
 
-    var body: some View
-    {
-        GeometryReader
-        { container in
-            VStack(spacing: scheme == .light ? 1 : 2)
-            {
-                GeometryReader
-                { geometry in
+    var body: some View {
+        GeometryReader { container in
+            VStack(spacing: scheme == .light ? 1 : 2) {
+                GeometryReader { geometry in
                     bottomGraphTopRow(geometry, context)
                 }
                 .frame(height: container.size.height / 2 - 1)
                 .clipShape(UnevenRoundedRectangle(topLeadingRadius: 6, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 6, style: .continuous))
                     
-                GeometryReader
-                { geometry in
+                GeometryReader { geometry in
                     bottomGraphBottomRow(geometry, context)
                 }
                 .frame(height: container.size.height / 2 - 1)
@@ -47,16 +42,17 @@ struct BarBalanceGraphMidnight: View
         }
     }
     
-    func bottomGraphTopRow(_ geometry: GeometryProxy, _ context: ViewContext) -> some View
-    {
-        ZStack(alignment: .leading)
-        {
+    func bottomGraphTopRow(_ geometry: GeometryProxy, _ context: ViewContext) -> some View {
+        ZStack(alignment: .leading) {
             Rectangle()
                 .fill(AppSettings.getGraphEmptyColor(scheme).opacity(scheme == .light ? 0.4 : 1))
                 .frame(width: geometry.size.width)
-                .overlay
-                {
-                    LinearGradient(colors: [scheme == .dark ? .black : .white, AppSettings.getGraphEmptyColor(scheme)], startPoint: scheme == .dark ? .bottom : .top, endPoint: scheme == .dark ? .top : .bottom)
+                .overlay {
+                    LinearGradient(
+                        colors: [scheme == .dark ? .black : .white, AppSettings.getGraphEmptyColor(scheme)],
+                        startPoint: scheme == .dark ? .bottom : .top,
+                        endPoint: scheme == .dark ? .top : .bottom
+                    )
                         .opacity(0.25)
                 }
 
@@ -67,15 +63,16 @@ struct BarBalanceGraphMidnight: View
                 .fill(burnedColor)
                 .frame(width: widthActive)
                 .brightness(level: .primary)
-                .overlay
-                {
-                    LinearGradient(colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor], startPoint: scheme == .dark ? .bottom : .top, endPoint: scheme == .dark ? .top : .bottom)
+                .overlay {
+                    LinearGradient(
+                        colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor],
+                        startPoint: scheme == .dark ? .bottom : .top,
+                        endPoint: scheme == .dark ? .top : .bottom
+                    )
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                 }
-                .overlay
-                {
-                    ViewThatFits
-                    {
+                .overlay {
+                    ViewThatFits {
                         Text("\(burnedActive)").graphLabelStyle(scheme)
                         
                         Color.clear.frame(width: 0, height: 0)
@@ -89,15 +86,16 @@ struct BarBalanceGraphMidnight: View
                 .fill(burnedColor)
                 .frame(width: widthPassive)
                 .brightness(level: .secondary)
-                .overlay
-                {
-                    LinearGradient(colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor], startPoint: scheme == .dark ? .bottom : .top, endPoint: scheme == .dark ? .top : .bottom)
+                .overlay {
+                    LinearGradient(
+                        colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor],
+                        startPoint: scheme == .dark ? .bottom : .top,
+                        endPoint: scheme == .dark ? .top : .bottom
+                    )
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                 }
-                .overlay
-                {
-                    ViewThatFits
-                    {
+                .overlay {
+                    ViewThatFits {
                         Text("\(burnedPassive)").graphLabelStyle(scheme)
 
                         Color.clear.frame(width: 0, height: 0)
@@ -112,16 +110,17 @@ struct BarBalanceGraphMidnight: View
                 .fill(burnedColor)
                 .frame(width: widthPassiveTillMidnight)
                 .brightness(level: .tertiary)
-                .overlay
-                {
-                    LinearGradient(colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor], startPoint: scheme == .dark ? .bottom : .top, endPoint: scheme == .dark ? .top : .bottom)
+                .overlay {
+                    LinearGradient(
+                        colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor],
+                        startPoint: scheme == .dark ? .bottom : .top,
+                        endPoint: scheme == .dark ? .top : .bottom
+                    )
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                 }
                 .cornerRadius(6, corners: .topRight)
-                .overlay
-                {
-                    ViewThatFits
-                    {
+                .overlay {
+                    ViewThatFits {
                         Text("\(burnedPassiveRemaining)").graphLabelStyle(scheme)
                         
                         Color.clear.frame(width: 0, height: 0)
@@ -131,23 +130,18 @@ struct BarBalanceGraphMidnight: View
             
             let widthRest = geometry.size.width - widthActive - widthPassive - widthPassiveTillMidnight
             
-            if(burnedActive + burnedPassive + burnedPassiveRemaining < graphTotal)
-            {
-                ZStack
-                {
+            if(burnedActive + burnedPassive + burnedPassiveRemaining < graphTotal) {
+                ZStack {
                     Rectangle()
                         .fill(Color.clear)
                         .frame(width: widthRest)
                         .padding(.leading, widthActive + widthPassive + widthPassiveTillMidnight)
                     
-                    if widthRest <= 25
-                    {
+                    if widthRest <= 25 {
                         Text("\(graphTotal - (burnedActive + burnedPassive + burnedPassiveRemaining))")
                             .graphLabelStyle(scheme)
                             .padding(.leading, widthActive + widthPassive + widthPassiveTillMidnight - 18)
-                    }
-                    else
-                    {
+                    } else {
                         Text("\(graphTotal - (burnedActive + burnedPassive + burnedPassiveRemaining))")
                             .graphLabelStyle(scheme)
                             .padding(.leading, widthActive + widthPassive + widthPassiveTillMidnight)
@@ -160,16 +154,17 @@ struct BarBalanceGraphMidnight: View
 //        .compositingGroup()
     }
     
-    func bottomGraphBottomRow(_ geometry: GeometryProxy, _ context: ViewContext) -> some View
-    {
-        ZStack(alignment: .leading)
-        {
+    func bottomGraphBottomRow(_ geometry: GeometryProxy, _ context: ViewContext) -> some View {
+        ZStack(alignment: .leading) {
             Rectangle()
                 .fill(AppSettings.getGraphEmptyColor(scheme).opacity(scheme == .light ? 0.4 : 1))
                 .frame(width: geometry.size.width)
-                .overlay
-                {
-                    LinearGradient(colors: [scheme == .dark ? .black : .white, AppSettings.getGraphEmptyColor(scheme)], startPoint: scheme == .dark ? .bottom : .top, endPoint: scheme == .dark ? .top : .bottom)
+                .overlay {
+                    LinearGradient(
+                        colors: [scheme == .dark ? .black : .white, AppSettings.getGraphEmptyColor(scheme)],
+                        startPoint: scheme == .dark ? .bottom : .top,
+                        endPoint: scheme == .dark ? .top : .bottom
+                    )
                         .opacity(0.25)
                 }
             
@@ -178,29 +173,28 @@ struct BarBalanceGraphMidnight: View
             Rectangle()
                 .fill(consumedColor)
                 .frame(width: widthConsumed)
-                .overlay
-                {
-                    LinearGradient(colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor], startPoint: scheme == .dark ? .bottom : .top, endPoint: scheme == .dark ? .top : .bottom)
+                .overlay {
+                    LinearGradient(
+                        colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor],
+                        startPoint: scheme == .dark ? .bottom : .top,
+                        endPoint: scheme == .dark ? .top : .bottom
+                    )
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                 }
                 .brightness(level: .primary)
                 .cornerRadius(6, corners: .bottomRight)
-                .overlay
-                {
-                    ViewThatFits
-                    {
+                .overlay {
+                    ViewThatFits {
                         Text("\(consumed)").graphLabelStyle(scheme)
                         
                         Color.clear.frame(width: 0, height: 0)
                     }
                 }
             
-            if (consumed < graphTotal)
-            {
+            if (consumed < graphTotal) {
                 let widthRest = geometry.size.width - widthConsumed
                 
-                ZStack
-                {
+                ZStack {
                     Rectangle()
                         .fill(Color.clear)
                         .frame(width: widthRest)

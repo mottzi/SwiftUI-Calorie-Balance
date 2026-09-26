@@ -1,27 +1,27 @@
 import SwiftUI
 
-struct BarBalanceGraphBottomRow: View
-{
+struct BarBalanceGraphBottomRow: View {
     @Environment(\.colorScheme) private var scheme: ColorScheme
+
     @EnvironmentObject private var AppSettings: Settings
+
     @Environment(HealthInterface.self) private var DataViewModel
     
     let geometry: GeometryProxy
     let context: ViewContext
     var labels = true
     
-    var calBurnedNowGraphTotal: Int { max(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive, DataViewModel.sample.consumed) }
-    
-    var body: some View
-    {
-        ZStack(alignment: .leading)
-        {
+    var body: some View {
+        ZStack(alignment: .leading) {
             Rectangle()
                 .fill(AppSettings.getGraphEmptyColor(scheme).opacity(scheme == .light ? 0.4 : 1))
                 .frame(width: geometry.size.width)
-                .overlay
-                {
-                    LinearGradient(colors: [scheme == .dark ? .black : .white, AppSettings.getGraphEmptyColor(scheme)], startPoint: scheme == .dark ? .bottom : .top, endPoint: scheme == .dark ? .top : .bottom)
+                .overlay {
+                    LinearGradient(
+                        colors: [scheme == .dark ? .black : .white, AppSettings.getGraphEmptyColor(scheme)],
+                        startPoint: scheme == .dark ? .bottom : .top,
+                        endPoint: scheme == .dark ? .top : .bottom
+                    )
                         .opacity(0.25)
                 }
             
@@ -31,18 +31,18 @@ struct BarBalanceGraphBottomRow: View
                 .fill(AppSettings.consumedColor)
                 .frame(width: widthConsumed)
                 .brightness(level: .primary)
-                .overlay
-                {
-                    LinearGradient(colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor], startPoint: scheme == .dark ? .bottom : .top, endPoint: scheme == .dark ? .top : .bottom)
+                .overlay {
+                    LinearGradient(
+                        colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor],
+                        startPoint: scheme == .dark ? .bottom : .top,
+                        endPoint: scheme == .dark ? .top : .bottom
+                    )
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                 }
                 .cornerRadius(6, corners: .bottomRight)
-                .overlay
-                {
-                    if labels
-                    {
-                        ViewThatFits
-                        {
+                .overlay {
+                    if labels {
+                        ViewThatFits {
                             Text("\(DataViewModel.sample.consumed)").graphLabelStyle(scheme)
                             
                             Color.clear
@@ -52,27 +52,21 @@ struct BarBalanceGraphBottomRow: View
                     }
                 }
             
-            if (DataViewModel.sample.consumed < calBurnedNowGraphTotal)
-            {
+            if (DataViewModel.sample.consumed < calBurnedNowGraphTotal) {
                 let widthRest = geometry.size.width - widthConsumed
                 
-                ZStack
-                {
+                ZStack {
                     Rectangle()
                         .fill(Color.clear)
                         .frame(width: widthRest)
                         .padding(.leading, widthConsumed)
                     
-                    if labels
-                    {
-                        if widthRest <= 25
-                        {
+                    if labels {
+                        if widthRest <= 25 {
                             Text("\(calBurnedNowGraphTotal - DataViewModel.sample.consumed)")
                                 .graphLabelStyle(scheme)
                                 .padding(.leading, widthConsumed - 18)
-                        }
-                        else
-                        {
+                        } else {
                             Text("\(calBurnedNowGraphTotal - DataViewModel.sample.consumed)")
                                 .graphLabelStyle(scheme)
                                 .padding(.leading, widthConsumed)
@@ -87,12 +81,15 @@ struct BarBalanceGraphBottomRow: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
-        ZStack
-        {
+extension BarBalanceGraphBottomRow {
+
+    var calBurnedNowGraphTotal: Int { max(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive, DataViewModel.sample.consumed) }
+
+}
+
+#Preview {
+    NavigationView {
+        ZStack {
             Settings.shared.AppBackground.ignoresSafeArea(.all)
             
             Pager(lb: 6, tb: 1)

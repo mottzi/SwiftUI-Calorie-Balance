@@ -1,17 +1,13 @@
 import SwiftUI
 
-struct ThemesSection: View 
-{
+struct ThemesSection: View {
     @EnvironmentObject private var AppSettings: Settings
 
 //    @State private var showSuggestedThemes: Bool = false
 
-    var body: some View
-    {
-        VStack(spacing: 0)
-        {
-            HStack
-            {
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack {
                 Text("Themes")
                     .font(.subheadline)
                     .fontWeight(.semibold)
@@ -40,10 +36,8 @@ struct ThemesSection: View
 
 //            if showSuggestedThemes
 //            {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 20)
-                {
-                    ForEach(Settings.Themes)
-                    { theme in
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 20) {
+                    ForEach(Settings.Themes) { theme in
                         ThemeButton(theme: theme)
                     }
                 }
@@ -56,10 +50,8 @@ struct ThemesSection: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
+#Preview {
+    NavigationView {
         SettingsPage()
             .environmentObject(Settings.shared)
     }

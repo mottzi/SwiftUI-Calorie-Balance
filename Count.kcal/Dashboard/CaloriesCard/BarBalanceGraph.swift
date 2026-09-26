@@ -1,29 +1,25 @@
 import SwiftUI
 
-struct BarBalanceGraph: View
-{
+struct BarBalanceGraph: View {
     @Environment(\.colorScheme) private var scheme: ColorScheme
+
     @EnvironmentObject private var AppSettings: Settings
+
     @Environment(HealthInterface.self) private var DataViewModel
 
     var context: ViewContext = .app
     var labels = true
     
-    var body: some View
-    {
-        GeometryReader
-        { container in
-            VStack(spacing: scheme == .light ? 1 : 2)
-            {
-                GeometryReader
-                { geometry in
+    var body: some View {
+        GeometryReader { container in
+            VStack(spacing: scheme == .light ? 1 : 2) {
+                GeometryReader { geometry in
                     BarBalanceGraphTopRow(geometry: geometry, context: context, labels: labels)
                 }
                 .frame(height: container.size.height / 2 - 1)
                 .clipShape(UnevenRoundedRectangle(topLeadingRadius: 6, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 6, style: .continuous))
                 
-                GeometryReader
-                { geometry in
+                GeometryReader { geometry in
                     BarBalanceGraphBottomRow(geometry: geometry, context: context, labels: labels)
                 }
                 .frame(height: container.size.height / 2 - 1)
@@ -34,8 +30,7 @@ struct BarBalanceGraph: View
     }
 }
 
-#Preview
-{
+#Preview {
     BarBalanceGraph()
         .environment(HealthInterface(.example(for: .now, balance: .deficit)))
         .environmentObject(Settings.shared)
@@ -45,12 +40,9 @@ struct BarBalanceGraph: View
         .fontDesign(.rounded)
 }
 
-#Preview
-{
-    NavigationView
-    {
-        ZStack
-        {
+#Preview {
+    NavigationView {
+        ZStack {
             Settings.shared.AppBackground.ignoresSafeArea(.all)
             
             Pager(lb: 6, tb: 1)

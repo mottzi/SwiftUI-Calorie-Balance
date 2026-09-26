@@ -2,11 +2,8 @@ import HealthKit
 import WidgetKit
 import UserNotifications
 
-final class HKRepository
-{
-    private init() {}
-    
-    static let shared = HKRepository()
+/// HealthKit access for energy, nutrient, step, and weight samples.
+final class HKRepository {
     public let store = HKHealthStore()
     public let dataTypesToRead = Set(
     [
@@ -19,17 +16,19 @@ final class HKRepository
         HKObjectType.quantityType(forIdentifier: .bodyMass)!,
         HKObjectType.quantityType(forIdentifier: .stepCount)!,
     ])
+
+    private init() {}
     
-    func fetchInitialAvgWeightData(for date: Date) async -> [WeightChartData]
-    {
-        if !HKHealthStore.isHealthDataAvailable()
-        {
+    static let shared = HKRepository()
+
+    /// Loads daily weight averages for the chart period ending on the given date.
+    func fetchInitialAvgWeightData(for date: Date) async -> [WeightChartData] {
+        if !HKHealthStore.isHealthDataAvailable() {
             print("isHealthDataAvailable false")
             return []
         }
         
-        if await !requestPermission()
-        {
+        if await !requestPermission() {
             print("requestPermission false")
             return []
         }
@@ -51,18 +50,13 @@ final class HKRepository
         
         var returnData: [WeightChartData] = []
         
-        if let data = try? await query.result(for: HKRepository.shared.store)
-        {
-            data.enumerateStatistics(from: dayStart, to: dayEnd)
-            { statistics, pointer in
-                if let avg = statistics.averageQuantity()
-                {
+        if let data = try? await query.result(for: HKRepository.shared.store) {
+            data.enumerateStatistics(from: dayStart, to: dayEnd) { statistics, pointer in
+                if let avg = statistics.averageQuantity() {
                     let unit: HKUnit = Settings.shared.weightUnit == .lbs ? .pound() : .gramUnit(with: .kilo)
 
                     returnData.append(WeightChartData(date: statistics.startDate, weightAvg: round(avg.doubleValue(for: unit) * 10) / 10.0))
-                }
-                else
-                {
+                } else {
                     returnData.append(WeightChartData(date: statistics.startDate, weightAvg: nil))
                 }
             }
@@ -71,16 +65,14 @@ final class HKRepository
         return returnData
     }
     
-    func fetchLatestWeightData() async -> (Double?, Date?)
-    {
-        if !HKHealthStore.isHealthDataAvailable()
-        {
+    /// Returns the latest weight value and its sample date.
+    func fetchLatestWeightData() async -> (Double?, Date?) {
+        if !HKHealthStore.isHealthDataAvailable() {
             print("isHealthDataAvailable false")
             return (nil, nil)
         }
         
-        if await !requestPermission()
-        {
+        if await !requestPermission() {
             print("requestPermission false")
             return (nil, nil)
         }
@@ -100,10 +92,8 @@ final class HKRepository
         var v: Double?
         var d: Date?
         
-        if let result = try? await query.result(for: HKRepository.shared.store)
-        {
-            if result.count == 1
-            {
+        if let result = try? await query.result(for: HKRepository.shared.store) {
+            if result.count == 1 {
                 let unit: HKUnit = Settings.shared.weightUnit == .lbs ? .pound() : .gramUnit(with: .kilo)
                 
                 v = round(result[0].quantity.doubleValue(for: unit) * 10) / 10.0
@@ -114,18 +104,16 @@ final class HKRepository
         return (v, d)
     }
       
-    func requestPermission() async -> Bool
-    {        
-        if let _ = try? await store.requestAuthorization(toShare: Set(), read: dataTypesToRead)
-        {
+    /// Requests read access to the health data used by the app.
+    func requestPermission() async -> Bool {
+        if let _ = try? await store.requestAuthorization(toShare: Set(), read: dataTypesToRead) {
             return true
         }
         
         return false
     }
      
-    func cumDataToday(fetch dataType: HKQuantityTypeIdentifier, for date: Date) async -> Int
-    {
+    func cumDataToday(fetch dataType: HKQuantityTypeIdentifier, for date: Date) async -> Int {
         if !HKHealthStore.isHealthDataAvailable() { return 0 }
 
         if await !requestPermission() { return 0 }
@@ -147,19 +135,15 @@ final class HKRepository
         
         var unit: HKUnit
         
-        switch dataType
-        {
+        switch dataType {
             case .dietaryProtein: unit = HKUnit.gram()
             case .dietaryFatTotal: unit = HKUnit.gram()
             case .dietaryCarbohydrates: unit = HKUnit.gram()
             case .stepCount: unit = HKUnit.count()
             default:
-                if Settings.shared.energyUnit == .kJ
-                {
+                if Settings.shared.energyUnit == .kJ {
                     unit = HKUnit.jouleUnit(with: .kilo)
-                }
-                else
-                {
+                } else {
                     unit = HKUnit.kilocalorie()
                 }
         }
@@ -169,16 +153,13 @@ final class HKRepository
         return Int((cum ?? 0).rounded())
     }
     
-    func cumDataWeek(fetch dataType: HKQuantityTypeIdentifier, for date: Date) async -> Int
-    {
-        if !HKHealthStore.isHealthDataAvailable()
-        {
+    func cumDataWeek(fetch dataType: HKQuantityTypeIdentifier, for date: Date) async -> Int {
+        if !HKHealthStore.isHealthDataAvailable() {
             print("isHealthDataAvailable false")
             return 0
         }
 
-        if await !requestPermission()
-        {
+        if await !requestPermission() {
             print("requestPermission false")
             return 0
         }

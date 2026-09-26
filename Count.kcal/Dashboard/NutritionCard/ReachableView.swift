@@ -1,10 +1,8 @@
 import SwiftUI
 import WidgetKit
 
-extension Int 
-{
-    func stringFormat() -> String 
-    {
+extension Int {
+    func stringFormat() -> String {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .none
         
@@ -12,16 +10,15 @@ extension Int
     }
 }
 
-enum ViewContext: Hashable
-{
+enum ViewContext: Hashable {
     case app
     case widget(WidgetFamily)
 }
 
-struct ReachableView: View
-{
+struct ReachableView: View {
     @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(\.colorScheme) private var scheme: ColorScheme
+
     @EnvironmentObject private var AppSettings: Settings
 
     private let gradientOpacityLight: Double = 0.10
@@ -32,11 +29,6 @@ struct ReachableView: View
     
     private var consumedValue: Int
     private var goalValue: Int
-    
-    private var percent: Int
-    {
-        goalValue - consumedValue
-    }
     
     private let key: LocalizedStringKey
     private let color:  Color
@@ -49,8 +41,7 @@ struct ReachableView: View
          goalValue:      Int,
          unit:           String = "g",
          color:          Color = Color("SecondaryTextColor"),
-         graphHeight:    CGFloat = 18.0)
-    {
+         graphHeight:    CGFloat = 18.0) {
         self.context = context
         self.graphHeight = graphHeight
         
@@ -63,19 +54,14 @@ struct ReachableView: View
         self.unit = unit
     }
     
-    var body: some View
-    {
+    var body: some View {
         BarTypeView
     }
     
-    var BarTypeView: some View 
-    {
-        HStack(alignment: .bottom)
-        {
-            VStack(alignment: .leading, spacing: 3)
-            {
-                HStack
-                {
+    var BarTypeView: some View {
+        HStack(alignment: .bottom) {
+            VStack(alignment: .leading, spacing: 3) {
+                HStack {
                     Text(key)
                         .font(.caption)
                         .fontWeight(.bold)
@@ -118,8 +104,7 @@ struct ReachableView: View
                         .accessibility5: 80,
                     ]
                     
-                    HStack(spacing: 0)
-                    {
+                    HStack(spacing: 0) {
                         Text("\(consumedValue)")
                             .frame(minWidth: minWidthLeading[dynamicType, default: 30], alignment: .trailing)
                         
@@ -140,8 +125,7 @@ struct ReachableView: View
                     #endif
                 }
                 
-                GeometryReader
-                { geometry in
+                GeometryReader { geometry in
                     NutritionBar(geometry)
                 }
                 .frame(height: graphHeight)
@@ -149,37 +133,28 @@ struct ReachableView: View
         }
     }
     
-    func getConsumedWidth(_ geometry: GeometryProxy) -> CGFloat
-    {
-        if goalValue == 0 
-        {
+    func getConsumedWidth(_ geometry: GeometryProxy) -> CGFloat {
+        if goalValue == 0 {
             return 0
         }
         
         return max(0, min(geometry.size.width, CGFloat(Double(consumedValue) / Double(goalValue) * geometry.size.width)))
     }
     
-    func getConsumedRatio(cap: Double? = nil) -> Double
-    {
-        if goalValue == 0
-        {
+    func getConsumedRatio(cap: Double? = nil) -> Double {
+        if goalValue == 0 {
             return 0
         }
         
-        if cap == nil
-        {
+        if cap == nil {
             return Double(consumedValue) / Double(goalValue)
-        }
-        else
-        {
+        } else {
             return min(cap!, Double(consumedValue) / Double(goalValue))
         }
     }
     
-    func NutritionBar(_ geometry: GeometryProxy) -> some View
-    {
-        ZStack(alignment: .leading)
-        {
+    func NutritionBar(_ geometry: GeometryProxy) -> some View {
+        ZStack(alignment: .leading) {
             Capsule()
                 .fill(AppSettings.getGraphEmptyColor(scheme).brighten(scheme == .light ? 0.15 : -0.05))
                 .frame(height: graphHeight)
@@ -188,13 +163,24 @@ struct ReachableView: View
                 .fill(color.brighten(0.1))
                 .saturation(Settings.baseSaturation - 0.2)
                 .frame(width: getConsumedWidth(geometry), height: graphHeight)
-                .overlay
-                {
-                    LinearGradient(colors: [scheme == .dark ? .black : .white, color.brighten(0.1)], startPoint: scheme == .dark ? .bottom : .top, endPoint: scheme == .dark ? .top : .bottom)
+                .overlay {
+                    LinearGradient(
+                        colors: [scheme == .dark ? .black : .white, color.brighten(0.1)],
+                        startPoint: scheme == .dark ? .bottom : .top,
+                        endPoint: scheme == .dark ? .top : .bottom
+                    )
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                         .clipShape(Capsule())
                 }
         }
         .clipShape(Capsule())
     }
+}
+
+extension ReachableView {
+
+    private var percent: Int {
+        goalValue - consumedValue
+    }
+
 }

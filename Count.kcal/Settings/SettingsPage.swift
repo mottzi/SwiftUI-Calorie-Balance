@@ -1,65 +1,53 @@
 import SwiftUI
 import WidgetKit
 
-enum Field: Int, CaseIterable
-{
+enum Field: Int, CaseIterable {
     case balance, carbs, fats, protein, passive, active, steps
 }
 
-struct SettingsPage: View
-{
+/// Settings screen for goals, units, and appearance.
+struct SettingsPage: View {
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) var scenePhase
+
     @FocusState private var focusedField: Field?
 
     @Environment(HSlider.self) private var SliderData
     // @State private var SliderData = HSlider()
     
-    var body: some View
-    {
-        ZStack
-        {
+    var body: some View {
+        ZStack {
             AppSettings.AppBackground.ignoresSafeArea(.all)
             
-            ScrollView
-            {
+            ScrollView {
                 EnergySettingsView(focusedField: _focusedField)
                     .padding(.bottom, 20)
 
-                VStack(spacing: 30)
-                {
+                VStack(spacing: 30) {
                     NutrientsCard()
                     StepsCard(focusedField: _focusedField)
                     UnitsCard()
                     ColorsCard()
                 }
                 
-                VStack(spacing: 2)
-                {
-                    HStack(spacing: 6)
-                    {
+                VStack(spacing: 2) {
+                    HStack(spacing: 6) {
                         Image(systemName: "laurel.leading")
                             .font(.system(size: 42))
                             .fontWeight(.black)
                             .foregroundStyle(LinearGradient(colors: [Color("TextColor"), Color("TextColor").opacity(0.5)], startPoint: .top, endPoint: .bottom))
 
-                        Button
-                        {
+                        Button {
                             if let url = URL(string: "https://apps.apple.com/us/app/count-kcal/id6476797015?action=write-review"),
-                               UIApplication.shared.canOpenURL(url)
-                            {
+                               UIApplication.shared.canOpenURL(url) {
                                 UIApplication.shared.open(url)
                             }
-                        }
-                        label:
-                        {
-                            VStack(spacing: 4)
-                            {
-                                HStack(spacing: 4)
-                                {
+                        } label: {
+                            VStack(spacing: 4) {
+                                HStack(spacing: 4) {
                                     Text("Rate us on the")
                                         .font(.headline)
                                         .fontWeight(.semibold)
@@ -73,10 +61,8 @@ struct SettingsPage: View
                                         .shadow(color: Color("TextColor").opacity(0.4), radius: 10, y: -2)
                                 }
 
-                                HStack()
-                                {
-                                    ForEach(1...5, id: \.self)
-                                    { i in
+                                HStack() {
+                                    ForEach(1...5, id: \.self) { i in
                                         Image(systemName: "star.fill")
                                             .font(.subheadline)
                                             .fontWeight(.black)
@@ -107,20 +93,14 @@ struct SettingsPage: View
                         .padding(.top, 4)
                         .padding(.bottom, 6)
                 
-                    HStack(spacing: 24)
-                    {
-                        Button
-                        {
+                    HStack(spacing: 24) {
+                        Button {
                             if let url = URL(string: "twitter://user?screen_name=BerkenSayilir"),
-                               UIApplication.shared.canOpenURL(url)
-                            {
+                               UIApplication.shared.canOpenURL(url) {
                                 UIApplication.shared.open(url)
                             }
-                        }
-                        label:
-                        {
-                            HStack(spacing: 3)
-                            {
+                        } label: {
+                            HStack(spacing: 3) {
                                 Text("Contact")
                                     .font(.caption)
                                     .foregroundStyle(Color("SecondaryTextColor"))
@@ -144,18 +124,13 @@ struct SettingsPage: View
                         }
                         .buttonStyle(.plain)
                         
-                        Button
-                        {
+                        Button {
                             if let url = URL(string: "https://count.mottzi.de/help"),
-                               UIApplication.shared.canOpenURL(url)
-                            {
+                               UIApplication.shared.canOpenURL(url) {
                                 UIApplication.shared.open(url)
                             }
-                        }
-                        label:
-                        {
-                            HStack(spacing: 3)
-                            {
+                        } label: {
+                            HStack(spacing: 3) {
                                 Text("Support")
                                     .font(.caption)
                                     .foregroundStyle(Color("SecondaryTextColor"))
@@ -186,29 +161,21 @@ struct SettingsPage: View
             .sendContextOnChange(of: AppSettings.dataSource)
             .sendContextOnChange(of: AppSettings.consumedColor)
             .sendContextOnChange(of: AppSettings.burnedColor)
-            .toolbar
-            {
-                ToolbarItem(placement: .keyboard)
-                {
-                    Button("Done")
-                    {
+            .toolbar {
+                ToolbarItem(placement: .keyboard) {
+                    Button("Done") {
                         focusedField = nil
                     }
                     .foregroundStyle(Color("TextColor"))
                 }
                 
-                ToolbarItem(placement: .topBarLeading)
-                {
-                    Button 
-                    {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
                         WidgetCenter.shared.reloadAllTimelines()
                                                 
                         dismiss()
-                    }
-                    label:
-                    {
-                        HStack
-                        {
+                    } label: {
+                        HStack {
                             Image(systemName: "chevron.left")
                                 .font(.callout)
                                 
@@ -221,19 +188,14 @@ struct SettingsPage: View
                 }
                 
                 #if DEBUG
-                ToolbarItem(placement: .topBarTrailing)
-                {
-                    Button
-                    {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
                         AppSettings.showWelcome = true
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1)
-                        {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                             dismiss()
                         }
-                    }
-                    label:
-                    {
+                    } label: {
                         Text(verbatim: "Setup")
                             .foregroundColor(Color("TextColor"))
                             .fontWeight(.semibold)
@@ -246,10 +208,8 @@ struct SettingsPage: View
     }
 }
 
-#Preview
-{
-    NavigationView
-    {
+#Preview {
+    NavigationView {
         SettingsPage()
             .environmentObject(Settings.shared)
             .environment(HSlider())
