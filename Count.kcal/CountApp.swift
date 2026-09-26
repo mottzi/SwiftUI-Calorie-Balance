@@ -33,19 +33,4 @@ struct CountApp: App
     }
 }
 
-#Preview
-{    
-    NavigationStack
-    {
-        ZStack
-        {
-            Settings.shared.AppBackground
-                .ignoresSafeArea(.all)
-            
-            Pager(lb: 5, tb: 1)
-                .environmentObject(Settings.shared)
-                .environment(WeightDataViewModel())
-                .environment(Streak())
-        }
-    }
-}
+#Preview { PreviewPager }

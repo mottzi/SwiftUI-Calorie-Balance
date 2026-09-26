@@ -8,6 +8,7 @@ struct Dashboard: View
     @Environment(HealthInterface.self) private var DataViewModel
 
     @Binding var todayPageMode: PagerSelection?
+    var nutrientGoals: NutrientGoals? = nil
     
     var sTitle: String 
     {
@@ -79,7 +80,7 @@ struct Dashboard: View
                 }
             }
 
-            MacroCard()
+            MacroCard(goals: nutrientGoals)
             
             Card("Steps")
             {

@@ -448,20 +448,3 @@ struct Pager: View
 }
 
 #Preview { PreviewPager }
-
-var PreviewPager: some View
-{
-    NavigationView
-    {
-        ZStack
-        {
-            Settings.shared.AppBackground
-                .ignoresSafeArea(.all)
-            
-            Pager(lb: 5, tb: 1)
-        }
-    }
-    .environmentObject(Settings.shared)
-    .environment(WeightDataViewModel())
-    .environment(Streak())
-}
