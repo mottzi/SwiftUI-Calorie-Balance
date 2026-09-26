@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1620"
+   LastUpgradeVersion = "2700"
    wasCreatedForAppExtension = "YES"
    version = "2.2">
    <BuildAction
@@ -86,7 +86,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9AA412FD2C24D90D005B9D73"
             BuildableName = "Count.kcal.complications.appex"
-            BlueprintName = "Count.kcal.complications"
             ReferencedContainer = "container:Count.kcal.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -129,7 +128,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9AA412FD2C24D90D005B9D73"
             BuildableName = "Count.kcal.complications.appex"
-            BlueprintName = "Count.kcal.complications"
             ReferencedContainer = "container:Count.kcal.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

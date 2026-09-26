@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1620"
+   LastUpgradeVersion = "2700"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -60,7 +60,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9AC2E27E2C12742500B07EBE"
             BuildableName = "Count.kcal.watch.app"
-            BlueprintName = "Count.kcal.watch"
             ReferencedContainer = "container:Count.kcal.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -77,7 +76,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9AC2E27E2C12742500B07EBE"
             BuildableName = "Count.kcal.watch.app"
-            BlueprintName = "Count.kcal.watch"
             ReferencedContainer = "container:Count.kcal.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

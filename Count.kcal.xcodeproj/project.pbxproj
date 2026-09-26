@@ -48,7 +48,7 @@
 		9A3F8EAA2B348C1F00B0DC74 /* CaloriesMidnightCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */; };
 		9A480F6A2B19315600D79FAE /* ToggleViewModeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A480F692B19315600D79FAE /* ToggleViewModeIntent.swift */; };
 		9A4B47D92C17C10000F9168E /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A4B47D82C17C10000F9168E /* WatchConnectivity.framework */; };
-		9A4B47DB2C17C13300F9168E /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A4B47DA2C17C13300F9168E /* WatchConnectivity.framework */; };
+		9A4B47DB2C17C13300F9168E /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A4B47D82C17C10000F9168E /* WatchConnectivity.framework */; };
 		9A4B728D2C13B639004853F0 /* HealhData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CBB2B3E2E7A0037628F /* HealhData.swift */; };
 		9A4B728E2C13B63E004853F0 /* HealthInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */; };
 		9A4B728F2C13B648004853F0 /* WeightDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */; };
@@ -255,7 +255,6 @@
 		9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CaloriesMidnightCard.swift; path = Count.kcal/Dashboard/CaloriesMidnightCard.swift; sourceTree = SOURCE_ROOT; };
 		9A480F692B19315600D79FAE /* ToggleViewModeIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleViewModeIntent.swift; sourceTree = "<group>"; };
 		9A4B47D82C17C10000F9168E /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
-		9A4B47DA2C17C13300F9168E /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS10.5.sdk/System/Library/Frameworks/WatchConnectivity.framework; sourceTree = DEVELOPER_DIR; };
 		9A4B72952C13BFF2004853F0 /* Count.kcal.watch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Count.kcal.watch.entitlements; sourceTree = "<group>"; };
 		9A5460342B27C0D3009BF0A4 /* Pager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pager.swift; sourceTree = "<group>"; };
 		9A54D7492C4FE79C0000A107 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
@@ -312,8 +311,8 @@
 		9ABFA7C12C0A451A00024D2F /* BarBalanceGraphMidnight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphMidnight.swift; sourceTree = "<group>"; };
 		9ABFA7C32C0A453B00024D2F /* CircleBalanceGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleBalanceGraph.swift; sourceTree = "<group>"; };
 		9AC2E27F2C12742500B07EBE /* Count.kcal.watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Count.kcal.watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9AC2E2812C12742500B07EBE /* WatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WatchApp.swift; path = /Users/berken/Desktop/dev/Swift/Count.kcal/Count.kcal.watch/WatchApp.swift; sourceTree = "<absolute>"; };
-		9AC2E2832C12742500B07EBE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = /Users/berken/Desktop/dev/Swift/Count.kcal/Count.kcal.watch/ContentView.swift; sourceTree = "<absolute>"; };
+		9AC2E2812C12742500B07EBE /* WatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchApp.swift; sourceTree = "<group>"; };
+		9AC2E2832C12742500B07EBE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9AC319DE2C073A1B0039E3C3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthInterface.swift; sourceTree = "<group>"; };
 		9AD25EBF2A65A82000C6E6E1 /* WeightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightCard.swift; sourceTree = "<group>"; };
@@ -480,7 +479,6 @@
 			isa = PBXGroup;
 			children = (
 				9A4B47D82C17C10000F9168E /* WatchConnectivity.framework */,
-				9A4B47DA2C17C13300F9168E /* WatchConnectivity.framework */,
 				9A2A67F929CF9D7F001E58DF /* Charts.framework */,
 				9AB83A272AF5879B00FBF3B3 /* WidgetKit.framework */,
 				9AB83A292AF5879B00FBF3B3 /* SwiftUI.framework */,
@@ -669,9 +667,8 @@
 				9AC2E2832C12742500B07EBE /* ContentView.swift */,
 				9A0BAC042C244C4F00622F9F /* Tab.Calories */,
 			);
-			name = Count.kcal.watch;
-			path = /Users/berken/Desktop/dev/Swift/Count.kcal/Count.kcal.watch;
-			sourceTree = "<absolute>";
+			path = Count.kcal.watch;
+			sourceTree = "<group>";
 		};
 		9AD5F5562C28269F003FE1C5 /* BalanceComplications */ = {
 			isa = PBXGroup;
@@ -847,7 +844,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 2700;
 				TargetAttributes = {
 					9A001C3829B6122500BB42B9 = {
 						CreatedOnToolsVersion = 14.1;
@@ -1146,6 +1143,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 4DXABR577J;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1168,6 +1166,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1209,6 +1208,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 4DXABR577J;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1225,6 +1225,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -1241,11 +1242,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4DXABR577J;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Count.kcal/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Count.kcal;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
@@ -1284,11 +1285,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4DXABR577J;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Count.kcal/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Count.kcal;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Grant permission to read nutritional, caloric and weight data.";
@@ -1326,7 +1327,6 @@
 				CODE_SIGN_ENTITLEMENTS = Count.kcal.widgets/Count.kcal.widget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4DXABR577J;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Count.kcal.widgets/Info.plist;
@@ -1365,7 +1365,6 @@
 				CODE_SIGN_ENTITLEMENTS = Count.kcal.widgets/Count.kcal.widget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4DXABR577J;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Count.kcal.widgets/Info.plist;
@@ -1403,7 +1402,6 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4DXABR577J;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Count.kcal.complications/Info.plist;
@@ -1438,7 +1436,6 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4DXABR577J;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Count.kcal.complications/Info.plist;
@@ -1474,7 +1471,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 4DXABR577J;
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1515,7 +1511,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 4DXABR577J;
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;

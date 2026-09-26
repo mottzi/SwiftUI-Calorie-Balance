@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/berken/Desktop/firstswift/SwiftTest/Count.kcal.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>
