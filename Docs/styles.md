@@ -1,0 +1,75 @@
+# Swift style
+
+Use `stepdown.md` for declaration ordering.
+
+Apply these rules in order. A style-only pass preserves behavior, API, names, access control, declaration ownership, and file ownership. When no rule objectively requires a change, leave the code unchanged.
+
+- A line is horizontally long when its final character is at column 125 or later. Indentation counts toward the column.
+- Apply the narrowest matching rule. A specific exception overrides a general rule; never infer a rule's converse.
+- If rules conflict or require an unstated subjective judgment, make no change.
+- Do not alter whitespace-only blank lines during a style-only pass.
+- Declare properties with `@Environment`, `@State`, `@Binding`, or `@Bindable` before unwrapped stored instance
+  properties.
+- Separate consecutive stored properties with different property-wrapper kinds with one blank line.
+- Declare type aliases before stored instance properties. This overrides the property-first default in `stepdown.md`.
+- For new behavioral type and extension declarations, place one blank line immediately inside the opening and closing braces. Case-only enums and passive nested data containers may be compact. Do not reformat an existing declaration solely to normalize brace spacing.
+- When an enum has two or more cases and every case has an immediately preceding documentation comment, place exactly one blank line after the opening brace, between adjacent cases, and before the closing brace. Treat each documentation comment and its case declaration as one unit. This rule applies to existing declarations during a style-only pass.
+- Separate consecutive documented stored properties with one blank line.
+- For new functions with more than three nonblank body lines, place one blank line
+  immediately after the opening brace. Trivial initializers, forwarding or
+  single-expression bodies, and bodies whose non-declaration statements are
+  only control-flow statements such as `if`, `switch`, `guard`, or `return` may
+  remain compact. Do not add or remove an existing leading blank line solely
+  from the body-line count.
+- Use blank lines to divide a body into conceptual paragraphs. Keep directly coupled statements together. Do not add a blank line or introduce a local solely to manufacture a semantic phase.
+- Keep a function declaration header on one line when its final character would occur before column 125. This rule does not apply to initializers, accessors, closure properties, or function calls.
+- Declare an initializer with four or more parameters across multiple lines, with one parameter per line.
+- Line length is an expansion trigger, not a compaction trigger, for existing calls and initializers. Do not collapse an existing multiline call or initializer solely because it fits before column 125.
+- When a call is multiline, place each labeled argument on its own line. A multiline collection or closure may determine the enclosing layout.
+- Never use a multiline collection literal directly as a loop sequence. Bind it first; place each independent element of that bound collection on its own line.
+- Preserve ordered collection-literal grouping unless line length requires expansion.
+- Keep simple one-use expressions inline.
+- Do not introduce a local solely to name a Boolean, raw value, status value, property alias, throwing call, or semantic phase.
+- Bind the Boolean result of an operation that also writes an `inout` result before guarding that result. This keeps the operation separate from the predicates that inspect its output.
+- A rule requiring an intermediate operation result never authorizes extracting a Boolean predicate result unless the operation also writes an `inout` result that a later predicate inspects.
+- Preserve a one-use local that names a non-primitive domain value, exposes a meaningful transformation boundary, or makes a multiline construction independently readable.
+- Name each newly introduced local with the shortest unambiguous domain noun. Do not rename an existing reasonable local solely to normalize vocabulary.
+- When a newly bound value is used only to return one of its properties, name it for the underlying domain entity rather than its representation or producing operation.
+- When returning a property of the result of an asynchronous throwing domain operation, bind the domain entity before accessing the property.
+- When a function performs earlier parsing or validation and its final return transforms a non-primitive collection constructed with a multiline closure, bind the constructed collection before transforming it. Preserve a function whose entire body is one construction-to-transformation pipeline.
+- In nested fallible operations, bind the inner result only when both operations are fallible and it represents a distinct checked domain value.
+- A style-only pass must not otherwise introduce or remove a reasonable one-use local.
+- For new chronological workflows, reject invalid states with `guard` so the successful path remains unnested. A style-only pass does not replace an existing `if` with `guard`, or an existing `guard` with `if`, solely to normalize control flow.
+- Prefer one predicate per new `guard`.
+- Never split an existing combined `guard` whose predicates share one `else` action.
+- Combine consecutive guards with textually identical failure actions only when all predicates are simple or every predicate is rooted in the same domain value. Do not combine rejection actions such as `return`, `break`, or `continue`.
+- A simple predicate is an identifier or dot-separated member chain, optionally negated, containing no call, subscript, comparison, arithmetic, closure, or literal.
+- Combining guards may change only delimiters and layout; preserve each predicate's spelling.
+- When newly combining predicates, keep them on one line only when every predicate is simple and the complete condition ends before column 125. Otherwise place each predicate on its own aligned line.
+- Do not reflow the predicates of an existing combined `guard` solely for compactness or uniformity.
+- Never combine predicates with different failure actions.
+- Before formatting a `guard`, bind only the minimum evaluated subexpression needed when its condition would otherwise be horizontally long.
+- A `guard` with a one-statement `else` body may remain on one line when the complete statement ends before column 125.
+- If the complete statement is horizontally long, place `else` on the following line while keeping its one-statement body on that line.
+- When an `else` body contains multiple statements, place `else {` on the same line as the final condition and place each body statement on a subsequent indented line. Never place that `else {` on a separate line.
+- Do not otherwise reflow an existing valid one-line or two-line `guard`.
+- Predicate-restructuring rules apply only to optional element searches, not Boolean operations such as `contains` or `allSatisfy`.
+- Bind an optional element search before testing it when its predicate is multiline or contains multiple conjunctive conditions.
+- In that search predicate, reject every prerequisite with one `guard` before performing work needed only by accepted elements. Return the final predicate directly; use `return true` only when every predicate has already been rejected.
+- Use trailing-closure syntax for the multiline search predicate.
+- Name each bound search result for both the domain entity and the criterion that distinguishes it from neighboring searches.
+- Test a bound optional search result with shorthand `if let`, return it on success, then continue to fallback selection or failure. Do not use `guard let` for this shape.
+- Replace a `switch` that handles one pattern and otherwise only exits or does nothing with `if case`.
+- When optional binding merely renames a value to a generic alias, retain the source variable's domain name and use shorthand binding.
+- Use shorthand optional binding whenever the bound name is unchanged.
+- Indent every `case` one level inside its `switch`.
+- A case body is single-statement when it contains exactly one non-compound statement and no attached comment.
+- A switch is compactable when every case label occupies one line, every case body is single-statement, and every complete `case ...: statement` line would end before column 125. Indentation counts toward the column.
+- Format every compactable switch compactly by placing each case body on the same line as its case label.
+- Preserve an already compact switch regardless of line length.
+- A switch is mixed when at least one single-statement case body begins on its case-label line and another begins on the following line.
+- If a mixed switch is compactable, compact it. Otherwise, place every single-statement case body on the following line and separate adjacent cases with one blank line.
+- Place compound case bodies on subsequent indented lines.
+- Preserve a `do`/`catch` chain when every clause contains one non-compound statement.
+- If any clause contains conditional control flow, a switch, a loop, or another `do` block, expand every clause in that chain and place each `catch` on the same line as the preceding closing brace.
+- A compact `do` or `catch` clause may end at column 125. Expand compound clauses and clauses ending after column 125.
