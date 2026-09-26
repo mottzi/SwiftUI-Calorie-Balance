@@ -25,6 +25,9 @@ struct CountApp: App
                         .environment(WeightViewModel)
                         .environment(StreakManager)
                 }
+                #if DEBUG && targetEnvironment(simulator)
+                .task { await SimulatorHealthSeeder.runIfRequested() }
+                #endif
             }
         }
     }
