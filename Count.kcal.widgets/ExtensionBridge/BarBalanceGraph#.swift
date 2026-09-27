@@ -3,8 +3,6 @@ import SwiftUI
 struct BarBalanceGraph: View
 {
     @Environment(\.colorScheme) private var scheme
-    @EnvironmentObject private var AppSettings: Settings
-    @Environment(HealthInterface.self) private var DataViewModel
 
     var context: ViewContext = .app
     

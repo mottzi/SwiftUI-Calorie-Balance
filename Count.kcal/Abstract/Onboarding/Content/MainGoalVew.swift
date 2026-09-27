@@ -4,7 +4,6 @@ struct MaingoalView: View {
 
     @EnvironmentObject private var AppSettings: Settings
 
-    @Environment(\.colorScheme) private var scheme: ColorScheme
     
     var body: some View {
         VStack(spacing: 30) {

@@ -225,7 +225,6 @@ struct EnergySettingsView: View {
                                     
                                     SliderData.updateMacroWeights()
                                 }
-//                                .onSubmit { Connectivity.shared.sendSettingsContext() }
                         } else {
                             Text("\(AppSettings.showActive)")
                                 .frame(width: 50, alignment: .trailing)
@@ -372,7 +371,7 @@ struct EnergySettingsView: View {
                             .offset(x: 3)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .underline()
-                            .onChange(of: AppSettings.balanceGoal) { /*o, n in*/
+                            .onChange(of: AppSettings.balanceGoal) {
                                 AppSettings.balanceGoal = abs(AppSettings.balanceGoal)
 
                                 SliderData.updateMacroWeights()

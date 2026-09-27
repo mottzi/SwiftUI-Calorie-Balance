@@ -77,7 +77,6 @@ struct ReachableView: View
                         .padding(.leading, 4)
                         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
                     
-//                    Spacer()
                     
                     let minWidthLeading: [DynamicTypeSize: CGFloat] =
                     [

@@ -27,10 +27,6 @@ extension CGFloat {
 
 extension Color {
 
-    func darken(_ level: Double) -> Color {
-        self.brighten(-level)
-    }
-    
     func brighten(_ level: Double) -> Color {
         if level == 0 { return self }
         
@@ -117,17 +113,6 @@ extension Date {
 
 }
 
-#if DEBUG
-extension View {
-
-    func debug(_ color: Color = .orange) -> some View {
-        self
-            .border(color, width: 1)
-    }
-
-}
-#endif
-
 extension Date {
 
     var nextSunday: Date {
@@ -151,7 +136,6 @@ extension Date {
     func isSameDay(as date: Date) -> Bool {
         Calendar.current.isDate(self, inSameDayAs: date)
 
-//        return Calendar.current.dateComponents([.year, .month, .day], from: self) == Calendar.current.d*/ateComponents([.year, .month, .day], from: date)
     }
     
     var shortTime: String {
@@ -190,15 +174,6 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    var dayOfMonth: String {
-        let dateFormatter = DateFormatter()
-        
-        dateFormatter.locale = Locale.current
-        dateFormatter.dateFormat = "dd"
-
-        return dateFormatter.string(from: self)
-    }
-    
     var yesterday: Date {
         self.subtractDays(1)
     }
@@ -213,20 +188,6 @@ extension Date {
     
     func subtractDays(_ days: Int) -> Date {
         Calendar.current.date(byAdding: .day, value: -days, to: self)!
-    }
-
-}
-
-extension Date {
-
-    static var getDayProgress: Double {
-        let now = Date.now
-    
-        let startOfDay = Calendar.current.startOfDay(for: now)
-        let secondsSinceStartOfDay = now.timeIntervalSince(startOfDay)
-        let totalSecondsInDay = 24.0 * 60.0 * 60.0
-
-        return secondsSinceStartOfDay / totalSecondsInDay
     }
 
 }

@@ -32,7 +32,6 @@ struct HealthData: Equatable, Sendable {
         burnedPassive + burnedPassiveRemaining + burnedActiveMidnight - consumed
     }
     
-    var burnedActiveRemaining: Int { max(burnedActive7 - burnedActive, 0) }
     var burnedPassiveRemaining: Int { max(burnedPassive7 - burnedPassive, 0) }
 
 }

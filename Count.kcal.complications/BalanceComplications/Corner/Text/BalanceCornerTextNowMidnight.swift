@@ -4,7 +4,6 @@ import WidgetKit
 struct BalanceCornerTextNowMidnightComplicationView : View
 {
     @Environment(\.widgetFamily) var family
-    @Environment(\.widgetRenderingMode) var renderingMode
 
     var entry: HealthDataTimelineProvider.Entry
 

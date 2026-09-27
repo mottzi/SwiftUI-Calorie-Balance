@@ -4,9 +4,7 @@ struct BarBalanceGraph: View {
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
-    @EnvironmentObject private var AppSettings: Settings
 
-    @Environment(HealthInterface.self) private var DataViewModel
 
     var context: ViewContext = .app
     var labels = true

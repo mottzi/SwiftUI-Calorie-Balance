@@ -284,7 +284,7 @@ struct BalanceWidgetBarMidnight: View
                 .font(.system(size: 14))
                 .fontWeight(.semibold)
                 .foregroundColor(Color("SecondaryTextColor"))
-                .padding(.bottom, /*goalReached ? 2 : */4)
+                .padding(.bottom, 4)
             
             Text("\(abs(entry.data.balanceMidnight))")
                 .font(.title3)
@@ -551,7 +551,7 @@ struct BalanceWidgetBarNow: View
                 .font(.system(size: 14))
                 .fontWeight(.semibold)
                 .foregroundColor(Color("SecondaryTextColor"))
-                .padding(.bottom, /*goalReached ? 2 : */4)
+                .padding(.bottom, 4)
             
             Text("\(abs(entry.data.balanceNow))")
                 .font(.title3)

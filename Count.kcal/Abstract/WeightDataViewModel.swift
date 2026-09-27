@@ -65,7 +65,7 @@ extension WeightDataViewModel {
     func validData(_ page: WeightPage) -> [WeightChartData] {
         if page == .weekly {
             return WeeklyWeightData.filter({ $0.weightAvg != nil })
-        } else { // if page == .monthly
+        } else {
             return WeightData.filter({ $0.weightAvg != nil })
         }
     }
@@ -78,25 +78,6 @@ extension WeightDataViewModel {
         if latest > average { return .orderedDescending }
         return .orderedSame
     }
-    
-    /*func randomizeWeightData(range: ClosedRange<Double>)
-    {
-        for (index, _) in self.WeightData.enumerated()
-        {
-            if WeightData[index].date > referenceDate
-            {
-                self.WeightData[index].weightAvg = nil
-            }
-            else if(Int.random(in: 1...100) <= 25)
-            {
-                self.WeightData[index].weightAvg = nil
-            }
-            else
-            {
-                self.WeightData[index].weightAvg = round(Double.random(in: range) * 10) / 10.0
-            }
-        }
-    }*/
     
     func randomizeWeightData(start: Double, end: Double) {
         requestID += 1
@@ -141,51 +122,11 @@ extension WeightDataViewModel {
         WeightData = updatedData
     }
     
-    func printData() {
-        if !dataLoaded { return }
-        
-        var str = ""
-        
-        print("*** printing all data:")
-        for (index, element) in self.WeightData.enumerated() {
-            if element.weightAvg == nil {
-                str = "nil"
-            } else {
-                str = String(element.weightAvg!)
-            }
-
-            print("*** \(index + 1). element -date = \(element.date.shortDate) -weight = \(str)")
-        }
-        
-        print("*** printing weekly data:")
-        for (index, element) in self.WeeklyWeightData.enumerated() {
-            if element.weightAvg == nil {
-                str = "nil"
-            } else {
-                str = String(element.weightAvg!)
-            }
-
-            print("*** \(index + 1). element -date = \(element.date.shortDate) -weight = \(str)")
-        }
-    }
-
-    func firstWeightValue(_ page: WeightPage) -> Double? {
-        if page == .weekly {
-            if let firstValidElement = WeeklyWeightData.first(where: { $0.weightAvg != nil })
-            { return firstValidElement.weightAvg }
-        } else { // if page == .monthly
-            if let firstValidElement = WeightData.first(where: { $0.weightAvg != nil })
-            { return firstValidElement.weightAvg }
-        }
-        
-        return nil
-    }
-    
     func lastWeightValue(_ page: WeightPage) -> Double? {
         if page == .weekly {
             if let lastValidElement = WeeklyWeightData.last(where: { $0.weightAvg != nil })
             { return lastValidElement.weightAvg }
-        } else { // if page == .monthly
+        } else {
             if let lastValidElement = WeightData.last(where: { $0.weightAvg != nil })
             { return lastValidElement.weightAvg }
         }
@@ -202,7 +143,7 @@ extension WeightDataViewModel {
             }) {
                 return lowestWeightData
             }
-        } else { // if page == .monthly
+        } else {
             if !dataLoaded { return nil }
             
             if let lowestWeightData = WeightData.min(by: {
@@ -220,7 +161,7 @@ extension WeightDataViewModel {
             if !dataLoaded { return nil }
 
             return WeeklyWeightData.max(by: { $0.weightAvg ?? 0.0 < $1.weightAvg ?? 0.0})
-        } else { // if page == .monthly
+        } else {
             if !dataLoaded { return nil }
 
             return WeightData.max(by: { $0.weightAvg ?? 0.0 < $1.weightAvg ?? 0.0})

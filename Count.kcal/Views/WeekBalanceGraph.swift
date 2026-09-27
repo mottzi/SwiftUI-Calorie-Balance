@@ -171,7 +171,6 @@ extension WeekBalanceGraph.VBarBalanceGraph {
 
 //#Preview
 //{
-//    WeekBalanceGraph(DataPoints: d)
 //}
 
 #Preview { PreviewPager }

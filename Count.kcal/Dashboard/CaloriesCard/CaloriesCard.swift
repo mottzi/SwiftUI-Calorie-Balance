@@ -4,9 +4,7 @@ struct CaloriesCard: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
 
-    @EnvironmentObject private var AppSettings: Settings
 
-    @Environment(HealthInterface.self) private var DataViewModel
     
     let sizeMapping: [DynamicTypeSize: CGFloat] = 
     [

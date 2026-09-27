@@ -135,7 +135,7 @@ extension Settings {
 extension Settings {
 
     /// Returns the eating goal after the weight goal adjusts the selected energy source.
-    func maxEatingEnergy(/*_ showActive: Int, _ showResting: Int*/) -> Int {
+    func maxEatingEnergy() -> Int {
         var activeCalories: Int = 0
         var balanceAdjustment: Int = 0
 

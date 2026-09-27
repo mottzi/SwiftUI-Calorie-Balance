@@ -4,7 +4,6 @@ struct BalanceGoalView: View {
 
     @EnvironmentObject private var AppSettings: Settings
 
-    @Environment(HSlider.self) private var SliderData
     
     @State private var balanceSlider = 0.0
     

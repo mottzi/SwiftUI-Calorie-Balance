@@ -2,7 +2,6 @@ import SwiftUI
 
 struct CaloriesCardTopRowCenter: View {
 
-    @Environment(\.dynamicTypeSize) private var dynamicType
 
     @EnvironmentObject private var AppSettings: Settings
 

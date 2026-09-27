@@ -4,8 +4,6 @@ struct UnitsCard: View {
 
     @EnvironmentObject private var AppSettings: Settings
 
-    //@State private var selectedFlavor: BalanceLayout
-
     var body: some View {
         Card("Units", titlePadding: false) {
             VStack(spacing: 8) {
@@ -67,9 +65,3 @@ struct UnitsCard: View {
             .environmentObject(Settings.shared)
     }
 }
-
-
-/*
- 
-
- */

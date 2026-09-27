@@ -4,8 +4,6 @@ struct DataSourceView: View {
 
     @EnvironmentObject private var AppSettings: Settings
 
-    @Environment(HSlider.self) private var SliderData
-    @Environment(\.colorScheme) private var scheme: ColorScheme
     
     @State private var activeSlider = 0.0
     @State private var passiveSlider = 0.0

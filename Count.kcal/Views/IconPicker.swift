@@ -134,69 +134,6 @@ enum PagerSelection: String, Hashable {
 
 }
 
-struct PageSelector: View {
-
-    var firstIcon: String
-    var secondIcon: String
-    var pickedColor: Color = Color(white: 0.1)
-    var unpickedColor: Color = Color(white: 0.3)
-    var iconFontSize: CGFloat = 20
-    var bgColor: Color = Color("TextColor").opacity(0.6)
-    var bgColorSelected: Color = Color("TextColor")
-
-    @Binding var selection: PagerSelection?
-    
-    var body: some View {
-        GeometryReader { geo in
-            RoundedRectangle(cornerRadius: 6)
-                .fill(bgColor)
-                .overlay(alignment: selection == .first ? .leading : .trailing) {
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(bgColorSelected)
-                        .padding([.leading, .vertical], selection == .first ? 2 : 0)
-                        .padding([.trailing, .vertical], selection == .second ? 2 : 0)
-                        .frame(width: geo.size.width / 2, height: geo.size.height)
-                }
-                .overlay {
-                    HStack(spacing: 0) {
-                        Spacer()
-
-                        Image(systemName: firstIcon)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: iconFontSize, height: iconFontSize)
-                            .fontWeight(.bold)
-                            .foregroundStyle(selection == .first ? pickedColor : unpickedColor)
-
-                        Spacer()
-                        Spacer()
-
-                        Image(systemName: secondIcon)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: iconFontSize, height: iconFontSize)
-                            .fontWeight(.bold)
-                            .foregroundStyle(selection == .second ? pickedColor : unpickedColor)
-
-                        Spacer()
-                    }
-                }
-                .contentShape(.rect)
-                // animate picker on scroll
-                .animation(.default, value: selection)
-                .onTapGesture {
-                    // animate scrollview on pick
-                    withAnimation {
-                        if selection == .first { selection = .second }
-                        else if selection == .second { selection = .first }
-                        else { selection = .first }
-                    }
-                }
-        }
-    }
-
-}
-
 #Preview {
     NavigationView {
         SettingsPage()

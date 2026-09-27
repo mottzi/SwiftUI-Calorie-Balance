@@ -155,7 +155,6 @@
 		9AF39CB32B3DBA4C0037628F /* WeightTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CB22B3DBA4C0037628F /* WeightTopBar.swift */; };
 		9AF39CB62B3DC61A0037628F /* MonthlyChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CB52B3DC61A0037628F /* MonthlyChart.swift */; };
 		9AF39CB82B3DC9180037628F /* WeeklyChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CB72B3DC9180037628F /* WeeklyChart.swift */; };
-		9AF39CBA2B3DC9B20037628F /* CircleChartSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CB92B3DC9B20037628F /* CircleChartSymbol.swift */; };
 		9AF39CBC2B3E2E7A0037628F /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CBB2B3E2E7A0037628F /* HealthData.swift */; };
 		9AF39CBD2B3E2E980037628F /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CBB2B3E2E7A0037628F /* HealthData.swift */; };
 		9AF4DC922BF2C4B5000EF0A5 /* MacroSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF4DC912BF2C4B5000EF0A5 /* MacroSlider.swift */; };
@@ -338,7 +337,6 @@
 		9AF39CB22B3DBA4C0037628F /* WeightTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightTopBar.swift; sourceTree = "<group>"; };
 		9AF39CB52B3DC61A0037628F /* MonthlyChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyChart.swift; sourceTree = "<group>"; };
 		9AF39CB72B3DC9180037628F /* WeeklyChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyChart.swift; sourceTree = "<group>"; };
-		9AF39CB92B3DC9B20037628F /* CircleChartSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleChartSymbol.swift; sourceTree = "<group>"; };
 		9AF39CBB2B3E2E7A0037628F /* HealthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthData.swift; sourceTree = "<group>"; };
 		9AF4DC912BF2C4B5000EF0A5 /* MacroSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacroSlider.swift; sourceTree = "<group>"; };
 		9AFAAA6E2B5FF9DC00034CA9 /* HealthDataTimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataTimelineProvider.swift; sourceTree = "<group>"; };
@@ -743,7 +741,6 @@
 				9AF39CB22B3DBA4C0037628F /* WeightTopBar.swift */,
 				9AF39CB72B3DC9180037628F /* WeeklyChart.swift */,
 				9AF39CB52B3DC61A0037628F /* MonthlyChart.swift */,
-				9AF39CB92B3DC9B20037628F /* CircleChartSymbol.swift */,
 			);
 			path = WeightCard;
 			sourceTree = "<group>";
@@ -987,7 +984,6 @@
 				D7A8097F63844ED785702A11 /* DayPager.swift in Sources */,
 				9A206D822C583ADA0079DE3D /* Button.swift in Sources */,
 				9AF39CB32B3DBA4C0037628F /* WeightTopBar.swift in Sources */,
-				9AF39CBA2B3DC9B20037628F /* CircleChartSymbol.swift in Sources */,
 				9A368CA32A6E64F900280BF9 /* WeightDataViewModel.swift in Sources */,
 				9AF4DC922BF2C4B5000EF0A5 /* MacroSlider.swift in Sources */,
 				9A92F1682B054C30009C4A2A /* IconPicker.swift in Sources */,

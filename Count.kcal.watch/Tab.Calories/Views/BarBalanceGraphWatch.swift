@@ -86,18 +86,6 @@ struct BarBalanceGraphWatchTop: View
                 .padding(.leading, widthActive)
 
             
-//            let widthRest = geometry.size.width - widthActive - widthPassive
-            
-//            if(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive < calBurnedNowGraphTotal)
-//            {
-//                ZStack
-//                {
-//                    Rectangle()
-//                        .fill(Color.clear)
-//                        .frame(width: widthRest)
-//                        .padding(.leading, widthActive + widthPassive)
-//                }
-//            }
         }
         .drawingGroup()
     }
@@ -138,18 +126,6 @@ struct BarBalanceGraphWatchBottom: View
                 }
                 .clipShape(.rect(bottomTrailingRadius: 6))
             
-//            if (DataViewModel.sample.consumed < calBurnedNowGraphTotal)
-//            {
-//                let widthRest = geometry.size.width - widthConsumed
-//                
-//                ZStack
-//                {
-//                    Rectangle()
-//                        .fill(Color.clear)
-//                        .frame(width: widthRest)
-//                        .padding(.leading, widthConsumed)
-//                }
-//            }
         }
         .drawingGroup()
     }

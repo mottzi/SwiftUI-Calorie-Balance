@@ -128,7 +128,6 @@ struct ContentView: View
                 else if oldPhase == .active && newPhase == .inactive
                 {
                     // make sure that the next timeline reload fetches live data
-                    // UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")!.set(Date(timeIntervalSinceReferenceDate: 0), forKey: "lastReceivedBalanceContext")
                     
                     // force timeline reload
                     WidgetCenter.shared.reloadAllTimelines()

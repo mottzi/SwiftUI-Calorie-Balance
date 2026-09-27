@@ -76,7 +76,6 @@ struct WeeklyChart: View {
             .chartYScale(domain: WeightViewModel.getYRange(.weekly))
             .chartYAxis {
                 AxisMarks(values: WeightViewModel.createYRangeArray(.weekly)) {
-                    // AxisGridLine(stroke: StrokeStyle(lineWidth: 1, dash: [2], dashPhase: 0))
                     AxisValueLabel()
                 }
                 

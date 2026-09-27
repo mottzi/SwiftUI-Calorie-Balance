@@ -68,7 +68,7 @@ struct WeightTopBar: View {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(
                         Color("TextColor").opacity(0.2),
-                        style: StrokeStyle(lineWidth: 2/*, dash: [2, 2], dashPhase: 0*/)
+                        style: StrokeStyle(lineWidth: 2)
                     )
                 
                 GeometryReader { geo in
@@ -84,7 +84,6 @@ struct WeightTopBar: View {
             .onTapGesture { pageSelection?.toggle() }
             .animation(.snappy, value: pageSelection)
             
-//            Spacer()
             
             HStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
@@ -124,7 +123,6 @@ struct WeightTopBar: View {
             .padding(.vertical, 6)
             .padding(.bottom, 2)
 
-            // Spacer()
         }
 //        .padding(.leading, 13)
 //        .padding(.trailing, 13)

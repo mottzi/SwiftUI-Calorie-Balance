@@ -2,7 +2,6 @@ import SwiftUI
 
 struct AppleHealthView: View {
 
-    @EnvironmentObject private var AppSettings: Settings
     
     var body: some View {
         VStack(spacing: 16) {
