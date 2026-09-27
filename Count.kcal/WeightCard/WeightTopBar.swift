@@ -111,47 +111,7 @@ struct WeightTopBar: View {
 //        .debug(.blue)
     }
     
-    func getTrendColor(_ page: WeightPage) -> Color {
-        if page == .weekly {
-            if !WeightViewModel.dataLoaded {
-                return Color(white: 0.22)
-            }
-            
-            guard let lastWeight = WeightViewModel.lastWeightValue(.weekly)/*,
-                  let firstWeight = WeightViewModel.firstWeightValue(.weekly)*/
-            else {
-                return Color(white: 0.22)
-            }
-            
-            if lastWeight > WeightViewModel.weightAvg7 {
-                return AppSettings.consumedColor
-            } else if lastWeight < WeightViewModel.weightAvg7 {
-                return AppSettings.burnedColor
-            }
-        } else if page == .monthly {
-//            print("getting trend color")
-            
-            if !WeightViewModel.dataLoaded {
-                return Color(white: 0.22)
-            }
-            
-            guard let lastWeight = WeightViewModel.lastWeightValue(.monthly)/*,
-                  let firstWeight = WeightViewModel.firstWeightValue(.monthly)*/
-            else {
-                return Color(white: 0.22)
-            }
-            
-//            print("lastWeight: \(lastWeight), avgWeight: \(WeightViewModel.weightAvg30)")
-            
-            if lastWeight > WeightViewModel.weightAvg30 {
-                return AppSettings.consumedColor
-            } else if lastWeight < WeightViewModel.weightAvg30 {
-                return AppSettings.burnedColor
-            }
-        }
-        
-        return Color(white: 0.22)
-    }
+
 }
 
 #Preview {

@@ -9,8 +9,7 @@ var PreviewPager: some View {
 private struct DashboardSamplePreview: View {
     @State private var pages: [HealthInterface]
     @State private var selectedPage: HealthInterface?
-    @State private var todayPageMode: PagerSelection? = .first
-    @State private var ignoreChanges = false
+    @State private var todayPageMode: PagerSelection = .first
     @State private var weightModel: WeightDataViewModel
     @State private var streak: Streak
 
@@ -60,9 +59,10 @@ private struct DashboardSamplePreview: View {
                         Card(level: .clear, innerPadding: 0, subtitle: { EmptyView() }) {
                             WeekBalanceGraph(
                                 DataPoints: pages,
-                                Pages: $pages,
-                                selectedPage: $selectedPage,
-                                ignoreChanges: $ignoreChanges
+                                selectedDay: selectedPage?.id ?? Calendar.current.startOfDay(for: .now),
+                                selectDay: { day in
+                                    selectedPage = pages.first { $0.id == day }
+                                }
                             )
                             .padding(.horizontal, 12)
                         }

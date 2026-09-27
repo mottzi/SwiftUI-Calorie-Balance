@@ -1,50 +1,47 @@
 import SwiftUI
 import Observation
 
+@MainActor
 @Observable
 /// Consecutive past days that meet the selected energy balance goal.
-class Streak {
+final class Streak {
+    @ObservationIgnored private let repository: HKRepository
+    @ObservationIgnored private let settings: Settings
+    @ObservationIgnored private var requestID = 0
+
     var streaks: Int = 0
     var showStreaksView: Bool = true
+
+    init(repository: HKRepository = .shared, settings: Settings = .shared) {
+        self.repository = repository
+        self.settings = settings
+    }
     
     /// Recounts goal days from yesterday until a day fails or the limit is reached.
     func updateStreaks() async {
+
+        requestID += 1
+        let currentRequest = requestID
+        let goal = settings.balanceGoal
+        let isLossGoal = settings.weightGoal == .lose
         var streak = 0
         var date = Date.now.yesterday
-        var dataInterface: HealthInterface
-        
-        while true {
-            if streak > 200 { break }
-            
-            dataInterface = HealthInterface(HealthData.empty(for: date))
-            await dataInterface.updateMetrics()
-            
-            if isGoalReached(data: dataInterface.sample) {
-                streak += 1
-                date = date.yesterday
-            } else {
-                break
-            }
+
+        while streak < 200 {
+            // stop if another count replaced this one during the HealthKit query
+            guard !Task.isCancelled, currentRequest == requestID else { return }
+            let data = await repository.fetchDailySnapshot(for: date, settings: settings)
+            guard !Task.isCancelled, currentRequest == requestID else { return }
+            guard data.consumed > 0 else { break }
+            guard isLossGoal ? data.balanceNow >= goal : data.balanceNow <= -goal else { break }
+            streak += 1
+            date = date.yesterday
         }
-        
-        self.updateStreaks(to: streak)
+
+        guard !Task.isCancelled, currentRequest == requestID else { return }
+        streaks = streak
     }
 
+    /// Shows or hides the streak value.
     func toggleStreaksView() { withAnimation(.snappy) { showStreaksView.toggle() } }
-}
-
-extension Streak {
-
-    private func isGoalReached(data: HealthData) -> Bool {
-        if data.consumed <= 0 { return false }
-        
-        if Settings.shared.weightGoal == .lose {
-            return data.balanceMidnight >= Int(Settings.shared.balanceGoal)
-        } else {
-            return data.balanceMidnight <= -Int(Settings.shared.balanceGoal)
-        }
-    }
-
-    private func updateStreaks(to newStreaks: Int) { streaks = newStreaks }
-
 }

@@ -1,8 +1,9 @@
 import SwiftUI
 
+@MainActor
 @Observable
 /// Macro slider widths and saved goal ratios.
-class HSlider {
+final class HSlider {
     var carbsWidthLast: CGFloat = 0
     var fatsWidthLast: CGFloat = 0
     var protsWidthLast: CGFloat = 0
@@ -14,19 +15,9 @@ class HSlider {
     var minSegmentRatio: CGFloat = 0.1
     var snapTo = 0.05
 
-    @MainActor
     /// Updates macro weight goals from the current energy budget and ratios.
-    func updateMacroWeights() async {
-        var maxEnergy = 0
-
-        if Settings.shared.dataSource == .apple {
-            Settings.shared.showResting = await HKRepository.shared.cumDataWeek(fetch: .basalEnergyBurned, for: .now)
-            Settings.shared.showActive = await HKRepository.shared.cumDataWeek(fetch: .activeEnergyBurned, for: .now)
-        }
-        
-        maxEnergy = Settings.shared.maxEatingEnergy()
-
-
+    func updateMacroWeights() {
+        let maxEnergy = Settings.shared.maxEatingEnergy()
         Settings.shared.carbsGoal = ratioToWeight(
             maxEatingEnergy: maxEnergy,
             ratio: Settings.shared.carbsRatio,
@@ -162,16 +153,31 @@ struct MacroSlider: View {
                 // use appsotrage ratio for control width init
                 SliderData.ratioToWidth(maxSlider)
                 
-                Task { await SliderData.updateMacroWeights() }
+                SliderData.updateMacroWeights()
             }
             .onChange(of: AppSettings.weightGoal) {
-                Task { await SliderData.updateMacroWeights() }
+                SliderData.updateMacroWeights()
             }
             .onChange(of: AppSettings.dataSource) {
-                Task { await SliderData.updateMacroWeights() }
+                SliderData.updateMacroWeights()
             }
             .onChange(of: AppSettings.energyUnit) {
-                Task { await SliderData.updateMacroWeights() }
+                SliderData.updateMacroWeights()
+            }
+            .onChange(of: AppSettings.showActive) {
+                SliderData.updateMacroWeights()
+            }
+            .onChange(of: AppSettings.showResting) {
+                SliderData.updateMacroWeights()
+            }
+            .onChange(of: AppSettings.customCalActive) {
+                SliderData.updateMacroWeights()
+            }
+            .onChange(of: AppSettings.customCalPassive) {
+                SliderData.updateMacroWeights()
+            }
+            .onChange(of: AppSettings.balanceGoal) {
+                SliderData.updateMacroWeights()
             }
         }
         .frame(height: 40)
@@ -229,7 +235,7 @@ extension MacroSlider {
                 SliderData.protsWidth = widthNew
                 
                 SliderData.widthToRatio(maxSlider)
-                Task { await SliderData.updateMacroWeights() }
+                SliderData.updateMacroWeights()
                 
             }
             .onEnded { _ in
@@ -238,7 +244,7 @@ extension MacroSlider {
                 SliderData.protsWidthLast = SliderData.protsWidth
 
                 SliderData.widthToRatio(maxSlider)
-                Task { await SliderData.updateMacroWeights() }
+                SliderData.updateMacroWeights()
             }
     }
     
@@ -288,7 +294,7 @@ extension MacroSlider {
                 SliderData.carbsWidth = widthNew
                 SliderData.widthToRatio(maxSlider)
                 
-                Task { await SliderData.updateMacroWeights() }
+                SliderData.updateMacroWeights()
             }
             .onEnded { value in
                 SliderData.carbsWidthLast = SliderData.carbsWidth
@@ -297,7 +303,7 @@ extension MacroSlider {
                 
                 // translate raw ui-element data to macro ratios
                 SliderData.widthToRatio(maxSlider)
-                Task { await SliderData.updateMacroWeights() }
+                SliderData.updateMacroWeights()
             }
         
         return r

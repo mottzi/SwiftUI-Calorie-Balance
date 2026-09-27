@@ -11,7 +11,6 @@ struct SettingsPage: View {
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.scenePhase) var scenePhase
 
     @FocusState private var focusedField: Field?
 
@@ -21,8 +20,6 @@ struct SettingsPage: View {
     @State private var seedResultMessage = ""
     #endif
 
-    @Environment(HSlider.self) private var SliderData
-    // @State private var SliderData = HSlider()
     
     var body: some View {
         ZStack {
@@ -46,12 +43,7 @@ struct SettingsPage: View {
                             .fontWeight(.black)
                             .foregroundStyle(LinearGradient(colors: [Color("TextColor"), Color("TextColor").opacity(0.5)], startPoint: .top, endPoint: .bottom))
 
-                        Button {
-                            if let url = URL(string: "https://apps.apple.com/us/app/count-kcal/id6476797015?action=write-review"),
-                               UIApplication.shared.canOpenURL(url) {
-                                UIApplication.shared.open(url)
-                            }
-                        } label: {
+                        Link(destination: URL(string: "https://apps.apple.com/us/app/count-kcal/id6476797015?action=write-review")!) {
                             VStack(spacing: 4) {
                                 HStack(spacing: 4) {
                                     Text("Rate us on the")
@@ -100,12 +92,7 @@ struct SettingsPage: View {
                         .padding(.bottom, 6)
                 
                     HStack(spacing: 24) {
-                        Button {
-                            if let url = URL(string: "twitter://user?screen_name=BerkenSayilir"),
-                               UIApplication.shared.canOpenURL(url) {
-                                UIApplication.shared.open(url)
-                            }
-                        } label: {
+                        Link(destination: URL(string: "https://x.com/BerkenSayilir")!) {
                             HStack(spacing: 3) {
                                 Text("Contact")
                                     .font(.caption)
@@ -130,12 +117,7 @@ struct SettingsPage: View {
                         }
                         .buttonStyle(.plain)
                         
-                        Button {
-                            if let url = URL(string: "https://count.mottzi.de/help"),
-                               UIApplication.shared.canOpenURL(url) {
-                                UIApplication.shared.open(url)
-                            }
-                        } label: {
+                        Link(destination: URL(string: "https://count.mottzi.de/help")!) {
                             HStack(spacing: 3) {
                                 Text("Support")
                                     .font(.caption)
@@ -168,6 +150,8 @@ struct SettingsPage: View {
             .sendContextOnChange(of: AppSettings.fatsGoal)
             .sendContextOnChange(of: AppSettings.proteinGoal)
             .sendContextOnChange(of: AppSettings.weightGoal)
+            .sendContextOnChange(of: AppSettings.energyUnit)
+            .sendContextOnChange(of: AppSettings.weightUnit)
             .sendContextOnChange(of: AppSettings.dataSource)
             .sendContextOnChange(of: AppSettings.consumedColor)
             .sendContextOnChange(of: AppSettings.burnedColor)

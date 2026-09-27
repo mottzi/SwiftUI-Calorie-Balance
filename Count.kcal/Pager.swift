@@ -1,16 +1,11 @@
 import SwiftUI
-import Observation
 import WidgetKit
 import StoreKit
 
 /// Daily dashboard with calendar, streak, and settings controls.
 struct Pager: View {
-    @State private var firstLaunch = Date.now
-
-    @State private var Pages: [HealthInterface]
-    @State private var selectedPage: HealthInterface?
-    @State private var ignoreChanges: Bool = false
-    @State private var todayPageMode: PagerSelection? = .first
+    @State private var navigation: DayPager
+    @State private var todayPageMode: PagerSelection = .first
     
     @State private var showCalendar: Bool = false
     @State private var currentMonth: Date = .now
@@ -19,27 +14,15 @@ struct Pager: View {
 
     @Environment(WeightDataViewModel.self) private var WeightViewModel
     @Environment(Streak.self) private var streak
-    @Environment(\.scenePhase) var scenePhase
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.requestReview) private var requestReview
     
     @State private var SliderData = HSlider()
+    @State private var manualRefresh = 0
+    @State private var calendarRefresh = 0
     
     init(lb: Int, tb: Int) {
-        var pastPresentData: [HealthInterface] = []
-
-        for i in (1...lb).reversed() {
-            pastPresentData.append(HealthInterface(.empty(for: .now.subtractDays(i))))
-        }
-
-        pastPresentData.append(HealthInterface(.empty(for: .now)))
-        
-        var allData: [HealthInterface] = pastPresentData.map { HealthInterface($0.sample/*.copy()*/) }
-
-        for i in (1...tb) {
-            allData.append(HealthInterface(.empty(for: .now.addDays(i))))
-        }
-
-        self._Pages = State(initialValue: allData)
+        navigation = DayPager(past: lb, future: tb)
     }
 
     var body: some View {
@@ -52,26 +35,21 @@ struct Pager: View {
                     if AppSettings.isSettingsInputValid {
                         if showCalendar {
                             CDatePicker(
-                                Pages: $Pages,
-                                selectedPage: $selectedPage,
-                                ignoreChanges: $ignoreChanges,
-                                currentMonth: $currentMonth
+                                currentMonth: $currentMonth,
+                                navigation: navigation,
+                                sceneActive: scenePhase == .active,
+                                refreshRevision: calendarRefresh,
+                                selectDay: selectDay
                             )
                         }
                         
                         if streak.showStreaksView {
                             Card(level: .clear, innerPadding: 0, subtitle: { EmptyView() }) {
                                 WeekBalanceGraph(
-                                    DataPoints: FirstPages,
-                                    Pages: $Pages,
-                                    selectedPage: $selectedPage,
-                                    ignoreChanges: $ignoreChanges
+                                    DataPoints: navigation.weekPages,
+                                    selectedDay: navigation.selectedDay,
+                                    selectDay: selectDay
                                 )
-                                    .task {
-                                        for page in FirstPages {
-                                            await page.updateMetrics(cache: false)
-                                        }
-                                    }
                                     .padding(.horizontal, 12)
                             }
                             .padding(.bottom, 15)
@@ -79,11 +57,11 @@ struct Pager: View {
                         
                         ScrollView(.horizontal) {
                             LazyHStack(spacing: 0) {
-                                ForEach(Pages, id: \.self) {
+                                ForEach(navigation.pages, id: \.id) {
                                     Dashboard(todayPageMode: $todayPageMode)
                                         .containerRelativeFrame(.horizontal, count: 1, span: 1, spacing: 10.0)
                                         .environment($0)
-                                        .id($0)
+                                        .id($0.id)
                                 }
                             }
                             .scrollTargetLayout()
@@ -91,14 +69,9 @@ struct Pager: View {
                         }
                         .scrollTargetBehavior(.paging)
                         .scrollIndicators(.hidden)
-                        .scrollPosition(id: $selectedPage)
+                        .scrollPosition(id: scrollDay)
                         
                         WeightCard()
-                        .onAppear {
-                            Task.detached(priority: .userInitiated) {
-                                await WeightViewModel.fetchData()
-                            }
-                        }
                     } else {
                         ContentUnavailableView(
                             "Calorie data incomplete",
@@ -114,40 +87,26 @@ struct Pager: View {
             .frame(maxHeight: .infinity)
             .onChange(of: scenePhase) { _, newPhase in
                 if newPhase == .active {
-                    let now = Date.now
-                    
-                    if !now.isSameDay(as: firstLaunch) {
-                        firstLaunch = now
-                        
-                        if let today = findPage(for: now) {
-                            withAnimation(.snappy) {
-                                selectedPage = today
-                            }
-                        }
-                    }
-                    
-                    Task.detached {
-                        await selectedPage?.updateMetrics(cache: false)
-                        await WeightViewModel.fetchData()
-                        await streak.updateStreaks()
-                        
-                        for page in await FirstPages {
-                            await page.updateMetrics(cache: false)
-                        }
-                        
-                        WidgetCenter.shared.reloadAllTimelines()
-                    }
+                    navigation.rolloverIfNeeded()
                 } else if newPhase == .inactive {
                     WidgetCenter.shared.reloadAllTimelines()
                 }
             }
-            .refreshable {
-                await selectedPage?.updateMetrics(cache: false)
-                await WeightViewModel.fetchData()
-                
-                for page in FirstPages {
-                    await page.updateMetrics(cache: false)
+            .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged)) { _ in
+                navigation.rolloverIfNeeded()
+            }
+            .onChange(of: navigation.selectedDay) { _, _ in
+                // extend the range without animating inserted pages
+                withTransaction(Transaction(animation: nil)) {
+                    navigation.ensureSelectionBuffer()
                 }
+            }
+            .task(id: selectedRefreshKey) { await refreshSelectedDay() }
+            .task(id: summaryRefreshKey) { await refreshSummary() }
+            .refreshable {
+                await refreshSelectedDay()
+                await refreshSummary()
+                calendarRefresh += 1
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -187,7 +146,6 @@ struct Pager: View {
                                 .fontDesign(.rounded)
                                 .fontWeight(.bold)
                                 .foregroundStyle(Color("TextColor"))
-                                .task { await streak.updateStreaks() }
                         }
                     }
                     .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
@@ -210,73 +168,90 @@ struct Pager: View {
                 }
             }
             .safeAreaPadding(.top, 10)
-            .onAppear {
-                selectedPage = findPage(for: .now)
-                
-                Task {
-                    AppSettings.showResting = await HKRepository.shared.cumDataWeek(fetch: .basalEnergyBurned, for: .now)
-                    AppSettings.showActive = await HKRepository.shared.cumDataWeek(fetch: .activeEnergyBurned, for: .now)
-                }
-            }
-            .onChange(of: selectedPage) { oldPage, newPage in
-                guard let newPage else { return }
-                
-                // data updates on background "thread"
-                Task.detached(priority: .userInitiated) {
-                    // if selected page is today
-                    if newPage.isTodayPage {
-                        // fetch data of newly selected today page
-                        await newPage.updateMetrics(cache: false)
-                        
-                        // reload widgets.
-                        WidgetCenter.shared.reloadAllTimelines()
-                    } else {
-                        // restore cached data of newly selected page
-                        await newPage.updateMetrics(cache: false)
-                    }
-                    
-                    // reset data of old page, data will reload (from cache) on next selection, ensures load animations
-                    // await oldPage?.clearData()
-                }
-                
-                // manipulation of Pages
-                if !ignoreChanges {
-                    if let lastPage = Pages.last, newPage == lastPage {
-                        Pages.append(HealthInterface(.empty(for: newPage.sample.date.tomorrow)))
-                    } else if let firstPage = Pages.first, newPage == firstPage {
-                        Pages.insert(HealthInterface(.empty(for: newPage.sample.date.yesterday)), at: 0)
-                    }
-                } else {
-                    ignoreChanges = false
-                }
-            }
         }
     }
 }
 
 extension Pager {
 
-    func findPage(for date: Date) -> HealthInterface? {
-        Pages.first { $0.sample.date.isSameDay(as: date) }
+    private var selectedPage: HealthInterface? { navigation.page(for: navigation.selectedDay) }
+
+    private var scrollDay: Binding<Date?> {
+        Binding(
+            get: { navigation.selectedDay },
+            set: { day in
+                guard let day else { return }
+                navigation.selectedDay = Calendar.current.startOfDay(for: day)
+            }
+        )
     }
-    
-    var FirstPages: [HealthInterface] {
-        var pages: [HealthInterface] = []
-        let current = Date.now
-        
-        for i in (0...5).reversed() {
-            guard let p = findPage(for: current.subtractDays(i)) else { continue }
-            pages.append(p)
+
+    private var selectedRefreshKey: DayRefreshKey {
+        DayRefreshKey(
+            day: navigation.selectedDay,
+            active: scenePhase == .active,
+            source: AppSettings.dataSource.rawValue,
+            unit: AppSettings.energyUnit.rawValue,
+            activeGoal: AppSettings.customCalActive,
+            passiveGoal: AppSettings.customCalPassive,
+            revision: manualRefresh
+        )
+    }
+
+    private var summaryRefreshKey: SummaryRefreshKey {
+        SummaryRefreshKey(
+            today: navigation.weekPages.last?.id ?? Calendar.current.startOfDay(for: .now),
+            active: scenePhase == .active,
+            source: AppSettings.dataSource.rawValue,
+            unit: AppSettings.energyUnit.rawValue,
+            weightUnit: AppSettings.weightUnit.rawValue,
+            weightGoal: AppSettings.weightGoal.rawValue,
+            balanceGoal: AppSettings.balanceGoal,
+            activeGoal: AppSettings.customCalActive,
+            passiveGoal: AppSettings.customCalPassive,
+            revision: manualRefresh
+        )
+    }
+
+    /// Refreshes only the day being viewed; cancellation keeps rapid swipes cheap.
+    private func refreshSelectedDay() async {
+        guard scenePhase == .active, let selectedPage else { return }
+        await selectedPage.updateMetrics()
+        guard !Task.isCancelled else { return }
+        if selectedPage.id == Calendar.current.startOfDay(for: .now) {
+            WidgetCenter.shared.reloadAllTimelines()
         }
-        
-        return pages
+    }
+
+    /// Refreshes Today summary data when its inputs change, independent of historical swipes.
+    private func refreshSummary() async {
+        guard scenePhase == .active else { return }
+        await AppSettings.updateShow()
+        guard !Task.isCancelled else { return }
+        for page in navigation.weekPages where page.id != navigation.selectedDay {
+            guard !Task.isCancelled else { return }
+            await page.updateMetrics()
+        }
+        guard !Task.isCancelled else { return }
+        await WeightViewModel.fetchData()
+        await streak.updateStreaks()
+    }
+
+    /// Animates navigation to the selected calendar day.
+    private func selectDay(_ date: Date) {
+        let day = Calendar.current.startOfDay(for: date)
+        // prepare scroll targets without animating inserted pages
+        withTransaction(Transaction(animation: nil)) {
+            navigation.ensurePagesForSelection(day)
+        }
+        withAnimation(.snappy) { navigation.selectedDay = day }
     }
 
     // The date describes the selected page; it does not share a glass background
     // with the adjacent day/night action. Keep the development shortcut available.
     private var selectedDateLabel: some View {
         #if !DEBUG
-        Text(selectedPage?.sample.date.relative ?? "")
+        Text(selectedPage?.id.relative ?? "")
             .fontWeight(.semibold)
             .fontDesign(.rounded)
             .foregroundColor(Color("TextColor"))
@@ -294,7 +269,7 @@ extension Pager {
                 WeightViewModel.randomizeWeightData(start: start, end: end)
             }
         } label: {
-            Text(selectedPage?.sample.date.relative ?? "")
+            Text(selectedPage?.id.relative ?? "")
                 .fontWeight(.semibold)
                 .fontDesign(.rounded)
                 .foregroundColor(Color("TextColor"))
@@ -306,7 +281,7 @@ extension Pager {
     }
 
     private var isTodaySelected: Bool {
-        selectedPage?.isTodayPage ?? false
+        navigation.selectedDay == Calendar.current.startOfDay(for: .now)
     }
     
     private var calendarButton: some View {
@@ -332,10 +307,9 @@ extension Pager {
                 .onDisappear {
                     AppSettings.closedSettings += 1
                     
+                    manualRefresh += 1
+                    calendarRefresh += 1
                     Task {
-                        await selectedPage?.updateMetrics()
-                        await WeightViewModel.fetchData()
-                        
                         #if !DEBUG
                         if AppSettings.isSettingsInputValid && AppSettings.closedSettings >= 1 {
                             try? await Task.sleep(for: .seconds(0.2))
@@ -356,29 +330,14 @@ extension Pager {
     private var todayButton: some View {
         Button {
             if !isTodaySelected {
-                let now = Date()
-                
-                if let todayPage = findPage(for: now) {
-                    var t = Transaction(animation: .snappy)
-                    t.scrollToToday = true
-                    
-                    withTransaction(t) {
-                        selectedPage = todayPage
-                    }
-                    
-                    if !Calendar.current.isDate(currentMonth, equalTo: now, toGranularity: .month) {
-                        withAnimation(.snappy) {
-                            currentMonth = now
-                        }
-                    }
+                let now = Date.now
+                selectDay(now)
+                if !Calendar.current.isDate(currentMonth, equalTo: now, toGranularity: .month) {
+                    withAnimation(.snappy) { currentMonth = now }
                 }
             } else {
                 withAnimation(.snappy) {
-                    if (todayPageMode ?? .first) == .first {
-                        todayPageMode = .second
-                    } else {
-                        todayPageMode = .first
-                    }
+                    todayPageMode = todayPageMode == .first ? .second : .first
                 }
             }
         } label: {
@@ -395,7 +354,7 @@ extension Pager {
         Image(
             systemName: !isTodaySelected
                 ? "arrow.turn.down.left"
-                : (todayPageMode ?? .first) == .first ? "sun.min.fill" : "moon.stars.fill"
+                : todayPageMode == .first ? "sun.min.fill" : "moon.stars.fill"
         )
         .foregroundColor(Color("TextColor"))
         .contentTransition(.symbolEffect(.replace))
@@ -418,4 +377,29 @@ extension View {
             self
         }
     }
+}
+
+/// Values that can change the selected day's HealthKit result.
+private struct DayRefreshKey: Hashable {
+    let day: Date
+    let active: Bool
+    let source: Int
+    let unit: String
+    let activeGoal: Int
+    let passiveGoal: Int
+    let revision: Int
+}
+
+/// Inputs for Today charts, streak, and weight summaries.
+private struct SummaryRefreshKey: Hashable {
+    let today: Date
+    let active: Bool
+    let source: Int
+    let unit: String
+    let weightUnit: String
+    let weightGoal: Int
+    let balanceGoal: Int
+    let activeGoal: Int
+    let passiveGoal: Int
+    let revision: Int
 }

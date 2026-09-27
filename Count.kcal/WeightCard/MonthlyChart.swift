@@ -10,7 +10,7 @@ struct MonthlyChart: View {
         if WeightViewModel.dataLoaded {
             Chart {
                 RuleMark(y: .value("Value", WeightViewModel.weightAvg30))
-                    .foregroundStyle(getTrendColor(.monthly).opacity(0.8))
+                    .foregroundStyle(trendColor.opacity(0.8))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [2, 3]))
                 
                 RectangleMark(
@@ -20,7 +20,7 @@ struct MonthlyChart: View {
                 .foregroundStyle(Color("SecondaryTextColor").opacity(0.1))
                 
                 let gradient = LinearGradient(
-                    stops: [.init(color: getTrendColor(.monthly), location: 0.5), .init(color: Color.clear, location: 1.5)],
+                    stops: [.init(color: trendColor, location: 0.5), .init(color: Color.clear, location: 1.5)],
                     startPoint: .trailing,
                     endPoint: .leading
                 )
@@ -71,45 +71,12 @@ struct MonthlyChart: View {
         }
     }
     
-    func getTrendColor(_ page: WeightPage) -> Color {
-        if page == .weekly {
-            if !WeightViewModel.dataLoaded {
-                return Color(white: 0.22)
-            }
-            
-            guard let lastWeight = WeightViewModel.lastWeightValue(.weekly)/*,
-                  let firstWeight = WeightViewModel.firstWeightValue(.weekly)*/
-            else {
-                return Color(white: 0.22)
-            }
-            
-            if lastWeight > WeightViewModel.weightAvg7 {
-                return AppSettings.consumedColor
-            } else if lastWeight < WeightViewModel.weightAvg7 {
-                return AppSettings.burnedColor
-            }
-        } else if page == .monthly {
-//            print("getting trend color")
-            
-            if !WeightViewModel.dataLoaded {
-                return Color(white: 0.22)
-            }
-            
-            guard let lastWeight = WeightViewModel.lastWeightValue(.monthly)/*,
-                  let firstWeight = WeightViewModel.firstWeightValue(.monthly)*/
-            else {
-                return Color(white: 0.22)
-            }
-            
-//            print("lastWeight: \(lastWeight), avgWeight: \(WeightViewModel.weightAvg30)")
-            
-            if lastWeight > WeightViewModel.weightAvg30 {
-                return AppSettings.consumedColor
-            } else if lastWeight < WeightViewModel.weightAvg30 {
-                return AppSettings.burnedColor
-            }
+    /// Uses the period trend to select the existing chart color.
+    private var trendColor: Color {
+        switch WeightViewModel.trend(for: .monthly) {
+            case .orderedAscending: AppSettings.burnedColor
+            case .orderedDescending: AppSettings.consumedColor
+            default: Color(white: 0.22)
         }
-        
-        return Color(white: 0.22)
     }
 }

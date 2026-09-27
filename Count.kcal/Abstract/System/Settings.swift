@@ -32,15 +32,30 @@ final class Settings: ObservableObject {
     
     @AppStorage("stepsGoal", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")) public var stepsGoal: Int = 10000
 
-    private init() {}
+    private init() {
+
+        // apply the locale default only before the user has saved a weight unit
+        if UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")?.object(forKey: "weightUnit") == nil {
+            setDefaultWeightUnit()
+        }
+    }
 
     static public let shared = Settings()
 
     @MainActor
     /// Updates the active and resting energy estimates from HealthKit.
     public func updateShow() async {
-        self.showResting = await HKRepository.shared.cumDataWeek(fetch: .basalEnergyBurned, for: .now)
-        self.showActive = await HKRepository.shared.cumDataWeek(fetch: .activeEnergyBurned, for: .now)
+
+        let unit = energyUnit
+        let date = Date.now
+        async let resting = HKRepository.shared.cumDataWeek(fetch: .basalEnergyBurned, for: date, energyUnit: unit)
+        async let active = HKRepository.shared.cumDataWeek(fetch: .activeEnergyBurned, for: date, energyUnit: unit)
+        let estimates = await (resting, active)
+
+        // discard estimates if the user changed units during the queries
+        guard !Task.isCancelled, energyUnit == unit else { return }
+        showResting = estimates.0
+        showActive = estimates.1
     }
 
     static public let baseSaturation: Double = 0.8

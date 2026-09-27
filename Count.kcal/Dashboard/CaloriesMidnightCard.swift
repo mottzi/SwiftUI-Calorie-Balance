@@ -1,22 +1,8 @@
 import SwiftUI
 
-private struct MyTransactionKey: TransactionKey {
-    static let defaultValue = false
-}
-
-extension Transaction {
-    var scrollToToday: Bool {
-        get { self[MyTransactionKey.self] }
-        set { self[MyTransactionKey.self] = newValue }
-    }
-}
-
+/// Swipeable Now and Midnight graphs with one persistent mode selection.
 struct CaloriesMidnightCard: View {
-    @EnvironmentObject private var AppSettings: Settings
-
-    @Environment(HealthInterface.self) private var DataViewModel
-    
-    @Binding var todayPageMode: PagerSelection?
+    @Binding var todayPageMode: PagerSelection
     
     var body: some View {
         ScrollView(.horizontal) {
@@ -31,14 +17,25 @@ struct CaloriesMidnightCard: View {
             }
             .scrollTargetLayout()
         }
-//        .scrollDisabled(true)
         .scrollTargetBehavior(.paging)
         .scrollIndicators(.hidden)
-        .scrollPosition(id: $todayPageMode)
-        .transaction {
-            if $0.scrollToToday {
-                $0.animation = .none
-            }
+        .scrollPosition(id: Binding(
+            get: { todayPageMode },
+            set: { if let mode = $0 { todayPageMode = mode } }
+        ))
+        .initialModeAnchor(todayPageMode)
+    }
+}
+
+extension View {
+
+    @ViewBuilder
+    /// Restores the selected mode when SwiftUI recreates the lazy Today card.
+    fileprivate func initialModeAnchor(_ mode: PagerSelection) -> some View {
+        if #available(iOS 18, *) {
+            defaultScrollAnchor(mode == .second ? .trailing : .leading, for: .initialOffset)
+        } else {
+            defaultScrollAnchor(mode == .second ? .trailing : .leading)
         }
     }
 }
@@ -54,4 +51,3 @@ struct CaloriesMidnightCard: View {
         }
     }
 }
-

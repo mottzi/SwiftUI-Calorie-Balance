@@ -37,7 +37,7 @@ struct BarBalanceGraphWatchMidnightTop: View
     
     let geometry: GeometryProxy
 
-    var burnedActive: Int { AppSettings.dataSource == .apple ? DataViewModel.sample.burnedActive : DataViewModel.sample.burnedActive7 }
+    var burnedActive: Int { DataViewModel.sample.burnedActiveMidnight }
     
     var calBurnedMidnightGraphTotal: Int { max(burnedActive + DataViewModel.sample.burnedPassive + DataViewModel.sample.burnedPassiveRemaining, DataViewModel.sample.consumed) }
     
@@ -122,7 +122,7 @@ struct BarBalanceGraphWatchMidnightBottom: View
     
     let geometry: GeometryProxy
     
-    var burnedActive: Int { AppSettings.dataSource == .apple ? DataViewModel.sample.burnedActive : DataViewModel.sample.burnedActive7 }
+    var burnedActive: Int { DataViewModel.sample.burnedActiveMidnight }
 
     var calBurnedMidnightGraphTotal: Int { max(burnedActive + DataViewModel.sample.burnedPassive + DataViewModel.sample.burnedPassiveRemaining, DataViewModel.sample.consumed) }
 

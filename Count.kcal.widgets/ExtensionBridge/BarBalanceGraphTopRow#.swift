@@ -65,7 +65,7 @@ struct BarBalanceGraphTopRow: View
                     LinearGradient(colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor], startPoint: scheme == .dark ? .bottom : .top, endPoint: scheme == .dark ? .top : .bottom)
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                 }
-                .cornerRadius(6, corners: .topRight)
+                .clipShape(UnevenRoundedRectangle(topTrailingRadius: 6, style: .circular))
                 .overlay
                 {
                     ViewThatFits
@@ -109,26 +109,5 @@ struct BarBalanceGraphTopRow: View
         .drawingGroup()
 //        .geometryGroup()
 //        .compositingGroup()
-    }
-}
-
-extension View
-{
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View
-    {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
-    }
-}
-
-struct RoundedCorner: Shape
-{
-    var radius: CGFloat = .infinity
-    var corners: UIRectCorner = .allCorners
-
-    func path(in rect: CGRect) -> Path
-    {
-        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-        
-        return Path(path.cgPath)
     }
 }

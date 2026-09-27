@@ -118,7 +118,7 @@ struct BarBalanceGraphMidnight: View {
                     )
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                 }
-                .cornerRadius(6, corners: .topRight)
+                .clipShape(UnevenRoundedRectangle(topTrailingRadius: 6, style: .circular))
                 .overlay {
                     ViewThatFits {
                         Text("\(burnedPassiveRemaining)").graphLabelStyle(scheme)
@@ -182,7 +182,7 @@ struct BarBalanceGraphMidnight: View {
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                 }
                 .brightness(level: .primary)
-                .cornerRadius(6, corners: .bottomRight)
+                .clipShape(UnevenRoundedRectangle(bottomTrailingRadius: 6, style: .circular))
                 .overlay {
                     ViewThatFits {
                         Text("\(consumed)").graphLabelStyle(scheme)

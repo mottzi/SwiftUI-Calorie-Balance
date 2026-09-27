@@ -39,7 +39,7 @@ struct BarBalanceGraphBottomRow: View {
                     )
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                 }
-                .cornerRadius(6, corners: .bottomRight)
+                .clipShape(UnevenRoundedRectangle(bottomTrailingRadius: 6, style: .circular))
                 .overlay {
                     if labels {
                         ViewThatFits {

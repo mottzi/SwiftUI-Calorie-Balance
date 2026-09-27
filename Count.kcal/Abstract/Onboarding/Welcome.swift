@@ -3,7 +3,7 @@ import SwiftUI
 struct OnboardingWelcome: View {
     var body: some View {
         HStack(alignment: .bottom, spacing: 16) {
-            Image(uiImage: UIImage(named: "icon") ?? UIImage())
+            Image("icon")
                 .resizable()
                 .frame(width: 70, height: 70)
                 .clipShape(.rect(cornerRadius: 13))

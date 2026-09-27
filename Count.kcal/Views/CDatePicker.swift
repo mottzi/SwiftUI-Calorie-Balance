@@ -1,18 +1,19 @@
 import SwiftUI
 
-/// Calendar that selects a day and adds visible dates to page navigation.
+/// Calendar that browses months without extending the dashboard's swipe range.
 struct CDatePicker: View {
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
-    @Binding var Pages: [HealthInterface]
-    @Binding var selectedPage: HealthInterface?
-    
-    @Binding var ignoreChanges: Bool
     @Binding var currentMonth: Date
-    
-    @State private var days: [DayCell] = []
+
+    @State private var days: [HealthInterface] = []
+
+    let navigation: DayPager
+    let sceneActive: Bool
+    let refreshRevision: Int
+    let selectDay: (Date) -> Void
     
     var body: some View {
         let columns = Array(repeating: GridItem(.flexible()), count: 7)
@@ -63,8 +64,8 @@ struct CDatePicker: View {
             .padding(.trailing, 4)
             
             LazyVGrid(columns: columns, spacing: spacing + 1) {
-                ForEach(weekdays, id: \.self) { day in
-                    Text(verbatim: day)
+                ForEach(0..<weekdays.count, id: \.self) { index in
+                    Text(verbatim: weekdays[index])
                         .font(.callout)
                         .fontWeight(.medium)
                         .fontDesign(.rounded)
@@ -73,24 +74,13 @@ struct CDatePicker: View {
                         .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                 }
                 
-                ForEach(days, id: \.self) { d in
-                    VStack(spacing: 2) {
-                        Text(verbatim: "\(d.date.day)")
-                            .font(.callout)
-                            .opacity(d.date.isSameMonth(as: currentMonth) ? 1 : 0.7)
-                            .fontWeight(d.date.isSameMonth(as: currentMonth) ? .semibold : .medium)
-                            .dynamicTypeSize(...DynamicTypeSize.xxLarge)
-                        
-                        Circle()
-                            .fill(d.vm.sample.balanceNow > 0 && d.vm.sample.consumed > 0 ? AppSettings.burnedColor.gradient : d.vm.sample.balanceNow < 0 && d.vm.sample.consumed > 0 ? AppSettings.consumedColor.gradient : AppSettings.getGraphEmptyColor(scheme).brighten(-0.1).gradient)
-                            .frame(width: 7)
-                            .brightness(level: scheme == .dark ? .primary : .none)
-                    }
+                ForEach(days) { d in
+                    CalendarDayLabel(day: d, isCurrentMonth: d.id.isSameMonth(as: currentMonth))
                     .offset(y: -1)
                     .frame(width: width, height: width)
                     .background {
                         Group {
-                            if days.first! == d {
+                            if days.first == d {
                                 UnevenRoundedRectangle(
                                     topLeadingRadius: 10,
                                     bottomLeadingRadius: 0,
@@ -98,13 +88,13 @@ struct CDatePicker: View {
                                     topTrailingRadius: 0,
                                     style: .circular
                                 )
-                                    .fill(getDayCellBackground(d: d.date))
+                                    .fill(getDayCellBackground(d: d.id))
                                     .stroke(
-                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)),
-                                        style: getDayCellStrokeStyle(d: d.date)
+                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.id)),
+                                        style: getDayCellStrokeStyle(d: d.id)
                                     )
-                                    .brightness(level: getDayCellBrightness(d: d.date))
-                            } else if days.last! == d {
+                                    .brightness(level: getDayCellBrightness(d: d.id))
+                            } else if days.last == d {
                                 UnevenRoundedRectangle(
                                     topLeadingRadius: 0,
                                     bottomLeadingRadius: 0,
@@ -112,12 +102,12 @@ struct CDatePicker: View {
                                     topTrailingRadius: 0,
                                     style: .circular
                                 )
-                                    .fill(getDayCellBackground(d: d.date))
+                                    .fill(getDayCellBackground(d: d.id))
                                     .stroke(
-                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)),
-                                        style: getDayCellStrokeStyle(d: d.date)
+                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.id)),
+                                        style: getDayCellStrokeStyle(d: d.id)
                                     )
-                                    .brightness(level: getDayCellBrightness(d: d.date))
+                                    .brightness(level: getDayCellBrightness(d: d.id))
                             } else if days.firstIndex(of: d) == 6 {
                                 UnevenRoundedRectangle(
                                     topLeadingRadius: 0,
@@ -126,12 +116,12 @@ struct CDatePicker: View {
                                     topTrailingRadius: 10,
                                     style: .circular
                                 )
-                                    .fill(getDayCellBackground(d: d.date))
+                                    .fill(getDayCellBackground(d: d.id))
                                     .stroke(
-                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)),
-                                        style: getDayCellStrokeStyle(d: d.date)
+                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.id)),
+                                        style: getDayCellStrokeStyle(d: d.id)
                                     )
-                                    .brightness(level: getDayCellBrightness(d: d.date))
+                                    .brightness(level: getDayCellBrightness(d: d.id))
                             } else if days.firstIndex(of: d) == days.count - 7 {
                                 UnevenRoundedRectangle(
                                     topLeadingRadius: 0,
@@ -140,20 +130,20 @@ struct CDatePicker: View {
                                     topTrailingRadius: 0,
                                     style: .circular
                                 )
-                                    .fill(getDayCellBackground(d: d.date))
+                                    .fill(getDayCellBackground(d: d.id))
                                     .stroke(
-                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)),
-                                        style: getDayCellStrokeStyle(d: d.date)
+                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.id)),
+                                        style: getDayCellStrokeStyle(d: d.id)
                                     )
-                                    .brightness(level: getDayCellBrightness(d: d.date))
+                                    .brightness(level: getDayCellBrightness(d: d.id))
                             } else {
                                 Rectangle()
-                                    .fill(getDayCellBackground(d: d.date))
+                                    .fill(getDayCellBackground(d: d.id))
                                     .stroke(
-                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.date)),
-                                        style: getDayCellStrokeStyle(d: d.date)
+                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.id)),
+                                        style: getDayCellStrokeStyle(d: d.id)
                                     )
-                                    .brightness(level: getDayCellBrightness(d: d.date))
+                                    .brightness(level: getDayCellBrightness(d: d.id))
                             }
                         }
                         .transaction { transaction in
@@ -162,13 +152,7 @@ struct CDatePicker: View {
                     }
                     .contentShape(.rect)
                     .onTapGesture {
-                        ignoreChanges = true
-
-                        if let page = findPage(for: d.date) {
-                            withAnimation(.snappy) {
-                                selectedPage = page
-                            }
-                        }
+                        selectDay(d.id)
                     }
                    
                 }
@@ -181,60 +165,21 @@ struct CDatePicker: View {
         .foregroundStyle(Color("TextColor"))
         .fontDesign(.rounded)
         .geometryGroup()
-        .onChange(of: selectedPage) { o, n in
-            guard let n else { return }
-            
-            if n.sample.date < days.first!.date {
-                currentMonth = n.sample.date
-            } else if n.sample.date > days.last!.date.tomorrow {
-                currentMonth = n.sample.date
+        .onChange(of: navigation.selectedDay) { _, day in
+            guard let first = days.first?.id, let last = days.last?.id else { return }
+            if day < first || day > last {
+                currentMonth = day
             }
         }
-        .onChange(of: currentMonth, initial: true) { oldValue, newValue in
-            let firstDay = Calendar.current.date(from: DateComponents(year: newValue.year, month: newValue.month, day: 1))!.weekStartDate
-            let lastDay = newValue.lastDayOfMonth.weekEndDate
-                                    
-            var d: [DayCell] = []
-            
-            var currentDate = firstDay
-            
-            while currentDate <= lastDay {
-                let new = DayCell(date: currentDate, vm: HealthInterface(HealthData.empty(for: currentDate)))
-                d.append(new)
-                
-                currentDate = Calendar.current.date(byAdding: .day, value: 1, to: currentDate)!
-            }
-            
-            withAnimation(.snappy) {
-                days = d
-            }
-            
-            for d in days {
-                Task.detached {
-                    await d.vm.updateMetrics()
-                }
-            }
-            
-            // prepend days of calendar to Pages for navigation
-            if findPage(for: firstDay) == nil {
-                var nextDate = Pages[0].sample.date.yesterday
-                
-                while firstDay.yesterday < nextDate {
-                    Pages.insert(HealthInterface(.empty(for: nextDate)), at: 0)
-                    
-                    nextDate = nextDate.yesterday
-                }
-            }
-            
-            // append days of calendar to Pages for navigation
-            if findPage(for: lastDay) == nil {
-                var nextDate = Pages[Pages.count - 1].sample.date.tomorrow
-                
-                while !nextDate.isSameDay(as: lastDay.tomorrow.tomorrow) {
-                    Pages.append(HealthInterface(.empty(for: nextDate)))
-                    
-                    nextDate = nextDate.tomorrow
-                }
+        .task(id: calendarRefreshKey) {
+            let cells = navigation.calendarPages(for: currentMonth)
+            days = cells
+            guard sceneActive else { return }
+            let sharedDays = Set(navigation.weekPages.map(\.id) + [navigation.selectedDay])
+            for cell in cells {
+                guard !Task.isCancelled else { return }
+                guard !sharedDays.contains(cell.id) else { continue }
+                await cell.updateMetrics()
             }
         }
 
@@ -243,18 +188,22 @@ struct CDatePicker: View {
 
 extension CDatePicker {
 
-    func findPage(for date: Date) -> HealthInterface? {
-        Pages.first { $0.sample.date.isSameDay(as: date) }
+    private var calendarRefreshKey: CalendarRefreshKey {
+        CalendarRefreshKey(
+            month: currentMonth,
+            active: sceneActive,
+            source: AppSettings.dataSource.rawValue,
+            unit: AppSettings.energyUnit.rawValue,
+            activeGoal: AppSettings.customCalActive,
+            passiveGoal: AppSettings.customCalPassive,
+            revision: refreshRevision
+        )
     }
-    
+
     func isDaySelected(_ d: Date) -> Bool {
-        if let selectedPage, d.isSameDay(as: selectedPage.sample.date) {
-            return true
-        }
-        
-        return false
+        Calendar.current.startOfDay(for: d) == navigation.selectedDay
     }
-        
+
     var weekdays: [String] {
         return Calendar.current.shortWeekdaySymbolsLocalized
     }
@@ -293,10 +242,49 @@ extension CDatePicker {
 
 }
 
-struct DayCell: Identifiable, Hashable {
-    let id = UUID().uuidString
-    let date: Date
-    let vm: HealthInterface
+/// One date and its balance indicator, updated only by that day's health snapshot.
+private struct CalendarDayLabel: View {
+
+    @EnvironmentObject private var settings: Settings
+
+    @Environment(\.colorScheme) private var scheme
+
+    let day: HealthInterface
+    let isCurrentMonth: Bool
+
+    var body: some View {
+        VStack(spacing: 2) {
+            Text(verbatim: "\(day.id.day)")
+                .font(.callout)
+                .opacity(isCurrentMonth ? 1 : 0.7)
+                .fontWeight(isCurrentMonth ? .semibold : .medium)
+                .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+
+            Circle()
+                .fill(balanceColor.gradient)
+                .frame(width: 7)
+                .brightness(level: scheme == .dark ? .primary : .none)
+        }
+    }
+
+    private var balanceColor: Color {
+        guard day.sample.consumed > 0 else { return settings.getGraphEmptyColor(scheme).brighten(-0.1) }
+        if day.sample.balanceNow > 0 { return settings.burnedColor }
+        if day.sample.balanceNow < 0 { return settings.consumedColor }
+        return settings.getGraphEmptyColor(scheme).brighten(-0.1)
+    }
+
+}
+
+/// Inputs that affect visible calendar dots.
+private struct CalendarRefreshKey: Hashable {
+    let month: Date
+    let active: Bool
+    let source: Int
+    let unit: String
+    let activeGoal: Int
+    let passiveGoal: Int
+    let revision: Int
 }
 
 #Preview {

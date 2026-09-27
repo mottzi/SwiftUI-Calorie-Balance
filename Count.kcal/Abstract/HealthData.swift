@@ -1,7 +1,7 @@
 import Foundation
 
 /// Daily energy, nutrient, step, and calculated balance values.
-struct HealthData {
+struct HealthData: Equatable, Sendable {
     var date: Date
     var lastDataSync: Date?
     
@@ -18,9 +18,18 @@ struct HealthData {
     var fats: Int
     
     var steps: Int
+
+    /// Selects actual active energy for the midnight estimate.
+    var usesAppleActiveAtMidnight: Bool = true
     
     var balanceNow: Int { burnedPassive + burnedActive - consumed }
-    var balanceMidnight: Int { burnedPassive + burnedPassiveRemaining + (Settings.shared.dataSource == .apple ? burnedActive : burnedActive7) - consumed }
+
+    /// Active energy used by the midnight balance and graphs.
+    var burnedActiveMidnight: Int { usesAppleActiveAtMidnight ? burnedActive : burnedActive7 }
+
+    var balanceMidnight: Int {
+        burnedPassive + burnedPassiveRemaining + burnedActiveMidnight - consumed
+    }
     
     var burnedActiveRemaining: Int { max(burnedActive7 - burnedActive, 0) }
     var burnedPassiveRemaining: Int { max(burnedPassive7 - burnedPassive, 0) }

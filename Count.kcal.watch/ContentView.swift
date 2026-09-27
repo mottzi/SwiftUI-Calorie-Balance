@@ -1,18 +1,24 @@
 import SwiftUI
 import WidgetKit
 
+/// Watch dashboard with a shared daily snapshot and calorie display mode.
 struct ContentView: View
 {
     @EnvironmentObject private var AppSettings: Settings
     @Environment(\.scenePhase) private var scenePhase
-    @Namespace private var ring
     
-    @StateObject var Watch = Connectivity.shared
-    @State var Interface: HealthInterface
+    @StateObject private var Watch = Connectivity.shared
+    @State private var Interface: HealthInterface
 
-    @State private var firstLaunch = Date.now
+    @State private var refreshRevision = 0
+    @State private var healthAccessRequested = false
     @State private var tabSelection = 0
     @State private var modeSelection: GraphMode = .now
+
+    init(Interface: HealthInterface)
+    {
+        _Interface = State(initialValue: Interface)
+    }
     
     func toggleMode()
     {
@@ -90,25 +96,34 @@ struct ContentView: View
                 
             }
             .tabViewStyle(.verticalPage)
-            .task { await Interface.updateMetrics() }
+            .task {
+                // the watch has no onboarding flow, so request access before its first refresh
+                _ = await HKRepository.shared.requestPermission()
+                guard !Task.isCancelled else { return }
+                healthAccessRequested = true
+                refreshRevision += 1
+            }
+            .task(id: refreshRevision)
+            {
+                guard scenePhase == .active, healthAccessRequested else { return }
+                await Interface.updateMetrics()
+            }
             .onChange(of: Watch.lastReceivedSettingsContext)
             { _, newValue in
                 guard newValue != nil else { return }
-                Task { await Interface.updateMetrics() }
+                refreshRevision += 1
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged)) { _ in
+                updateDay()
+                refreshRevision += 1
             }
             .onChange(of: scenePhase)
             { oldPhase, newPhase in
+                // cancel the previous refresh whenever the scene changes phase
+                refreshRevision += 1
                 if newPhase == .active
                 {
-                    let now = Date.now
-
-                    if !now.isSameDay(as: firstLaunch)
-                    {
-                        firstLaunch = now
-                        Interface.sample.date = now
-                    }
-                    
-                    Task.detached { await Interface.updateMetrics() }
+                    updateDay()
                 }
                 else if oldPhase == .active && newPhase == .inactive
                 {
@@ -122,6 +137,17 @@ struct ContentView: View
         }
         .environment(Interface)
     }
+}
+
+extension ContentView {
+
+    /// Replaces the daily model after the calendar day changes.
+    private func updateDay() {
+        if Interface.id != Calendar.current.startOfDay(for: .now) {
+            Interface = HealthInterface(.empty(for: .now))
+        }
+    }
+
 }
 
 #Preview

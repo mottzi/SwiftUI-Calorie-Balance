@@ -1,40 +1,6 @@
 import WidgetKit
 import SwiftUI
 
-struct HealthDataEntry: TimelineEntry
-{
-    let date: Date
-    let data: HealthData
-}
-
-struct ToggleWidgetProvider: TimelineProvider
-{
-    func placeholder(in context: Context) -> HealthDataEntry 
-    {
-        HealthDataEntry(date: .now, data: HealthData.example(for: .now))
-    }
-    
-    func getSnapshot(in context: Context, completion: @escaping (HealthDataEntry) -> Void) 
-    {
-        completion(HealthDataEntry(date: .now, data: HealthData.example(for: .now)))
-    }
-    
-    func getTimeline(in context: Context, completion: @escaping (Timeline<HealthDataEntry>) -> Void)
-    {
-        let nextUpdateDate = Calendar.current.date(byAdding: .minute, value: 15, to: .now)!
-
-        Task
-        {
-            let timeline = Timeline(
-                entries: [HealthDataEntry(date: .now, data: try! await asyncFetchData())],
-                policy: .after(nextUpdateDate)
-            )
-            
-            completion(timeline)
-        }
-    }
-}
-
 struct BalanceWidgetCircle: Widget
 {
     @StateObject private var AppSettings = Settings.shared
@@ -43,7 +9,7 @@ struct BalanceWidgetCircle: Widget
     {
         StaticConfiguration(
             kind: "CircleBalanceGraphWidget",
-            provider: ToggleWidgetProvider())
+            provider: HealthDataTimelineProvider())
             { entry in
                 if ModeToggleManager.buttonMode() == false
                 {
@@ -71,7 +37,7 @@ struct BalanceWidgetCircleMidnight: View
     @EnvironmentObject private var AppSettings: Settings
     @Environment(\.widgetFamily) var family: WidgetFamily
     
-    var entry: ToggleWidgetProvider.Entry
+    var entry: HealthDataTimelineProvider.Entry
     
     private var goalReached: Bool
     {
@@ -87,14 +53,7 @@ struct BalanceWidgetCircleMidnight: View
     
     func getActiveBurnedCalories() -> Int
     {
-        if AppSettings.dataSource == .custom
-        {
-            return entry.data.burnedActive7
-        }
-        else
-        {
-            return entry.data.burnedActive
-        }
+        entry.data.burnedActiveMidnight
     }
     
     var body: some View
@@ -397,7 +356,7 @@ struct BalanceWidgetCircleNow: View
     @EnvironmentObject private var AppSettings: Settings
     @Environment(\.widgetFamily) var family: WidgetFamily
     
-    var entry: ToggleWidgetProvider.Entry
+    var entry: HealthDataTimelineProvider.Entry
     
     private var goalReached: Bool
     {

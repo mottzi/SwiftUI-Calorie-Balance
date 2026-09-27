@@ -31,7 +31,7 @@ struct PrognosisCard: View {
             TopRowRight.padding(.top, 2)
             
             BarBalanceGraphMidnight(
-                burnedActive: AppSettings.dataSource == .apple ? DataViewModel.sample.burnedActive : DataViewModel.sample.burnedActive7,
+                burnedActive: DataViewModel.sample.burnedActiveMidnight,
                 burnedPassive: DataViewModel.sample.burnedPassive,
                 burnedPassive7: DataViewModel.sample.burnedPassive7,
                 consumed: DataViewModel.sample.consumed,
@@ -202,34 +202,9 @@ extension PrognosisCard {
     }
     
     func getActiveBurnedCalories() -> Int {
-        if AppSettings.dataSource == .custom {
-            return DataViewModel.sample.burnedActive7
-        } else {
-            return DataViewModel.sample.burnedActive
-        }
+        DataViewModel.sample.burnedActiveMidnight
     }
 
-}
-
-extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
-    }
-}
-
-struct RoundedCorner: Shape {
-    var radius: CGFloat = .infinity
-    var corners: UIRectCorner = .allCorners
-
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(
-            roundedRect: rect,
-            byRoundingCorners: corners,
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        
-        return Path(path.cgPath)
-    }
 }
 
 #Preview {

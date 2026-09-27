@@ -9,7 +9,7 @@ struct NutritionWidget: Widget
     {
         StaticConfiguration(
             kind: "BarNutritionBalanceGraphWidget",
-            provider: ToggleWidgetProvider())
+            provider: HealthDataTimelineProvider())
         { entry in
             NutritionWidgetNow(entry: entry)
                 .containerRelativeFrame([.horizontal, .vertical])
@@ -25,11 +25,11 @@ struct NutritionWidget: Widget
 
 struct NutritionWidgetNow: View
 {
-    @State private var AppSettings = Settings.shared
+    @EnvironmentObject private var AppSettings: Settings
     
     @Environment(\.colorScheme) var scheme: ColorScheme
     @Environment(\.widgetFamily) var family: WidgetFamily
-    var entry: ToggleWidgetProvider.Entry
+    var entry: HealthDataTimelineProvider.Entry
     
     var body: some View
     {

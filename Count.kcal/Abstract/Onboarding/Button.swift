@@ -5,12 +5,13 @@ struct OnboardingButton: View {
     
     @Binding var selection: OnboardingState
     
-    @State private var showButton = false
-    
     var body: some View {
         Button {
             if selection == .applehealth {
-                HKRepository.shared.store.requestAuthorization(toShare: Set(), read: HKRepository.shared.dataTypesToRead) { success, error in
+                Task { @MainActor in
+                    _ = await HKRepository.shared.requestPermission()
+                    // keep a later navigation choice if permission completed after the user moved back
+                    guard selection == .applehealth else { return }
                     withAnimation {
                         selection = .maingoal
                     }

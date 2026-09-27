@@ -8,7 +8,7 @@ struct Dashboard: View {
     @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(HealthInterface.self) private var DataViewModel
 
-    @Binding var todayPageMode: PagerSelection?
+    @Binding var todayPageMode: PagerSelection
     var nutrientGoals: NutrientGoals? = nil
     
     var body: some View {
@@ -40,12 +40,9 @@ struct Dashboard: View {
             }
             .contentShape(.rect)
             .onTapGesture {
+                guard DataViewModel.isTodayPage else { return }
                 withAnimation(.snappy) {
-                    if (todayPageMode ?? .first) == .first {
-                        todayPageMode = .second
-                    } else {
-                        todayPageMode = .first
-                    }
+                    todayPageMode = todayPageMode == .first ? .second : .first
                 }
             }
 
@@ -73,10 +70,10 @@ extension Dashboard {
 
     var sTitle: String {
         if DataViewModel.isTodayPage {
-            if let todayPageMode, todayPageMode == .second {
+            if todayPageMode == .second {
                 return String(localized: "Midnight")
             } else {
-                return String(localized: "Now, \((DataViewModel.CacheDate ?? .now).shortTime)")
+                return String(localized: "Now, \((DataViewModel.sample.lastDataSync ?? .now).shortTime)")
             }
         }
         

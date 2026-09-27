@@ -117,7 +117,7 @@ struct BarBalanceGraphMidnight: View
                     LinearGradient(colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor], startPoint: scheme == .dark ? .bottom : .top, endPoint: scheme == .dark ? .top : .bottom)
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                 }
-                .cornerRadius(6, corners: .topRight)
+                .clipShape(UnevenRoundedRectangle(topTrailingRadius: 6, style: .circular))
                 .overlay
                 {
                     ViewThatFits
@@ -184,7 +184,7 @@ struct BarBalanceGraphMidnight: View
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                 }
                 .brightness(level: .primary)
-                .cornerRadius(6, corners: .bottomRight)
+                .clipShape(UnevenRoundedRectangle(bottomTrailingRadius: 6, style: .circular))
                 .overlay
                 {
                     ViewThatFits

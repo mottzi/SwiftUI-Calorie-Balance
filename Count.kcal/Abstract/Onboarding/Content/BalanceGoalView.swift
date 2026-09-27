@@ -93,7 +93,8 @@ struct BalanceGoalView: View {
         let unit = AppSettings.weightUnit
         let conversionFactor = unit == .kg ? 1.0 : 2.20462
         
-        let weightChange = Double(AppSettings.balanceGoal) * 7 / 7700.0 * conversionFactor
+        let kcal = Double(AppSettings.balanceGoal) / (AppSettings.energyUnit == .kJ ? 4.184 : 1.0)
+        let weightChange = kcal * 7 / 7700.0 * conversionFactor
         
         return String(format: "%.2f \(unit.rawValue)", weightChange)
     }
@@ -102,7 +103,8 @@ struct BalanceGoalView: View {
         let unit = AppSettings.weightUnit
         let conversionFactor = unit == .kg ? 1.0 : 2.20462
         
-        let weightChange = Double(AppSettings.balanceGoal) * 30 / 7700.0 * conversionFactor
+        let kcal = Double(AppSettings.balanceGoal) / (AppSettings.energyUnit == .kJ ? 4.184 : 1.0)
+        let weightChange = kcal * 30 / 7700.0 * conversionFactor
         
         return String(format: "%.2f \(unit.rawValue)", weightChange)
     }

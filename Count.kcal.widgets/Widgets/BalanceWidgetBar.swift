@@ -9,7 +9,7 @@ struct BalanceWidgetBar: Widget
     {
         StaticConfiguration(
             kind: "BarBalanceGraphWidget",
-            provider: ToggleWidgetProvider())
+            provider: HealthDataTimelineProvider())
         { entry in
             if ModeToggleManager.buttonMode() == false
             {
@@ -37,7 +37,7 @@ struct BalanceWidgetBarMidnight: View
     @EnvironmentObject private var AppSettings: Settings
     @Environment(\.widgetFamily) var family: WidgetFamily
     
-    var entry: ToggleWidgetProvider.Entry
+    var entry: HealthDataTimelineProvider.Entry
     
     private var goalReached: Bool
     {
@@ -53,14 +53,7 @@ struct BalanceWidgetBarMidnight: View
     
     func getActiveBurnedCalories() -> Int
     {
-        if AppSettings.dataSource == .custom
-        {
-            return entry.data.burnedActive7
-        }
-        else
-        {
-            return entry.data.burnedActive
-        }
+        entry.data.burnedActiveMidnight
     }
     
     var body: some View
@@ -314,7 +307,7 @@ struct BalanceWidgetBarNow: View
     @EnvironmentObject private var AppSettings: Settings
     @Environment(\.widgetFamily) var family: WidgetFamily
     
-    var entry: ToggleWidgetProvider.Entry
+    var entry: HealthDataTimelineProvider.Entry
     
     private var goalReached: Bool
     {

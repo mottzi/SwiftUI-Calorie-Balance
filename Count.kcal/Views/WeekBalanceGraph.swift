@@ -5,13 +5,12 @@ import Charts
 struct WeekBalanceGraph: View {
     var DataPoints: [HealthInterface]
 
-    @Binding var Pages: [HealthInterface]
-    @Binding var selectedPage: HealthInterface?
-    @Binding var ignoreChanges: Bool
+    let selectedDay: Date
+    let selectDay: (Date) -> Void
     
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(DataPoints, id: \.self) { point in
+            ForEach(DataPoints, id: \.id) { point in
                 VStack(spacing: 6) {
                     ZStack {
                         Image(systemName: "circle.fill")
@@ -37,13 +36,7 @@ struct WeekBalanceGraph: View {
                 }
                 .contentShape(.rect)
                 .onTapGesture {
-                    ignoreChanges = true
-
-                    if let page = findPage(for: point.sample.date) {
-                        withAnimation(.snappy) {
-                            selectedPage = page
-                        }
-                    }
+                    selectDay(point.id)
                 }
             }
         }
@@ -52,41 +45,14 @@ struct WeekBalanceGraph: View {
 
 extension WeekBalanceGraph {
 
-    func findPage(for date: Date) -> HealthInterface? {
-        Pages.first { $0.sample.date.isSameDay(as: date) }
-    }
-    
     var maxEnergy: Int {
-        var highest: HealthInterface? = nil
-        
-        for point in DataPoints {
-            if highest != nil {
-                let balance = point.isTodayPage ? point.sample.balanceMidnight : point.sample.balanceNow
-                let balanceHighest = highest!.isTodayPage ? highest!.sample.balanceMidnight : highest!.sample.balanceNow
-                
-                if balance > balanceHighest {
-                    highest = point
-                }
-            } else {
-                highest = point
-            }
-        }
-        
-        if let highest {
-            let balance = highest.isTodayPage ? highest.sample.balanceMidnight : highest.sample.balanceNow
-            
-            return Int(ceil(Double(abs(balance))))
-        }
-
-        return 0
+        DataPoints.map { point in
+            abs(point.isTodayPage ? point.sample.balanceMidnight : point.sample.balanceNow)
+        }.max() ?? 0
     }
 
     func isDaySelected(barDay: Date) -> Bool {
-        if let selectedPage, selectedPage.sample.date.isSameDay(as: barDay) {
-            return true
-        }
-        
-        return false
+        Calendar.current.startOfDay(for: barDay) == selectedDay
     }
 
 }
@@ -106,6 +72,7 @@ extension WeekBalanceGraph {
         let date: Date
         
         var barChartRatio: Double {
+            guard maxEnergy > 0 else { return 0 }
             return min(1, max(-1, Double(balance) / Double(maxEnergy)))
         }
         
@@ -179,10 +146,6 @@ extension WeekBalanceGraph {
     }
 
 }
-
-let d = [
-    HealthInterface(HealthData.example(for: .now))
-]
 
 //#Preview
 //{

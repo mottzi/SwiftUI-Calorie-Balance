@@ -1,140 +1,71 @@
 import SwiftUI
-import WidgetKit
 import Observation
 
+@MainActor
 @Observable
-/// Health metrics for one day and their cached values.
-class HealthInterface: Hashable {
-    @ObservationIgnored private let AppSettings = Settings.shared
-    @ObservationIgnored private let hkRep = HKRepository.shared
-    @ObservationIgnored var CachedSample: HealthData?
-    @ObservationIgnored var CacheDate: Date?
-    
-    var sample: HealthData
-    init(data: HealthData) { self.sample = data }
-    
-    init(_ healthData: HealthData) { self.sample = healthData }
+/// Health metrics for one calendar day.
+final class HealthInterface: Identifiable, Hashable {
 
-    /// Loads daily metrics and applies the selected energy source to the visible sample.
-    func updateMetrics(cache: Bool = false) async {
-        // (1) use cached data if last cache is younger than 180 seconds
-        if cache, let d = self.CacheDate, abs(d.timeIntervalSince(.now)) <  3 * 60, let c = self.CachedSample {
-            await MainActor.run {
-                withAnimation(.snappy) {
-                    self.sample.burnedActive = c.burnedActive
-                    self.sample.burnedPassive = c.burnedPassive
-                    self.sample.burnedPassive7 = c.burnedPassive7
-                    self.sample.consumed = c.consumed
-                    self.sample.protein = c.protein
-                    self.sample.carbs = c.carbs
-                    self.sample.fats = c.fats
-                    self.sample.steps = c.steps
-                }
-            }
-            
-            return
-        }
-        
-        // (2) fetch data from HealthKit if cache expired
-        // prepare async calls
-        async let activeFetch = hkRep.cumDataToday(fetch: .activeEnergyBurned, for: self.sample.date)
-        async let passiveFetch = hkRep.cumDataToday(fetch: .basalEnergyBurned, for: self.sample.date)
-        async let passiveAvgFetch = hkRep.cumDataWeek(fetch: .basalEnergyBurned, for: self.sample.date)
-        async let consumedFetch = hkRep.cumDataToday(fetch: .dietaryEnergyConsumed, for: self.sample.date)
-        async let proteinFetch = hkRep.cumDataToday(fetch: .dietaryProtein, for: self.sample.date)
-        async let carbsFetch = hkRep.cumDataToday(fetch: .dietaryCarbohydrates, for: self.sample.date)
-        async let fatsFetch = hkRep.cumDataToday(fetch: .dietaryFatTotal, for: self.sample.date)
-        async let stepsFetch = hkRep.cumDataToday(fetch: .stepCount, for: self.sample.date)
-        
-        // execute all async calls concurrently
-        let (active, passive, passiveAvg, consumed, protein, carbs, fats, steps) = await (activeFetch, passiveFetch, passiveAvgFetch, consumedFetch, proteinFetch, carbsFetch, fatsFetch, stepsFetch)
-        
-        // update UI on main "thread"
-        await MainActor.run {
-            withAnimation(.snappy) {
-                // consumed energy is HealthKit-only at the moment
-                self.sample.consumed = consumed
-                self.sample.protein = protein
-                self.sample.carbs = carbs
-                self.sample.fats = fats
-                self.sample.steps = steps
-                
-                if AppSettings.dataSource == .custom {
-                    // custom energy data
-                    if self.sample.date.isToday {
-                        // today: calculate current energy proportional to linear day progress
-                        self.sample.burnedActive = Int((Double(AppSettings.customCalActive) * Date.getDayProgress).rounded())
-                        self.sample.burnedPassive = Int((Double(AppSettings.customCalPassive) * Date.getDayProgress).rounded())
-                    } else {
-                        // not today: fill energy to max
-                        self.sample.burnedActive = AppSettings.customCalActive
-                        self.sample.burnedPassive = AppSettings.customCalPassive
-                    }
-                    
-                    self.sample.burnedActive7 = AppSettings.customCalActive
-                    self.sample.burnedPassive7 = AppSettings.customCalPassive
-                } else {
-                    // HealthKit energy data
-                    self.sample.burnedActive = active
-                    self.sample.burnedPassive = passive
-                    self.sample.burnedPassive7 = passiveAvg
-                }
-            }
-        }
-        
-        // save a copy of new data to cache
-        var c = HealthData.empty(for: self.sample.date)
-        
-        c.burnedActive = active
-        c.burnedPassive = passive
-        c.burnedPassive7 = passiveAvg
-        c.consumed = consumed
-        c.protein = protein
-        c.carbs = carbs
-        c.fats = fats
-        c.steps = steps
-        
-        self.CachedSample = c
-        self.CacheDate = .now
+    /// The fixed start of the day used by lists and equality.
+    @ObservationIgnored nonisolated let id: Date
+
+    /// The last complete health snapshot published for this day.
+    private(set) var sample: HealthData
+
+    @ObservationIgnored private let repository: HKRepository
+    @ObservationIgnored private let settings: Settings
+    @ObservationIgnored private var requestID = 0
+
+    init(_ healthData: HealthData, repository: HKRepository = .shared, settings: Settings = .shared) {
+        let day = Calendar.current.startOfDay(for: healthData.date)
+        id = day
+        var initial = healthData
+        initial.date = day
+        sample = initial
+        self.repository = repository
+        self.settings = settings
     }
 
-    static func == (lhs: HealthInterface, rhs: HealthInterface) -> Bool {
-         lhs.sample.date.isSameDay(as: rhs.sample.date)
+    convenience init(data: HealthData) { self.init(data) }
+
+    /// Loads the day and publishes only the latest completed request.
+    func updateMetrics() async {
+
+        requestID += 1
+        let currentRequest = requestID
+        let updated = await repository.fetchDailySnapshot(for: id, settings: settings)
+        // discard a cancelled request or one superseded by a later refresh
+        guard !Task.isCancelled, currentRequest == requestID else { return }
+
+        withAnimation(.snappy) { sample = updated }
     }
 
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.sample.date)
-    }
+    /// Compares fixed calendar-day identities.
+    nonisolated static func == (lhs: HealthInterface, rhs: HealthInterface) -> Bool { lhs.id == rhs.id }
+
+    /// Hashes the same fixed day used by equality.
+    nonisolated func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }
 
 extension HealthInterface {
 
-    var isTodayPage: Bool { self.sample.date.isToday }
+    /// Tells views whether this model is the current calendar day.
+    var isTodayPage: Bool { id.isToday }
 
-    @MainActor
-    func clearData() {
-        self.sample.burnedActive = 0
-        self.sample.burnedActive7 = 0
-        self.sample.burnedPassive = 0
-        self.sample.burnedPassive7 = 0
-        self.sample.consumed = 0
-        self.sample.protein = 0
-        self.sample.carbs = 0
-        self.sample.fats = 0
-        self.sample.steps = 0
-    }
-    
-    @MainActor
+    /// Fills the visible day with sample values for development controls.
     func randomizeHealthData() {
-        self.sample.burnedActive = Int.random(in: 100...1000)
-        self.sample.burnedPassive = Int.random(in: 200...2300)
-        self.sample.burnedPassive7 = Int.random(in: 1800...2500)
-        self.sample.burnedActive7 = Int.random(in: 200...1000)
-        self.sample.consumed = Int.random(in: 400...3600)
-        self.sample.protein = Int.random(in: 70...200)
-        self.sample.carbs = Int.random(in: 180...300)
-        self.sample.fats = Int.random(in: 50...80)
-        self.sample.steps = Int.random(in: 0...30000)
-    }
 
+        requestID += 1
+        var updated = sample
+        updated.burnedActive = Int.random(in: 100...1000)
+        updated.burnedPassive = Int.random(in: 200...2300)
+        updated.burnedPassive7 = Int.random(in: 1800...2500)
+        updated.burnedActive7 = Int.random(in: 200...1000)
+        updated.consumed = Int.random(in: 400...3600)
+        updated.protein = Int.random(in: 70...200)
+        updated.carbs = Int.random(in: 180...300)
+        updated.fats = Int.random(in: 50...80)
+        updated.steps = Int.random(in: 0...30000)
+        sample = updated
+    }
 }

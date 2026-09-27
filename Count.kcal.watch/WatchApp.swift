@@ -4,7 +4,6 @@ import SwiftUI
 struct WatchApp: App 
 {
     @StateObject private var AppSettings = Settings.shared
-    @StateObject private var Watch = Connectivity.shared
 
     var body: some Scene
     {

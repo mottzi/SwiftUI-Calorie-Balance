@@ -138,7 +138,7 @@ struct EnergySettingsView: View {
                                 .onChange(of: AppSettings.customCalPassive) {
                                     AppSettings.customCalPassive = abs(AppSettings.customCalPassive)
                                     
-                                    Task { await SliderData.updateMacroWeights() }
+                                    SliderData.updateMacroWeights()
                                 }
                         } else {
                             Text("\(AppSettings.showResting)")
@@ -198,7 +198,7 @@ struct EnergySettingsView: View {
                                 .onChange(of: AppSettings.customCalActive) {
                                     AppSettings.customCalActive = abs(AppSettings.customCalActive)
                                     
-                                    Task { await SliderData.updateMacroWeights() }
+                                    SliderData.updateMacroWeights()
                                 }
 //                                .onSubmit { Connectivity.shared.sendSettingsContext() }
                         } else {
@@ -338,7 +338,7 @@ struct EnergySettingsView: View {
                             .onChange(of: AppSettings.balanceGoal) { /*o, n in*/
                                 AppSettings.balanceGoal = abs(AppSettings.balanceGoal)
 
-                                Task { await SliderData.updateMacroWeights() }
+                                SliderData.updateMacroWeights()
                             }
                     
                         Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")

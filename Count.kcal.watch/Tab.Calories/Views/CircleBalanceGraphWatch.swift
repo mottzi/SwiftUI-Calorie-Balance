@@ -10,7 +10,7 @@ enum GraphContext
     case circleFuller
 }
 
-struct CircleBalanceGraphWatch: View, GraphCalculations
+struct CircleBalanceGraphWatch: View
 {
     @Environment(\.colorScheme) private var scheme
     @EnvironmentObject var AppSettings: Settings
@@ -66,20 +66,20 @@ struct CircleBalanceGraphWatch: View, GraphCalculations
                     .opacity(rendering == .fullColor ? 1 : 0.2)
 
                 // passive future
-                CircleProgressView(progress: mode == .now ? passiveNow : passiveFutureMidnight, color: rendering == .fullColor ? AppSettings.burnedColor : Color.white.opacity(mode == .now ? 0 : 0.74), cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
+                CircleProgressView(progress: mode == .now ? graph.passiveNow : graph.passiveFutureMidnight, color: rendering == .fullColor ? AppSettings.burnedColor : Color.white.opacity(mode == .now ? 0 : 0.74), cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
                     .brightness(level: .tertiary, to: .circlegraphMidnight)
                     .frame(width: geo.size.width - lineWidth(max: geo.size.width))
                     .opacity(rendering == .fullColor ? 1 : 0.4)
                     .opacity(mode == .now ? 0 : 1)
                 
                 // passive
-                CircleProgressView(progress: mode == .now ? passiveNow : passiveMidnight, color: AppSettings.burnedColor, cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
+                CircleProgressView(progress: mode == .now ? graph.passiveNow : graph.passiveMidnight, color: AppSettings.burnedColor, cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
                     .brightness(level: .secondary, to: .circlegraphMidnight)
                     .frame(width: geo.size.width - lineWidth(max: geo.size.width))
                     .opacity(rendering == .fullColor ? 1 : 0.7)
                                     
                 // active
-                CircleProgressView(progress: mode == .now ? activeNow : activeMidnight, color: AppSettings.burnedColor, cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
+                CircleProgressView(progress: mode == .now ? graph.activeNow : graph.activeMidnight, color: AppSettings.burnedColor, cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
                     .brightness(level: .primary, to: .circlegraphMidnight)
                     .frame(width: geo.size.width - lineWidth(max: geo.size.width))
 
@@ -90,7 +90,7 @@ struct CircleBalanceGraphWatch: View, GraphCalculations
                     .opacity(rendering == .fullColor ? 1 : 0.2)
                 
                 // consumed
-                CircleProgressView(progress: mode == .now ? consumedNow : consumedMidnight, color: AppSettings.consumedColor, cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
+                CircleProgressView(progress: mode == .now ? graph.consumedNow : graph.consumedMidnight, color: AppSettings.consumedColor, cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
                     .frame(width: geo.size.width - (3 * lineWidth(max: geo.size.width)) - gapWidth(max: geo.size.width))
                     .brightness(level: .primary)
             }
@@ -100,4 +100,11 @@ struct CircleBalanceGraphWatch: View, GraphCalculations
             .brightness(scheme == .dark ? -0.1 : 0.0)
         }
     }
+}
+
+
+extension CircleBalanceGraphWatch {
+
+    private var graph: GraphCalculations { GraphCalculations(sample: DataInterface.sample) }
+
 }

@@ -1,75 +1,46 @@
-protocol GraphCalculations {
-    var AppSettings: Settings { get }
-    var DataInterface: HealthInterface { get }
-    var mode: GraphMode { get }
-    var passiveFuture: Int { get }
-    var maxNow: Int { get }
-    var maxMidnight: Int { get }
-    var activeNow: Double { get }
-    var passiveNow: Double { get }
-    var consumedNow: Double { get }
-    var activeMidnight: Double { get }
-    var passiveMidnight: Double { get }
-    var passiveFutureMidnight: Double { get }
-    var consumedMidnight: Double { get }
+/// Energy proportions shared by app, widget, and complication ring graphs.
+struct GraphCalculations {
+
+    let sample: HealthData
+
+    /// Active energy as a share of the larger current energy total.
+    var activeNow: Double { ratio(sample.burnedActive, of: maxNow) }
+
+    /// Combined active and resting energy as a share of the current total.
+    var passiveNow: Double { ratio(sample.burnedActive + sample.burnedPassive, of: maxNow) }
+
+    /// Consumed energy as a share of the current total.
+    var consumedNow: Double { ratio(sample.consumed, of: maxNow) }
+
+    /// Active energy as a share of the larger midnight energy total.
+    var activeMidnight: Double { ratio(sample.burnedActiveMidnight, of: maxMidnight) }
+
+    /// Active and recorded resting energy as a share of the midnight total.
+    var passiveMidnight: Double {
+        ratio(sample.burnedActiveMidnight + sample.burnedPassive, of: maxMidnight)
+    }
+
+    /// Active and projected resting energy as a share of the midnight total.
+    var passiveFutureMidnight: Double {
+        ratio(sample.burnedActiveMidnight + sample.burnedPassive + sample.burnedPassiveRemaining, of: maxMidnight)
+    }
+
+    /// Consumed energy as a share of the midnight total.
+    var consumedMidnight: Double { ratio(sample.consumed, of: maxMidnight) }
+
 }
 
 extension GraphCalculations {
-    var passiveFuture: Int {
-        mode == .midnight ? max(DataInterface.sample.burnedPassive7 - DataInterface.sample.burnedPassive, 0) : 0
+
+    private var maxNow: Int { max(sample.burnedActive + sample.burnedPassive, sample.consumed) }
+
+    private var maxMidnight: Int {
+        max(sample.burnedActiveMidnight + sample.burnedPassive + sample.burnedPassiveRemaining, sample.consumed)
     }
 
-    var maxNow: Int {
-        max(DataInterface.sample.burnedActive + DataInterface.sample.burnedPassive, DataInterface.sample.consumed)
+    /// Returns zero for an empty graph.
+    private func ratio(_ value: Int, of total: Int) -> Double {
+        total == 0 ? 0 : Double(value) / Double(total)
     }
 
-    var maxMidnight: Int {
-        max(
-            (AppSettings.dataSource == .apple ? DataInterface.sample.burnedActive : DataInterface.sample.burnedActive7) + DataInterface.sample.burnedPassive + passiveFuture,
-            DataInterface.sample.consumed
-        )
-    }
-
-    var activeNow: Double {
-        maxNow == 0 ? 0.0 : Double(DataInterface.sample.burnedActive) / Double(maxNow)
-    }
-
-    var passiveNow: Double {
-        maxNow == 0 ? 0.0 : Double(DataInterface.sample.burnedActive + DataInterface.sample.burnedPassive) / Double(maxNow)
-    }
-
-    var consumedNow: Double {
-        maxNow == 0 ? 0.0 : Double(DataInterface.sample.consumed) / Double(maxNow)
-    }
-
-    var activeMidnight: Double {
-        maxMidnight == 0 ? 0.0 : (AppSettings.dataSource == .apple ? Double(DataInterface.sample.burnedActive) : Double(DataInterface.sample.burnedActive7)) / Double(maxMidnight)
-    }
-
-    var passiveMidnight: Double {
-        maxMidnight == 0 ? 0.0 : Double((AppSettings.dataSource == .apple ? DataInterface.sample.burnedActive : DataInterface.sample.burnedActive7) + DataInterface.sample.burnedPassive) / Double(maxMidnight)
-    }
-
-    var passiveFutureMidnight: Double {
-        maxMidnight == 0 ? 0.0 : Double((AppSettings.dataSource == .apple ? DataInterface.sample.burnedActive : DataInterface.sample.burnedActive7) + DataInterface.sample.burnedPassive + passiveFuture) / Double(maxMidnight)
-    }
-
-    var consumedMidnight: Double {
-        maxMidnight == 0 ? 0.0 : Double(DataInterface.sample.consumed) / Double(maxMidnight)
-    }
 }
-
-
-//    var passiveFuture: Int { Mode == .midnight ? max(DataInterface.sample.burnedPassive7 - DataInterface.sample.burnedPassive, 0) : 0 }
-//
-//    var maxNow: Int { max(DataInterface.sample.burnedActive + DataInterface.sample.burnedPassive, DataInterface.sample.consumed) }
-//    var maxMidnight: Int { max((AppSettings.dataSource == .apple ? DataInterface.sample.burnedActive : DataInterface.sample.burnedActive7) + DataInterface.sample.burnedPassive + passiveFuture, DataInterface.sample.consumed) }
-//
-//    var activeNow: Double { maxNow == 0 ? 0.0 : Double(DataInterface.sample.burnedActive) / Double(maxNow) }
-//    var passiveNow: Double { maxNow == 0 ? 0.0 : Double(DataInterface.sample.burnedActive + DataInterface.sample.burnedPassive) / Double(maxNow) }
-//    var consumedNow: Double { maxNow == 0 ? 0.0 : Double(DataInterface.sample.consumed) / Double(maxNow) }
-//
-//    var activeMidnight: Double { maxMidnight == 0 ? 0.0 : (AppSettings.dataSource == .apple ? Double(DataInterface.sample.burnedActive) : Double(DataInterface.sample.burnedActive7)) / Double(maxMidnight) }
-//    var passiveMidnight: Double { maxMidnight == 0 ? 0.0 : Double((AppSettings.dataSource == .apple ? DataInterface.sample.burnedActive : DataInterface.sample.burnedActive7) + DataInterface.sample.burnedPassive) / Double(maxMidnight) }
-//    var passiveFutureMidnight: Double { maxMidnight == 0 ? 0.0 : Double((AppSettings.dataSource == .apple ? DataInterface.sample.burnedActive : DataInterface.sample.burnedActive7) + DataInterface.sample.burnedPassive + passiveFuture) / Double(maxMidnight) }
-//    var consumedMidnight: Double { maxMidnight == 0 ? 0.0 : Double(DataInterface.sample.consumed) / Double(maxMidnight) }
