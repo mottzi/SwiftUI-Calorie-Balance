@@ -9,10 +9,12 @@ struct CaloriesMidnightCard: View {
         ScrollView(.horizontal) {
             HStack(spacing: 0) {
                 CaloriesCard()
+                    .padding(16)
                     .id(PagerSelection.first)
                     .containerRelativeFrame(.horizontal)
 
                 PrognosisCard()
+                    .padding(16)
                     .id(PagerSelection.second)
                     .containerRelativeFrame(.horizontal)
             }

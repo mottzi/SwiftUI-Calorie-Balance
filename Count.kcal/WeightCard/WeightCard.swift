@@ -9,18 +9,21 @@ struct WeightCard: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            Card("Weight") {
+            Card("Weight", innerPadding: 0) {
                 VStack(spacing: 0) {
                     WeightTopBar(pageSelection: $pageSelection)
-                        .padding(.top, 4)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 20)
                     
                     ScrollView(.horizontal) {
                         HStack(spacing: 0) {
                             WeeklyChart()
+                                .padding(.horizontal, 16)
                                 .id(PagerSelection.first)
                                 .containerRelativeFrame(.horizontal)
                             
                             MonthlyChart()
+                                .padding(.horizontal, 16)
                                 .id(PagerSelection.second)
                                 .containerRelativeFrame(.horizontal)
                         }
@@ -31,7 +34,7 @@ struct WeightCard: View {
                     .scrollTargetBehavior(.paging)
                     .scrollIndicators(.hidden)
                     .animation(.snappy, value: pageSelection)
-                    .padding(.bottom, 2)
+                    .padding(.bottom, 18)
                 }
             }
         }

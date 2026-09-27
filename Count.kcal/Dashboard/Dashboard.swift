@@ -14,10 +14,11 @@ struct Dashboard: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            Card("Calories", secondaryTitle: sTitle) {
+            Card("Calories", secondaryTitle: sTitle, innerPadding: 0) {
                 VStack {
                     if !DataViewModel.isTodayPage {
                         CaloriesCard()
+                            .padding(16)
                     } else {
                         CaloriesMidnightCard(todayPageMode: $todayPageMode)
                     }
