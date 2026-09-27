@@ -19,7 +19,7 @@ enum SimulatorHealthSeeder {
         }
     }
 
-    private static func seed() async throws -> Int {
+    static func seed() async throws -> Int {
         guard HKHealthStore.isHealthDataAvailable() else { throw SeedError.healthKitUnavailable }
 
         let store = HKHealthStore()

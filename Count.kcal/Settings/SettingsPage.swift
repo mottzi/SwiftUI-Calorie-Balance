@@ -15,6 +15,12 @@ struct SettingsPage: View {
 
     @FocusState private var focusedField: Field?
 
+    #if DEBUG && targetEnvironment(simulator)
+    @State private var isSeedingHealthData = false
+    @State private var showSeedResult = false
+    @State private var seedResultMessage = ""
+    #endif
+
     @Environment(HSlider.self) private var SliderData
     // @State private var SliderData = HSlider()
     
@@ -192,27 +198,52 @@ struct SettingsPage: View {
                 
                 #if DEBUG
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        AppSettings.showWelcome = true
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            dismiss()
+                    Menu {
+                        Button("Restart Onboarding", systemImage: "arrow.counterclockwise") {
+                            AppSettings.showWelcome = true
+
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                dismiss()
+                            }
                         }
+
+                        #if targetEnvironment(simulator)
+                        Button("Seed Health Data", systemImage: "cross.case") {
+                            isSeedingHealthData = true
+                            Task {
+                                do {
+                                    let count = try await SimulatorHealthSeeder.seed()
+                                    seedResultMessage = "Saved \(count) simulator Health samples."
+                                } catch {
+                                    seedResultMessage = "Could not seed Health data: \(error)"
+                                }
+                                isSeedingHealthData = false
+                                showSeedResult = true
+                            }
+                        }
+                        .disabled(isSeedingHealthData)
+                        #endif
                     } label: {
                         if #available(iOS 26, *) {
-                            Label("Setup", systemImage: "arrow.counterclockwise")
+                            Label("Debug", systemImage: "ladybug")
                                 .labelStyle(.iconOnly)
                         } else {
-                            Text(verbatim: "Setup")
+                            Text(verbatim: "Debug")
                                 .foregroundColor(Color("TextColor"))
                                 .fontWeight(.semibold)
                         }
                     }
-                    .accessibilityHint("Restart onboarding")
                     .padding(.trailing, usesLegacyToolbar ? 24 : 0)
                 }
                 #endif
             }
+            #if DEBUG && targetEnvironment(simulator)
+            .alert("Simulator Health Data", isPresented: $showSeedResult) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(seedResultMessage)
+            }
+            #endif
         }
     }
 
