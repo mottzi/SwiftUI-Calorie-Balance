@@ -1,11 +1,14 @@
 import SwiftUI
 
 enum IconPickerStyle {
+
     case rectangle
     case capsule
+
 }
 
 struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int {
+
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
     var firstIcon: String
@@ -70,7 +73,11 @@ struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int {
                             .scaledToFit()
                             .frame(width: iconFontSize, height: iconFontSize)
                             .fontWeight(selection.rawValue == 0 ? .heavy : .regular)
-                            .foregroundStyle(selection.rawValue == 0 ? (firstIcon == "heart.fill" ? Color.pink.gradient : pickedColor.gradient) : unpickedColor.gradient)
+                            .foregroundStyle(
+                                selection.rawValue == 0
+                                    ? (firstIcon == "heart.fill" ? Color.pink.gradient : pickedColor.gradient)
+                                    : unpickedColor.gradient
+                            )
                             .opacity(selection.rawValue == 1 && exclusiveLabel ? 0 : 1)
                         
 
@@ -108,9 +115,11 @@ struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int {
             }
         }
     }
+
 }
 
 enum PagerSelection: String, Hashable {
+
     case first
     case second
     
@@ -122,9 +131,11 @@ enum PagerSelection: String, Hashable {
         }
         
     }
+
 }
 
 struct PageSelector: View {
+
     var firstIcon: String
     var secondIcon: String
     var pickedColor: Color = Color(white: 0.1)
@@ -183,6 +194,7 @@ struct PageSelector: View {
                 }
         }
     }
+
 }
 
 #Preview {

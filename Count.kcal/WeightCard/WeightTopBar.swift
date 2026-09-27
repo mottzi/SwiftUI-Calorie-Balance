@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct WeightTopBar: View {
+
     @Environment(\.colorScheme) private var scheme: ColorScheme
     @Environment(WeightDataViewModel.self) private var WeightViewModel
 
@@ -12,7 +13,11 @@ struct WeightTopBar: View {
         HStack(alignment: .lastTextBaseline, spacing: 0) {
             HStack(spacing: 16) {
                 VStack(spacing: 0) {
-                    Text(verbatim: WeightViewModel.weightAvg7 == 0.0 ? "-/-" : String(format: "%.1f", WeightViewModel.weightAvg7))
+                    Text(
+                        verbatim: WeightViewModel.weightAvg7 == 0.0
+                            ? "-/-"
+                            : String(format: "%.1f", WeightViewModel.weightAvg7)
+                    )
                         .font(.title3)
                         .foregroundStyle(pageSelection == .first ? Color("TextColor") : Color("SecondaryTextColor"))
                         .fontWeight(.semibold)
@@ -36,7 +41,11 @@ struct WeightTopBar: View {
                     .dynamicTypeSize(...DynamicTypeSize.xxLarge)
 
                 VStack(spacing: 0) {
-                    Text(verbatim: WeightViewModel.weightAvg30 == 0.0 ? "-/-" : String(format: "%.1f", WeightViewModel.weightAvg30))
+                    Text(
+                        verbatim: WeightViewModel.weightAvg30 == 0.0
+                            ? "-/-"
+                            : String(format: "%.1f", WeightViewModel.weightAvg30)
+                    )
                         .font(.title3)
                         .foregroundStyle(pageSelection == .second ? Color("TextColor") : Color("SecondaryTextColor"))
                         .fontWeight(.semibold)
@@ -57,7 +66,10 @@ struct WeightTopBar: View {
             .padding(.bottom, 2)
             .background {
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color("TextColor").opacity(0.2), style: StrokeStyle(lineWidth: 2/*, dash: [2, 2], dashPhase: 0*/))
+                    .stroke(
+                        Color("TextColor").opacity(0.2),
+                        style: StrokeStyle(lineWidth: 2/*, dash: [2, 2], dashPhase: 0*/)
+                    )
                 
                 GeometryReader { geo in
                     RoundedRectangle(cornerRadius: 10)
@@ -77,7 +89,11 @@ struct WeightTopBar: View {
             HStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 2) {
-                        Text(verbatim: WeightViewModel.weightLatest == nil ? "-/-" : String(format: "%.1f", WeightViewModel.weightLatest!))
+                        Text(
+                            verbatim: WeightViewModel.weightLatest == nil
+                                ? "-/-"
+                                : String(format: "%.1f", WeightViewModel.weightLatest!)
+                        )
                             .font(.title3)
                             .foregroundStyle(Color("TextColor"))
                             .fontWeight(.semibold)
@@ -91,7 +107,11 @@ struct WeightTopBar: View {
                             .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                     }
 
-                    Text(WeightViewModel.weightLatestDate == nil ? "Last Sample" : WeightViewModel.weightLatestDate!.relative)
+                    Text(
+                        WeightViewModel.weightLatestDate == nil
+                            ? "Last Sample"
+                            : WeightViewModel.weightLatestDate!.relative
+                    )
                         .font(.caption)
                         .foregroundStyle(Color("SecondaryTextColor"))
                         .fontWeight(.light)

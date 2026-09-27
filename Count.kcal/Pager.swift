@@ -4,6 +4,7 @@ import StoreKit
 
 /// Daily dashboard with calendar, streak, and settings controls.
 struct Pager: View {
+
     @State private var navigation: DayPager
     @State private var todayPageMode: PagerSelection = .first
     
@@ -170,6 +171,7 @@ struct Pager: View {
             .safeAreaPadding(.top, 10)
         }
     }
+
 }
 
 extension Pager {
@@ -369,6 +371,7 @@ extension Pager {
 // The navigation bar reads the top edge of its scroll view.
 // Keep the default effect on older iOS releases.
 extension View {
+
     @ViewBuilder
     func softTopScrollEdge() -> some View {
         if #available(iOS 26, *) {
@@ -377,10 +380,12 @@ extension View {
             self
         }
     }
+
 }
 
 /// Values that can change the selected day's HealthKit result.
 private struct DayRefreshKey: Hashable {
+
     let day: Date
     let active: Bool
     let source: Int
@@ -388,10 +393,12 @@ private struct DayRefreshKey: Hashable {
     let activeGoal: Int
     let passiveGoal: Int
     let revision: Int
+
 }
 
 /// Inputs for Today charts, streak, and weight summaries.
 private struct SummaryRefreshKey: Hashable {
+
     let today: Date
     let active: Bool
     let source: Int
@@ -402,4 +409,5 @@ private struct SummaryRefreshKey: Hashable {
     let activeGoal: Int
     let passiveGoal: Int
     let revision: Int
+
 }

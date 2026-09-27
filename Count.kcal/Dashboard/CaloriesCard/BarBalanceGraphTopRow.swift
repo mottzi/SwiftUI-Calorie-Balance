@@ -4,6 +4,7 @@ let gradientOpacityLight: Double = 0.10
 let gradientOpacityDark: Double = 0.20
 
 struct BarBalanceGraphTopRow: View {
+
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
     @EnvironmentObject private var AppSettings: Settings
@@ -112,13 +113,26 @@ struct BarBalanceGraphTopRow: View {
 //        .geometryGroup()
 //        .compositingGroup()
     }
+
 }
 
 extension BarBalanceGraphTopRow {
 
-    var calBurnedNowGraphTotal: Int { max(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive, DataViewModel.sample.consumed) }
-    var activeNowGraphWidthRatio: CGFloat { calBurnedNowGraphTotal == 0 ? 0.0 : CGFloat(Double(DataViewModel.sample.burnedActive) / Double(calBurnedNowGraphTotal)) }
-    var passiveNowGraphWidthRatio: CGFloat { calBurnedNowGraphTotal == 0 ? 0.0 : CGFloat(Double(DataViewModel.sample.burnedPassive) / Double(calBurnedNowGraphTotal)) }
+    var calBurnedNowGraphTotal: Int {
+        max(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive, DataViewModel.sample.consumed)
+    }
+
+    var activeNowGraphWidthRatio: CGFloat {
+        calBurnedNowGraphTotal == 0
+            ? 0.0
+            : CGFloat(Double(DataViewModel.sample.burnedActive) / Double(calBurnedNowGraphTotal))
+    }
+
+    var passiveNowGraphWidthRatio: CGFloat {
+        calBurnedNowGraphTotal == 0
+            ? 0.0
+            : CGFloat(Double(DataViewModel.sample.burnedPassive) / Double(calBurnedNowGraphTotal))
+    }
 
 }
 

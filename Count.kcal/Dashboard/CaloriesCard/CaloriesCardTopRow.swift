@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct CaloriesCardTopRow: View {
+
     @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
@@ -11,7 +12,11 @@ struct CaloriesCardTopRow: View {
     var body: some View {
         TopRowRight
     }
-    
+
+}
+
+extension CaloriesCardTopRow {
+
     var TopRowRight: some View {
         HStack(spacing: 0) {
             VStack(alignment: .leading, spacing: dynamicType <= .xxLarge ? 16 : 4) {
@@ -26,10 +31,16 @@ struct CaloriesCardTopRow: View {
                             .background {
                                 if dynamicType <= .xxLarge {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(DataViewModel.sample.balanceNow > 0 ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1) : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
+                                        .fill(DataViewModel.sample.balanceNow > 0
+                                            ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1)
+                                            : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
                                         .stroke(
-                                            DataViewModel.sample.balanceNow > 0 ? AppSettings.burnedColor.brighten(scheme == .light ? -0.15 : 0) : Color("TextColor").opacity(0.2),
-                                            style: StrokeStyle(lineWidth: scheme == .light && DataViewModel.sample.balanceNow > 0 ? 1.5 : 1)
+                                            DataViewModel.sample.balanceNow > 0
+                                                ? AppSettings.burnedColor.brighten(scheme == .light ? -0.15 : 0)
+                                                : Color("TextColor").opacity(0.2),
+                                            style: StrokeStyle(
+                                                lineWidth: scheme == .light && DataViewModel.sample.balanceNow > 0 ? 1.5 : 1
+                                            )
                                         )
                                         .padding(-8)
                                         .brightness(level: .secondary)
@@ -73,10 +84,16 @@ struct CaloriesCardTopRow: View {
                             .background {
                                 if dynamicType <= .xxLarge {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(DataViewModel.sample.balanceNow < 0 ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1) : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
+                                        .fill(DataViewModel.sample.balanceNow < 0
+                                            ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1)
+                                            : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
                                         .stroke(
-                                            DataViewModel.sample.balanceNow < 0 ? AppSettings.consumedColor.brighten(scheme == .light ? -0.15 : 0) : Color("TextColor").opacity(0.2),
-                                            style: StrokeStyle(lineWidth: scheme == .light && DataViewModel.sample.balanceNow < 0 ? 1.5 : 1)
+                                            DataViewModel.sample.balanceNow < 0
+                                                ? AppSettings.consumedColor.brighten(scheme == .light ? -0.15 : 0)
+                                                : Color("TextColor").opacity(0.2),
+                                            style: StrokeStyle(
+                                                lineWidth: scheme == .light && DataViewModel.sample.balanceNow < 0 ? 1.5 : 1
+                                            )
                                         )
                                         .brightness(level: .secondary)
                                         .padding(-8)
@@ -120,6 +137,7 @@ struct CaloriesCardTopRow: View {
                 .padding(.trailing, 19)
         }
     }
+
 }
 
 #Preview {

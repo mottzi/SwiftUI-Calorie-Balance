@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct NutrientsCard: View {
+
     @Environment(HSlider.self) private var SliderData
 
     @EnvironmentObject private var AppSettings: Settings
@@ -204,6 +205,7 @@ struct NutrientsCard: View {
         }
         .padding(.vertical, 4)
     }
+
 }
 
 #Preview {

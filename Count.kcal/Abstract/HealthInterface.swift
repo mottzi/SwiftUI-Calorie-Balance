@@ -45,6 +45,7 @@ final class HealthInterface: Identifiable, Hashable {
 
     /// Hashes the same fixed day used by equality.
     nonisolated func hash(into hasher: inout Hasher) { hasher.combine(id) }
+
 }
 
 extension HealthInterface {
@@ -68,4 +69,5 @@ extension HealthInterface {
         updated.steps = Int.random(in: 0...30000)
         sample = updated
     }
+
 }

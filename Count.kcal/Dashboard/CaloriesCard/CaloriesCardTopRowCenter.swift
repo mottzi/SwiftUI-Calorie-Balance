@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct CaloriesCardTopRowCenter: View {
+
     @Environment(\.dynamicTypeSize) private var dynamicType
 
     @EnvironmentObject private var AppSettings: Settings
@@ -19,7 +20,9 @@ struct CaloriesCardTopRowCenter: View {
                     .foregroundColor(Color("TextColor"))
                     .contentTransition(.numericText(value: Double(abs(DataViewModel.sample.balanceNow))))
                 
-                Text(DataViewModel.sample.balanceNow > 0 ? String(localized: "Deficit") : DataViewModel.sample.balanceNow == 0 ? String("") : String(localized: "Surplus"))
+                Text(DataViewModel.sample.balanceNow > 0
+                    ? String(localized: "Deficit")
+                    : DataViewModel.sample.balanceNow == 0 ? String("") : String(localized: "Surplus"))
                     .font(.caption)
                     .fontWeight(.light)
                     .foregroundColor(Color("SecondaryTextColor"))
@@ -36,6 +39,7 @@ struct CaloriesCardTopRowCenter: View {
                 .transaction { $0.animation = .none }
         }
     }
+
 }
 
 extension CaloriesCardTopRowCenter {

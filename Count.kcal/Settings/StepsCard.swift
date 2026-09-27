@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct StepsCard: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     @FocusState var focusedField: Field?
@@ -30,6 +31,7 @@ struct StepsCard: View {
             .padding(.trailing, 8)
         }
     }
+
 }
 
 #Preview {

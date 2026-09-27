@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Swipeable Now and Midnight graphs with one persistent mode selection.
 struct CaloriesMidnightCard: View {
+
     @Binding var todayPageMode: PagerSelection
     
     var body: some View {
@@ -25,6 +26,7 @@ struct CaloriesMidnightCard: View {
         ))
         .initialModeAnchor(todayPageMode)
     }
+
 }
 
 extension View {
@@ -38,6 +40,7 @@ extension View {
             defaultScrollAnchor(mode == .second ? .trailing : .leading)
         }
     }
+
 }
 
 #Preview {

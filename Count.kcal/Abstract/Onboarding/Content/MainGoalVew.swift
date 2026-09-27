@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct MaingoalView: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
@@ -44,6 +45,7 @@ struct MaingoalView: View {
                 .foregroundStyle(Color("TextColor"))
         }
     }
+
 }
 
 #Preview {

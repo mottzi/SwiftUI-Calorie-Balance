@@ -3,6 +3,7 @@ import Charts
 
 /// Recent daily balances with selection of a day in the dashboard.
 struct WeekBalanceGraph: View {
+
     var DataPoints: [HealthInterface]
 
     let selectedDay: Date
@@ -22,7 +23,9 @@ struct WeekBalanceGraph: View {
                             .font(.system(size: 12))
                             .fontDesign(.rounded)
                             .fontWeight(.bold)
-                            .foregroundStyle(isDaySelected(barDay: point.sample.date) ? Color("ContrastColor") : Color("TextColor"))
+                            .foregroundStyle(
+                                isDaySelected(barDay: point.sample.date) ? Color("ContrastColor") : Color("TextColor")
+                            )
                             .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                     }
                     
@@ -41,9 +44,14 @@ struct WeekBalanceGraph: View {
             }
         }
     }
+
 }
 
 extension WeekBalanceGraph {
+
+    func isDaySelected(barDay: Date) -> Bool {
+        Calendar.current.startOfDay(for: barDay) == selectedDay
+    }
 
     var maxEnergy: Int {
         DataPoints.map { point in
@@ -51,15 +59,12 @@ extension WeekBalanceGraph {
         }.max() ?? 0
     }
 
-    func isDaySelected(barDay: Date) -> Bool {
-        Calendar.current.startOfDay(for: barDay) == selectedDay
-    }
-
 }
 
 extension WeekBalanceGraph {
 
     struct VBarBalanceGraph: View {
+
         @EnvironmentObject private var AppSettings: Settings
 
         @Environment(\.colorScheme) private var scheme
@@ -71,46 +76,15 @@ extension WeekBalanceGraph {
         let maxEnergy: Int
         let date: Date
         
-        var barChartRatio: Double {
-            guard maxEnergy > 0 else { return 0 }
-            return min(1, max(-1, Double(balance) / Double(maxEnergy)))
-        }
-        
-        var color: Color {
-            let color = barChartRatio > 0 ? AppSettings.burnedColor : AppSettings.consumedColor
-            let isToday = date.isToday
-
-            if consumed <= 0 {
-                if isToday {
-                    return color
-                } else {
-                    return .secondary
-                }
-            } else {
-                if isGoalReached() && !isToday {
-                    return color.brighten(0.3)
-                } else {
-                    return color
-                }
-            }
-        }
-        
-        func barChartHeight(graphHeight: CGFloat) -> CGFloat {
-            return (graphHeight / 2.0) * abs(barChartRatio)
-        }
-        
-        func isGoalReached() -> Bool {
-            if AppSettings.weightGoal == .lose {
-                return balance >= Int(AppSettings.balanceGoal)
-            } else {
-                return balance <= -Int(AppSettings.balanceGoal)
-            }
-        }
-        
         var body: some View {
             GeometryReader { geo in
                 ZStack {
-                    UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(topLeading: barChartRatio > 0 ? cr : 0, bottomLeading: barChartRatio > 0 ? 0 : cr, bottomTrailing: barChartRatio > 0 ? 0 : cr, topTrailing: barChartRatio > 0 ? cr : 0))
+                    UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(
+                        topLeading: barChartRatio > 0 ? cr : 0,
+                        bottomLeading: barChartRatio > 0 ? 0 : cr,
+                        bottomTrailing: barChartRatio > 0 ? 0 : cr,
+                        topTrailing: barChartRatio > 0 ? cr : 0
+                    ))
                         .fill(color.brighten(0.1).gradient)
                         .frame(width: geo.size.width * 0.75, height: (geo.size.height / 2.0) * abs(barChartRatio))
                         .overlay {
@@ -120,10 +94,17 @@ extension WeekBalanceGraph {
                                 endPoint: scheme == .dark ? .top : .bottom
                             )
                                 .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
-                                .clipShape(UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(topLeading: barChartRatio > 0 ? cr : 0, bottomLeading: barChartRatio > 0 ? 0 : cr, bottomTrailing: barChartRatio > 0 ? 0 : cr, topTrailing: barChartRatio > 0 ? cr : 0)))
+                                .clipShape(UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(
+                                    topLeading: barChartRatio > 0 ? cr : 0,
+                                    bottomLeading: barChartRatio > 0 ? 0 : cr,
+                                    bottomTrailing: barChartRatio > 0 ? 0 : cr,
+                                    topTrailing: barChartRatio > 0 ? cr : 0
+                                )))
                         }
 
-                        .offset(y: barChartRatio > 0 ? -barChartHeight(graphHeight: geo.size.height) / 2 - 1: barChartHeight(graphHeight: geo.size.height) / 2 + 1)
+                        .offset(y: barChartRatio > 0
+                            ? -barChartHeight(graphHeight: geo.size.height) / 2 - 1
+                            : barChartHeight(graphHeight: geo.size.height) / 2 + 1)
                     
                     Rectangle()
                         .frame(width: geo.size.width, height: 2)
@@ -142,6 +123,47 @@ extension WeekBalanceGraph {
                 }
 //                .opacity(c)
             }
+        }
+
+    }
+
+}
+
+extension WeekBalanceGraph.VBarBalanceGraph {
+
+    var barChartRatio: Double {
+        guard maxEnergy > 0 else { return 0 }
+        return min(1, max(-1, Double(balance) / Double(maxEnergy)))
+    }
+
+    var color: Color {
+        let color = barChartRatio > 0 ? AppSettings.burnedColor : AppSettings.consumedColor
+        let isToday = date.isToday
+
+        if consumed <= 0 {
+            if isToday {
+                return color
+            } else {
+                return .secondary
+            }
+        } else {
+            if isGoalReached() && !isToday {
+                return color.brighten(0.3)
+            } else {
+                return color
+            }
+        }
+    }
+
+    func barChartHeight(graphHeight: CGFloat) -> CGFloat {
+        (graphHeight / 2.0) * abs(barChartRatio)
+    }
+
+    func isGoalReached() -> Bool {
+        if AppSettings.weightGoal == .lose {
+            return balance >= Int(AppSettings.balanceGoal)
+        } else {
+            return balance <= -Int(AppSettings.balanceGoal)
         }
     }
 

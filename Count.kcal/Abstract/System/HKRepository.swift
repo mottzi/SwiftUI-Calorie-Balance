@@ -2,6 +2,7 @@ import HealthKit
 
 /// HealthKit access for energy, nutrient, step, and weight samples.
 final class HKRepository {
+
     public let store = HKHealthStore()
     public let dataTypesToRead = Set(
     [
@@ -16,8 +17,6 @@ final class HKRepository {
     ])
 
     private init() {}
-    
-    static let shared = HKRepository()
 
     @MainActor
     /// Fetches one daily value with fixed settings and calendar bounds.
@@ -64,7 +63,9 @@ final class HKRepository {
         }
 
         if source == .custom {
-            let progress = isToday ? min(max(now.timeIntervalSince(dayStart) / dayEnd.timeIntervalSince(dayStart), 0), 1) : 1
+            let progress = isToday
+                ? min(max(now.timeIntervalSince(dayStart) / dayEnd.timeIntervalSince(dayStart), 0), 1)
+                : 1
             snapshot.burnedActive = Int((Double(customActive) * progress).rounded())
             snapshot.burnedPassive = Int((Double(customPassive) * progress).rounded())
             snapshot.burnedActive7 = customActive
@@ -75,6 +76,10 @@ final class HKRepository {
         return snapshot
     }
 
+}
+
+extension HKRepository {
+
     /// Loads daily weight averages for the chart period ending on the given date.
     func fetchInitialAvgWeightData(for date: Date, weightUnit: Settings.WeightUnit) async -> [WeightChartData] {
         let unit: HKUnit = weightUnit == .lbs ? .pound() : .gramUnit(with: .kilo)
@@ -83,7 +88,11 @@ final class HKRepository {
             return []
         }
         
-        let dayStart = Calendar.current.date(byAdding: .day, value: -30, to: Calendar.current.startOfDay(for: date))!.lastMonday
+        let dayStart = Calendar.current.date(
+            byAdding: .day,
+            value: -30,
+            to: Calendar.current.startOfDay(for: date)
+        )!.lastMonday
         let dayEnd = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: date)!//.nextSunday.tomorrow
         
         let fetchPredicate = HKSamplePredicate.quantitySample(
@@ -103,7 +112,12 @@ final class HKRepository {
         if let data = try? await query.result(for: store) {
             data.enumerateStatistics(from: dayStart, to: dayEnd) { statistics, pointer in
                 if let avg = statistics.averageQuantity() {
-                    returnData.append(WeightChartData(date: statistics.startDate, weightAvg: round(avg.doubleValue(for: unit) * 10) / 10.0))
+                    returnData.append(
+                        WeightChartData(
+                            date: statistics.startDate,
+                            weightAvg: round(avg.doubleValue(for: unit) * 10) / 10.0
+                        )
+                    )
                 } else {
                     returnData.append(WeightChartData(date: statistics.startDate, weightAvg: nil))
                 }
@@ -170,6 +184,7 @@ final class HKRepository {
         let unit: HKUnit = energyUnit == .kJ ? .jouleUnit(with: .kilo) : .kilocalorie()
         return await weeklyAverage(dataType, from: start, to: end, unit: unit)
     }
+
 }
 
 extension HKRepository {
@@ -193,7 +208,12 @@ extension HKRepository {
     }
 
     /// Reads the average daily quantity over the prior seven days.
-    private func weeklyAverage(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async -> Int {
+    private func weeklyAverage(
+        _ type: HKQuantityTypeIdentifier,
+        from start: Date,
+        to end: Date,
+        unit: HKUnit
+    ) async -> Int {
 
         let predicate = HKSamplePredicate.quantitySample(
             type: HKQuantityType(type),
@@ -209,4 +229,11 @@ extension HKRepository {
         let sum = statistics?.statistics(for: start)?.sumQuantity()?.doubleValue(for: unit) ?? 0
         return Int((sum / 7).rounded())
     }
+
+}
+
+extension HKRepository {
+
+    static let shared = HKRepository()
+
 }

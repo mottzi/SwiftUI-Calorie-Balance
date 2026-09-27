@@ -5,12 +5,13 @@ import Observation
 @Observable
 /// Consecutive past days that meet the selected energy balance goal.
 final class Streak {
-    @ObservationIgnored private let repository: HKRepository
-    @ObservationIgnored private let settings: Settings
-    @ObservationIgnored private var requestID = 0
 
     var streaks: Int = 0
     var showStreaksView: Bool = true
+
+    @ObservationIgnored private let repository: HKRepository
+    @ObservationIgnored private let settings: Settings
+    @ObservationIgnored private var requestID = 0
 
     init(repository: HKRepository = .shared, settings: Settings = .shared) {
         self.repository = repository
@@ -44,4 +45,5 @@ final class Streak {
 
     /// Shows or hides the streak value.
     func toggleStreaksView() { withAnimation(.snappy) { showStreaksView.toggle() } }
+
 }

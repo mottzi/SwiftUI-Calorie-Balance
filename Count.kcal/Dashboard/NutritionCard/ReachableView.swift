@@ -2,20 +2,25 @@ import SwiftUI
 import WidgetKit
 
 extension Int {
+
     func stringFormat() -> String {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .none
         
         return numberFormatter.string(from: NSNumber(value: self)) ?? String("")
     }
+
 }
 
 enum ViewContext: Hashable {
+
     case app
     case widget(WidgetFamily)
+
 }
 
 struct ReachableView: View {
+
     @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
@@ -31,17 +36,19 @@ struct ReachableView: View {
     private var goalValue: Int
     
     private let key: LocalizedStringKey
-    private let color:  Color
+    private let color: Color
     
     private let unit: String
     
-    init(_  key:         LocalizedStringKey,
-         context:        ViewContext = .app,
-         consumedValue:  Int,
-         goalValue:      Int,
-         unit:           String = "g",
-         color:          Color = Color("SecondaryTextColor"),
-         graphHeight:    CGFloat = 18.0) {
+    init(
+        _ key: LocalizedStringKey,
+        context: ViewContext = .app,
+        consumedValue: Int,
+        goalValue: Int,
+        unit: String = "g",
+        color: Color = Color("SecondaryTextColor"),
+        graphHeight: CGFloat = 18.0
+    ) {
         self.context = context
         self.graphHeight = graphHeight
         
@@ -58,6 +65,10 @@ struct ReachableView: View {
         BarTypeView
     }
     
+}
+
+extension ReachableView {
+
     var BarTypeView: some View {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 3) {
@@ -133,26 +144,6 @@ struct ReachableView: View {
         }
     }
     
-    func getConsumedWidth(_ geometry: GeometryProxy) -> CGFloat {
-        if goalValue == 0 {
-            return 0
-        }
-        
-        return max(0, min(geometry.size.width, CGFloat(Double(consumedValue) / Double(goalValue) * geometry.size.width)))
-    }
-    
-    func getConsumedRatio(cap: Double? = nil) -> Double {
-        if goalValue == 0 {
-            return 0
-        }
-        
-        if cap == nil {
-            return Double(consumedValue) / Double(goalValue)
-        } else {
-            return min(cap!, Double(consumedValue) / Double(goalValue))
-        }
-    }
-    
     func NutritionBar(_ geometry: GeometryProxy) -> some View {
         ZStack(alignment: .leading) {
             Capsule()
@@ -175,6 +166,27 @@ struct ReachableView: View {
         }
         .clipShape(Capsule())
     }
+
+    func getConsumedWidth(_ geometry: GeometryProxy) -> CGFloat {
+        if goalValue == 0 {
+            return 0
+        }
+
+        return max(0, min(geometry.size.width, CGFloat(Double(consumedValue) / Double(goalValue) * geometry.size.width)))
+    }
+
+    func getConsumedRatio(cap: Double? = nil) -> Double {
+        if goalValue == 0 {
+            return 0
+        }
+
+        if cap == nil {
+            return Double(consumedValue) / Double(goalValue)
+        } else {
+            return min(cap!, Double(consumedValue) / Double(goalValue))
+        }
+    }
+
 }
 
 extension ReachableView {

@@ -4,14 +4,15 @@ import SwiftUI
 @Observable
 /// Weight history and values used by the weekly and monthly charts.
 final class WeightDataViewModel {
-    @ObservationIgnored private let hk: HKRepository
-    @ObservationIgnored private let settings: Settings
-    @ObservationIgnored private var requestID = 0
-    
+
     var WeightData: [WeightChartData] = []
     
     var weightLatest: Double?
     var weightLatestDate: Date?
+
+    @ObservationIgnored private let hk: HKRepository
+    @ObservationIgnored private let settings: Settings
+    @ObservationIgnored private var requestID = 0
 
     init(repository: HKRepository = .shared, settings: Settings = .shared) {
         hk = repository
@@ -35,12 +36,14 @@ final class WeightDataViewModel {
         weightLatest = latestSample.0
         weightLatestDate = latestSample.1
     }
+
 }
+
 extension WeightDataViewModel {
 
     /// Reports whether the monthly chart has enough daily entries.
     var dataLoaded: Bool {
-        return WeightData.count >= 30
+        WeightData.count >= 30
     }
     
     /// The final seven daily entries shown by the weekly chart.
@@ -57,13 +60,6 @@ extension WeightDataViewModel {
     /// The average recorded weight over the final seven days.
     var weightAvg7: Double {
         average(days: 7)
-    }
-
-    private func average(days: Int) -> Double {
-        guard dataLoaded else { return 0 }
-        let values = WeightData.suffix(days).compactMap(\.weightAvg)
-        guard !values.isEmpty else { return 0 }
-        return (values.reduce(0, +) / Double(values.count) * 10).rounded() / 10
     }
 
     func validData(_ page: WeightPage) -> [WeightChartData] {
@@ -201,13 +197,17 @@ extension WeightDataViewModel {
         if page == .weekly {
             if !dataLoaded { return nil }
             
-            if let lowestWeightData = WeeklyWeightData.min(by: { $0.weightAvg ?? .greatestFiniteMagnitude < $1.weightAvg ?? .greatestFiniteMagnitude }) {
+            if let lowestWeightData = WeeklyWeightData.min(by: {
+                $0.weightAvg ?? .greatestFiniteMagnitude < $1.weightAvg ?? .greatestFiniteMagnitude
+            }) {
                 return lowestWeightData
             }
         } else { // if page == .monthly
             if !dataLoaded { return nil }
             
-            if let lowestWeightData = WeightData.min(by: { $0.weightAvg ?? .greatestFiniteMagnitude < $1.weightAvg ?? .greatestFiniteMagnitude }) {
+            if let lowestWeightData = WeightData.min(by: {
+                $0.weightAvg ?? .greatestFiniteMagnitude < $1.weightAvg ?? .greatestFiniteMagnitude
+            }) {
                 return lowestWeightData
             }
         }
@@ -228,7 +228,7 @@ extension WeightDataViewModel {
     }
     
     func getYRange(_ page: WeightPage) -> ClosedRange<Int> {
-        return getYBottomRange(page) ... getYTopRange(page)
+        getYBottomRange(page) ... getYTopRange(page)
     }
 
     func createYRangeArray(_ page: WeightPage) -> [Int] {
@@ -257,13 +257,27 @@ extension WeightDataViewModel {
 
 }
 
+extension WeightDataViewModel {
+
+    private func average(days: Int) -> Double {
+        guard dataLoaded else { return 0 }
+        let values = WeightData.suffix(days).compactMap(\.weightAvg)
+        guard !values.isEmpty else { return 0 }
+        return (values.reduce(0, +) / Double(values.count) * 10).rounded() / 10
+    }
+
+}
+
 enum WeightPage: Int, Hashable {
+
     case weekly = 0
     case monthly = 1
+
 }
 
 /// One calendar day's weight average for charts.
 struct WeightChartData: Identifiable, Equatable, Sendable {
+
     let date: Date
     var weightAvg: Double?
 
@@ -273,4 +287,5 @@ struct WeightChartData: Identifiable, Equatable, Sendable {
         self.date = Calendar.current.startOfDay(for: date)
         self.weightAvg = weightAvg
     }
+
 }

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct CircleChartSymbol: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(WeightDataViewModel.self) private var WeightViewModel
@@ -51,4 +52,5 @@ struct CircleChartSymbol: View {
             }
         }
     }
+
 }

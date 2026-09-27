@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct AppleHealthView: View {
+
     @EnvironmentObject private var AppSettings: Settings
     
     var body: some View {
@@ -23,6 +24,7 @@ struct AppleHealthView: View {
             .fontDesign(.rounded)
         }
     }
+
 }
 
 #Preview {

@@ -3,6 +3,7 @@ import SwiftUI
 @main
 /// Main app scene with shared settings, health pages, and streak state.
 struct CountApp: App {
+
     @StateObject private var AppSettings = Settings.shared
     @StateObject private var Watch = Connectivity.shared
 
@@ -27,6 +28,7 @@ struct CountApp: App {
             }
         }
     }
+
 }
 
 #Preview { PreviewPager }

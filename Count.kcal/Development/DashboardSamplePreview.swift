@@ -7,6 +7,7 @@ var PreviewPager: some View {
 }
 
 private struct DashboardSamplePreview: View {
+
     @State private var pages: [HealthInterface]
     @State private var selectedPage: HealthInterface?
     @State private var todayPageMode: PagerSelection = .first
@@ -99,4 +100,5 @@ private struct DashboardSamplePreview: View {
         .environment(weightModel)
         .environment(streak)
     }
+
 }

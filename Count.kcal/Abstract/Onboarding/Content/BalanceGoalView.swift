@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct BalanceGoalView: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(HSlider.self) private var SliderData
@@ -14,7 +15,11 @@ struct BalanceGoalView: View {
             InfoSegment
         }
     }
-    
+
+}
+
+extension BalanceGoalView {
+
     var TitleSegment: some View {
         (
             Text("What is your")
@@ -79,13 +84,21 @@ struct BalanceGoalView: View {
             .fontDesign(.rounded)
             .padding(.top, 25)
     }
-    
+
+}
+
+extension BalanceGoalView {
+
     var balanceGoalDescription: String {
         switch AppSettings.weightGoal {
             case .lose:
-                String(localized: "This deficit equates to a weight loss of \(weightChange7) per week or \(weightChange30) per month.")
+                String(
+                    localized: "This deficit equates to a weight loss of \(weightChange7) per week or \(weightChange30) per month."
+                )
             case .gain:
-                String(localized: "This surplus equates to a weight gain of \(weightChange7) per week or \(weightChange30) per month.")
+                String(
+                    localized: "This surplus equates to a weight gain of \(weightChange7) per week or \(weightChange30) per month."
+                )
         }
     }
     
@@ -108,6 +121,7 @@ struct BalanceGoalView: View {
         
         return String(format: "%.2f \(unit.rawValue)", weightChange)
     }
+
 }
 
 #Preview {

@@ -2,8 +2,10 @@ import WidgetKit
 
 /// One daily snapshot displayed by a widget or complication.
 struct HealthDataEntry: TimelineEntry {
+
     let date: Date
     let data: HealthData
+
 }
 
 /// Health snapshots and refresh timing shared by widgets and complications.

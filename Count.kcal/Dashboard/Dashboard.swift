@@ -3,6 +3,7 @@ import WidgetKit
 
 /// Daily energy, nutrient, and step summary.
 struct Dashboard: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.dynamicTypeSize) private var dynamicType
@@ -64,6 +65,7 @@ struct Dashboard: View {
             }
         }
     }
+
 }
 
 extension Dashboard {

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ThemeButton: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     var theme: Settings.Theme
@@ -44,5 +45,6 @@ struct ThemeButton: View {
         }
         .sensoryFeedback(.selection, trigger: AppSettings.burnedColor)
     }
+
 }
 

@@ -1,12 +1,9 @@
 import SwiftUI
 import WidgetKit
 
-enum Field: Int, CaseIterable {
-    case balance, carbs, fats, protein, passive, active, steps
-}
-
 /// Settings screen for goals, units, and appearance.
 struct SettingsPage: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
@@ -41,9 +38,17 @@ struct SettingsPage: View {
                         Image(systemName: "laurel.leading")
                             .font(.system(size: 42))
                             .fontWeight(.black)
-                            .foregroundStyle(LinearGradient(colors: [Color("TextColor"), Color("TextColor").opacity(0.5)], startPoint: .top, endPoint: .bottom))
+                            .foregroundStyle(LinearGradient(
+                                colors: [Color("TextColor"), Color("TextColor").opacity(0.5)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            ))
 
-                        Link(destination: URL(string: "https://apps.apple.com/us/app/count-kcal/id6476797015?action=write-review")!) {
+                        Link(
+                            destination: URL(
+                                string: "https://apps.apple.com/us/app/count-kcal/id6476797015?action=write-review"
+                            )!
+                        ) {
                             VStack(spacing: 4) {
                                 HStack(spacing: 4) {
                                     Text("Rate us on the")
@@ -80,7 +85,11 @@ struct SettingsPage: View {
                         Image(systemName: "laurel.trailing")
                             .font(.system(size: 42))
                             .fontWeight(.black)
-                            .foregroundStyle(LinearGradient(colors: [Color("TextColor"), Color("TextColor").opacity(0.5)], startPoint: .top, endPoint: .bottom))
+                            .foregroundStyle(LinearGradient(
+                                colors: [Color("TextColor"), Color("TextColor").opacity(0.5)],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            ))
                     }
                     .padding(.top, 10)
                     .foregroundStyle(Color("TextColor"))
@@ -231,9 +240,20 @@ struct SettingsPage: View {
         }
     }
 
+}
+
+extension SettingsPage {
+
     private var usesLegacyToolbar: Bool {
         if #available(iOS 26, *) { false } else { true }
     }
+
+}
+
+enum Field: Int, CaseIterable {
+
+    case balance, carbs, fats, protein, passive, active, steps
+
 }
 
 #Preview {

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct UnitsCard: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     //@State private var selectedFlavor: BalanceLayout
@@ -57,6 +58,7 @@ struct UnitsCard: View {
             .padding(.horizontal, 8)
         }
     }
+
 }
 
 #Preview {

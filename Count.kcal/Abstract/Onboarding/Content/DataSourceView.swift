@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct DataSourceView: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(HSlider.self) private var SliderData
@@ -131,6 +132,7 @@ struct DataSourceView: View {
             }
         }
     }
+
 }
 
 #Preview {

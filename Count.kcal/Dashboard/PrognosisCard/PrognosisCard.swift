@@ -3,6 +3,7 @@ import Charts
 
 /// Expected end-of-day energy balance and goal status.
 struct PrognosisCard: View {
+
     @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
@@ -45,6 +46,7 @@ struct PrognosisCard: View {
             .dynamicTypeSize(...DynamicTypeSize.xxLarge)
         }
     }
+
 }
 
 extension PrognosisCard {
@@ -63,10 +65,17 @@ extension PrognosisCard {
                             .background {
                                 if dynamicType <= .xxLarge {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(DataViewModel.sample.balanceMidnight > 0 ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1) : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
+                                        .fill(DataViewModel.sample.balanceMidnight > 0
+                                            ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1)
+                                            : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
                                         .stroke(
-                                            DataViewModel.sample.balanceMidnight > 0 ? AppSettings.burnedColor.brighten(scheme == .light ? -0.15 : 0) : Color("TextColor").opacity(0.2),
-                                            style: StrokeStyle(lineWidth: scheme == .light && DataViewModel.sample.balanceMidnight > 0 ? 1.5 : 1)
+                                            DataViewModel.sample.balanceMidnight > 0
+                                                ? AppSettings.burnedColor.brighten(scheme == .light ? -0.15 : 0)
+                                                : Color("TextColor").opacity(0.2),
+                                            style: StrokeStyle(
+                                                lineWidth: scheme == .light && DataViewModel.sample.balanceMidnight > 0
+                                                    ? 1.5 : 1
+                                            )
                                         )
                                         .padding(-8)
                                         .brightness(level: .secondary)
@@ -111,10 +120,17 @@ extension PrognosisCard {
                             .background {
                                 if dynamicType <= .xxLarge {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(DataViewModel.sample.balanceMidnight < 0 ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1) : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
+                                        .fill(DataViewModel.sample.balanceMidnight < 0
+                                            ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1)
+                                            : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
                                         .stroke(
-                                            DataViewModel.sample.balanceMidnight < 0 ? AppSettings.consumedColor.brighten(scheme == .light ? -0.15 : 0) : Color("TextColor").opacity(0.2),
-                                            style: StrokeStyle(lineWidth: scheme == .light && DataViewModel.sample.balanceMidnight < 0 ? 1.5 : 1)
+                                            DataViewModel.sample.balanceMidnight < 0
+                                                ? AppSettings.consumedColor.brighten(scheme == .light ? -0.15 : 0)
+                                                : Color("TextColor").opacity(0.2),
+                                            style: StrokeStyle(
+                                                lineWidth: scheme == .light && DataViewModel.sample.balanceMidnight < 0
+                                                    ? 1.5 : 1
+                                            )
                                         )
                                         .brightness(level: .secondary)
                                         .padding(-8)
@@ -172,7 +188,9 @@ extension PrognosisCard {
                     .foregroundColor(Color("TextColor"))
                     .contentTransition(.numericText(value: Double(abs(DataViewModel.sample.balanceMidnight))))
                 
-                Text(DataViewModel.sample.balanceMidnight > 0 ? String(localized: "Deficit") : DataViewModel.sample.balanceMidnight == 0 ? String("") : String(localized: "Surplus"))
+                Text(DataViewModel.sample.balanceMidnight > 0
+                    ? String(localized: "Deficit")
+                    : DataViewModel.sample.balanceMidnight == 0 ? String("") : String(localized: "Surplus"))
                     .font(.caption)
                     .fontWeight(.light)
                     .foregroundColor(Color("SecondaryTextColor"))

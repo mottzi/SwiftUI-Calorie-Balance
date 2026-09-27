@@ -4,9 +4,7 @@ import WidgetKit
 
 /// Phone and watch settings transfer through the active connectivity session.
 final class Connectivity: NSObject, ObservableObject {
-    // only one interface per device needed
-    static let shared = Connectivity()
-    
+
     // used to limit transmissions from phone to watch
     // private var lastSentBalanceContext: Date? = nil
     
@@ -24,11 +22,13 @@ final class Connectivity: NSObject, ObservableObject {
         WCSession.default.delegate = self
         WCSession.default.activate()
     }
+
 }
 
 // sender
 #if os(iOS)
 extension Connectivity: WCSessionDelegate {
+
     func sendSettingsContext() {
         guard WCSession.default.activationState == .activated else { return }
         guard WCSession.default.isWatchAppInstalled else { return }
@@ -90,12 +90,14 @@ extension Connectivity: WCSessionDelegate {
         activationDidCompleteWith activationState: WCSessionActivationState,
         error: Error?
     ) { }
+
 }
 #endif
     
 // receiver
 #if os(watchOS)
 extension Connectivity: WCSessionDelegate {
+
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
         DispatchQueue.main.async {
             // extract individual settings from received phone settings-dictionary
@@ -203,13 +205,22 @@ extension Connectivity: WCSessionDelegate {
         activationDidCompleteWith activationState: WCSessionActivationState,
         error: Error?
     ) { }
+
 }
 #endif
+
+extension Connectivity {
+
+    // only one interface per device needed
+    static let shared = Connectivity()
+
+}
 
 #if os(iOS)
 // use View.sendContextOnChange(of:) to send settings-dictionary to
 // watch when a setting was changed on the phone
 struct SendContextOnChange<V: Equatable>: ViewModifier {
+
     var value: V
 
     func body(content: Content) -> some View {
@@ -218,11 +229,14 @@ struct SendContextOnChange<V: Equatable>: ViewModifier {
                 Connectivity.shared.sendSettingsContext()
             }
     }
+
 }
 
 extension View {
+
     func sendContextOnChange<V: Equatable>(of value: V) -> some View {
         self.modifier(SendContextOnChange(value: value))
     }
+
 }
 #endif

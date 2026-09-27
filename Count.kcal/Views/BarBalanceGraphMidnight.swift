@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct BarBalanceGraphMidnight: View {
+
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
     @EnvironmentObject private var AppSettings: Settings
@@ -15,14 +16,6 @@ struct BarBalanceGraphMidnight: View {
     let consumedColor: Color
     let burnedColor: Color
         
-    var balanceMidnight: Int { burnedPassive + burnedPassiveRemaining + burnedActive - consumed }
-    var burnedPassiveRemaining: Int { max(burnedPassive7 - burnedPassive, 0) }
-    var graphTotal: Int { max(burnedActive + burnedPassive + burnedPassiveRemaining, consumed) }
-    
-    var activeGraphRatio: CGFloat { graphTotal == 0 ? 0.0 : CGFloat(Double(burnedActive) / Double(graphTotal)) }
-    var passiveGraphRatio: CGFloat { graphTotal == 0 ? 0.0 : CGFloat(Double(burnedPassive) / Double(graphTotal)) }
-    var passiveRemainingRatio: CGFloat { graphTotal == 0 ? 0.0 : CGFloat(Double(self.burnedPassiveRemaining) / Double(graphTotal)) }
-
     var body: some View {
         GeometryReader { container in
             VStack(spacing: scheme == .light ? 1 : 2) {
@@ -30,18 +23,34 @@ struct BarBalanceGraphMidnight: View {
                     bottomGraphTopRow(geometry, context)
                 }
                 .frame(height: container.size.height / 2 - 1)
-                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 6, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 6, style: .continuous))
+                .clipShape(UnevenRoundedRectangle(
+                    topLeadingRadius: 6,
+                    bottomLeadingRadius: 0,
+                    bottomTrailingRadius: 0,
+                    topTrailingRadius: 6,
+                    style: .continuous
+                ))
                     
                 GeometryReader { geometry in
                     bottomGraphBottomRow(geometry, context)
                 }
                 .frame(height: container.size.height / 2 - 1)
-                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 0, bottomLeadingRadius: 6, bottomTrailingRadius: 6, topTrailingRadius: 0, style: .continuous))
+                .clipShape(UnevenRoundedRectangle(
+                    topLeadingRadius: 0,
+                    bottomLeadingRadius: 6,
+                    bottomTrailingRadius: 6,
+                    topTrailingRadius: 0,
+                    style: .continuous
+                ))
             }
             .saturation(Settings.baseSaturation)
         }
     }
-    
+
+}
+
+extension BarBalanceGraphMidnight {
+
     func bottomGraphTopRow(_ geometry: GeometryProxy, _ context: ViewContext) -> some View {
         ZStack(alignment: .leading) {
             Rectangle()
@@ -168,7 +177,9 @@ struct BarBalanceGraphMidnight: View {
                         .opacity(0.25)
                 }
             
-            let widthConsumed = graphTotal == 0 ? 0.0 : CGFloat(Double(consumed) / Double(graphTotal)) * (geometry.size.width)
+            let widthConsumed = graphTotal == 0
+                ? 0.0
+                : CGFloat(Double(consumed) / Double(graphTotal)) * (geometry.size.width)
             
             Rectangle()
                 .fill(consumedColor)
@@ -210,4 +221,15 @@ struct BarBalanceGraphMidnight: View {
 //        .geometryGroup()
 //        .compositingGroup()
     }
+
+    var balanceMidnight: Int { burnedPassive + burnedPassiveRemaining + burnedActive - consumed }
+    var burnedPassiveRemaining: Int { max(burnedPassive7 - burnedPassive, 0) }
+    var graphTotal: Int { max(burnedActive + burnedPassive + burnedPassiveRemaining, consumed) }
+
+    var activeGraphRatio: CGFloat { graphTotal == 0 ? 0.0 : CGFloat(Double(burnedActive) / Double(graphTotal)) }
+    var passiveGraphRatio: CGFloat { graphTotal == 0 ? 0.0 : CGFloat(Double(burnedPassive) / Double(graphTotal)) }
+    var passiveRemainingRatio: CGFloat {
+        graphTotal == 0 ? 0.0 : CGFloat(Double(self.burnedPassiveRemaining) / Double(graphTotal))
+    }
+
 }

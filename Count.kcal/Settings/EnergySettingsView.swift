@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Controls for the weight goal, energy source, and daily balance target.
 struct EnergySettingsView: View {
+
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
     @EnvironmentObject private var AppSettings: Settings
@@ -46,8 +47,20 @@ struct EnergySettingsView: View {
                 .background(
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
                         .fill(
-                            .shadow(.inner(color: scheme == .dark ? Color(white: 0.5).opacity(0.2) : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5), radius: 2, x:2, y: 2))
-                            .shadow(.inner(color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white, radius: 2, x: -2, y: -2))
+                            .shadow(.inner(
+                                color: scheme == .dark
+                                    ? Color(white: 0.5).opacity(0.2)
+                                    : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5),
+                                radius: 2,
+                                x: 2,
+                                y: 2
+                            ))
+                            .shadow(.inner(
+                                color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white,
+                                radius: 2,
+                                x: -2,
+                                y: -2
+                            ))
                         )
                         .foregroundColor(AppSettings.CardBackground)
                 )
@@ -88,8 +101,20 @@ struct EnergySettingsView: View {
                 .background(
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
                         .fill(
-                            .shadow(.inner(color: scheme == .dark ? Color(white: 0.5).opacity(0.2) : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5), radius: 2, x:2, y: 2))
-                            .shadow(.inner(color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white, radius: 2, x: -2, y: -2))
+                            .shadow(.inner(
+                                color: scheme == .dark
+                                    ? Color(white: 0.5).opacity(0.2)
+                                    : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5),
+                                radius: 2,
+                                x: 2,
+                                y: 2
+                            ))
+                            .shadow(.inner(
+                                color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white,
+                                radius: 2,
+                                x: -2,
+                                y: -2
+                            ))
                         )
                         .foregroundColor(AppSettings.CardBackground)
                 )
@@ -280,8 +305,20 @@ struct EnergySettingsView: View {
             .background(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .fill(
-                        .shadow(.inner(color: scheme == .dark ? Color(white: 0.5).opacity(0.2) : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5), radius: 2, x:2, y: 2))
-                        .shadow(.inner(color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white, radius: 2, x: -2, y: -2))
+                        .shadow(.inner(
+                            color: scheme == .dark
+                                ? Color(white: 0.5).opacity(0.2)
+                                : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5),
+                            radius: 2,
+                            x: 2,
+                            y: 2
+                        ))
+                        .shadow(.inner(
+                            color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white,
+                            radius: 2,
+                            x: -2,
+                            y: -2
+                        ))
                     )
                     .foregroundColor(AppSettings.CardBackground)
             )
@@ -408,8 +445,20 @@ struct EnergySettingsView: View {
             .background(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .fill(
-                        .shadow(.inner(color: scheme == .dark ? Color(white: 0.5).opacity(0.2) : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5), radius: 2, x:2, y: 2))
-                        .shadow(.inner(color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white, radius: 2, x: -2, y: -2))
+                        .shadow(.inner(
+                            color: scheme == .dark
+                                ? Color(white: 0.5).opacity(0.2)
+                                : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5),
+                            radius: 2,
+                            x: 2,
+                            y: 2
+                        ))
+                        .shadow(.inner(
+                            color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white,
+                            radius: 2,
+                            x: -2,
+                            y: -2
+                        ))
                     )
                     .foregroundColor(AppSettings.CardBackground)
             )
@@ -457,6 +506,7 @@ struct EnergySettingsView: View {
             }
         }
     }
+
 }
 
 #Preview {

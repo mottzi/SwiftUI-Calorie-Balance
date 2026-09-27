@@ -34,7 +34,9 @@ final class DayPager {
     /// Browsing a month fills only the model cache; it leaves the swipe range alone.
     func calendarPages(for month: Date) -> [HealthInterface] {
 
-        let first = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: month))?.weekStartDate ?? month
+        let first = Calendar.current.date(
+            from: Calendar.current.dateComponents([.year, .month], from: month)
+        )?.weekStartDate ?? month
         let last = month.lastDayOfMonth.weekEndDate
         var calendarModels: [HealthInterface] = []
         var day = first
@@ -113,4 +115,5 @@ extension DayPager {
             return model(for: day)
         }
     }
+
 }

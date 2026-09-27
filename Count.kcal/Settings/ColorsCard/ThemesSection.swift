@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ThemesSection: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
 //    @State private var showSuggestedThemes: Bool = false
@@ -48,6 +49,7 @@ struct ThemesSection: View {
 //            }
         }
     }
+
 }
 
 #Preview {

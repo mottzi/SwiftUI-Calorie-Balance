@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ColorsCard: View {
+
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
     var body: some View {
@@ -16,4 +17,5 @@ struct ColorsCard: View {
             .padding(.horizontal, 8)
         }
     }
+
 }

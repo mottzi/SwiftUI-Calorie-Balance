@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct BarBalanceGraphBottomRow: View {
+
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
     @EnvironmentObject private var AppSettings: Settings
@@ -25,7 +26,9 @@ struct BarBalanceGraphBottomRow: View {
                         .opacity(0.25)
                 }
             
-            let widthConsumed = calBurnedNowGraphTotal == 0 ? 0.0 : CGFloat(Double(DataViewModel.sample.consumed) / Double(calBurnedNowGraphTotal)) * (geometry.size.width)
+            let widthConsumed = calBurnedNowGraphTotal == 0
+                ? 0.0
+                : CGFloat(Double(DataViewModel.sample.consumed) / Double(calBurnedNowGraphTotal)) * (geometry.size.width)
             
             Rectangle()
                 .fill(AppSettings.consumedColor)
@@ -79,11 +82,14 @@ struct BarBalanceGraphBottomRow: View {
 //        .geometryGroup()
 //        .compositingGroup()
     }
+
 }
 
 extension BarBalanceGraphBottomRow {
 
-    var calBurnedNowGraphTotal: Int { max(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive, DataViewModel.sample.consumed) }
+    var calBurnedNowGraphTotal: Int {
+        max(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive, DataViewModel.sample.consumed)
+    }
 
 }
 

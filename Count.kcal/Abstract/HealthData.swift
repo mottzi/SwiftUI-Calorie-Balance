@@ -2,6 +2,7 @@ import Foundation
 
 /// Daily energy, nutrient, step, and calculated balance values.
 struct HealthData: Equatable, Sendable {
+
     var date: Date
     var lastDataSync: Date?
     
@@ -33,14 +34,11 @@ struct HealthData: Equatable, Sendable {
     
     var burnedActiveRemaining: Int { max(burnedActive7 - burnedActive, 0) }
     var burnedPassiveRemaining: Int { max(burnedPassive7 - burnedPassive, 0) }
-}
 
-enum BalanceOption {
-    case deficit
-    case surplus
 }
 
 extension HealthData {
+
     static func example(for date: Date, balance: BalanceOption = .deficit, random: Bool = false) -> HealthData {
         if random {
             var data = HealthData.empty(for: date)
@@ -59,43 +57,57 @@ extension HealthData {
         }
         
         if balance == .deficit {
-            return HealthData(date: date,
-                              lastDataSync: nil,
-                              burnedActive: 1500,
-                              burnedActive7: 0,
-                              burnedPassive: 2130,
-                              burnedPassive7: 2500,
-                              consumed: 2380,
-                              protein: 100,
-                              carbs: 80,
-                              fats: 100,
-                              steps: 6809)
+            return HealthData(
+                date: date,
+                lastDataSync: nil,
+                burnedActive: 1500,
+                burnedActive7: 0,
+                burnedPassive: 2130,
+                burnedPassive7: 2500,
+                consumed: 2380,
+                protein: 100,
+                carbs: 80,
+                fats: 100,
+                steps: 6809
+            )
         } else {
-            return HealthData(date: date,
-                              lastDataSync: nil,
-                              burnedActive: 400,
-                              burnedActive7: 0,
-                              burnedPassive: 1850,
-                              burnedPassive7: 2200,
-                              consumed: 2700,
-                              protein: 100,
-                              carbs: 80,
-                              fats: 100,
-                              steps: 1270)
+            return HealthData(
+                date: date,
+                lastDataSync: nil,
+                burnedActive: 400,
+                burnedActive7: 0,
+                burnedPassive: 1850,
+                burnedPassive7: 2200,
+                consumed: 2700,
+                protein: 100,
+                carbs: 80,
+                fats: 100,
+                steps: 1270
+            )
         }
     }
     
     static func empty(for date: Date) -> HealthData {
-        return HealthData(date: date,
-                          lastDataSync: nil,
-                          burnedActive: 0,
-                          burnedActive7: 0,
-                          burnedPassive: 0,
-                          burnedPassive7: 0,
-                          consumed: 0,
-                          protein: 0,
-                          carbs: 0,
-                          fats: 0,
-                          steps: 0)
+        HealthData(
+            date: date,
+            lastDataSync: nil,
+            burnedActive: 0,
+            burnedActive7: 0,
+            burnedPassive: 0,
+            burnedPassive7: 0,
+            consumed: 0,
+            protein: 0,
+            carbs: 0,
+            fats: 0,
+            steps: 0
+        )
     }
+
+}
+
+enum BalanceOption {
+
+    case deficit
+    case surplus
+
 }

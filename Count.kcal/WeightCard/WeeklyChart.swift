@@ -2,6 +2,7 @@ import SwiftUI
 import Charts
 
 struct WeeklyChart: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(WeightDataViewModel.self) private var WeightViewModel
@@ -84,7 +85,10 @@ struct WeeklyChart: View {
                 }
                 
             }
-            .chartXScale(domain: WeightViewModel.WeeklyWeightData.first!.date ...  WeightViewModel.WeeklyWeightData.last!.date.tomorrow)
+            .chartXScale(
+                domain: WeightViewModel.WeeklyWeightData.first!.date ...
+                    WeightViewModel.WeeklyWeightData.last!.date.tomorrow
+            )
             .chartXAxis {
                 AxisMarks(values: .stride(by: .day)) { day in
                     if day.index != 0 && day.index != day.count - 1 {
@@ -99,6 +103,10 @@ struct WeeklyChart: View {
         }
     }
     
+}
+
+extension WeeklyChart {
+
     /// Uses the period trend to select the existing chart color.
     private var trendColor: Color {
         switch WeightViewModel.trend(for: .weekly) {
@@ -107,6 +115,7 @@ struct WeeklyChart: View {
             default: Color(white: 0.22)
         }
     }
+
 }
 
 #Preview {

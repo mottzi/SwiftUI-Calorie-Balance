@@ -4,6 +4,7 @@ import SwiftUI
 @Observable
 /// Macro slider widths and saved goal ratios.
 final class HSlider {
+
     var carbsWidthLast: CGFloat = 0
     var fatsWidthLast: CGFloat = 0
     var protsWidthLast: CGFloat = 0
@@ -30,6 +31,7 @@ final class HSlider {
             type: .proteins
         )
     }
+
 }
 
 extension HSlider {
@@ -81,6 +83,7 @@ extension HSlider {
 
 /// Slider for adjusting carbohydrate, fat, and protein goal shares.
 struct MacroSlider: View {
+
     @EnvironmentObject private var AppSettings: Settings
     
     @Environment(HSlider.self) private var SliderData
@@ -116,7 +119,7 @@ struct MacroSlider: View {
                             .offset(x: 6, y: 4)
                     }
                     .offset(x: SliderData.carbsWidth)
-                    .sensoryFeedback(trigger: SliderData.fatsWidth) { o, n in return o != 0 ? .selection : nil }
+                    .sensoryFeedback(trigger: SliderData.fatsWidth) { o, n in o != 0 ? .selection : nil }
                 
                 // Prots slider segment
                 Rectangle()
@@ -190,7 +193,7 @@ struct MacroSlider: View {
 extension MacroSlider {
 
     func getTrailingGesture(maxSlider: Double) -> _EndedGesture<_ChangedGesture<DragGesture>> {
-        return DragGesture(minimumDistance: 0)
+        DragGesture(minimumDistance: 0)
             .onChanged { value in
                 let minSegment = maxSlider * SliderData.minSegmentRatio
                 let maxSegment = maxSlider * SliderData.maxSegmentRatio
@@ -312,9 +315,11 @@ extension MacroSlider {
 }
 
 enum MacroType {
+
     case carbohydrates
     case fats
     case proteins
+
 }
 
 #Preview {

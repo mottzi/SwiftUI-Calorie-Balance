@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Calendar that browses months without extending the dashboard's swipe range.
 struct CDatePicker: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
@@ -184,6 +185,7 @@ struct CDatePicker: View {
         }
 
     }
+
 }
 
 extension CDatePicker {
@@ -205,7 +207,7 @@ extension CDatePicker {
     }
 
     var weekdays: [String] {
-        return Calendar.current.shortWeekdaySymbolsLocalized
+        Calendar.current.shortWeekdaySymbolsLocalized
     }
     
     func getDayCellStrokeStyle(d: Date) -> StrokeStyle {
@@ -278,6 +280,7 @@ private struct CalendarDayLabel: View {
 
 /// Inputs that affect visible calendar dots.
 private struct CalendarRefreshKey: Hashable {
+
     let month: Date
     let active: Bool
     let source: Int
@@ -285,6 +288,7 @@ private struct CalendarRefreshKey: Hashable {
     let activeGoal: Int
     let passiveGoal: Int
     let revision: Int
+
 }
 
 #Preview {

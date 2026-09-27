@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct BalanceDataLabelSimple: View {
+
     @Environment(\.colorScheme) var scheme: ColorScheme
 
     let icon: String
@@ -31,9 +32,11 @@ struct BalanceDataLabelSimple: View {
         }
         .fontDesign(.rounded)
     }
+
 }
 
 struct BalanceDataLabelExtra: View {
+
     @Environment(\.colorScheme) var scheme: ColorScheme
     
     let icon: String
@@ -69,4 +72,5 @@ struct BalanceDataLabelExtra: View {
         }
         .fontDesign(.rounded)
     }
+
 }

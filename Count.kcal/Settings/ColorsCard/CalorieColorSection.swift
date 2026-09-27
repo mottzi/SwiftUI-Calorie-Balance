@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct CalorieColorSection: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     var body: some View {
@@ -32,4 +33,5 @@ struct CalorieColorSection: View {
 
         Divider()
     }
+
 }

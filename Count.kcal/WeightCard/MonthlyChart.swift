@@ -2,6 +2,7 @@ import SwiftUI
 import Charts
 
 struct MonthlyChart: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(WeightDataViewModel.self) private var WeightViewModel
@@ -60,7 +61,9 @@ struct MonthlyChart: View {
 
             .chartYScale(domain: WeightViewModel.getYRange(.monthly))
             .chartYAxis { AxisMarks(position: .trailing, values: WeightViewModel.createYRangeArray(.monthly)) }
-            .chartXScale(domain: WeightViewModel.WeightData.first!.date ... WeightViewModel.WeightData.last!.date.nextSunday.tomorrow)
+            .chartXScale(
+                domain: WeightViewModel.WeightData.first!.date ... WeightViewModel.WeightData.last!.date.nextSunday.tomorrow
+            )
             .chartXAxis {
                 AxisMarks(values: .stride(by: .day, count: 7)) { date in
                     AxisGridLine()
@@ -71,6 +74,10 @@ struct MonthlyChart: View {
         }
     }
     
+}
+
+extension MonthlyChart {
+
     /// Uses the period trend to select the existing chart color.
     private var trendColor: Color {
         switch WeightViewModel.trend(for: .monthly) {
@@ -79,4 +86,5 @@ struct MonthlyChart: View {
             default: Color(white: 0.22)
         }
     }
+
 }

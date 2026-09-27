@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct OnboardingWelcome: View {
+
     var body: some View {
         HStack(alignment: .bottom, spacing: 16) {
             Image("icon")
@@ -22,6 +23,7 @@ struct OnboardingWelcome: View {
             .fontDesign(.rounded)
         }
     }
+
 }
 
 #Preview {

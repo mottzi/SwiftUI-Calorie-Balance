@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct BackgroundColorSection: View {
+
     @EnvironmentObject private var AppSettings: Settings
     
     var body: some View {
@@ -100,6 +101,7 @@ struct BackgroundColorSection: View {
         
         Divider()
     }
+
 }
 
 #Preview {

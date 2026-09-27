@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct WelcomeView: View {
+
     @EnvironmentObject private var AppSettings: Settings
     
     @State private var onboardingInterface = HealthInterface(.empty(for: .now))
@@ -21,7 +22,11 @@ struct WelcomeView: View {
                         .foregroundColor(Color("TextColor"))
                         .contentTransition(.numericText(value: Double(abs(onboardingInterface.sample.balanceNow))))
                     
-                    Text(onboardingInterface.sample.balanceNow > 0 ? String(localized: "Deficit") : onboardingInterface.sample.balanceNow == 0 ? String("") : String(localized: "Surplus"))
+                    Text(
+                        onboardingInterface.sample.balanceNow > 0
+                            ? String(localized: "Deficit")
+                            : onboardingInterface.sample.balanceNow == 0 ? String("") : String(localized: "Surplus")
+                    )
                         .font(.subheadline)
                         .fontWeight(.light)
                         .foregroundColor(Color("SecondaryTextColor"))
@@ -54,6 +59,10 @@ struct WelcomeView: View {
         }
     }
     
+}
+
+extension WelcomeView {
+
     private func startAnimationCycle() {
         welcomeAnimationWorkItem?.cancel()
         welcomeAnimationWorkItem = nil
@@ -93,6 +102,7 @@ struct WelcomeView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: workItem)
         }
     }
+
 }
 
 #Preview {

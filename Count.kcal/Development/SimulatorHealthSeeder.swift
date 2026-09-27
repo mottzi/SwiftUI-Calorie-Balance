@@ -2,11 +2,6 @@
 import HealthKit
 
 enum SimulatorHealthSeeder {
-    private enum SeedError: Error {
-        case healthKitUnavailable
-        case writePermissionDenied
-        case saveFailed
-    }
 
     static func runIfRequested() async {
         guard ProcessInfo.processInfo.arguments.contains("--seed-simulator-health") else { return }
@@ -18,6 +13,10 @@ enum SimulatorHealthSeeder {
             print("[SimulatorHealthSeed] Failed: \(error)")
         }
     }
+
+}
+
+extension SimulatorHealthSeeder {
 
     static func seed() async throws -> Int {
         guard HKHealthStore.isHealthDataAvailable() else { throw SeedError.healthKitUnavailable }
@@ -73,7 +72,9 @@ enum SimulatorHealthSeeder {
 
             let dayNumber = 36 - daysAgo
             let end = min(now, nextDay.addingTimeInterval(-1))
-            let dayFraction = daysAgo == 0 ? max(0.1, min(1, now.timeIntervalSince(day) / nextDay.timeIntervalSince(day))) : 1.0
+            let dayFraction = daysAgo == 0
+                ? max(0.1, min(1, now.timeIntervalSince(day) / nextDay.timeIntervalSince(day)))
+                : 1.0
             let mealTime = min(end, day.addingTimeInterval(12 * 60 * 60))
             let weighTime = min(end, day.addingTimeInterval(7 * 60 * 60))
 
@@ -86,14 +87,63 @@ enum SimulatorHealthSeeder {
             let steps = Double(5500 + (dayNumber * 431) % 7500) * dayFraction
             let weight = 81.5 - Double(dayNumber) * 0.05
 
-            samples.append(quantitySample(.basalEnergyBurned, value: basal, unit: .kilocalorie(), from: day, to: end, day: day))
-            samples.append(quantitySample(.activeEnergyBurned, value: active, unit: .kilocalorie(), from: day, to: end, day: day))
-            samples.append(quantitySample(.dietaryEnergyConsumed, value: eaten, unit: .kilocalorie(), from: mealTime, to: mealTime, day: day))
-            samples.append(quantitySample(.dietaryProtein, value: protein, unit: .gram(), from: mealTime, to: mealTime, day: day))
-            samples.append(quantitySample(.dietaryCarbohydrates, value: carbs, unit: .gram(), from: mealTime, to: mealTime, day: day))
-            samples.append(quantitySample(.dietaryFatTotal, value: fat, unit: .gram(), from: mealTime, to: mealTime, day: day))
+            samples.append(quantitySample(
+                .basalEnergyBurned,
+                value: basal,
+                unit: .kilocalorie(),
+                from: day,
+                to: end,
+                day: day
+            ))
+            samples.append(quantitySample(
+                .activeEnergyBurned,
+                value: active,
+                unit: .kilocalorie(),
+                from: day,
+                to: end,
+                day: day
+            ))
+            samples.append(quantitySample(
+                .dietaryEnergyConsumed,
+                value: eaten,
+                unit: .kilocalorie(),
+                from: mealTime,
+                to: mealTime,
+                day: day
+            ))
+            samples.append(quantitySample(
+                .dietaryProtein,
+                value: protein,
+                unit: .gram(),
+                from: mealTime,
+                to: mealTime,
+                day: day
+            ))
+            samples.append(quantitySample(
+                .dietaryCarbohydrates,
+                value: carbs,
+                unit: .gram(),
+                from: mealTime,
+                to: mealTime,
+                day: day
+            ))
+            samples.append(quantitySample(
+                .dietaryFatTotal,
+                value: fat,
+                unit: .gram(),
+                from: mealTime,
+                to: mealTime,
+                day: day
+            ))
             samples.append(quantitySample(.stepCount, value: steps, unit: .count(), from: day, to: end, day: day))
-            samples.append(quantitySample(.bodyMass, value: weight, unit: .gramUnit(with: .kilo), from: weighTime, to: weighTime, day: day))
+            samples.append(quantitySample(
+                .bodyMass,
+                value: weight,
+                unit: .gramUnit(with: .kilo),
+                from: weighTime,
+                to: weighTime,
+                day: day
+            ))
         }
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
@@ -106,5 +156,18 @@ enum SimulatorHealthSeeder {
 
         return samples.count
     }
+
+}
+
+extension SimulatorHealthSeeder {
+
+    private enum SeedError: Error {
+
+        case healthKitUnavailable
+        case writePermissionDenied
+        case saveFailed
+
+    }
+
 }
 #endif

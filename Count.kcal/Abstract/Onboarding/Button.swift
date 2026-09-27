@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct OnboardingButton: View {
+
     @EnvironmentObject private var AppSettings: Settings
     
     @Binding var selection: OnboardingState
@@ -71,6 +72,7 @@ struct OnboardingButton: View {
         }
         .sensoryFeedback(.selection, trigger: selection)
     }
+
 }
 
 #Preview {

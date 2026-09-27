@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Styled card with an optional title, subtitle, and controls.
 struct Card <Subtitle: View, Content: View>: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     let title: LocalizedStringKey?
@@ -81,26 +82,30 @@ struct Card <Subtitle: View, Content: View>: View {
         }
         .padding(.horizontal)
     }
+
 }
 
 extension Card {
 
-    private func isContentEmpty(c: () -> Content) -> Bool {
-        return Mirror(reflecting: c()).children.isEmpty
-    }
-
     var background: Color {
         switch level {
-            case .clear:
-                Color.clear
-            case .primary:
-                AppSettings.CardBackground
+            case .clear: Color.clear
+            case .primary: AppSettings.CardBackground
         }
     }
 
 }
 
+extension Card {
+
+    private func isContentEmpty(c: () -> Content) -> Bool {
+        Mirror(reflecting: c()).children.isEmpty
+    }
+
+}
+
 extension Card where Subtitle == EmptyView {
+
     init(
         _ title: LocalizedStringKey? = nil,
         level: CardLevel = .primary,
@@ -119,17 +124,22 @@ extension Card where Subtitle == EmptyView {
         self.content = content
         self.controls = controls
     }
+
 }
 
 enum CardPickerType {
+
     case none
     case balance
     case weight
+
 }
 
 enum CardLevel {
+
     case clear
     case primary
+
 }
 
 #Preview {

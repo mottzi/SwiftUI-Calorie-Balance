@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct CircleBalanceGraph: View {
+
     @Environment(\.colorScheme) private var scheme
 
     @EnvironmentObject private var AppSettings: Settings
@@ -29,7 +30,11 @@ struct CircleBalanceGraph: View {
                         .brightness(level: .tertiary, to: .circlegraphMidnight)
                     
                     // passive
-                    CircleProgressView(progress: graph.passiveMidnight, color: AppSettings.burnedColor, lineWidth: lineWidth)
+                    CircleProgressView(
+                        progress: graph.passiveMidnight,
+                        color: AppSettings.burnedColor,
+                        lineWidth: lineWidth
+                    )
                         .brightness(level: .secondary, to: .circlegraphMidnight)
                     
                     // active
@@ -45,7 +50,11 @@ struct CircleBalanceGraph: View {
                         .brightness(level: .primary)
                     
                     // consumed
-                    CircleProgressView(progress: graph.consumedMidnight, color: AppSettings.consumedColor, lineWidth: lineWidth)
+                    CircleProgressView(
+                        progress: graph.consumedMidnight,
+                        color: AppSettings.consumedColor,
+                        lineWidth: lineWidth
+                    )
                         .frame(
                             width: geo.size.width - (scheme == .dark ? lineWidth * 2.5 : lineWidth * 2.25),
                             height: geo.size.height - (scheme == .dark ? lineWidth * 2.5 : lineWidth * 2.25)
@@ -94,6 +103,7 @@ struct CircleBalanceGraph: View {
             .padding(lineWidth / 2)
         }
     }
+
 }
 
 extension CircleBalanceGraph {
@@ -103,6 +113,8 @@ extension CircleBalanceGraph {
 }
 
 enum GraphMode {
+
     case now
     case midnight
+
 }

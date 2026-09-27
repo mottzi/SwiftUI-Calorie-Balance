@@ -1,12 +1,15 @@
 import SwiftUI
 
 struct NutrientGoals {
+
     let carbs: Int
     let fats: Int
     let protein: Int
+
 }
 
 struct MacroCard: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(HealthInterface.self) private var DataViewModel
@@ -45,6 +48,7 @@ struct MacroCard: View {
             .padding(.bottom, 2)
         }
     }
+
 }
 
 #Preview { PreviewPager }

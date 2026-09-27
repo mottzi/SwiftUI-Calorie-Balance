@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Setup flow for Health access, goals, and the energy data source.
 struct Onboarding: View {
+
     @State private var selection: OnboardingState = .welcome
     @State private var showButton = false
     
@@ -31,9 +32,11 @@ struct Onboarding: View {
             }
         }
     }
+
 }
 
 struct OnboardingContent: View {
+
     let selection: OnboardingState
 
     var body: some View {
@@ -63,9 +66,11 @@ struct OnboardingContent: View {
         .padding(.horizontal, 40)
         .padding(.top, 30)
     }
+
 }
 
 enum OnboardingState: Int, CaseIterable {
+
     case welcome = 0
     case applehealth = 1
     case maingoal = 2
@@ -81,6 +86,7 @@ enum OnboardingState: Int, CaseIterable {
             case .balancegoal: String(localized: "Finish")
         }
     }
+
 }
 
 #Preview { PreviewPager }

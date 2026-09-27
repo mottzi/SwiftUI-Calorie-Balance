@@ -3,6 +3,7 @@ import Charts
 
 /// Weight history with weekly and monthly chart pages.
 struct WeightCard: View {
+
     @EnvironmentObject private var AppSettings: Settings
 
     @State private var pageSelection: PagerSelection? = .first
@@ -36,6 +37,7 @@ struct WeightCard: View {
             }
         }
     }
+
 }
 
 #Preview {

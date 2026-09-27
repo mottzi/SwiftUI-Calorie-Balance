@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct CaloriesCard: View {
+
     @Environment(\.dynamicTypeSize) private var dynamicType
 
     @EnvironmentObject private var AppSettings: Settings
@@ -36,6 +37,7 @@ struct CaloriesCard: View {
                 .dynamicTypeSize(...DynamicTypeSize.xxLarge)
         }
     }
+
 }
 
 #Preview {
