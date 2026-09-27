@@ -192,13 +192,13 @@ struct Pager: View {
                     }
                     .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
                 }
-                
-                if #available(iOS 26, *) {
-                    ToolbarSpacer(.fixed, placement: .topBarTrailing)
-                }
 
                 ToolbarItem(placement: .topBarTrailing) {
                     calendarButton
+                }
+
+                if #available(iOS 26, *) {
+                    ToolbarSpacer(.fixed, placement: .topBarTrailing)
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
