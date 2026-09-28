@@ -25,6 +25,9 @@ struct CountApp: App {
                 #if DEBUG && targetEnvironment(simulator)
                 .task { await SimulatorHealthSeeder.runIfRequested() }
                 #endif
+                #if os(iOS)
+                .modifier(SettingsContextSync())
+                #endif
             }
         }
     }

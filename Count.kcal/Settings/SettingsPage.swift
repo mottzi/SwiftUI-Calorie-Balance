@@ -152,18 +152,6 @@ struct SettingsPage: View {
             .onDisappear {
                 WidgetCenter.shared.reloadAllTimelines()
             }
-            .sendContextOnChange(of: AppSettings.customCalActive)
-            .sendContextOnChange(of: AppSettings.customCalPassive)
-            .sendContextOnChange(of: AppSettings.balanceGoal)
-            .sendContextOnChange(of: AppSettings.carbsGoal)
-            .sendContextOnChange(of: AppSettings.fatsGoal)
-            .sendContextOnChange(of: AppSettings.proteinGoal)
-            .sendContextOnChange(of: AppSettings.weightGoal)
-            .sendContextOnChange(of: AppSettings.energyUnit)
-            .sendContextOnChange(of: AppSettings.weightUnit)
-            .sendContextOnChange(of: AppSettings.dataSource)
-            .sendContextOnChange(of: AppSettings.consumedColor)
-            .sendContextOnChange(of: AppSettings.burnedColor)
             .toolbar {
                 ToolbarItem(placement: .keyboard) {
                     Button("Done") {
