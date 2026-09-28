@@ -9,7 +9,7 @@ struct RectangleBalanceBarMidnightComplicationView : View
     
     var burnedTotal: Int
     {
-        (Settings.shared.dataSource == Settings.DataSources.custom ? entry.data.burnedActive7 : entry.data.burnedActive) + entry.data.burnedPassive + entry.data.burnedPassiveRemaining
+        entry.data.midnight.burned
     }
     
     var body: some View
@@ -108,4 +108,3 @@ timeline:
 {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }
-

@@ -284,10 +284,7 @@ extension BalanceWidgetBarContent {
         } else {
             BarBalanceGraphMidnight(
                 context: .widget(family),
-                burnedActive: entry.data.burnedActiveMidnight,
-                burnedPassive: entry.data.burnedPassive,
-                burnedPassive7: entry.data.burnedPassive7,
-                consumed: entry.data.consumed,
+                energy: entry.data.midnight,
                 consumedColor: AppSettings.consumedColor,
                 burnedColor: AppSettings.burnedColor
             )
@@ -298,27 +295,16 @@ extension BalanceWidgetBarContent {
         }
     }
         
-    private var balance: Int {
-        mode == .now ? entry.data.balanceNow : entry.data.balanceMidnight
-    }
+    private var energy: EnergyBalance { mode == .now ? entry.data.now : entry.data.midnight }
 
-    private var burnedTotal: Int {
-        if mode == .now {
-            return entry.data.burnedActive + entry.data.burnedPassive
-        }
-        return entry.data.burnedActiveMidnight + entry.data.burnedPassive + entry.data.burnedPassiveRemaining
-    }
+    private var balance: Int { energy.balance }
 
-    private var burnedPassiveTotal: Int {
-        mode == .now ? entry.data.burnedPassive : entry.data.burnedPassive + entry.data.burnedPassiveRemaining
-    }
+    private var burnedTotal: Int { energy.burned }
+
+    private var burnedPassiveTotal: Int { energy.resting + energy.restingRemaining }
     
     private var goalReached: Bool {
-        if AppSettings.weightGoal == .lose {
-            return balance >= Int(AppSettings.balanceGoal)
-        } else {
-            return balance <= -Int(AppSettings.balanceGoal)
-        }
+        energy.meetsGoal(AppSettings.balanceGoal, isLoss: AppSettings.weightGoal == .lose)
     }
     
 }

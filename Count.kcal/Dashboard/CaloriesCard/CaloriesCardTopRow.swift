@@ -51,7 +51,7 @@ extension CaloriesCardTopRow {
                     
                     VStack(alignment: .leading, spacing: 0) {
                         HStack(alignment: .lastTextBaseline, spacing: 2) {
-                            Text("\(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive)")
+                            Text("\(DataViewModel.sample.now.burned)")
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color("TextColor"))

@@ -14,6 +14,9 @@ struct CircleBalanceGraph: View {
     let mode: GraphMode
 
     var groupNowGeometry = true
+
+    private var now: EnergyBalance { DataViewModel.sample.now }
+    private var midnight: EnergyBalance { DataViewModel.sample.midnight }
     
     var body: some View {
         if mode == .midnight {
@@ -25,7 +28,7 @@ struct CircleBalanceGraph: View {
                     
                     // passive future
                     CircleProgressView(
-                        progress: graph.passiveFutureMidnight,
+                        progress: midnight.ratio(of: midnight.burned),
                         color: AppSettings.burnedColor,
                         lineWidth: lineWidth
                     )
@@ -33,14 +36,18 @@ struct CircleBalanceGraph: View {
                     
                     // passive
                     CircleProgressView(
-                        progress: graph.passiveMidnight,
+                        progress: midnight.ratio(of: midnight.active + midnight.resting),
                         color: AppSettings.burnedColor,
                         lineWidth: lineWidth
                     )
                         .brightness(level: .secondary, to: .circlegraphMidnight)
                     
                     // active
-                    CircleProgressView(progress: graph.activeMidnight, color: AppSettings.burnedColor, lineWidth: lineWidth)
+                    CircleProgressView(
+                        progress: midnight.ratio(of: midnight.active),
+                        color: AppSettings.burnedColor,
+                        lineWidth: lineWidth
+                    )
                         .brightness(level: .primary, to: .circlegraphMidnight)
                     
                     // base
@@ -53,7 +60,7 @@ struct CircleBalanceGraph: View {
                     
                     // consumed
                     CircleProgressView(
-                        progress: graph.consumedMidnight,
+                        progress: midnight.ratio(of: midnight.consumed),
                         color: AppSettings.consumedColor,
                         lineWidth: lineWidth
                     )
@@ -75,11 +82,19 @@ struct CircleBalanceGraph: View {
                         .brightness(level: .primary)
                     
                     // passive
-                    CircleProgressView(progress: graph.passiveNow, color: AppSettings.burnedColor, lineWidth: lineWidth)
+                    CircleProgressView(
+                        progress: now.ratio(of: now.burned),
+                        color: AppSettings.burnedColor,
+                        lineWidth: lineWidth
+                    )
                         .brightness(level: .secondary, to: .circlegraphNow)
                     
                     // active
-                    CircleProgressView(progress: graph.activeNow, color: AppSettings.burnedColor, lineWidth: lineWidth)
+                    CircleProgressView(
+                        progress: now.ratio(of: now.active),
+                        color: AppSettings.burnedColor,
+                        lineWidth: lineWidth
+                    )
                         .brightness(level: .primary, to: .circlegraphNow)
                     
                     // base
@@ -91,7 +106,11 @@ struct CircleBalanceGraph: View {
                         .brightness(level: .primary)
                     
                     // consumed
-                    CircleProgressView(progress: graph.consumedNow, color: AppSettings.consumedColor, lineWidth: lineWidth)
+                    CircleProgressView(
+                        progress: now.ratio(of: now.consumed),
+                        color: AppSettings.consumedColor,
+                        lineWidth: lineWidth
+                    )
                         .frame(
                             width: geo.size.width - (scheme == .dark ? lineWidth * 2.5 : lineWidth * 2.25),
                             height: geo.size.height - (scheme == .dark ? lineWidth * 2.5 : lineWidth * 2.25)
@@ -112,12 +131,6 @@ struct CircleBalanceGraph: View {
             .padding(lineWidth / 2)
         }
     }
-
-}
-
-extension CircleBalanceGraph {
-
-    private var graph: GraphCalculations { GraphCalculations(sample: DataViewModel.sample) }
 
 }
 

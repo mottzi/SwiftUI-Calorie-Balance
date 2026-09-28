@@ -12,35 +12,36 @@ struct WeekBalanceGraph: View {
     var body: some View {
         HStack(spacing: 0) {
             ForEach(DataPoints, id: \.id) { point in
-                VStack(spacing: 6) {
-                    ZStack {
-                        Image(systemName: "circle.fill")
-                            .foregroundStyle(Color("TextColor"))
-                            .font(.system(size: 18))
-                            .opacity(isDaySelected(barDay: point.sample.date) ? 1 : 0)
-                
-                        Text("\(point.sample.date.workday)")
-                            .font(.system(size: 12))
-                            .fontDesign(.rounded)
-                            .fontWeight(.bold)
-                            .foregroundStyle(
-                                isDaySelected(barDay: point.sample.date) ? Color("ContrastColor") : Color("TextColor")
-                            )
-                            .dynamicTypeSize(...DynamicTypeSize.xxLarge)
-                    }
-                    
-                    VBarBalanceGraph(
-                        balance: point.isTodayPage ? point.sample.balanceMidnight : point.sample.balanceNow,
-                        consumed: point.sample.consumed,
-                        maxEnergy: maxEnergy,
-                        date: point.sample.date
-                    )
-                        .frame(height: 60)
-                }
-                .contentShape(.rect)
-                .onTapGesture {
+                Button {
                     selectDay(point.id)
+                } label: {
+                    VStack(spacing: 6) {
+                        ZStack {
+                            Image(systemName: "circle.fill")
+                                .foregroundStyle(Color("TextColor"))
+                                .font(.system(size: 18))
+                                .opacity(isDaySelected(barDay: point.sample.date) ? 1 : 0)
+                
+                            Text("\(point.sample.date.workday)")
+                                .font(.system(size: 12))
+                                .fontDesign(.rounded)
+                                .fontWeight(.bold)
+                                .foregroundStyle(
+                                    isDaySelected(barDay: point.sample.date) ? Color("ContrastColor") : Color("TextColor")
+                                )
+                                .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+                        }
+                    
+                        VBarBalanceGraph(
+                            energy: point.isTodayPage ? point.sample.midnight : point.sample.now,
+                            maxEnergy: maxEnergy,
+                            date: point.sample.date
+                        )
+                        .frame(height: 60)
+                    }
+                    .contentShape(.rect)
                 }
+                .buttonStyle(.plain)
             }
         }
     }
@@ -55,7 +56,7 @@ extension WeekBalanceGraph {
 
     var maxEnergy: Int {
         DataPoints.map { point in
-            abs(point.isTodayPage ? point.sample.balanceMidnight : point.sample.balanceNow)
+            abs((point.isTodayPage ? point.sample.midnight : point.sample.now).balance)
         }.max() ?? 0
     }
 
@@ -63,6 +64,7 @@ extension WeekBalanceGraph {
 
 extension WeekBalanceGraph {
 
+    /// Daily balance bar with goal feedback for past days.
     struct VBarBalanceGraph: View {
 
         @EnvironmentObject private var AppSettings: Settings
@@ -71,8 +73,8 @@ extension WeekBalanceGraph {
 
         let cr = 10.0
         
-        let balance: Int
-        let consumed: Int
+        /// Current or midnight balance for the selected day.
+        let energy: EnergyBalance
         let maxEnergy: Int
         let date: Date
         
@@ -112,14 +114,14 @@ extension WeekBalanceGraph {
                 }
                 .frame(width: geo.size.width, height: geo.size.height)
                 .overlay {
-                    Text("\(abs(balance))")
+                    Text("\(abs(energy.balance))")
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
                         .font(.caption)
                         .fontDesign(.rounded)
                         .fontWeight(.semibold)
                         .foregroundStyle(Color("TextColor"))
-                        .offset(y: balance > 0 ? 14 : -14)
+                        .offset(y: energy.balance > 0 ? 14 : -14)
                 }
 //                .opacity(c)
             }
@@ -133,21 +135,21 @@ extension WeekBalanceGraph.VBarBalanceGraph {
 
     var barChartRatio: Double {
         guard maxEnergy > 0 else { return 0 }
-        return min(1, max(-1, Double(balance) / Double(maxEnergy)))
+        return min(1, max(-1, Double(energy.balance) / Double(maxEnergy)))
     }
 
     var color: Color {
         let color = barChartRatio > 0 ? AppSettings.burnedColor : AppSettings.consumedColor
         let isToday = date.isToday
 
-        if consumed <= 0 {
+        if energy.consumed <= 0 {
             if isToday {
                 return color
             } else {
                 return .secondary
             }
         } else {
-            if isGoalReached() && !isToday {
+            if energy.meetsGoal(AppSettings.balanceGoal, isLoss: AppSettings.weightGoal == .lose) && !isToday {
                 return color.brighten(0.3)
             } else {
                 return color
@@ -157,14 +159,6 @@ extension WeekBalanceGraph.VBarBalanceGraph {
 
     func barChartHeight(graphHeight: CGFloat) -> CGFloat {
         (graphHeight / 2.0) * abs(barChartRatio)
-    }
-
-    func isGoalReached() -> Bool {
-        if AppSettings.weightGoal == .lose {
-            return balance >= Int(AppSettings.balanceGoal)
-        } else {
-            return balance <= -Int(AppSettings.balanceGoal)
-        }
     }
 
 }

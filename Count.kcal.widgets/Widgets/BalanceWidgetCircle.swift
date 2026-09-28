@@ -356,22 +356,14 @@ extension BalanceWidgetCircleContent {
 
 extension BalanceWidgetCircleContent {
 
-    private var balance: Int {
-        mode == .now ? entry.data.balanceNow : entry.data.balanceMidnight
-    }
+    private var energy: EnergyBalance { mode == .now ? entry.data.now : entry.data.midnight }
 
-    private var burnedCalories: Int {
-        mode == .now
-            ? entry.data.burnedActive + entry.data.burnedPassive
-            : entry.data.burnedActiveMidnight + entry.data.burnedPassive + entry.data.burnedPassiveRemaining
-    }
+    private var balance: Int { energy.balance }
+
+    private var burnedCalories: Int { energy.burned }
     
     private var goalReached: Bool {
-        if AppSettings.weightGoal == .lose {
-            return balance >= Int(AppSettings.balanceGoal)
-        } else {
-            return balance <= -Int(AppSettings.balanceGoal)
-        }
+        energy.meetsGoal(AppSettings.balanceGoal, isLoss: AppSettings.weightGoal == .lose)
     }
     
 }

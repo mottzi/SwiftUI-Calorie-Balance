@@ -20,6 +20,9 @@ struct CircleBalanceGraphWatch: View
     var rendering: WidgetRenderingMode = .fullColor
     var context: GraphContext = .app
     var cutout = 0.28
+
+    private var now: EnergyBalance { DataInterface.sample.now }
+    private var midnight: EnergyBalance { DataInterface.sample.midnight }
     
     func lineWidth(max: CGFloat) -> CGFloat
     {
@@ -66,20 +69,37 @@ struct CircleBalanceGraphWatch: View
                     .opacity(rendering == .fullColor ? 1 : 0.2)
 
                 // passive future
-                CircleProgressView(progress: mode == .now ? graph.passiveNow : graph.passiveFutureMidnight, color: rendering == .fullColor ? AppSettings.burnedColor : Color.white.opacity(mode == .now ? 0 : 0.74), cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
+                CircleProgressView(
+                    progress: mode == .now ? now.ratio(of: now.burned) : midnight.ratio(of: midnight.burned),
+                    color: rendering == .fullColor ? AppSettings.burnedColor : Color.white.opacity(mode == .now ? 0 : 0.74),
+                    cutout: cutout,
+                    lineWidth: lineWidth(max: geo.size.width)
+                )
                     .brightness(level: .tertiary, to: .circlegraphMidnight)
                     .frame(width: geo.size.width - lineWidth(max: geo.size.width))
                     .opacity(rendering == .fullColor ? 1 : 0.4)
                     .opacity(mode == .now ? 0 : 1)
                 
                 // passive
-                CircleProgressView(progress: mode == .now ? graph.passiveNow : graph.passiveMidnight, color: AppSettings.burnedColor, cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
+                CircleProgressView(
+                    progress: mode == .now
+                        ? now.ratio(of: now.burned)
+                        : midnight.ratio(of: midnight.active + midnight.resting),
+                    color: AppSettings.burnedColor,
+                    cutout: cutout,
+                    lineWidth: lineWidth(max: geo.size.width)
+                )
                     .brightness(level: .secondary, to: .circlegraphMidnight)
                     .frame(width: geo.size.width - lineWidth(max: geo.size.width))
                     .opacity(rendering == .fullColor ? 1 : 0.7)
                                     
                 // active
-                CircleProgressView(progress: mode == .now ? graph.activeNow : graph.activeMidnight, color: AppSettings.burnedColor, cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
+                CircleProgressView(
+                    progress: mode == .now ? now.ratio(of: now.active) : midnight.ratio(of: midnight.active),
+                    color: AppSettings.burnedColor,
+                    cutout: cutout,
+                    lineWidth: lineWidth(max: geo.size.width)
+                )
                     .brightness(level: .primary, to: .circlegraphMidnight)
                     .frame(width: geo.size.width - lineWidth(max: geo.size.width))
 
@@ -90,7 +110,12 @@ struct CircleBalanceGraphWatch: View
                     .opacity(rendering == .fullColor ? 1 : 0.2)
                 
                 // consumed
-                CircleProgressView(progress: mode == .now ? graph.consumedNow : graph.consumedMidnight, color: AppSettings.consumedColor, cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
+                CircleProgressView(
+                    progress: mode == .now ? now.ratio(of: now.consumed) : midnight.ratio(of: midnight.consumed),
+                    color: AppSettings.consumedColor,
+                    cutout: cutout,
+                    lineWidth: lineWidth(max: geo.size.width)
+                )
                     .frame(width: geo.size.width - (3 * lineWidth(max: geo.size.width)) - gapWidth(max: geo.size.width))
                     .brightness(level: .primary)
             }
@@ -100,11 +125,4 @@ struct CircleBalanceGraphWatch: View
             .brightness(scheme == .dark ? -0.1 : 0.0)
         }
     }
-}
-
-
-extension CircleBalanceGraphWatch {
-
-    private var graph: GraphCalculations { GraphCalculations(sample: DataInterface.sample) }
-
 }

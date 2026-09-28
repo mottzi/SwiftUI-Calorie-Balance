@@ -44,14 +44,10 @@ struct CaloriesCardTopRowCenter: View {
 extension CaloriesCardTopRowCenter {
 
     private var goalReached: Bool {
-        // loose weight goal
-        if AppSettings.weightGoal == .lose {
-            return DataViewModel.sample.balanceNow >= Int(AppSettings.balanceGoal)
-        }
-        // gain weight goal
-        else {
-            return DataViewModel.sample.balanceNow <= -Int(AppSettings.balanceGoal)
-        }
+        DataViewModel.sample.now.meetsGoal(
+            AppSettings.balanceGoal,
+            isLoss: AppSettings.weightGoal == .lose
+        )
     }
 
 }

@@ -88,7 +88,7 @@ struct BarBalanceGraphTopRow: View {
             
             let widthRest = geometry.size.width - widthActive - widthPassive
             
-            if(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive < calBurnedNowGraphTotal) {
+            if DataViewModel.sample.now.burned < calBurnedNowGraphTotal {
                 ZStack {
                     Rectangle()
                         .fill(Color.clear)
@@ -97,11 +97,11 @@ struct BarBalanceGraphTopRow: View {
                     
                     if labels {
                         if widthRest <= 25 {
-                            Text("\(calBurnedNowGraphTotal - (DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive))")
+                            Text("\(calBurnedNowGraphTotal - DataViewModel.sample.now.burned)")
                                 .graphLabelStyle(scheme)
                                 .padding(.leading, widthActive + widthPassive - 18)
                         } else {
-                            Text("\(calBurnedNowGraphTotal - (DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive))")
+                            Text("\(calBurnedNowGraphTotal - DataViewModel.sample.now.burned)")
                                 .graphLabelStyle(scheme)
                                 .padding(.leading, widthActive + widthPassive)
                         }
@@ -118,20 +118,14 @@ struct BarBalanceGraphTopRow: View {
 
 extension BarBalanceGraphTopRow {
 
-    var calBurnedNowGraphTotal: Int {
-        max(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive, DataViewModel.sample.consumed)
-    }
+    var calBurnedNowGraphTotal: Int { DataViewModel.sample.now.graphTotal }
 
     var activeNowGraphWidthRatio: CGFloat {
-        calBurnedNowGraphTotal == 0
-            ? 0.0
-            : CGFloat(Double(DataViewModel.sample.burnedActive) / Double(calBurnedNowGraphTotal))
+        CGFloat(DataViewModel.sample.now.ratio(of: DataViewModel.sample.now.active))
     }
 
     var passiveNowGraphWidthRatio: CGFloat {
-        calBurnedNowGraphTotal == 0
-            ? 0.0
-            : CGFloat(Double(DataViewModel.sample.burnedPassive) / Double(calBurnedNowGraphTotal))
+        CGFloat(DataViewModel.sample.now.ratio(of: DataViewModel.sample.now.resting))
     }
 
 }

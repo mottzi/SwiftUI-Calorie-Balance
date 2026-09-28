@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D7A8097F63844ED785702A13 /* GraphCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* GraphCalculations.swift */; };
-		D7A8097F63844ED785702A12 /* GraphCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* GraphCalculations.swift */; };
+		D7A8097F63844ED785702A13 /* EnergyBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */; };
+		D7A8097F63844ED785702A12 /* EnergyBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */; };
 		D7A8097F63844ED785702A11 /* DayPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A8097F63844ED785702A10 /* DayPager.swift */; };
 		9A001C3D29B6122500BB42B9 /* CountApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A001C3C29B6122500BB42B9 /* CountApp.swift */; };
 		9A001C3F29B6122500BB42B9 /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A001C3E29B6122500BB42B9 /* Dashboard.swift */; };
@@ -45,7 +45,7 @@
 		9A34AD4A2C2A1F4900A0C5A6 /* Connectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0D04FD2C165E6B00AF7247 /* Connectivity.swift */; };
 		9A34AD4B2C2A1F4A00A0C5A6 /* Connectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0D04FD2C165E6B00AF7247 /* Connectivity.swift */; };
 		9A368CA32A6E64F900280BF9 /* WeightDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */; };
-		9A3B60152C1E77E0006000B4 /* GraphCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* GraphCalculations.swift */; };
+		9A3B60152C1E77E0006000B4 /* EnergyBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */; };
 		9A3B87832C30C8DD002D02D1 /* BalanceCircleGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B87822C30C8DD002D02D1 /* BalanceCircleGauge.swift */; };
 		9A3B87852C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B87842C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift */; };
 		9A3F8EAA2B348C1F00B0DC74 /* CaloriesMidnightCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */; };
@@ -81,7 +81,7 @@
 		9A6DBD592C28D35A000920DA /* CircleBalanceGraphWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0B0CC42C1FA08D00D94FB4 /* CircleBalanceGraphWatch.swift */; };
 		9A6DBD5A2C28D42E000920DA /* CircleBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */; };
 		9A6DBD5B2C28D452000920DA /* HealthInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */; };
-		9A6DBD5C2C28D464000920DA /* GraphCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* GraphCalculations.swift */; };
+		9A6DBD5C2C28D464000920DA /* EnergyBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */; };
 		9A6DBD5D2C28D46F000920DA /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA785262B21CD9D007305F6 /* CircleProgressView.swift */; };
 		9A6DBD5F2C28D562000920DA /* ReachableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9BC9BD2A7E9C7300A4404A /* ReachableView.swift */; };
 		9A7A4DA22C28A8B70055C6CA /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9A57F5382B66813D00B8DF6D /* Localizable.xcstrings */; };
@@ -251,7 +251,7 @@
 		9A2F7E662C34989100498A67 /* BalanceCornerTextNowMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCornerTextNowMidnight.swift; sourceTree = "<group>"; };
 		9A31F9BC2B6AEBE800886BAE /* UnitsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitsCard.swift; sourceTree = "<group>"; };
 		9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightDataViewModel.swift; sourceTree = "<group>"; };
-		9A3B60142C1E77E0006000B4 /* GraphCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphCalculations.swift; sourceTree = "<group>"; };
+		9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBalance.swift; sourceTree = "<group>"; };
 		9A3B87822C30C8DD002D02D1 /* BalanceCircleGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGauge.swift; sourceTree = "<group>"; };
 		9A3B87842C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGaugeMidnight.swift; sourceTree = "<group>"; };
 		9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CaloriesMidnightCard.swift; path = Count.kcal/Dashboard/CaloriesMidnightCard.swift; sourceTree = SOURCE_ROOT; };
@@ -672,7 +672,6 @@
 				9A58E8E62C012F8A002C16D6 /* Streak.swift */,
 				9A0D04FD2C165E6B00AF7247 /* Connectivity.swift */,
 				9A480F692B19315600D79FAE /* ToggleViewModeIntent.swift */,
-				9A3B60142C1E77E0006000B4 /* GraphCalculations.swift */,
 			);
 			path = System;
 			sourceTree = "<group>";
@@ -719,6 +718,7 @@
 			isa = PBXGroup;
 			children = (
 				9AF39CBB2B3E2E7A0037628F /* HealthData.swift */,
+				9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */,
 				9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */,
 				D7A8097F63844ED785702A10 /* DayPager.swift */,
 				9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */,
@@ -950,7 +950,7 @@
 				9AEA55CA2A5B0081000AB057 /* HKRepository.swift in Sources */,
 				9AA785272B21CD9D007305F6 /* CircleProgressView.swift in Sources */,
 				9AD25EBE2A656A5E00C6E6E1 /* HealthInterface.swift in Sources */,
-				D7A8097F63844ED785702A12 /* GraphCalculations.swift in Sources */,
+				D7A8097F63844ED785702A12 /* EnergyBalance.swift in Sources */,
 				D7A8097F63844ED785702A11 /* DayPager.swift in Sources */,
 				9A206D822C583ADA0079DE3D /* Button.swift in Sources */,
 				9AF39CB32B3DBA4C0037628F /* WeightTopBar.swift in Sources */,
@@ -980,7 +980,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9AFDBA992AF822FE003E8B9C /* HealthInterface.swift in Sources */,
-				D7A8097F63844ED785702A13 /* GraphCalculations.swift in Sources */,
+				D7A8097F63844ED785702A13 /* EnergyBalance.swift in Sources */,
 				9ADC38132AF6FD0C005CCFEF /* BalanceWidgetBar.swift in Sources */,
 				9ABFA7B72C0A3CBA00024D2F /* BarBalanceGraphTopRow.swift in Sources */,
 				9ABFA7AE2C0A3BC700024D2F /* ReachableView.swift in Sources */,
@@ -1023,7 +1023,7 @@
 				9A5A005C2C3210C1002D548C /* BalanceCircleGraphMidnight.swift in Sources */,
 				9A16C8E12C38BBF200ED3B7E /* BarBalanceGraphWatchMidnight.swift in Sources */,
 				9AA413032C24D90D005B9D73 /* BalanceCornerGauge.swift in Sources */,
-				9A6DBD5C2C28D464000920DA /* GraphCalculations.swift in Sources */,
+				9A6DBD5C2C28D464000920DA /* EnergyBalance.swift in Sources */,
 				9A6DBD5B2C28D452000920DA /* HealthInterface.swift in Sources */,
 				9A16C8DA2C389EC100ED3B7E /* BarBalanceGraphWatch.swift in Sources */,
 				9AA413112C264C4D005B9D73 /* Extensions.swift in Sources */,
@@ -1059,7 +1059,7 @@
 				9A4B72922C13B653004853F0 /* Extensions.swift in Sources */,
 				9A16C8E02C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift in Sources */,
 				9A4B728E2C13B63E004853F0 /* HealthInterface.swift in Sources */,
-				9A3B60152C1E77E0006000B4 /* GraphCalculations.swift in Sources */,
+				9A3B60152C1E77E0006000B4 /* EnergyBalance.swift in Sources */,
 				9A0BAC0B2C244D6800622F9F /* CaloricTotalsView.swift in Sources */,
 				9A4B728D2C13B639004853F0 /* HealthData.swift in Sources */,
 				9A0D04FF2C165E6B00AF7247 /* Connectivity.swift in Sources */,

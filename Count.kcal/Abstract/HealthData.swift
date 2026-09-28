@@ -23,14 +23,27 @@ struct HealthData: Equatable, Sendable {
     /// Selects actual active energy for the midnight estimate.
     var usesAppleActiveAtMidnight: Bool = true
     
-    var balanceNow: Int { burnedPassive + burnedActive - consumed }
+    /// Energy recorded for the sample date.
+    var now: EnergyBalance {
+        EnergyBalance(active: burnedActive, resting: burnedPassive, consumed: consumed)
+    }
+
+    /// End-of-day estimate using the active source saved with this snapshot.
+    var midnight: EnergyBalance {
+        EnergyBalance(
+            active: burnedActiveMidnight,
+            resting: burnedPassive,
+            restingRemaining: burnedPassiveRemaining,
+            consumed: consumed
+        )
+    }
+
+    var balanceNow: Int { now.balance }
 
     /// Active energy used by the midnight balance and graphs.
     var burnedActiveMidnight: Int { usesAppleActiveAtMidnight ? burnedActive : burnedActive7 }
 
-    var balanceMidnight: Int {
-        burnedPassive + burnedPassiveRemaining + burnedActiveMidnight - consumed
-    }
+    var balanceMidnight: Int { midnight.balance }
     
     var burnedPassiveRemaining: Int { max(burnedPassive7 - burnedPassive, 0) }
 

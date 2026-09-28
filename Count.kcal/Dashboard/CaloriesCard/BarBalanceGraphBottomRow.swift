@@ -26,9 +26,8 @@ struct BarBalanceGraphBottomRow: View {
                         .opacity(0.25)
                 }
             
-            let widthConsumed = calBurnedNowGraphTotal == 0
-                ? 0.0
-                : CGFloat(Double(DataViewModel.sample.consumed) / Double(calBurnedNowGraphTotal)) * (geometry.size.width)
+            let widthConsumed = CGFloat(DataViewModel.sample.now.ratio(of: DataViewModel.sample.now.consumed))
+                * geometry.size.width
             
             Rectangle()
                 .fill(AppSettings.consumedColor)
@@ -87,8 +86,6 @@ struct BarBalanceGraphBottomRow: View {
 
 extension BarBalanceGraphBottomRow {
 
-    var calBurnedNowGraphTotal: Int {
-        max(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive, DataViewModel.sample.consumed)
-    }
+    var calBurnedNowGraphTotal: Int { DataViewModel.sample.now.graphTotal }
 
 }

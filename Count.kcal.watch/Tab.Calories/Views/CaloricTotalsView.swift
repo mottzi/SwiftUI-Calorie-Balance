@@ -11,11 +11,11 @@ struct CaloricTotalsView: View
     {
         if mode == .now
         {
-            Interface.sample.burnedActive + Interface.sample.burnedPassive
+            Interface.sample.now.burned
         }
         else
         {
-            (AppSettings.dataSource == Settings.DataSources.custom ? Interface.sample.burnedActive7 : Interface.sample.burnedActive) + Interface.sample.burnedPassive + Interface.sample.burnedPassiveRemaining
+            Interface.sample.midnight.burned
         }
     }
     

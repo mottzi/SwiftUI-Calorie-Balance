@@ -39,11 +39,11 @@ struct BarBalanceGraphWatchMidnightTop: View
 
     var burnedActive: Int { DataViewModel.sample.burnedActiveMidnight }
     
-    var calBurnedMidnightGraphTotal: Int { max(burnedActive + DataViewModel.sample.burnedPassive + DataViewModel.sample.burnedPassiveRemaining, DataViewModel.sample.consumed) }
+    var calBurnedMidnightGraphTotal: Int { DataViewModel.sample.midnight.graphTotal }
     
-    var activeMidnightGraphWidthRatio: CGFloat { calBurnedMidnightGraphTotal == 0 ? 0.0 : CGFloat(Double(burnedActive) / Double(calBurnedMidnightGraphTotal)) }
-    var passiveMidnightGraphWidthRatio: CGFloat { calBurnedMidnightGraphTotal == 0 ? 0.0 : CGFloat(Double(DataViewModel.sample.burnedPassive) / Double(calBurnedMidnightGraphTotal)) }
-    var passiveTillMidnightWidthRatio: CGFloat { calBurnedMidnightGraphTotal == 0 ? 0.0 : CGFloat(Double(DataViewModel.sample.burnedPassiveRemaining) / Double(calBurnedMidnightGraphTotal)) }
+    var activeMidnightGraphWidthRatio: CGFloat { CGFloat(DataViewModel.sample.midnight.ratio(of: burnedActive)) }
+    var passiveMidnightGraphWidthRatio: CGFloat { CGFloat(DataViewModel.sample.midnight.ratio(of: DataViewModel.sample.midnight.resting)) }
+    var passiveTillMidnightWidthRatio: CGFloat { CGFloat(DataViewModel.sample.midnight.ratio(of: DataViewModel.sample.midnight.restingRemaining)) }
     
     var body: some View
     {
@@ -103,7 +103,7 @@ struct BarBalanceGraphWatchMidnightTop: View
             
             let widthRest = geometry.size.width - widthActive - widthPassive - widthPassiveTillMidnight
             
-            if(burnedActive + DataViewModel.sample.burnedPassive + DataViewModel.sample.burnedPassiveRemaining < calBurnedMidnightGraphTotal)
+            if(DataViewModel.sample.midnight.burned < calBurnedMidnightGraphTotal)
             {
                 Rectangle()
                     .fill(Color.clear)
@@ -124,7 +124,7 @@ struct BarBalanceGraphWatchMidnightBottom: View
     
     var burnedActive: Int { DataViewModel.sample.burnedActiveMidnight }
 
-    var calBurnedMidnightGraphTotal: Int { max(burnedActive + DataViewModel.sample.burnedPassive + DataViewModel.sample.burnedPassiveRemaining, DataViewModel.sample.consumed) }
+    var calBurnedMidnightGraphTotal: Int { DataViewModel.sample.midnight.graphTotal }
 
     var body: some View
     {
@@ -139,7 +139,7 @@ struct BarBalanceGraphWatchMidnightBottom: View
                         .opacity(0.25)
                 }
             
-            let widthConsumed = calBurnedMidnightGraphTotal == 0 ? 0.0 : CGFloat(Double(DataViewModel.sample.consumed) / Double(calBurnedMidnightGraphTotal)) * (geometry.size.width)
+            let widthConsumed = CGFloat(DataViewModel.sample.midnight.ratio(of: DataViewModel.sample.midnight.consumed)) * geometry.size.width
             
             Rectangle()
                 .fill(AppSettings.consumedColor)

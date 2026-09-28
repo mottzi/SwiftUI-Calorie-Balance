@@ -29,7 +29,7 @@ struct RectangleBalanceBarComplicationView : View
                                 .fontWeight(.semibold)
                                 .foregroundStyle(Settings.shared.burnedColor.brighten(0.1).gradient)
                             
-                            Text("\(entry.data.burnedActive + entry.data.burnedPassive)")
+                            Text("\(entry.data.now.burned)")
                                 .fontWeight(.medium)
                                 .foregroundStyle(Settings.shared.burnedColor.brighten(0.3))
                         }
@@ -107,4 +107,3 @@ timeline:
 {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }
-

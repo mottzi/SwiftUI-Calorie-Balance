@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Shows projected burned and consumed energy in two horizontal bars.
 struct BarBalanceGraphMidnight: View {
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
@@ -8,10 +9,8 @@ struct BarBalanceGraphMidnight: View {
 
     var context: ViewContext = .app
 
-    let burnedActive: Int
-    let burnedPassive: Int
-    let burnedPassive7: Int
-    let consumed: Int
+    /// The snapshot projection used for every segment and label.
+    let energy: EnergyBalance
 
     let consumedColor: Color
     let burnedColor: Color
@@ -82,7 +81,7 @@ extension BarBalanceGraphMidnight {
                 }
                 .overlay {
                     ViewThatFits {
-                        Text("\(burnedActive)").graphLabelStyle(scheme)
+                        Text("\(energy.active)").graphLabelStyle(scheme)
                         
                         Color.clear.frame(width: 0, height: 0)
                     }
@@ -105,7 +104,7 @@ extension BarBalanceGraphMidnight {
                 }
                 .overlay {
                     ViewThatFits {
-                        Text("\(burnedPassive)").graphLabelStyle(scheme)
+                        Text("\(energy.resting)").graphLabelStyle(scheme)
 
                         Color.clear.frame(width: 0, height: 0)
                     }
@@ -130,7 +129,7 @@ extension BarBalanceGraphMidnight {
                 .clipShape(UnevenRoundedRectangle(topTrailingRadius: 6, style: .circular))
                 .overlay {
                     ViewThatFits {
-                        Text("\(burnedPassiveRemaining)").graphLabelStyle(scheme)
+                        Text("\(energy.restingRemaining)").graphLabelStyle(scheme)
                         
                         Color.clear.frame(width: 0, height: 0)
                     }
@@ -139,7 +138,7 @@ extension BarBalanceGraphMidnight {
             
             let widthRest = geometry.size.width - widthActive - widthPassive - widthPassiveTillMidnight
             
-            if(burnedActive + burnedPassive + burnedPassiveRemaining < graphTotal) {
+            if energy.burned < energy.graphTotal {
                 ZStack {
                     Rectangle()
                         .fill(Color.clear)
@@ -147,11 +146,11 @@ extension BarBalanceGraphMidnight {
                         .padding(.leading, widthActive + widthPassive + widthPassiveTillMidnight)
                     
                     if widthRest <= 25 {
-                        Text("\(graphTotal - (burnedActive + burnedPassive + burnedPassiveRemaining))")
+                        Text("\(energy.graphTotal - energy.burned)")
                             .graphLabelStyle(scheme)
                             .padding(.leading, widthActive + widthPassive + widthPassiveTillMidnight - 18)
                     } else {
-                        Text("\(graphTotal - (burnedActive + burnedPassive + burnedPassiveRemaining))")
+                        Text("\(energy.graphTotal - energy.burned)")
                             .graphLabelStyle(scheme)
                             .padding(.leading, widthActive + widthPassive + widthPassiveTillMidnight)
                     }
@@ -177,9 +176,7 @@ extension BarBalanceGraphMidnight {
                         .opacity(0.25)
                 }
             
-            let widthConsumed = graphTotal == 0
-                ? 0.0
-                : CGFloat(Double(consumed) / Double(graphTotal)) * (geometry.size.width)
+            let widthConsumed = CGFloat(energy.ratio(of: energy.consumed)) * geometry.size.width
             
             Rectangle()
                 .fill(consumedColor)
@@ -196,13 +193,13 @@ extension BarBalanceGraphMidnight {
                 .clipShape(UnevenRoundedRectangle(bottomTrailingRadius: 6, style: .circular))
                 .overlay {
                     ViewThatFits {
-                        Text("\(consumed)").graphLabelStyle(scheme)
+                        Text("\(energy.consumed)").graphLabelStyle(scheme)
                         
                         Color.clear.frame(width: 0, height: 0)
                     }
                 }
             
-            if (consumed < graphTotal) {
+            if (energy.consumed < energy.graphTotal) {
                 let widthRest = geometry.size.width - widthConsumed
                 
                 ZStack {
@@ -211,7 +208,7 @@ extension BarBalanceGraphMidnight {
                         .frame(width: widthRest)
                         .padding(.leading, widthConsumed)
 
-                    Text("\(graphTotal - consumed)")
+                    Text("\(energy.graphTotal - energy.consumed)")
                         .graphLabelStyle(scheme)
                         .padding(.leading, widthRest <= 25 ? widthConsumed - 18 : widthConsumed)
                 }
@@ -222,14 +219,8 @@ extension BarBalanceGraphMidnight {
 //        .compositingGroup()
     }
 
-    var balanceMidnight: Int { burnedPassive + burnedPassiveRemaining + burnedActive - consumed }
-    var burnedPassiveRemaining: Int { max(burnedPassive7 - burnedPassive, 0) }
-    var graphTotal: Int { max(burnedActive + burnedPassive + burnedPassiveRemaining, consumed) }
-
-    var activeGraphRatio: CGFloat { graphTotal == 0 ? 0.0 : CGFloat(Double(burnedActive) / Double(graphTotal)) }
-    var passiveGraphRatio: CGFloat { graphTotal == 0 ? 0.0 : CGFloat(Double(burnedPassive) / Double(graphTotal)) }
-    var passiveRemainingRatio: CGFloat {
-        graphTotal == 0 ? 0.0 : CGFloat(Double(self.burnedPassiveRemaining) / Double(graphTotal))
-    }
+    var activeGraphRatio: CGFloat { CGFloat(energy.ratio(of: energy.active)) }
+    var passiveGraphRatio: CGFloat { CGFloat(energy.ratio(of: energy.resting)) }
+    var passiveRemainingRatio: CGFloat { CGFloat(energy.ratio(of: energy.restingRemaining)) }
 
 }

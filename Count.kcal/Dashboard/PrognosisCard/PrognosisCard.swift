@@ -32,10 +32,7 @@ struct PrognosisCard: View {
             TopRowRight.padding(.top, 2)
             
             BarBalanceGraphMidnight(
-                burnedActive: DataViewModel.sample.burnedActiveMidnight,
-                burnedPassive: DataViewModel.sample.burnedPassive,
-                burnedPassive7: DataViewModel.sample.burnedPassive7,
-                consumed: DataViewModel.sample.consumed,
+                energy: DataViewModel.sample.midnight,
                 consumedColor: AppSettings.consumedColor,
                 burnedColor: AppSettings.burnedColor
             )
@@ -86,7 +83,7 @@ extension PrognosisCard {
 
                     VStack(alignment: .leading, spacing: 0) {
                         HStack(alignment: .lastTextBaseline, spacing: 2) {
-                            Text("\(getActiveBurnedCalories() + DataViewModel.sample.burnedPassive + DataViewModel.sample.burnedPassiveRemaining)")
+                            Text("\(DataViewModel.sample.midnight.burned)")
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color("TextColor"))
@@ -209,18 +206,10 @@ extension PrognosisCard {
     }
 
     private var goalReached: Bool {
-        // loose weight goal
-        if AppSettings.weightGoal == .lose {
-            return DataViewModel.sample.balanceMidnight >= Int(AppSettings.balanceGoal)
-        }
-        // gain weight goal
-        else {
-            return DataViewModel.sample.balanceMidnight <= -Int(AppSettings.balanceGoal)
-        }
-    }
-    
-    func getActiveBurnedCalories() -> Int {
-        DataViewModel.sample.burnedActiveMidnight
+        DataViewModel.sample.midnight.meetsGoal(
+            AppSettings.balanceGoal,
+            isLoss: AppSettings.weightGoal == .lose
+        )
     }
 
 }

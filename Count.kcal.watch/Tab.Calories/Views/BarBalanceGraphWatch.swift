@@ -40,9 +40,9 @@ struct BarBalanceGraphWatchTop: View
     
     let geometry: GeometryProxy
 
-    var calBurnedNowGraphTotal: Int { max(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive, DataViewModel.sample.consumed) }
-    var activeNowGraphWidthRatio: CGFloat { calBurnedNowGraphTotal == 0 ? 0.0 : CGFloat(Double(DataViewModel.sample.burnedActive) / Double(calBurnedNowGraphTotal)) }
-    var passiveNowGraphWidthRatio: CGFloat { calBurnedNowGraphTotal == 0 ? 0.0 : CGFloat(Double(DataViewModel.sample.burnedPassive) / Double(calBurnedNowGraphTotal)) }
+    var calBurnedNowGraphTotal: Int { DataViewModel.sample.now.graphTotal }
+    var activeNowGraphWidthRatio: CGFloat { CGFloat(DataViewModel.sample.now.ratio(of: DataViewModel.sample.now.active)) }
+    var passiveNowGraphWidthRatio: CGFloat { CGFloat(DataViewModel.sample.now.ratio(of: DataViewModel.sample.now.resting)) }
     
     var body: some View
     {
@@ -98,7 +98,7 @@ struct BarBalanceGraphWatchBottom: View
     
     let geometry: GeometryProxy
     
-    var calBurnedNowGraphTotal: Int { max(DataViewModel.sample.burnedActive + DataViewModel.sample.burnedPassive, DataViewModel.sample.consumed) }
+    var calBurnedNowGraphTotal: Int { DataViewModel.sample.now.graphTotal }
     
     var body: some View
     {
@@ -113,7 +113,7 @@ struct BarBalanceGraphWatchBottom: View
                         .opacity(0.25)
                 }
             
-            let widthConsumed = calBurnedNowGraphTotal == 0 ? 0.0 : CGFloat(Double(DataViewModel.sample.consumed) / Double(calBurnedNowGraphTotal)) * (geometry.size.width)
+            let widthConsumed = CGFloat(DataViewModel.sample.now.ratio(of: DataViewModel.sample.now.consumed)) * geometry.size.width
             
             Rectangle()
                 .fill(AppSettings.consumedColor)

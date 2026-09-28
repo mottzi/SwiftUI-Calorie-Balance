@@ -52,7 +52,7 @@ struct RectangleBalanceComplicationView : View
                                 
                                 HStack(alignment: .lastTextBaseline, spacing: 2)
                                 {
-                                    Text("\(entry.data.burnedActive + entry.data.burnedPassive)")
+                                    Text("\(entry.data.now.burned)")
                                         .fontWeight(.medium)
                                         .foregroundStyle(Settings.shared.burnedColor.brighten(0.45))
                                         .frame(minWidth: 50, alignment: .trailing)
