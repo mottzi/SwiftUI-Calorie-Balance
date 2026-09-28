@@ -56,21 +56,7 @@ struct Pager: View {
                             .padding(.bottom, 15)
                         }
                         
-                        ScrollView(.horizontal) {
-                            LazyHStack(spacing: 0) {
-                                ForEach(navigation.pages, id: \.id) {
-                                    Dashboard(todayPageMode: $todayPageMode)
-                                        .containerRelativeFrame(.horizontal, count: 1, span: 1, spacing: 10.0)
-                                        .environment($0)
-                                        .id($0.id)
-                                }
-                            }
-                            .scrollTargetLayout()
-                            .padding(.bottom, 20)
-                        }
-                        .scrollTargetBehavior(.paging)
-                        .scrollIndicators(.hidden)
-                        .scrollPosition(id: scrollDay)
+                        DayPageStrip(navigation: navigation, todayPageMode: $todayPageMode)
                         
                         WeightCard()
                     } else {
@@ -131,25 +117,7 @@ struct Pager: View {
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        streak.toggleStreaksView()
-                    } label: {
-                        let color = (AppSettings.weightGoal == .lose ? AppSettings.burnedColor : AppSettings.consumedColor)
-                        
-                        HStack(spacing: 4) {
-                            Image(systemName: "flame.fill")
-                                .symbolRenderingMode(.palette)
-                                .foregroundStyle(color.brighten(-0.1).gradient)
-                                .fontWeight(.bold)
-                            
-                            Text("\(streak.streaks)")
-                                .font(.callout)
-                                .fontDesign(.rounded)
-                                .fontWeight(.bold)
-                                .foregroundStyle(Color("TextColor"))
-                        }
-                    }
-                    .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
+                    StreakToolbarButton()
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
@@ -177,16 +145,6 @@ struct Pager: View {
 extension Pager {
 
     private var selectedPage: HealthInterface? { navigation.page(for: navigation.selectedDay) }
-
-    private var scrollDay: Binding<Date?> {
-        Binding(
-            get: { navigation.selectedDay },
-            set: { day in
-                guard let day else { return }
-                navigation.selectedDay = Calendar.current.startOfDay(for: day)
-            }
-        )
-    }
 
     private var selectedRefreshKey: DayRefreshKey {
         DayRefreshKey(
@@ -230,13 +188,18 @@ extension Pager {
         guard scenePhase == .active else { return }
         await AppSettings.updateShow()
         guard !Task.isCancelled else { return }
-        for page in navigation.weekPages where page.id != navigation.selectedDay {
-            guard !Task.isCancelled else { return }
-            await page.updateMetrics()
+        let weekPages = navigation.weekPages.filter { $0.id != navigation.selectedDay }
+        async let weightRefresh: Void = WeightViewModel.fetchData()
+        async let streakRefresh: Void = streak.updateStreaks()
+        await withTaskGroup(of: Void.self) { group in
+            for page in weekPages {
+                group.addTask {
+                    guard !Task.isCancelled else { return }
+                    await page.updateMetrics()
+                }
+            }
         }
-        guard !Task.isCancelled else { return }
-        await WeightViewModel.fetchData()
-        await streak.updateStreaks()
+        _ = await (weightRefresh, streakRefresh)
     }
 
     /// Animates navigation to the selected calendar day.
@@ -361,6 +324,73 @@ extension Pager {
         .foregroundColor(Color("TextColor"))
         .contentTransition(.symbolEffect(.replace))
         .fontWeight(.medium)
+    }
+
+}
+
+/// Horizontal day targets that keep their calendar-day identity while browsing.
+private struct DayPageStrip: View {
+
+    @Bindable var navigation: DayPager
+
+    @Binding var todayPageMode: PagerSelection
+
+    var body: some View {
+        ScrollView(.horizontal) {
+            LazyHStack(spacing: 0) {
+                ForEach(navigation.pages, id: \.id) { page in
+                    Dashboard(todayPageMode: $todayPageMode)
+                        .containerRelativeFrame(.horizontal, count: 1, span: 1, spacing: 10.0)
+                        .environment(page)
+                        .id(page.id)
+                }
+            }
+            .scrollTargetLayout()
+            .padding(.bottom, 20)
+        }
+        .scrollTargetBehavior(.paging)
+        .scrollIndicators(.hidden)
+        .scrollPosition(id: scrollDay)
+    }
+
+    private var scrollDay: Binding<Date?> {
+        Binding(
+            get: { navigation.selectedDay },
+            set: { day in
+                guard let day else { return }
+                navigation.selectedDay = Calendar.current.startOfDay(for: day)
+            }
+        )
+    }
+
+}
+
+/// Toolbar control for the streak count and chart visibility.
+private struct StreakToolbarButton: View {
+
+    @EnvironmentObject private var settings: Settings
+
+    @Environment(Streak.self) private var streak
+
+    var body: some View {
+        Button {
+            streak.toggleStreaksView()
+        } label: {
+            let color = settings.weightGoal == .lose ? settings.burnedColor : settings.consumedColor
+            HStack(spacing: 4) {
+                Image(systemName: "flame.fill")
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(color.brighten(-0.1).gradient)
+                    .fontWeight(.bold)
+
+                Text("\(streak.streaks)")
+                    .font(.callout)
+                    .fontDesign(.rounded)
+                    .fontWeight(.bold)
+                    .foregroundStyle(Color("TextColor"))
+            }
+        }
+        .disabled(settings.showWelcome || !settings.isSettingsInputValid)
     }
 
 }

@@ -11,77 +11,80 @@ struct WeightTopBar: View {
 
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: 0) {
-            HStack(spacing: 16) {
-                VStack(spacing: 0) {
-                    Text(
-                        verbatim: WeightViewModel.weightAvg7 == 0.0
-                            ? "-/-"
-                            : String(format: "%.1f", WeightViewModel.weightAvg7)
-                    )
-                        .font(.title3)
-                        .foregroundStyle(pageSelection == .first ? Color("TextColor") : Color("SecondaryTextColor"))
-                        .fontWeight(.semibold)
-                        .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+            Button {
+                pageSelection?.toggle()
+            } label: {
+                HStack(spacing: 16) {
+                    VStack(spacing: 0) {
+                        Text(
+                            verbatim: WeightViewModel.weightAvg7 == 0.0
+                                ? "-/-"
+                                : String(format: "%.1f", WeightViewModel.weightAvg7)
+                        )
+                            .font(.title3)
+                            .foregroundStyle(pageSelection == .first ? Color("TextColor") : Color("SecondaryTextColor"))
+                            .fontWeight(.semibold)
+                            .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                     
-                    Text("Weekly")
-                        .font(.caption)
-                        .foregroundStyle(pageSelection == .first ? Color("TextColor") : Color("SecondaryTextColor"))
-                        .fontWeight(.light)
-                        .dynamicTypeSize(...DynamicTypeSize.xxLarge)
-                }
-                .frame(minWidth: 60)
+                        Text("Weekly")
+                            .font(.caption)
+                            .foregroundStyle(pageSelection == .first ? Color("TextColor") : Color("SecondaryTextColor"))
+                            .fontWeight(.light)
+                            .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+                    }
+                    .frame(minWidth: 60)
                 
-                Image(systemName: "circle.slash")
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .foregroundStyle(Color("TextColor"))
-                    .rotationEffect(.degrees(-90))
-                    .padding(.trailing, pageSelection == .first ? 8 : -8)
-                    .padding(.leading, pageSelection == .first ? -8 : 8)
-                    .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+                    Image(systemName: "circle.slash")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                        .foregroundStyle(Color("TextColor"))
+                        .rotationEffect(.degrees(-90))
+                        .padding(.trailing, pageSelection == .first ? 8 : -8)
+                        .padding(.leading, pageSelection == .first ? -8 : 8)
+                        .dynamicTypeSize(...DynamicTypeSize.xxLarge)
 
-                VStack(spacing: 0) {
-                    Text(
-                        verbatim: WeightViewModel.weightAvg30 == 0.0
-                            ? "-/-"
-                            : String(format: "%.1f", WeightViewModel.weightAvg30)
-                    )
-                        .font(.title3)
-                        .foregroundStyle(pageSelection == .second ? Color("TextColor") : Color("SecondaryTextColor"))
-                        .fontWeight(.semibold)
-                        .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+                    VStack(spacing: 0) {
+                        Text(
+                            verbatim: WeightViewModel.weightAvg30 == 0.0
+                                ? "-/-"
+                                : String(format: "%.1f", WeightViewModel.weightAvg30)
+                        )
+                            .font(.title3)
+                            .foregroundStyle(pageSelection == .second ? Color("TextColor") : Color("SecondaryTextColor"))
+                            .fontWeight(.semibold)
+                            .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                     
-                    Text("Monthly")
-                        .font(.caption)
-                        .foregroundStyle(pageSelection == .second ? Color("TextColor") : Color("SecondaryTextColor"))
-                        .fontWeight(.light)
-                        .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+                        Text("Monthly")
+                            .font(.caption)
+                            .foregroundStyle(pageSelection == .second ? Color("TextColor") : Color("SecondaryTextColor"))
+                            .fontWeight(.light)
+                            .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+                    }
+                    .frame(minWidth: 60)
                 }
-                .frame(minWidth: 60)
-            }
-            .fixedSize(horizontal: true, vertical: false)
-            .padding(2)
-            .padding(.vertical, 6)
-            .padding(.horizontal, 12)
-            .padding(.bottom, 2)
-            .background {
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(
-                        Color("TextColor").opacity(0.2),
-                        style: StrokeStyle(lineWidth: 2)
-                    )
-                
-                GeometryReader { geo in
+                .fixedSize(horizontal: true, vertical: false)
+                .padding(2)
+                .padding(.vertical, 6)
+                .padding(.horizontal, 12)
+                .padding(.bottom, 2)
+                .background {
                     RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color("TextColor").opacity(0.6), style: StrokeStyle(lineWidth: 1.5))
-                        .fill(Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.05))
-                        .brightness(level: .secondary)
-                        .frame(width: geo.size.width / 2 + 15)
-                        .frame(maxWidth: .infinity, alignment: pageSelection == .first ? .leading : .trailing)
+                        .stroke(
+                            Color("TextColor").opacity(0.2),
+                            style: StrokeStyle(lineWidth: 2)
+                        )
+
+                    GeometryReader { geo in
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color("TextColor").opacity(0.6), style: StrokeStyle(lineWidth: 1.5))
+                            .fill(Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.05))
+                            .brightness(level: .secondary)
+                            .frame(width: geo.size.width / 2 + 15)
+                            .frame(maxWidth: .infinity, alignment: pageSelection == .first ? .leading : .trailing)
+                    }
                 }
             }
-            .contentShape(.rect)
-            .onTapGesture { pageSelection?.toggle() }
+            .buttonStyle(.plain)
             .animation(.snappy, value: pageSelection)
             
             

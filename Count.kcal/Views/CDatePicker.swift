@@ -75,87 +75,16 @@ struct CDatePicker: View {
                         .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                 }
                 
-                ForEach(days) { d in
-                    CalendarDayLabel(day: d, isCurrentMonth: d.id.isSameMonth(as: currentMonth))
-                    .offset(y: -1)
-                    .frame(width: width, height: width)
-                    .background {
-                        Group {
-                            if days.first == d {
-                                UnevenRoundedRectangle(
-                                    topLeadingRadius: 10,
-                                    bottomLeadingRadius: 0,
-                                    bottomTrailingRadius: 0,
-                                    topTrailingRadius: 0,
-                                    style: .circular
-                                )
-                                    .fill(getDayCellBackground(d: d.id))
-                                    .stroke(
-                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.id)),
-                                        style: getDayCellStrokeStyle(d: d.id)
-                                    )
-                                    .brightness(level: getDayCellBrightness(d: d.id))
-                            } else if days.last == d {
-                                UnevenRoundedRectangle(
-                                    topLeadingRadius: 0,
-                                    bottomLeadingRadius: 0,
-                                    bottomTrailingRadius: 10,
-                                    topTrailingRadius: 0,
-                                    style: .circular
-                                )
-                                    .fill(getDayCellBackground(d: d.id))
-                                    .stroke(
-                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.id)),
-                                        style: getDayCellStrokeStyle(d: d.id)
-                                    )
-                                    .brightness(level: getDayCellBrightness(d: d.id))
-                            } else if days.firstIndex(of: d) == 6 {
-                                UnevenRoundedRectangle(
-                                    topLeadingRadius: 0,
-                                    bottomLeadingRadius: 0,
-                                    bottomTrailingRadius: 0,
-                                    topTrailingRadius: 10,
-                                    style: .circular
-                                )
-                                    .fill(getDayCellBackground(d: d.id))
-                                    .stroke(
-                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.id)),
-                                        style: getDayCellStrokeStyle(d: d.id)
-                                    )
-                                    .brightness(level: getDayCellBrightness(d: d.id))
-                            } else if days.firstIndex(of: d) == days.count - 7 {
-                                UnevenRoundedRectangle(
-                                    topLeadingRadius: 0,
-                                    bottomLeadingRadius: 10,
-                                    bottomTrailingRadius: 0,
-                                    topTrailingRadius: 0,
-                                    style: .circular
-                                )
-                                    .fill(getDayCellBackground(d: d.id))
-                                    .stroke(
-                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.id)),
-                                        style: getDayCellStrokeStyle(d: d.id)
-                                    )
-                                    .brightness(level: getDayCellBrightness(d: d.id))
-                            } else {
-                                Rectangle()
-                                    .fill(getDayCellBackground(d: d.id))
-                                    .stroke(
-                                        Color("TextColor").opacity(getDayCellStrokeOpacity(d: d.id)),
-                                        style: getDayCellStrokeStyle(d: d.id)
-                                    )
-                                    .brightness(level: getDayCellBrightness(d: d.id))
-                            }
-                        }
-                        .transaction { transaction in
-                            transaction.animation = nil
-                        }
+                ForEach(Array(days.enumerated()), id: \.element.id) { index, day in
+                    Button {
+                        selectDay(day.id)
+                    } label: {
+                        CalendarDayLabel(day: day, isCurrentMonth: day.id.isSameMonth(as: currentMonth))
+                            .offset(y: -1)
+                            .frame(width: width, height: width)
+                            .background { dayBackground(day.id, index: index, count: days.count) }
                     }
-                    .contentShape(.rect)
-                    .onTapGesture {
-                        selectDay(d.id)
-                    }
-                   
+                    .buttonStyle(.plain)
                 }
             }
             .transaction { $0.animation = nil }
@@ -177,10 +106,18 @@ struct CDatePicker: View {
             days = cells
             guard sceneActive else { return }
             let sharedDays = Set(navigation.weekPages.map(\.id) + [navigation.selectedDay])
-            for cell in cells {
+            let pending = cells.filter { !sharedDays.contains($0.id) }
+            // limit concurrent requests for calendar days outside the visible summaries
+            for start in stride(from: 0, to: pending.count, by: 4) {
                 guard !Task.isCancelled else { return }
-                guard !sharedDays.contains(cell.id) else { continue }
-                await cell.updateMetrics()
+                await withTaskGroup(of: Void.self) { group in
+                    for cell in pending[start..<min(start + 4, pending.count)] {
+                        group.addTask {
+                            guard !Task.isCancelled else { return }
+                            await cell.updateMetrics()
+                        }
+                    }
+                }
             }
         }
 
@@ -210,20 +147,19 @@ extension CDatePicker {
         Calendar.current.shortWeekdaySymbolsLocalized
     }
     
-    func getDayCellStrokeStyle(d: Date) -> StrokeStyle {
-        if isDaySelected(d) {
-            return StrokeStyle(lineWidth: 2)
-        }
-        
-        return StrokeStyle(lineWidth: 0)
-    }
-    
-    func getDayCellStrokeOpacity(d: Date) -> Double {
-        if isDaySelected(d) {
-            return 1
-        }
-        
-        return 0
+    private func dayBackground(_ date: Date, index: Int, count: Int) -> some View {
+        let selected = isDaySelected(date)
+        return UnevenRoundedRectangle(
+            topLeadingRadius: index == 0 ? 10 : 0,
+            bottomLeadingRadius: index == count - 7 ? 10 : 0,
+            bottomTrailingRadius: index == count - 1 ? 10 : 0,
+            topTrailingRadius: index == 6 ? 10 : 0,
+            style: .circular
+        )
+        .fill(getDayCellBackground(d: date))
+        .stroke(Color("TextColor").opacity(selected ? 1 : 0), style: StrokeStyle(lineWidth: selected ? 2 : 0))
+        .brightness(level: getDayCellBrightness(d: date))
+        .transaction { $0.animation = nil }
     }
     
     func getDayCellBrightness(d: Date) -> BrightnessLevel {
