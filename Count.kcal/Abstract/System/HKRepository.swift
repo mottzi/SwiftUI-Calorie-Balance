@@ -80,6 +80,45 @@ final class HKRepository {
 
 extension HKRepository {
 
+    @MainActor
+    /// Loads daily energy balances for a bounded streak count with fixed settings.
+    func fetchStreakEnergy(
+        endingOn date: Date,
+        days: Int,
+        source: Settings.DataSources,
+        energyUnit: Settings.EnergyUnit,
+        customActive: Int,
+        customPassive: Int
+    ) async -> [EnergyBalance] {
+
+        guard days > 0 else { return [] }
+        let calendar = Calendar.current
+        let end = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: date))!
+        let start = calendar.date(byAdding: .day, value: -days, to: end)!
+        let unit: HKUnit = energyUnit == .kJ ? .jouleUnit(with: .kilo) : .kilocalorie()
+
+        var active: [Date: Int] = [:]
+        var passive: [Date: Int] = [:]
+        var consumed: [Date: Int] = [:]
+        if HKHealthStore.isHealthDataAvailable(), !Task.isCancelled {
+            async let activeSums = dailySums(.activeEnergyBurned, from: start, to: end, unit: unit)
+            async let passiveSums = dailySums(.basalEnergyBurned, from: start, to: end, unit: unit)
+            async let consumedSums = dailySums(.dietaryEnergyConsumed, from: start, to: end, unit: unit)
+            let sums = await (activeSums, passiveSums, consumedSums)
+            active = sums.0
+            passive = sums.1
+            consumed = sums.2
+        }
+
+        return (0..<days).map { offset in
+            let day = calendar.date(byAdding: .day, value: -offset - 1, to: end)!
+            let burnedActive = source == .custom ? customActive : active[day, default: 0]
+            let burnedPassive = source == .custom ? customPassive : passive[day, default: 0]
+            let intake = consumed[day, default: 0]
+            return EnergyBalance(active: burnedActive, resting: burnedPassive, consumed: intake)
+        }
+    }
+
     /// Loads daily weight averages for the chart period ending on the given date.
     func fetchInitialAvgWeightData(for date: Date, weightUnit: Settings.WeightUnit) async -> [WeightChartData] {
         let unit: HKUnit = weightUnit == .lbs ? .pound() : .gramUnit(with: .kilo)
@@ -188,6 +227,34 @@ extension HKRepository {
 }
 
 extension HKRepository {
+
+    /// Reads daily quantity sums in one HealthKit query over a date range.
+    private func dailySums(
+        _ type: HKQuantityTypeIdentifier,
+        from start: Date,
+        to end: Date,
+        unit: HKUnit
+    ) async -> [Date: Int] {
+
+        let predicate = HKSamplePredicate.quantitySample(
+            type: HKQuantityType(type),
+            predicate: HKQuery.predicateForSamples(withStart: start, end: end)
+        )
+        let query = HKStatisticsCollectionQueryDescriptor(
+            predicate: predicate,
+            options: .cumulativeSum,
+            anchorDate: start,
+            intervalComponents: DateComponents(day: 1)
+        )
+        guard let collection = try? await query.result(for: store) else { return [:] }
+
+        var sums: [Date: Int] = [:]
+        collection.enumerateStatistics(from: start, to: end) { statistics, _ in
+            let quantity = statistics.sumQuantity()?.doubleValue(for: unit) ?? 0
+            sums[statistics.startDate] = Int(quantity.rounded())
+        }
+        return sums
+    }
 
     /// Reads one quantity sum between calendar boundaries.
     private func dailySum(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async -> Int {

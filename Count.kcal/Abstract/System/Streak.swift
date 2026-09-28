@@ -25,21 +25,27 @@ final class Streak {
         let currentRequest = requestID
         let goal = settings.balanceGoal
         let isLossGoal = settings.weightGoal == .lose
+        let source = settings.dataSource
+        let energyUnit = settings.energyUnit
+        let customActive = settings.customCalActive
+        let customPassive = settings.customCalPassive
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: .now)!
         var streak = 0
-        var date = Date.now.yesterday
 
-        while streak < 200 {
-            // stop if another count replaced this one during the HealthKit query
-            guard !Task.isCancelled, currentRequest == requestID else { return }
-            let data = await repository.fetchDailySnapshot(for: date, settings: settings)
-            guard !Task.isCancelled, currentRequest == requestID else { return }
-            guard data.consumed > 0 else { break }
-            guard isLossGoal ? data.balanceNow >= goal : data.balanceNow <= -goal else { break }
+        let days = await repository.fetchStreakEnergy(
+            endingOn: yesterday,
+            days: 200,
+            source: source,
+            energyUnit: energyUnit,
+            customActive: customActive,
+            customPassive: customPassive
+        )
+        guard !Task.isCancelled, currentRequest == requestID else { return }
+        for day in days {
+            guard day.consumed > 0, day.meetsGoal(goal, isLoss: isLossGoal) else { break }
             streak += 1
-            date = date.yesterday
         }
 
-        guard !Task.isCancelled, currentRequest == requestID else { return }
         streaks = streak
     }
 
