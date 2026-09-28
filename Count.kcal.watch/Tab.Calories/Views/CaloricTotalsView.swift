@@ -1,34 +1,18 @@
 import SwiftUI
 
-struct CaloricTotalsView: View
-{
+struct CaloricTotalsView: View {
+
     @EnvironmentObject private var AppSettings: Settings
     @Environment(HealthInterface.self) var Interface
     
     let mode: GraphMode
     
-    var burnedTotal: Int
-    {
-        if mode == .now
-        {
-            Interface.sample.now.burned
-        }
-        else
-        {
-            Interface.sample.midnight.burned
-        }
-    }
-    
-    var body: some View
-    {
-        HStack
-        {
+    var body: some View {
+        HStack {
             Spacer(minLength: 0)
             
-            HStack
-            {
-                HStack(spacing: 3)
-                {
+            HStack {
+                HStack(spacing: 3) {
                     Image(systemName: "bolt.fill")
                         .resizable()
                         .scaledToFit()
@@ -49,8 +33,7 @@ struct CaloricTotalsView: View
                     .frame(width: 5)
                     .frame(width: 10, height: 10)
                 
-                HStack(spacing: 3)
-                {
+                HStack(spacing: 3) {
                     Text("\(Interface.sample.consumed)")
                         .font(.title3)
                         .fontWeight(.semibold)
@@ -75,10 +58,22 @@ struct CaloricTotalsView: View
         }
         .dynamicTypeSize(...DynamicTypeSize.xxLarge)
     }
+
 }
 
-#Preview
-{
+extension CaloricTotalsView {
+
+    var burnedTotal: Int {
+        if mode == .now {
+            Interface.sample.now.burned
+        } else {
+            Interface.sample.midnight.burned
+        }
+    }
+
+}
+
+#Preview {
     ContentView(Interface: HealthInterface(.example(for: .now, balance: .deficit)))
         .environmentObject(Settings.shared)
 }

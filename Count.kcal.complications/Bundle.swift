@@ -2,20 +2,19 @@ import SwiftUI
 import WidgetKit
 
 @main
-struct Bundle: WidgetBundle
-{
-    var body: some Widget
-    {
+struct Bundle: WidgetBundle {
+
+    var body: some Widget {
         CornerBundle().body
         CircleBundle().body
         RectangleBundle().body
     }
+
 }
 
-struct CornerBundle: WidgetBundle
-{
-    var body: some Widget
-    {
+struct CornerBundle: WidgetBundle {
+
+    var body: some Widget {
         BalanceCornerTextComplication<NowComplicationMode>()
         BalanceCornerTextComplication<MidnightComplicationMode>()
         BalanceCornerTextNowMidnightComplication()
@@ -23,12 +22,12 @@ struct CornerBundle: WidgetBundle
         BalanceCornerGaugeComplication<NowComplicationMode>()
         BalanceCornerGaugeComplication<MidnightComplicationMode>()
     }
+
 }
 
-struct CircleBundle: WidgetBundle
-{
-    var body: some Widget
-    {
+struct CircleBundle: WidgetBundle {
+
+    var body: some Widget {
         BalanceCircleGaugeComplication<NowComplicationMode>()
         BalanceCircleGaugeComplication<MidnightComplicationMode>()
         
@@ -41,18 +40,19 @@ struct CircleBundle: WidgetBundle
         BalanceCircleFullGraphComplication<NowComplicationMode>()
         BalanceCircleFullGraphComplication<MidnightComplicationMode>()
     }
+
 }
 
-struct RectangleBundle: WidgetBundle
-{
-    var body: some Widget
-    {
+struct RectangleBundle: WidgetBundle {
+
+    var body: some Widget {
         RectangleBalanceComplication<NowComplicationMode>()
         RectangleBalanceComplication<MidnightComplicationMode>()
         
         RectangleBalanceBarComplication<NowComplicationMode>()
         RectangleBalanceBarComplication<MidnightComplicationMode>()
     }
+
 }
 
 /// Fixed balance mode for one registered complication type.

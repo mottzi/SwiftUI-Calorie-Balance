@@ -9,10 +9,6 @@ struct BalanceCornerGaugeContent: View {
     let entry: HealthDataTimelineProvider.Entry
     let mode: GraphMode
 
-    private var range: ClosedRange<CGFloat> {
-        -1.6 * CGFloat(Settings.shared.balanceGoal) ... 1.6 * CGFloat(Settings.shared.balanceGoal)
-    }
-
     var body: some View {
         switch family {
             case .accessoryCorner:
@@ -36,11 +32,19 @@ struct BalanceCornerGaugeContent: View {
         }
     }
 
+}
+
+extension BalanceCornerGaugeContent {
+
     private var balance: Int {
         switch mode {
             case .now: entry.data.balanceNow
             case .midnight: entry.data.balanceMidnight
         }
+    }
+
+    private var range: ClosedRange<CGFloat> {
+        -1.6 * CGFloat(Settings.shared.balanceGoal) ... 1.6 * CGFloat(Settings.shared.balanceGoal)
     }
 
 }
@@ -63,26 +67,26 @@ struct BalanceCornerGaugeComplication<Mode: BalanceComplicationMode>: Widget {
         .supportedFamilies([.accessoryCorner])
     }
 
+}
+
+extension BalanceCornerGaugeComplication {
+
     private var kind: String {
         Mode.graphMode == .now ? "Balance.corner.gauge.now" : "Balance.corner.gauge.midnight"
     }
 
 }
 
-#Preview(as: .accessoryCorner)
-{
+#Preview(as: .accessoryCorner) {
     BalanceCornerGaugeComplication<NowComplicationMode>()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }
 
-#Preview(as: .accessoryCorner)
-{
+#Preview(as: .accessoryCorner) {
     BalanceCornerGaugeComplication<MidnightComplicationMode>()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }

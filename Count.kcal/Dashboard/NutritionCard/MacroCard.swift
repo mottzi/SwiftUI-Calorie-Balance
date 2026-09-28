@@ -1,13 +1,5 @@
 import SwiftUI
 
-struct NutrientGoals {
-
-    let carbs: Int
-    let fats: Int
-    let protein: Int
-
-}
-
 struct MacroCard: View {
 
     @EnvironmentObject private var AppSettings: Settings
@@ -48,6 +40,14 @@ struct MacroCard: View {
             .padding(.bottom, 2)
         }
     }
+
+}
+
+struct NutrientGoals {
+
+    let carbs: Int
+    let fats: Int
+    let protein: Int
 
 }
 

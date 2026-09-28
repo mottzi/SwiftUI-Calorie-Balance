@@ -1,17 +1,8 @@
 import SwiftUI
 import WidgetKit
 
-enum GraphContext
-{
-    case app
-    case circle
-    case circleThick
-    case circleFull
-    case circleFuller
-}
+struct CircleBalanceGraphWatch: View {
 
-struct CircleBalanceGraphWatch: View
-{
     @Environment(\.colorScheme) private var scheme
     @EnvironmentObject var AppSettings: Settings
     @Environment(HealthInterface.self) var DataInterface
@@ -21,49 +12,16 @@ struct CircleBalanceGraphWatch: View
     var context: GraphContext = .app
     var cutout = 0.28
 
-    private var now: EnergyBalance { DataInterface.sample.now }
-    private var midnight: EnergyBalance { DataInterface.sample.midnight }
-    
-    func lineWidth(max: CGFloat) -> CGFloat
-    {
-        switch context 
-        {
-            case .app:
-                max * 0.08
-            case .circle:
-                4
-            case .circleFull:
-                8
-            case .circleFuller:
-                10
-            case .circleThick:
-                6
-        }
-    }
-    
-    func gapWidth(max: CGFloat) -> CGFloat
-    {
-        switch context
-        {
-            case .app:
-                lineWidth(max: max) * 0.5
-            case .circle:
-                2
-            case .circleFull, .circleFuller:
-                4
-            case .circleThick:
-                5
-        }
-    }
-    
-    var body: some View
-    {
-        GeometryReader
-        { geo in
-            ZStack
-            {
+    var body: some View {
+        GeometryReader { geo in
+            ZStack {
                 // base
-                CircleProgressView(progress: 1, color: AppSettings.getGraphEmptyColor(scheme), cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
+                CircleProgressView(
+                    progress: 1,
+                    color: AppSettings.getGraphEmptyColor(scheme),
+                    cutout: cutout,
+                    lineWidth: lineWidth(max: geo.size.width)
+                )
                     .brightness(level: .primary)
                     .frame(width: geo.size.width - lineWidth(max: geo.size.width))
                     .opacity(rendering == .fullColor ? 1 : 0.2)
@@ -104,7 +62,12 @@ struct CircleBalanceGraphWatch: View
                     .frame(width: geo.size.width - lineWidth(max: geo.size.width))
 
                 // base
-                CircleProgressView(progress: 1, color: AppSettings.getGraphEmptyColor(scheme), cutout: cutout, lineWidth: lineWidth(max: geo.size.width))
+                CircleProgressView(
+                    progress: 1,
+                    color: AppSettings.getGraphEmptyColor(scheme),
+                    cutout: cutout,
+                    lineWidth: lineWidth(max: geo.size.width)
+                )
                     .frame(width: geo.size.width - (3 * lineWidth(max: geo.size.width)) - gapWidth(max: geo.size.width))
                     .brightness(level: .primary)
                     .opacity(rendering == .fullColor ? 1 : 0.2)
@@ -125,4 +88,43 @@ struct CircleBalanceGraphWatch: View
             .brightness(scheme == .dark ? -0.1 : 0.0)
         }
     }
+
+}
+
+extension CircleBalanceGraphWatch {
+
+    func lineWidth(max: CGFloat) -> CGFloat {
+        switch context {
+            case .app: max * 0.08
+            case .circle: 4
+            case .circleFull: 8
+            case .circleFuller: 10
+            case .circleThick: 6
+        }
+    }
+
+    func gapWidth(max: CGFloat) -> CGFloat {
+        switch context {
+            case .app: lineWidth(max: max) * 0.5
+            case .circle: 2
+            case .circleFull, .circleFuller: 4
+            case .circleThick: 5
+        }
+    }
+
+}
+
+extension CircleBalanceGraphWatch {
+
+    private var now: EnergyBalance { DataInterface.sample.now }
+    private var midnight: EnergyBalance { DataInterface.sample.midnight }
+
+}
+
+enum GraphContext {
+    case app
+    case circle
+    case circleThick
+    case circleFull
+    case circleFuller
 }

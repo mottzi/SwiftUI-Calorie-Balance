@@ -38,9 +38,8 @@ struct BarBalanceGraphWatch: View {
             .saturation(Settings.baseSaturation)
         }
     }
-}
 
-let gradientOpacityDark: Double = 0.20
+}
 
 /// Burned energy segments for the selected balance mode.
 private struct BarBalanceGraphWatchTop: View {
@@ -116,6 +115,10 @@ private struct BarBalanceGraphWatchTop: View {
         .drawingGroup()
     }
 
+}
+
+extension BarBalanceGraphWatchTop {
+
     private var energy: EnergyBalance {
         switch mode {
             case .now: health.sample.now
@@ -168,6 +171,10 @@ private struct BarBalanceGraphWatchBottom: View {
         .drawingGroup()
     }
 
+}
+
+extension BarBalanceGraphWatchBottom {
+
     private var energy: EnergyBalance {
         switch mode {
             case .now: health.sample.now
@@ -176,3 +183,5 @@ private struct BarBalanceGraphWatchBottom: View {
     }
 
 }
+
+let gradientOpacityDark: Double = 0.20

@@ -3,16 +3,19 @@ import SwiftUI
 
 /// Calorie balance bar for small and medium widgets.
 struct BalanceWidgetBar: Widget {
+
     @StateObject private var AppSettings = Settings.shared
 
     /// Selects now or midnight balance for each timeline entry.
     var body: some WidgetConfiguration {
         StaticConfiguration(
             kind: "BarBalanceGraphWidget",
-            provider: HealthDataTimelineProvider()) { entry in
+            provider: HealthDataTimelineProvider()
+        ) { entry in
             BalanceWidgetBarContent(
                 entry: entry,
-                mode: ModeToggleManager.buttonMode() ? .now : .midnight)
+                mode: ModeToggleManager.buttonMode() ? .now : .midnight
+            )
             .containerBackground(Color("BackGroundColor"), for: .widget)
             .environmentObject(AppSettings)
         }
@@ -21,6 +24,7 @@ struct BalanceWidgetBar: Widget {
         .description("Shows a bar graph of your calorie balance.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
+
 }
 
 /// Calorie balance bar with a button for now and midnight modes.

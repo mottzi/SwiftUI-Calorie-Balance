@@ -1,31 +1,18 @@
 import SwiftUI
 import WidgetKit
 
-struct BalanceCornerTextNowMidnightComplicationView : View
-{
+struct BalanceCornerTextNowMidnightComplicationView : View {
+
     @Environment(\.widgetFamily) var family
 
     var entry: HealthDataTimelineProvider.Entry
 
-    var balanceColor: Color
-    {
-        var c = entry.data.balanceMidnight > 0 ? Settings.shared.burnedColor : entry.data.balanceMidnight < 0 ? Settings.shared.consumedColor : Color.white
-        
-        c = c.brighten(0.6)
-        
-        return c
-    }
-    
-    var body: some View
-    {
-        switch family
-        {
-            case .accessoryCorner: do
-            {
+    var body: some View {
+        switch family {
+            case .accessoryCorner: do {
                 Text(verbatim: "\(entry.data.balanceNow)")
                     .widgetCurvesContent()
-                    .widgetLabel
-                    {
+                    .widgetLabel {
                         Text(verbatim: "\(entry.data.balanceMidnight)")
                             .foregroundStyle(balanceColor)
                     }
@@ -34,14 +21,30 @@ struct BalanceCornerTextNowMidnightComplicationView : View
             default: EmptyView()
         }
     }
+
 }
 
-struct BalanceCornerTextNowMidnightComplication: Widget
-{
-    var body: some WidgetConfiguration
-    {
-        StaticConfiguration(kind: "Balance.text.now.midnight", provider: HealthDataTimelineProvider())
-        { entry in
+extension BalanceCornerTextNowMidnightComplicationView {
+
+    var balanceColor: Color {
+        var c = entry.data.balanceMidnight > 0
+            ? Settings.shared.burnedColor
+            : entry.data.balanceMidnight < 0
+                ? Settings.shared.consumedColor
+                : Color.white
+
+        c = c.brighten(0.6)
+
+        return c
+    }
+
+
+}
+
+struct BalanceCornerTextNowMidnightComplication: Widget {
+
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: "Balance.text.now.midnight", provider: HealthDataTimelineProvider()) { entry in
             BalanceCornerTextNowMidnightComplicationView(entry: entry)
                 .containerBackground(.clear, for: .widget)
         }
@@ -49,15 +52,13 @@ struct BalanceCornerTextNowMidnightComplication: Widget
         .description(String("Shows current caloric balance and at midnight with text."))
         .supportedFamilies([.accessoryCorner])
     }
+
 }
 
 
-#Preview(as: .accessoryCorner)
-{
+#Preview(as: .accessoryCorner) {
     BalanceCornerTextNowMidnightComplication()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }
-

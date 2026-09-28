@@ -4,9 +4,9 @@ struct ThemeButton: View {
 
     @EnvironmentObject private var AppSettings: Settings
 
-    var theme: Settings.Theme
-    
     @State private var wasTapped: Bool = false
+
+    var theme: Settings.Theme
     
     var body: some View {
         VStack(spacing: 2) {
@@ -47,4 +47,3 @@ struct ThemeButton: View {
     }
 
 }
-

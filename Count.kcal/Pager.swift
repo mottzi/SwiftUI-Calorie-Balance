@@ -353,6 +353,10 @@ private struct DayPageStrip: View {
         .scrollPosition(id: scrollDay)
     }
 
+}
+
+extension DayPageStrip {
+
     private var scrollDay: Binding<Date?> {
         Binding(
             get: { navigation.selectedDay },

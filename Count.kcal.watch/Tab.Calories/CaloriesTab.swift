@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct CaloriesTab: View
-{
+struct CaloriesTab: View {
+
     @EnvironmentObject private var AppSettings: Settings
     @Environment(HealthInterface.self) var Interface
     
@@ -9,28 +9,18 @@ struct CaloriesTab: View
     let balance: Int
     let toggleMode: () -> Void
     
-    var bgColor: Color
-    {
-        balance >= 0 ? AppSettings.burnedColor : AppSettings.consumedColor
-    }
-    
-    var body: some View
-    {
-        VStack
-        {
-            Button 
-            {
+    var body: some View {
+        VStack {
+            Button {
                 #if !DEBUG
                 toggleMode()
                 #else
-                withAnimation(.snappy)
-                {
+                withAnimation(.snappy) {
                     Interface.randomizeHealthData()
                 }
                 #endif
             }
-            label:
-            {
+            label: {
                 CircleBalanceGraphWatch(mode: mode)
                     .overlay { CircleBalanceGraphOverlay(balance: balance) }
             }
@@ -46,10 +36,18 @@ struct CaloriesTab: View
         .padding(.top, 18)
         .scenePadding(.horizontal)
     }
+
 }
 
-#Preview
-{
+extension CaloriesTab {
+
+    var bgColor: Color {
+        balance >= 0 ? AppSettings.burnedColor : AppSettings.consumedColor
+    }
+
+}
+
+#Preview {
     ContentView(Interface: HealthInterface(.example(for: .now, balance: .deficit)))
         .environmentObject(Settings.shared)
 }

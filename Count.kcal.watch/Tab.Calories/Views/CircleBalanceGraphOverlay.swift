@@ -1,13 +1,11 @@
 import SwiftUI
 
-struct CircleBalanceGraphOverlay: View
-{
+struct CircleBalanceGraphOverlay: View {
+
     var balance: Int
     
-    var body: some View
-    {
-        VStack(spacing: 0)
-        {
+    var body: some View {
+        VStack(spacing: 0) {
             Text("\(abs(balance))")
                 .font(.title2)
                 .fontWeight(.semibold)
@@ -24,10 +22,10 @@ struct CircleBalanceGraphOverlay: View
         .fontDesign(.rounded)
         .offset(y: -2)
     }
+
 }
 
-#Preview
-{
+#Preview {
     ContentView(Interface: HealthInterface(.example(for: .now, balance: .deficit)))
         .environmentObject(Settings.shared)
 }

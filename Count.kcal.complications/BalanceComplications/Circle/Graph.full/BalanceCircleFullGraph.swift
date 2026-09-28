@@ -2,36 +2,22 @@ import SwiftUI
 import WidgetKit
 
 /// Full circular balance graph with a status symbol for one mode.
-struct BalanceCircleFullGraphComplicationView : View
-{
+struct BalanceCircleFullGraphComplicationView : View {
+
     @Environment(\.widgetFamily) var family
     @Environment(\.widgetRenderingMode) var renderingMode
 
     let entry: HealthDataTimelineProvider.Entry
     let mode: GraphMode
     
-    private var balance: Int
-    {
-        mode == .now ? entry.data.balanceNow : entry.data.balanceMidnight
-    }
-
-    private var balanceSymbol: String
-    {
-        balance > 0 ? "bolt.fill" : balance < 0 ? "fork.knife" : "dot"
-    }
-
-    var body: some View
-    {
-        switch family
-        {
-            case .accessoryCircular: do
-            {
+    var body: some View {
+        switch family {
+            case .accessoryCircular: do {
                 CircleBalanceGraphWatch(mode: mode, rendering: renderingMode, context: .circleFull, cutout: 0.2)
                     .widgetAccentable()
                     .environment(HealthInterface(entry.data))
                     .environmentObject(Settings.shared)
-                    .overlay(alignment: .bottom)
-                    {
+                    .overlay(alignment: .bottom) {
                         Image(systemName: balanceSymbol)
                             .font(.system(size: 11))
                             .widgetAccentable()
@@ -40,6 +26,19 @@ struct BalanceCircleFullGraphComplicationView : View
             default: EmptyView()
         }
     }
+
+}
+
+extension BalanceCircleFullGraphComplicationView {
+
+    private var balance: Int {
+        mode == .now ? entry.data.balanceNow : entry.data.balanceMidnight
+    }
+
+    private var balanceSymbol: String {
+        balance > 0 ? "bolt.fill" : balance < 0 ? "fork.knife" : "dot"
+    }
+
 }
 
 /// Full circular graph complication for the selected balance mode.
@@ -60,26 +59,26 @@ struct BalanceCircleFullGraphComplication<Mode: BalanceComplicationMode>: Widget
         .supportedFamilies([.accessoryCircular])
     }
 
+}
+
+extension BalanceCircleFullGraphComplication {
+
     private var kind: String {
         Mode.graphMode == .now ? "Balance.circle.full.graph.now" : "Balance.circle.full.graph.midnight"
     }
 
 }
 
-#Preview(as: .accessoryCircular)
-{
+#Preview(as: .accessoryCircular) {
     BalanceCircleFullGraphComplication<NowComplicationMode>()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }
 
-#Preview(as: .accessoryCircular)
-{
+#Preview(as: .accessoryCircular) {
     BalanceCircleFullGraphComplication<MidnightComplicationMode>()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }

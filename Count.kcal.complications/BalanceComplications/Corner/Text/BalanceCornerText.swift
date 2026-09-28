@@ -23,6 +23,10 @@ struct BalanceCornerTextContent: View {
         }
     }
 
+}
+
+extension BalanceCornerTextContent {
+
     private var balance: Int {
         switch mode {
             case .now: entry.data.balanceNow
@@ -55,26 +59,26 @@ struct BalanceCornerTextComplication<Mode: BalanceComplicationMode>: Widget {
         .supportedFamilies([.accessoryCorner])
     }
 
+}
+
+extension BalanceCornerTextComplication {
+
     private var kind: String {
         Mode.graphMode == .now ? "Balance.text.now" : "Balance.text.midnight"
     }
 
 }
 
-#Preview(as: .accessoryCorner)
-{
+#Preview(as: .accessoryCorner) {
     BalanceCornerTextComplication<NowComplicationMode>()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }
 
-#Preview(as: .accessoryCorner)
-{
+#Preview(as: .accessoryCorner) {
     BalanceCornerTextComplication<MidnightComplicationMode>()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }

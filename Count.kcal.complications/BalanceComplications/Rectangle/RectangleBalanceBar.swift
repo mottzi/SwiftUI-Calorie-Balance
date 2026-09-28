@@ -2,43 +2,19 @@ import SwiftUI
 import WidgetKit
 
 /// Rectangular energy totals and balance bar for one mode.
-struct RectangleBalanceBarComplicationView : View
-{
+struct RectangleBalanceBarComplicationView : View {
+
     @Environment(\.widgetFamily) var family
 
     let entry: HealthDataTimelineProvider.Entry
     let mode: GraphMode
 
-    private var burnedTotal: Int
-    {
-        switch mode
-        {
-            case .now: entry.data.now.burned
-            case .midnight: entry.data.midnight.burned
-        }
-    }
-
-    private var balance: Int
-    {
-        switch mode
-        {
-            case .now: entry.data.balanceNow
-            case .midnight: entry.data.balanceMidnight
-        }
-    }
-    
-    var body: some View
-    {
-        switch family
-        {
-            case .accessoryRectangular: do
-            {
-                VStack
-                {
-                    HStack
-                    {
-                        HStack(spacing: 0)
-                        {
+    var body: some View {
+        switch family {
+            case .accessoryRectangular: do {
+                VStack {
+                    HStack {
+                        HStack(spacing: 0) {
                             Image(systemName: "bolt.fill")
                                 .font(.system(size: 11))
                                 .fontWeight(.semibold)
@@ -50,8 +26,7 @@ struct RectangleBalanceBarComplicationView : View
                         }
                         
                         
-                        HStack(spacing: 2)
-                        {
+                        HStack(spacing: 2) {
                             Image(systemName: "fork.knife")
                                 .font(.system(size: 11))
                                 .fontWeight(.semibold)
@@ -64,8 +39,7 @@ struct RectangleBalanceBarComplicationView : View
                         
                         Spacer()
                         
-                        HStack(spacing: 0)
-                        {
+                        HStack(spacing: 0) {
                             Image(systemName: "equal")
                                 .font(.system(size: 14))
                                 .fontWeight(.regular)
@@ -94,6 +68,26 @@ struct RectangleBalanceBarComplicationView : View
             default: EmptyView()
         }
     }
+
+}
+
+extension RectangleBalanceBarComplicationView {
+
+    private var burnedTotal: Int {
+        switch mode {
+            case .now: entry.data.now.burned
+            case .midnight: entry.data.midnight.burned
+        }
+    }
+
+    private var balance: Int {
+        switch mode {
+            case .now: entry.data.balanceNow
+            case .midnight: entry.data.balanceMidnight
+        }
+    }
+
+
 }
 
 /// Rectangular balance bar complication for the selected mode.
@@ -115,26 +109,26 @@ struct RectangleBalanceBarComplication<Mode: BalanceComplicationMode>: Widget {
         .contentMarginsDisabled()
     }
 
+}
+
+extension RectangleBalanceBarComplication {
+
     private var kind: String {
         Mode.graphMode == .now ? "Balance.rect.bar.now" : "Balance.rect.bar.midnight"
     }
 
 }
 
-#Preview(as: .accessoryRectangular)
-{
+#Preview(as: .accessoryRectangular) {
     RectangleBalanceBarComplication<NowComplicationMode>()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }
 
-#Preview(as: .accessoryRectangular)
-{
+#Preview(as: .accessoryRectangular) {
     RectangleBalanceBarComplication<MidnightComplicationMode>()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }

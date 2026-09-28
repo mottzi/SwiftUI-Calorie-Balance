@@ -2,57 +2,24 @@ import SwiftUI
 import WidgetKit
 
 /// Rectangular balance circle and energy totals for one mode.
-struct RectangleBalanceComplicationView : View
-{
+struct RectangleBalanceComplicationView : View {
+
     @Environment(\.widgetFamily) var family
     @Environment(\.widgetRenderingMode) var renderingMode
 
     let entry: HealthDataTimelineProvider.Entry
     let mode: GraphMode
 
-    private var balanceSymbol: String
-    {
-        switch mode
-        {
-            case .now: entry.data.balanceNow > 0 ? "bolt.fill" : entry.data.balanceNow < 0 ? "fork.knife" : "dot"
-            case .midnight: entry.data.balanceMidnight >= 0 ? "bolt.fill" : "fork.knife"
-        }
-    }
-
-    private var burnedTotal: Int
-    {
-        switch mode
-        {
-            case .now: entry.data.now.burned
-            case .midnight: entry.data.midnight.burned
-        }
-    }
-
-    private var balance: Int
-    {
-        switch mode
-        {
-            case .now: entry.data.balanceNow
-            case .midnight: entry.data.balanceMidnight
-        }
-    }
-    
-    var body: some View
-    {
-        switch family
-        {
-            case .accessoryRectangular: do
-            {
-                GeometryReader
-                { geo in
-                    HStack(spacing: 0)
-                    {
+    var body: some View {
+        switch family {
+            case .accessoryRectangular: do {
+                GeometryReader { geo in
+                    HStack(spacing: 0) {
                         CircleBalanceGraphWatch(mode: mode, rendering: renderingMode, context: .circleFuller, cutout: 0.22)
                             .environment(HealthInterface(entry.data))
                             .environmentObject(Settings.shared)
                             .frame(width: geo.size.height * 0.8)
-                            .overlay
-                            {
+                            .overlay {
                                 Image(systemName: balanceSymbol)
                                     .font(.system(size: 12))
                                     .offset(y: 20)
@@ -63,10 +30,8 @@ struct RectangleBalanceComplicationView : View
 
                         Spacer(minLength: mode == .midnight ? 2 : nil)
                         
-                        VStack(alignment: .leading, spacing: 0)
-                        {
-                            HStack(spacing: 0)
-                            {
+                        VStack(alignment: .leading, spacing: 0) {
+                            HStack(spacing: 0) {
                                 Image(systemName: "bolt.fill")
                                     .resizable()
                                     .scaledToFit()
@@ -74,8 +39,7 @@ struct RectangleBalanceComplicationView : View
                                     .fontWeight(.semibold)
                                     .foregroundStyle(Settings.shared.burnedColor.brighten(0.3).gradient)
                                 
-                                HStack(alignment: .lastTextBaseline, spacing: 2)
-                                {
+                                HStack(alignment: .lastTextBaseline, spacing: 2) {
                                     Text("\(burnedTotal)")
                                         .fontWeight(.medium)
                                         .foregroundStyle(Settings.shared.burnedColor.brighten(0.45))
@@ -88,8 +52,7 @@ struct RectangleBalanceComplicationView : View
                                 }
                             }
                                          
-                            HStack(spacing: 0)
-                            {
+                            HStack(spacing: 0) {
                                 Image(systemName: "fork.knife")
                                     .resizable()
                                     .scaledToFit()
@@ -97,8 +60,7 @@ struct RectangleBalanceComplicationView : View
                                     .fontWeight(.semibold)
                                     .foregroundStyle(Settings.shared.consumedColor.brighten(0.2).gradient)
 
-                                HStack(alignment: .lastTextBaseline, spacing: 2)
-                                {
+                                HStack(alignment: .lastTextBaseline, spacing: 2) {
                                     Text("\(entry.data.consumed)")
                                         .fontWeight(.medium)
                                         .foregroundStyle(Settings.shared.consumedColor.brighten(0.3))
@@ -116,8 +78,7 @@ struct RectangleBalanceComplicationView : View
                                 .padding(.vertical, 1)
                                 .padding(.top, 1)
                             
-                            HStack(spacing: 0)
-                            {
+                            HStack(spacing: 0) {
                                 Image(systemName: "equal")
                                     .resizable()
                                     .scaledToFit()
@@ -126,8 +87,7 @@ struct RectangleBalanceComplicationView : View
                                     .fontWeight(.medium)
                                     .foregroundStyle(.primary)
 
-                                HStack(alignment: .lastTextBaseline, spacing: 2)
-                                {
+                                HStack(alignment: .lastTextBaseline, spacing: 2) {
                                     Text("\(balance)")
                                         .fontWeight(.medium)
                                         .foregroundStyle(.primary)
@@ -154,6 +114,33 @@ struct RectangleBalanceComplicationView : View
             default: EmptyView()
         }
     }
+
+}
+
+extension RectangleBalanceComplicationView {
+
+    private var balanceSymbol: String {
+        switch mode {
+            case .now: entry.data.balanceNow > 0 ? "bolt.fill" : entry.data.balanceNow < 0 ? "fork.knife" : "dot"
+            case .midnight: entry.data.balanceMidnight >= 0 ? "bolt.fill" : "fork.knife"
+        }
+    }
+
+    private var burnedTotal: Int {
+        switch mode {
+            case .now: entry.data.now.burned
+            case .midnight: entry.data.midnight.burned
+        }
+    }
+
+    private var balance: Int {
+        switch mode {
+            case .now: entry.data.balanceNow
+            case .midnight: entry.data.balanceMidnight
+        }
+    }
+
+
 }
 
 /// Rectangular balance circle complication for the selected mode.
@@ -178,26 +165,26 @@ struct RectangleBalanceComplication<Mode: BalanceComplicationMode>: Widget {
         .contentMarginsDisabled()
     }
 
+}
+
+extension RectangleBalanceComplication {
+
     private var kind: String {
         Mode.graphMode == .now ? "Balance.rect.now" : "Balance.rect.midnight"
     }
 
 }
 
-#Preview(as: .accessoryRectangular)
-{
+#Preview(as: .accessoryRectangular) {
     RectangleBalanceComplication<NowComplicationMode>()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now, random: true))
 }
 
-#Preview(as: .accessoryRectangular)
-{
+#Preview(as: .accessoryRectangular) {
     RectangleBalanceComplication<MidnightComplicationMode>()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }

@@ -49,6 +49,10 @@ final class Streak {
         streaks = streak
     }
 
+}
+
+extension Streak {
+
     /// Shows or hides the streak value.
     func toggleStreaksView() { withAnimation(.snappy) { showStreaksView.toggle() } }
 

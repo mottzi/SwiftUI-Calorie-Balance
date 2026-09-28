@@ -127,6 +127,34 @@ struct CDatePicker: View {
 
 extension CDatePicker {
 
+    func isDaySelected(_ d: Date) -> Bool {
+        Calendar.current.startOfDay(for: d) == navigation.selectedDay
+    }
+
+    var weekdays: [String] {
+        Calendar.current.shortWeekdaySymbolsLocalized
+    }
+
+    func getDayCellBrightness(d: Date) -> BrightnessLevel {
+        if d.isToday {
+            return .primary
+        }
+
+        return .none
+    }
+
+    func getDayCellBackground(d: Date) -> Color {
+        if Calendar.current.isDate(d, equalTo: currentMonth, toGranularity: .month) {
+            return AppSettings.CardBackground
+        }
+
+        return Color.clear
+    }
+
+}
+
+extension CDatePicker {
+
     private var calendarRefreshKey: CalendarRefreshKey {
         CalendarRefreshKey(
             month: currentMonth,
@@ -139,14 +167,6 @@ extension CDatePicker {
         )
     }
 
-    func isDaySelected(_ d: Date) -> Bool {
-        Calendar.current.startOfDay(for: d) == navigation.selectedDay
-    }
-
-    var weekdays: [String] {
-        Calendar.current.shortWeekdaySymbolsLocalized
-    }
-    
     private func dayBackground(_ date: Date, index: Int, count: Int) -> some View {
         let selected = isDaySelected(date)
         return UnevenRoundedRectangle(
@@ -160,22 +180,6 @@ extension CDatePicker {
         .stroke(Color("TextColor").opacity(selected ? 1 : 0), style: StrokeStyle(lineWidth: selected ? 2 : 0))
         .brightness(level: getDayCellBrightness(d: date))
         .transaction { $0.animation = nil }
-    }
-    
-    func getDayCellBrightness(d: Date) -> BrightnessLevel {
-        if d.isToday {
-            return .primary
-        }
-        
-        return .none
-    }
-    
-    func getDayCellBackground(d: Date) -> Color {
-        if Calendar.current.isDate(d, equalTo: currentMonth, toGranularity: .month) {
-            return AppSettings.CardBackground
-        }
-        
-        return Color.clear
     }
 
 }
@@ -204,6 +208,10 @@ private struct CalendarDayLabel: View {
                 .brightness(level: scheme == .dark ? .primary : .none)
         }
     }
+
+}
+
+extension CalendarDayLabel {
 
     private var balanceColor: Color {
         guard day.sample.consumed > 0 else { return settings.getGraphEmptyColor(scheme).brighten(-0.1) }

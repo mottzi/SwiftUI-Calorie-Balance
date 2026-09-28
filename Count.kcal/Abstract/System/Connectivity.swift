@@ -28,8 +28,8 @@ extension Connectivity: WCSessionDelegate {
     @MainActor
     /// Sends the latest phone settings after a local change or session activation.
     func sendSettingsContext() {
-        guard WCSession.default.activationState == .activated else { return }
-        guard WCSession.default.isWatchAppInstalled else { return }
+        guard WCSession.default.activationState == .activated,
+              WCSession.default.isWatchAppInstalled else { return }
         guard let context = WatchSettingsSnapshot(settings: .shared).context else { return }
 
         try? WCSession.default.updateApplicationContext(context)
@@ -91,8 +91,6 @@ extension Connectivity {
 }
 
 #if os(iOS)
-private let settingsSyncDefaults = UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")
-
 /// Observes phone settings for the app's lifetime and sends changes to the watch.
 struct SettingsContextSync: ViewModifier {
 
@@ -133,6 +131,8 @@ struct SettingsContextSync: ViewModifier {
     }
 
 }
+
+private let settingsSyncDefaults = UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")
 #endif
 
 /// Settings values exchanged with the Watch through a property-list context.

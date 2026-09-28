@@ -1,24 +1,6 @@
 import SwiftUI
 import WidgetKit
 
-extension Int {
-
-    func stringFormat() -> String {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .none
-        
-        return numberFormatter.string(from: NSNumber(value: self)) ?? String("")
-    }
-
-}
-
-enum ViewContext: Hashable {
-
-    case app
-    case widget(WidgetFamily)
-
-}
-
 struct ReachableView: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
@@ -26,9 +8,6 @@ struct ReachableView: View {
 
     @EnvironmentObject private var AppSettings: Settings
 
-    private let gradientOpacityLight: Double = 0.10
-    private let gradientOpacityDark: Double = 0.20
-    
     private let context: ViewContext
     private var graphHeight: CGFloat = 18.0
     
@@ -39,6 +18,9 @@ struct ReachableView: View {
     private let color: Color
     
     private let unit: String
+
+    private let gradientOpacityLight: Double = 0.10
+    private let gradientOpacityDark: Double = 0.20
     
     init(
         _ key: LocalizedStringKey,
@@ -207,5 +189,23 @@ extension ReachableView {
     private var percent: Int {
         goalValue - consumedValue
     }
+
+}
+
+extension Int {
+
+    func stringFormat() -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .none
+
+        return numberFormatter.string(from: NSNumber(value: self)) ?? String("")
+    }
+
+}
+
+enum ViewContext: Hashable {
+
+    case app
+    case widget(WidgetFamily)
 
 }

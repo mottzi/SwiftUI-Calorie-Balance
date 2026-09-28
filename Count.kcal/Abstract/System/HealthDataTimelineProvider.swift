@@ -1,25 +1,7 @@
 import WidgetKit
 
-/// One daily snapshot displayed by a widget or complication.
-struct HealthDataEntry: TimelineEntry {
-
-    let date: Date
-    let data: HealthData
-
-}
-
 /// Health snapshots and refresh timing shared by widgets and complications.
 struct HealthDataTimelineProvider: TimelineProvider {
-
-    /// Supplies sample values while WidgetKit reserves the widget layout.
-    func placeholder(in context: Context) -> HealthDataEntry {
-        HealthDataEntry(date: .now, data: HealthData.example(for: .now))
-    }
-
-    /// Supplies the gallery snapshot.
-    func getSnapshot(in context: Context, completion: @escaping (HealthDataEntry) -> Void) {
-        completion(placeholder(in: context))
-    }
 
     /// Requests a refresh after fifteen minutes or at the next midnight.
     func getTimeline(in context: Context, completion: @escaping (Timeline<HealthDataEntry>) -> Void) {
@@ -40,5 +22,27 @@ struct HealthDataTimelineProvider: TimelineProvider {
             completion(timeline)
         }
     }
+
+    /// Supplies the gallery snapshot.
+    func getSnapshot(in context: Context, completion: @escaping (HealthDataEntry) -> Void) {
+        completion(placeholder(in: context))
+    }
+
+}
+
+extension HealthDataTimelineProvider {
+
+    /// Supplies sample values while WidgetKit reserves the widget layout.
+    func placeholder(in context: Context) -> HealthDataEntry {
+        HealthDataEntry(date: .now, data: HealthData.example(for: .now))
+    }
+
+}
+
+/// One daily snapshot displayed by a widget or complication.
+struct HealthDataEntry: TimelineEntry {
+
+    let date: Date
+    let data: HealthData
 
 }

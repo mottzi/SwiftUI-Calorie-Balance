@@ -3,12 +3,14 @@ import SwiftUI
 
 /// Carbohydrate, fat, and protein goal progress for small and medium widgets.
 struct NutritionWidget: Widget {
+
     @StateObject private var AppSettings = Settings.shared
 
     var body: some WidgetConfiguration {
         StaticConfiguration(
             kind: "BarNutritionBalanceGraphWidget",
-            provider: HealthDataTimelineProvider()) { entry in
+            provider: HealthDataTimelineProvider()
+        ) { entry in
             NutritionWidgetNow(entry: entry)
                 .containerRelativeFrame([.horizontal, .vertical])
                 .containerBackground(Color("BackGroundColor"), for: .widget)
@@ -19,10 +21,12 @@ struct NutritionWidget: Widget {
         .description("Shows your macronutrients.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
+
 }
 
 /// Carbohydrate, fat, and protein progress for the selected widget size.
 struct NutritionWidgetNow: View {
+
     @Environment(\.widgetFamily) var family: WidgetFamily
 
     @EnvironmentObject private var AppSettings: Settings

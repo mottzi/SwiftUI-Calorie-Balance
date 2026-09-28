@@ -80,6 +80,26 @@ final class Settings: ObservableObject {
 
 extension Settings {
 
+    /// Returns the eating goal after the weight goal adjusts the selected energy source.
+    func maxEatingEnergy() -> Int {
+        var activeCalories: Int = 0
+        var balanceAdjustment: Int = 0
+
+        if self.dataSource == .apple {
+            activeCalories = self.showActive + self.showResting
+        } else {
+            activeCalories = self.customCalActive + self.customCalPassive
+        }
+
+        balanceAdjustment = self.weightGoal == .lose ? -self.balanceGoal : self.balanceGoal
+
+        return max(0, activeCalories + balanceAdjustment)
+    }
+
+}
+
+extension Settings {
+
     var isSettingsInputValid: Bool {
         if self.balanceGoal < 0 { return false }
         if self.dataSource == .custom && (self.customCalActive + self.customCalPassive <= 0) { return false }
@@ -122,6 +142,38 @@ extension Settings {
 
 extension Settings {
 
+    var AppBackground: Color {
+        switch self.appBackground {
+            case AppBackgrounds.black: return Color.backGroundColorBlack
+            case AppBackgrounds.dark: return Color.backGround
+            case AppBackgrounds.light: return Color.backGroundColorLight
+        }
+    }
+
+    var CardBackground: Color {
+        switch self.appBackground {
+            case Settings.AppBackgrounds.black: return Color.cardColorBlack
+            case Settings.AppBackgrounds.dark: return Color.cardColorDark
+            case Settings.AppBackgrounds.light: return Color.cardColorLight
+        }
+    }
+
+    func getGraphEmptyColor(_ scheme: ColorScheme) -> Color {
+        if scheme == .light {
+            return Color(white: 0.75)
+        }
+        
+        switch self.appBackground {
+            case Settings.AppBackgrounds.black: return Color(white: 0.22)
+            case Settings.AppBackgrounds.dark: return Color(white: 0.27)
+            case Settings.AppBackgrounds.light: return Color(white: 0.32)
+        }
+    }
+
+}
+
+extension Settings {
+
     func setDefaultWeightUnit() {
         switch Locale.current.measurementSystem {
             case .metric: self.weightUnit = .kg
@@ -129,32 +181,6 @@ extension Settings {
             default: break
         }
     }
-
-}
-
-extension Settings {
-
-    /// Returns the eating goal after the weight goal adjusts the selected energy source.
-    func maxEatingEnergy() -> Int {
-        var activeCalories: Int = 0
-        var balanceAdjustment: Int = 0
-
-        if self.dataSource == .apple {
-            activeCalories = self.showActive + self.showResting
-        } else {
-            activeCalories = self.customCalActive + self.customCalPassive
-        }
-        
-        balanceAdjustment = self.weightGoal == .lose ? -self.balanceGoal : self.balanceGoal
-        
-        return max(0, activeCalories + balanceAdjustment)
-    }
-
-}
-
-extension Settings {
-
-    static public let shared = Settings()
 
 }
 
@@ -192,44 +218,12 @@ extension Settings {
 
     }
 
-}
-
-extension Settings {
-
     enum AppBackgrounds: Int {
 
         case black = 0
         case dark
         case light
 
-    }
-    
-    var AppBackground: Color {
-        switch self.appBackground {
-            case AppBackgrounds.black: return Color.backGroundColorBlack
-            case AppBackgrounds.dark: return Color.backGround
-            case AppBackgrounds.light: return Color.backGroundColorLight
-        }
-    }
-    
-    var CardBackground: Color {
-        switch self.appBackground {
-            case Settings.AppBackgrounds.black: return Color.cardColorBlack
-            case Settings.AppBackgrounds.dark: return Color.cardColorDark
-            case Settings.AppBackgrounds.light: return Color.cardColorLight
-        }
-    }
-    
-    func getGraphEmptyColor(_ scheme: ColorScheme) -> Color {
-        if scheme == .light {
-            return Color(white: 0.75)
-        }
-        
-        switch self.appBackground {
-            case Settings.AppBackgrounds.black: return Color(white: 0.22)
-            case Settings.AppBackgrounds.dark: return Color(white: 0.27)
-            case Settings.AppBackgrounds.light: return Color(white: 0.32)
-        }
     }
 
 }
@@ -244,7 +238,11 @@ extension Settings {
         let consumed: Color
 
     }
-    
+
+}
+
+extension Settings {
+
     static let Themes: [Theme] =
     [
         Theme(burned: Color("ActiveDefault"), consumed: Color("ConsumedDefault")),
@@ -274,6 +272,11 @@ extension Settings {
 
 }
 
+extension Settings {
+
+    static public let shared = Settings()
+
+}
 
 extension Date: @retroactive RawRepresentable {
 
@@ -284,23 +287,6 @@ extension Date: @retroactive RawRepresentable {
     public init?(rawValue: String) {
         self = Date(timeIntervalSinceReferenceDate: Double(rawValue) ?? 0.0)
     }
-
-}
-
-enum BrightnessLevel {
-
-    case none
-    case primary
-    case secondary
-    case tertiary
-
-}
-
-enum BrightnessContext {
-
-    case bargraph
-    case circlegraphNow
-    case circlegraphMidnight
 
 }
 
@@ -367,5 +353,22 @@ extension Color: @retroactive RawRepresentable {
             return ""
         }
     }
+
+}
+
+enum BrightnessLevel {
+
+    case none
+    case primary
+    case secondary
+    case tertiary
+
+}
+
+enum BrightnessContext {
+
+    case bargraph
+    case circlegraphNow
+    case circlegraphMidnight
 
 }

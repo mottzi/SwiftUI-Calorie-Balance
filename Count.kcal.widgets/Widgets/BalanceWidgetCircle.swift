@@ -3,16 +3,19 @@ import SwiftUI
 
 /// Calorie balance circle for small and medium widgets.
 struct BalanceWidgetCircle: Widget {
+
     @StateObject private var AppSettings = Settings.shared
 
     /// Selects now or midnight balance for each timeline entry.
     var body: some WidgetConfiguration {
         StaticConfiguration(
             kind: "CircleBalanceGraphWidget",
-            provider: HealthDataTimelineProvider()) { entry in
+            provider: HealthDataTimelineProvider()
+        ) { entry in
             BalanceWidgetCircleContent(
                 entry: entry,
-                mode: ModeToggleManager.buttonMode() ? .now : .midnight)
+                mode: ModeToggleManager.buttonMode() ? .now : .midnight
+            )
             .environmentObject(AppSettings)
             .containerBackground(Color("BackGroundColor"), for: .widget)
         }
@@ -21,6 +24,7 @@ struct BalanceWidgetCircle: Widget {
         .description("Shows a circular graph of your calorie balance.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
+
 }
 
 /// Calorie balance circle with a button for now and midnight modes.

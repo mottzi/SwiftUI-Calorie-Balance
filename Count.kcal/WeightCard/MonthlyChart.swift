@@ -62,7 +62,8 @@ struct MonthlyChart: View {
             .chartYScale(domain: weightHistory.getYRange(.monthly))
             .chartYAxis { AxisMarks(position: .trailing, values: weightHistory.createYRangeArray(.monthly)) }
             .chartXScale(
-                domain: weightHistory.dailyAverages.first!.date ... weightHistory.dailyAverages.last!.date.nextSunday.tomorrow
+                domain: weightHistory.dailyAverages.first!.date
+                    ... weightHistory.dailyAverages.last!.date.nextSunday.tomorrow
             )
             .chartXAxis {
                 AxisMarks(values: .stride(by: .day, count: 7)) { date in

@@ -71,12 +71,12 @@ extension WeekBalanceGraph {
 
         @Environment(\.colorScheme) private var scheme
 
-        let cr = 10.0
-        
         /// Current or midnight balance for the selected day.
         let energy: EnergyBalance
         let maxEnergy: Int
         let date: Date
+
+        let cr = 10.0
         
         var body: some View {
             GeometryReader { geo in

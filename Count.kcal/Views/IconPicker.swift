@@ -1,12 +1,5 @@
 import SwiftUI
 
-enum IconPickerStyle {
-
-    case rectangle
-    case capsule
-
-}
-
 struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int {
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
@@ -115,6 +108,13 @@ struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int {
             }
         }
     }
+
+}
+
+enum IconPickerStyle {
+
+    case rectangle
+    case capsule
 
 }
 

@@ -2,43 +2,28 @@ import SwiftUI
 import WidgetKit
 
 /// Thick circular balance graph with amount and status for one mode.
-struct BalanceCircleThickGraphComplicationView : View
-{
+struct BalanceCircleThickGraphComplicationView : View {
+
     @Environment(\.widgetFamily) var family
     @Environment(\.widgetRenderingMode) var renderingMode
 
     let entry: HealthDataTimelineProvider.Entry
     let mode: GraphMode
     
-    private var balance: Int
-    {
-        mode == .now ? entry.data.balanceNow : entry.data.balanceMidnight
-    }
-
-    private var balanceSymbol: String
-    {
-        balance > 0 ? "bolt.fill" : balance < 0 ? "fork.knife" : "dot"
-    }
-
-    var body: some View
-    {
-        switch family
-        {
-            case .accessoryCircular: do
-            {
+    var body: some View {
+        switch family {
+            case .accessoryCircular: do {
                 CircleBalanceGraphWatch(mode: mode, rendering: renderingMode, context: .circleThick, cutout: 0.35)
                     .widgetAccentable()
                     .environment(HealthInterface(entry.data))
                     .environmentObject(Settings.shared)
-                    .overlay
-                    {
+                    .overlay {
                         Image(systemName: balanceSymbol)
                             .font(.system(size: 10))
                             .widgetAccentable()
                             .offset(y: 1)
                     }
-                    .overlay(alignment: .bottom)
-                    {
+                    .overlay(alignment: .bottom) {
                         Text("\(abs(balance))")
                             .font(.subheadline)
                             .fontWeight(.semibold)
@@ -51,6 +36,19 @@ struct BalanceCircleThickGraphComplicationView : View
             default: EmptyView()
         }
     }
+
+}
+
+extension BalanceCircleThickGraphComplicationView {
+
+    private var balance: Int {
+        mode == .now ? entry.data.balanceNow : entry.data.balanceMidnight
+    }
+
+    private var balanceSymbol: String {
+        balance > 0 ? "bolt.fill" : balance < 0 ? "fork.knife" : "dot"
+    }
+
 }
 
 /// Thick circular graph complication for the selected balance mode.
@@ -71,26 +69,26 @@ struct BalanceCircleThickGraphComplication<Mode: BalanceComplicationMode>: Widge
         .supportedFamilies([.accessoryCircular])
     }
 
+}
+
+extension BalanceCircleThickGraphComplication {
+
     private var kind: String {
         Mode.graphMode == .now ? "Balance.circle.thick.graph.now" : "Balance.circle.thick.graph.midnight"
     }
 
 }
 
-#Preview(as: .accessoryCircular)
-{
+#Preview(as: .accessoryCircular) {
     BalanceCircleThickGraphComplication<NowComplicationMode>()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }
 
-#Preview(as: .accessoryCircular)
-{
+#Preview(as: .accessoryCircular) {
     BalanceCircleThickGraphComplication<MidnightComplicationMode>()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }

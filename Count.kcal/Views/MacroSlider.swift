@@ -5,15 +5,15 @@ import SwiftUI
 /// Macro slider widths and saved goal ratios.
 final class HSlider {
 
+    private(set) var carbsWidth: CGFloat = 0
+    private(set) var fatsWidth: CGFloat = 0
+    private(set) var protsWidth: CGFloat = 0
+
     @ObservationIgnored private let settings: Settings
 
     private var carbsWidthLast: CGFloat = 0
     private var fatsWidthLast: CGFloat = 0
     private var protsWidthLast: CGFloat = 0
-    
-    private(set) var carbsWidth: CGFloat = 0
-    private(set) var fatsWidth: CGFloat = 0
-    private(set) var protsWidth: CGFloat = 0
     
     private let minSegmentRatio: CGFloat = 0.1
     private let snapTo: CGFloat = 0.05
@@ -40,8 +40,6 @@ final class HSlider {
 
 extension HSlider {
 
-    private var maxSegmentRatio: CGFloat { 1 - minSegmentRatio - minSegmentRatio }
-
     func ratioToWidth(_ maxSlider: CGFloat) {
         guard maxSlider > 0 else { return }
         let minSegment = maxSlider * minSegmentRatio
@@ -63,13 +61,10 @@ extension HSlider {
         protsWidth = maxSlider * settings.proteinRatio
         protsWidthLast = protsWidth
     }
-    
-    private func widthToRatio(_ maxSlider: CGFloat) {
-        guard maxSlider > 0 else { return }
-        settings.carbsRatio = carbsWidth / maxSlider
-        settings.fatsRatio = fatsWidth / maxSlider
-        settings.proteinRatio = protsWidth / maxSlider
-    }
+
+}
+
+extension HSlider {
 
     /// Moves one slider handle while preserving the minimum width of each segment.
     fileprivate func moveBoundary(_ handle: SliderHandle, translation: CGFloat, maxWidth: CGFloat) {
@@ -127,7 +122,20 @@ extension HSlider {
         widthToRatio(maxWidth)
         updateMacroWeights()
     }
-    
+
+}
+
+extension HSlider {
+
+    private var maxSegmentRatio: CGFloat { 1 - minSegmentRatio - minSegmentRatio }
+
+    private func widthToRatio(_ maxSlider: CGFloat) {
+        guard maxSlider > 0 else { return }
+        settings.carbsRatio = carbsWidth / maxSlider
+        settings.fatsRatio = fatsWidth / maxSlider
+        settings.proteinRatio = protsWidth / maxSlider
+    }
+
     private func ratioToWeight(maxEatingEnergy: Int, ratio: Double, type: MacroType) -> Int {
         var energyDensity: Double
         

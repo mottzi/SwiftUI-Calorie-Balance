@@ -61,6 +61,10 @@ private struct DashboardCalories: View {
         }
     }
 
+}
+
+extension DashboardCalories {
+
     private var subtitle: String {
         if day.isTodayPage {
             if todayPageMode == .second {
