@@ -31,7 +31,7 @@ private struct DashboardCalories: View {
                 if day.isTodayPage {
                     CaloriesMidnightCard(todayPageMode: $todayPageMode)
                 } else {
-                    CaloriesCard()
+                    CaloriesCard(mode: .now)
                         .padding(16)
                 }
             }

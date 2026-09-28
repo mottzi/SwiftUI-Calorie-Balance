@@ -1,8 +1,11 @@
 import SwiftUI
 
+/// Now or midnight calorie totals and balance for one day.
 struct CaloriesCard: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
+
+    let mode: GraphMode
 
     let sizeMapping: [DynamicTypeSize: CGFloat] = 
     [
@@ -21,11 +24,11 @@ struct CaloriesCard: View {
     ]
     
     var body: some View {
-        VStack(spacing: dynamicType <= .xxxLarge ? 0 : 8) {
-            CaloriesCardTopRow()
+        VStack(spacing: mode == .now && dynamicType > .xxxLarge ? 8 : 0) {
+            CaloriesCardTopRow(mode: mode)
                 .padding(.top, 2)
 
-            BarBalanceGraph(mode: .now)
+            BarBalanceGraph(mode: mode)
                 .frame(height: sizeMapping[dynamicType, default: 44])
                 .padding(.top, 6)
                 .padding(.bottom, 2)

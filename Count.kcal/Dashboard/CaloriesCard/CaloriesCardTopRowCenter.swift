@@ -1,27 +1,29 @@
 import SwiftUI
 
+/// Balance amount and goal status inside the selected circular graph.
 struct CaloriesCardTopRowCenter: View {
-
 
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(HealthInterface.self) private var DataViewModel
+
+    let mode: GraphMode
     
     var body: some View {
         ZStack {
-            CircleBalanceGraph(mode: .now)
+            CircleBalanceGraph(mode: mode)
                 .frame(width: 130, height: 130)
 
             VStack(spacing: 0) {
-                Text("\(abs(DataViewModel.sample.balanceNow))")
+                Text("\(abs(balance))")
                     .font(.system(size: 26))
                     .fontWeight(.semibold)
                     .foregroundColor(Color("TextColor"))
-                    .contentTransition(.numericText(value: Double(abs(DataViewModel.sample.balanceNow))))
+                    .contentTransition(.numericText(value: Double(abs(balance))))
                 
-                Text(DataViewModel.sample.balanceNow > 0
+                Text(balance > 0
                     ? String(localized: "Deficit")
-                    : DataViewModel.sample.balanceNow == 0 ? String("") : String(localized: "Surplus"))
+                    : balance == 0 ? String("") : String(localized: "Surplus"))
                     .font(.caption)
                     .fontWeight(.light)
                     .foregroundColor(Color("SecondaryTextColor"))
@@ -43,8 +45,14 @@ struct CaloriesCardTopRowCenter: View {
 
 extension CaloriesCardTopRowCenter {
 
+    private var energy: EnergyBalance {
+        mode == .now ? DataViewModel.sample.now : DataViewModel.sample.midnight
+    }
+
+    private var balance: Int { energy.balance }
+
     private var goalReached: Bool {
-        DataViewModel.sample.now.meetsGoal(
+        energy.meetsGoal(
             AppSettings.balanceGoal,
             isLoss: AppSettings.weightGoal == .lose
         )

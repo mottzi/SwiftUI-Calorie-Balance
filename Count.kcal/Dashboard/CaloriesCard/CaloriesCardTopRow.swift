@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Burned and eaten totals beside the selected balance circle.
 struct CaloriesCardTopRow: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
@@ -8,16 +9,10 @@ struct CaloriesCardTopRow: View {
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(HealthInterface.self) private var DataViewModel
-        
+
+    let mode: GraphMode
+
     var body: some View {
-        TopRowRight
-    }
-
-}
-
-extension CaloriesCardTopRow {
-
-    var TopRowRight: some View {
         HStack(spacing: 0) {
             VStack(alignment: .leading, spacing: dynamicType <= .xxLarge ? 16 : 4) {
                 HStack(spacing: dynamicType <= .xxLarge ? 14 : 10) {
@@ -31,15 +26,15 @@ extension CaloriesCardTopRow {
                             .background {
                                 if dynamicType <= .xxLarge {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(DataViewModel.sample.balanceNow > 0
+                                        .fill(balance > 0
                                             ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1)
                                             : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
                                         .stroke(
-                                            DataViewModel.sample.balanceNow > 0
+                                            balance > 0
                                                 ? AppSettings.burnedColor.brighten(scheme == .light ? -0.15 : 0)
                                                 : Color("TextColor").opacity(0.2),
                                             style: StrokeStyle(
-                                                lineWidth: scheme == .light && DataViewModel.sample.balanceNow > 0 ? 1.5 : 1
+                                                lineWidth: scheme == .light && balance > 0 ? 1.5 : 1
                                             )
                                         )
                                         .padding(-8)
@@ -51,14 +46,14 @@ extension CaloriesCardTopRow {
                     
                     VStack(alignment: .leading, spacing: 0) {
                         HStack(alignment: .lastTextBaseline, spacing: 2) {
-                            Text("\(DataViewModel.sample.now.burned)")
+                            Text("\(energy.burned)")
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color("TextColor"))
                                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                             
                             Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
-                                .font(.caption)
+                                .font(mode == .now ? .caption : .system(size: 13))
                                 .foregroundStyle(Color("SecondaryTextColor"))
                                 .fontWeight(.medium)
                                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
@@ -84,15 +79,15 @@ extension CaloriesCardTopRow {
                             .background {
                                 if dynamicType <= .xxLarge {
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(DataViewModel.sample.balanceNow < 0
+                                        .fill(balance < 0
                                             ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1)
                                             : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
                                         .stroke(
-                                            DataViewModel.sample.balanceNow < 0
+                                            balance < 0
                                                 ? AppSettings.consumedColor.brighten(scheme == .light ? -0.15 : 0)
                                                 : Color("TextColor").opacity(0.2),
                                             style: StrokeStyle(
-                                                lineWidth: scheme == .light && DataViewModel.sample.balanceNow < 0 ? 1.5 : 1
+                                                lineWidth: scheme == .light && balance < 0 ? 1.5 : 1
                                             )
                                         )
                                         .brightness(level: .secondary)
@@ -111,7 +106,7 @@ extension CaloriesCardTopRow {
                                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
 
                             Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
-                                .font(.caption)
+                                .font(mode == .now ? .caption : .system(size: 13))
                                 .foregroundStyle(Color("SecondaryTextColor"))
                                 .fontWeight(.medium)
                                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
@@ -133,10 +128,20 @@ extension CaloriesCardTopRow {
                 
             Spacer()
             
-            CaloriesCardTopRowCenter()
+            CaloriesCardTopRowCenter(mode: mode)
                 .padding(.trailing, 19)
         }
     }
+
+}
+
+extension CaloriesCardTopRow {
+
+    private var energy: EnergyBalance {
+        mode == .now ? DataViewModel.sample.now : DataViewModel.sample.midnight
+    }
+
+    private var balance: Int { energy.balance }
 
 }
 

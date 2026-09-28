@@ -8,12 +8,12 @@ struct CaloriesMidnightCard: View {
     var body: some View {
         ScrollView(.horizontal) {
             HStack(spacing: 0) {
-                CaloriesCard()
+                CaloriesCard(mode: .now)
                     .padding(16)
                     .id(PagerSelection.first)
                     .containerRelativeFrame(.horizontal)
 
-                PrognosisCard()
+                CaloriesCard(mode: .midnight)
                     .padding(16)
                     .id(PagerSelection.second)
                     .containerRelativeFrame(.horizontal)
