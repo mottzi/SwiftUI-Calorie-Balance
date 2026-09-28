@@ -4,8 +4,6 @@ struct CaloriesCard: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
 
-
-    
     let sizeMapping: [DynamicTypeSize: CGFloat] = 
     [
         .xSmall: 44,

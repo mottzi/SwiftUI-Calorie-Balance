@@ -12,6 +12,8 @@ struct CircleBalanceGraph: View {
     var lineWidth: CGFloat = 8
     
     let mode: GraphMode
+
+    var groupNowGeometry = true
     
     var body: some View {
         if mode == .midnight {
@@ -67,7 +69,7 @@ struct CircleBalanceGraph: View {
             .padding(lineWidth / 2)
         } else {
             GeometryReader { geo in
-                ZStack {
+                let rings = ZStack {
                     // base
                     CircleProgressView(progress: 1, color: AppSettings.getGraphEmptyColor(scheme), lineWidth: lineWidth)
                         .brightness(level: .primary)
@@ -96,7 +98,14 @@ struct CircleBalanceGraph: View {
                         )
                         .brightness(level: .primary)
                 }
-                .geometryGroup()
+
+                Group {
+                    if groupNowGeometry {
+                        rings.geometryGroup()
+                    } else {
+                        rings
+                    }
+                }
                 .saturation(Settings.baseSaturation)
                 .brightness(scheme == .dark ? -0.1 : 0.0)
             }

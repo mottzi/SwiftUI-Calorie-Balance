@@ -6,6 +6,16 @@ var PreviewPager: some View {
     DashboardSamplePreview()
 }
 
+#Preview("Balance bar") {
+    BarBalanceGraph()
+        .environment(HealthInterface(.example(for: .now, balance: .deficit)))
+        .environmentObject(Settings.shared)
+        .frame(height: 44)
+        .padding(.trailing, 80)
+        .padding(.leading, 30)
+        .fontDesign(.rounded)
+}
+
 private struct DashboardSamplePreview: View {
 
     @State private var pages: [HealthInterface]

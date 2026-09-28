@@ -116,13 +116,26 @@ extension ReachableView {
                     ]
                     
                     HStack(spacing: 0) {
-                        Text("\(consumedValue)")
-                            .frame(minWidth: minWidthLeading[dynamicType, default: 30], alignment: .trailing)
-                        
-                        Text(verbatim: "   / ")
-                        
-                        Text("\(goalValue) \(String(unit))")
-                            .frame(minWidth: minWidthTrailing[dynamicType, default: 40], alignment: .trailing)
+                        if case .widget = context {
+                            Text(verbatim: consumedValue.stringFormat())
+                                .frame(minWidth: minWidthLeading[dynamicType, default: 30], alignment: .trailing)
+                                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+
+                            Text(verbatim: "   / ")
+                                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+
+                            Text(verbatim: "\(goalValue.stringFormat()) g")
+                                .frame(minWidth: minWidthTrailing[dynamicType, default: 40], alignment: .trailing)
+                                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+                        } else {
+                            Text("\(consumedValue)")
+                                .frame(minWidth: minWidthLeading[dynamicType, default: 30], alignment: .trailing)
+
+                            Text(verbatim: "   / ")
+
+                            Text("\(goalValue) \(String(unit))")
+                                .frame(minWidth: minWidthTrailing[dynamicType, default: 40], alignment: .trailing)
+                        }
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .font(.caption)

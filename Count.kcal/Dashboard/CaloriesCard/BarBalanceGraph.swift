@@ -41,26 +41,3 @@ struct BarBalanceGraph: View {
     }
 
 }
-
-#Preview {
-    BarBalanceGraph()
-        .environment(HealthInterface(.example(for: .now, balance: .deficit)))
-        .environmentObject(Settings.shared)
-        .frame(height: 44)
-        .padding(.trailing, 80)
-        .padding(.leading, 30)
-        .fontDesign(.rounded)
-}
-
-#Preview {
-    NavigationView {
-        ZStack {
-            Settings.shared.AppBackground.ignoresSafeArea(.all)
-            
-            Pager(lb: 6, tb: 1)
-                .environment(Streak())
-                .environmentObject(Settings.shared)
-                .environment(WeightDataViewModel())
-        }
-    }
-}

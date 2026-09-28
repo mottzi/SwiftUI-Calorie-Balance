@@ -630,7 +630,7 @@ struct BalanceWidgetCircleNow: View
     {
         ZStack
         {
-            CircleBalanceGraph(mode: .now)
+            CircleBalanceGraph(mode: .now, groupNowGeometry: false)
                 .frame(width: 130, height: 130)
                 .environment(HealthInterface(entry.data))
                 .brightness(-0.05)
