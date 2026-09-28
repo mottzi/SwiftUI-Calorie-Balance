@@ -272,27 +272,13 @@ extension BalanceWidgetBarContent {
 
 extension BalanceWidgetBarContent {
 
-    @ViewBuilder
     private func barGraph(for family: WidgetFamily) -> some View {
-        if mode == .now {
-            BarBalanceGraph(context: .widget(family))
-                .environment(HealthInterface(entry.data))
-                .frame(height: 44)
-                .padding(.horizontal, family == .systemSmall ? 3 : 20)
-                .padding(.bottom, 4)
-                .fontDesign(.rounded)
-        } else {
-            BarBalanceGraphMidnight(
-                context: .widget(family),
-                energy: entry.data.midnight,
-                consumedColor: AppSettings.consumedColor,
-                burnedColor: AppSettings.burnedColor
-            )
+        BarBalanceGraph(mode: mode)
+            .environment(HealthInterface(entry.data))
             .frame(height: 44)
             .padding(.bottom, 4)
             .padding(.horizontal, family == .systemSmall ? 3 : 20)
             .fontDesign(.rounded)
-        }
     }
         
     private var energy: EnergyBalance { mode == .now ? entry.data.now : entry.data.midnight }

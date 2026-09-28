@@ -3,17 +3,17 @@ import SwiftUI
 let gradientOpacityLight: Double = 0.10
 let gradientOpacityDark: Double = 0.20
 
+/// Shows recorded burned energy and any end-of-day projection.
 struct BarBalanceGraphTopRow: View {
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
     @EnvironmentObject private var AppSettings: Settings
 
-    @Environment(HealthInterface.self) private var DataViewModel
-    
     let geometry: GeometryProxy
-    let context: ViewContext
-    var labels = true
+    let energy: EnergyBalance
+    let mode: GraphMode
+    let labels: Bool
 
     var body: some View {
         ZStack(alignment: .leading) {
@@ -29,7 +29,7 @@ struct BarBalanceGraphTopRow: View {
                         .opacity(0.25)
                 }
             
-            let widthActive: Double = activeNowGraphWidthRatio * geometry.size.width
+            let widthActive = CGFloat(energy.ratio(of: energy.active)) * geometry.size.width
             
             // active burned
             Rectangle()
@@ -47,16 +47,18 @@ struct BarBalanceGraphTopRow: View {
                 .overlay {
                     if labels {
                         ViewThatFits {
-                            Text("\(DataViewModel.sample.burnedActive)").graphLabelStyle(scheme)
+                            Text("\(energy.active)").graphLabelStyle(scheme)
                             
                             Color.clear.frame(width: 0, height: 0)
                         }
-                        .transaction { transaction in transaction.animation = .none }
+                        .transaction { transaction in
+                            if mode == .now { transaction.animation = .none }
+                        }
                     }
                 }
 
             
-            let widthPassive = passiveNowGraphWidthRatio * geometry.size.width
+            let widthPassive = CGFloat(energy.ratio(of: energy.resting)) * geometry.size.width
             
             // passive burned
             Rectangle()
@@ -71,39 +73,72 @@ struct BarBalanceGraphTopRow: View {
                     )
                         .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                 }
-                .clipShape(UnevenRoundedRectangle(topTrailingRadius: 6, style: .circular))
+                .clipShape(UnevenRoundedRectangle(topTrailingRadius: mode == .now ? 6 : 0, style: .circular))
                 .overlay {
                     if labels {
                         ViewThatFits {
-                            Text("\(DataViewModel.sample.burnedPassive)").graphLabelStyle(scheme)
+                            Text("\(energy.resting)").graphLabelStyle(scheme)
 
                             Color.clear
                                 .frame(width: 0, height: 0)
                         }
-                        .transaction { transaction in transaction.animation = .none }
+                        .transaction { transaction in
+                            if mode == .now { transaction.animation = .none }
+                        }
                     }
                 }
                 .padding(.leading, widthActive)
 
             
-            let widthRest = geometry.size.width - widthActive - widthPassive
+            let widthProjected = mode == .midnight
+                ? CGFloat(energy.ratio(of: energy.restingRemaining)) * geometry.size.width
+                : 0
+
+            if mode == .midnight {
+                // show resting energy expected before midnight
+                Rectangle()
+                    .fill(AppSettings.burnedColor)
+                    .frame(width: widthProjected)
+                    .brightness(level: .tertiary)
+                    .overlay {
+                        LinearGradient(
+                            colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor],
+                            startPoint: scheme == .dark ? .bottom : .top,
+                            endPoint: scheme == .dark ? .top : .bottom
+                        )
+                            .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
+                    }
+                    .clipShape(UnevenRoundedRectangle(topTrailingRadius: 6, style: .circular))
+                    .overlay {
+                        if labels {
+                            ViewThatFits {
+                                Text("\(energy.restingRemaining)").graphLabelStyle(scheme)
+
+                                Color.clear.frame(width: 0, height: 0)
+                            }
+                        }
+                    }
+                    .padding(.leading, widthActive + widthPassive)
+            }
+
+            let widthRest = geometry.size.width - widthActive - widthPassive - widthProjected
             
-            if DataViewModel.sample.now.burned < calBurnedNowGraphTotal {
+            if energy.burned < energy.graphTotal {
                 ZStack {
                     Rectangle()
                         .fill(Color.clear)
                         .frame(width: widthRest)
-                        .padding(.leading, widthActive + widthPassive)
+                        .padding(.leading, widthActive + widthPassive + widthProjected)
                     
                     if labels {
                         if widthRest <= 25 {
-                            Text("\(calBurnedNowGraphTotal - DataViewModel.sample.now.burned)")
+                            Text("\(energy.graphTotal - energy.burned)")
                                 .graphLabelStyle(scheme)
-                                .padding(.leading, widthActive + widthPassive - 18)
+                                .padding(.leading, widthActive + widthPassive + widthProjected - 18)
                         } else {
-                            Text("\(calBurnedNowGraphTotal - DataViewModel.sample.now.burned)")
+                            Text("\(energy.graphTotal - energy.burned)")
                                 .graphLabelStyle(scheme)
-                                .padding(.leading, widthActive + widthPassive)
+                                .padding(.leading, widthActive + widthPassive + widthProjected)
                         }
                     }
                 }
@@ -112,20 +147,6 @@ struct BarBalanceGraphTopRow: View {
         .drawingGroup()
 //        .geometryGroup()
 //        .compositingGroup()
-    }
-
-}
-
-extension BarBalanceGraphTopRow {
-
-    var calBurnedNowGraphTotal: Int { DataViewModel.sample.now.graphTotal }
-
-    var activeNowGraphWidthRatio: CGFloat {
-        CGFloat(DataViewModel.sample.now.ratio(of: DataViewModel.sample.now.active))
-    }
-
-    var passiveNowGraphWidthRatio: CGFloat {
-        CGFloat(DataViewModel.sample.now.ratio(of: DataViewModel.sample.now.resting))
     }
 
 }

@@ -36,7 +36,7 @@ struct WelcomeView: View {
                 .fontDesign(.rounded)
             }
             
-            BarBalanceGraph(labels: false)
+            BarBalanceGraph(mode: .now, labels: false)
                 .frame(height: 58)
                 .padding(.horizontal, 40)
         }

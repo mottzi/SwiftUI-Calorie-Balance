@@ -7,7 +7,7 @@ var PreviewPager: some View {
 }
 
 #Preview("Balance bar") {
-    BarBalanceGraph()
+    BarBalanceGraph(mode: .now)
         .environment(HealthInterface(.example(for: .now, balance: .deficit)))
         .environmentObject(Settings.shared)
         .frame(height: 44)

@@ -31,11 +31,7 @@ struct PrognosisCard: View {
         VStack(spacing: 0) {
             TopRowRight.padding(.top, 2)
             
-            BarBalanceGraphMidnight(
-                energy: DataViewModel.sample.midnight,
-                consumedColor: AppSettings.consumedColor,
-                burnedColor: AppSettings.burnedColor
-            )
+            BarBalanceGraph(mode: .midnight)
             .frame(height: sizeMapping[dynamicType, default: 44])
             .padding(.top, 6)
             .padding(.bottom, 2)

@@ -105,7 +105,6 @@
 		9AA413102C2630D5005B9D73 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA4130F2C2630D5005B9D73 /* Bundle.swift */; };
 		9AA413112C264C4D005B9D73 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A919DC22B233E380003C035 /* Extensions.swift */; };
 		9AA72DA82B02C33000E32650 /* BarBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA72DA72B02C33000E32650 /* BarBalanceGraph.swift */; };
-		9AA72DAB2B02EB8200E32650 /* BarBalanceGraphMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA72DAA2B02EB8200E32650 /* BarBalanceGraphMidnight.swift */; };
 		9AA72DAE2B04CAAD00E32650 /* NutritionWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA72DAD2B04CAAD00E32650 /* NutritionWidget.swift */; };
 		9AA785272B21CD9D007305F6 /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA785262B21CD9D007305F6 /* CircleProgressView.swift */; };
 		9AADF00F2B6FC28100774AE7 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9A57F5382B66813D00B8DF6D /* Localizable.xcstrings */; };
@@ -125,7 +124,6 @@
 		9ABFA7BD2C0A413A00024D2F /* ToggleViewModeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A480F692B19315600D79FAE /* ToggleViewModeIntent.swift */; };
 		9ABFA7BE2C0A415400024D2F /* WeightDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */; };
 		9ABFA7C02C0A450500024D2F /* BalanceDataLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB4BA092B00D7DD00176682 /* BalanceDataLabels.swift */; };
-		9ABFA7C22C0A451A00024D2F /* BarBalanceGraphMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA72DAA2B02EB8200E32650 /* BarBalanceGraphMidnight.swift */; };
 		9ABFA7C42C0A453B00024D2F /* CircleBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */; };
 		9AC2E2822C12742500B07EBE /* WatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC2E2812C12742500B07EBE /* WatchApp.swift */; };
 		9AC2E2842C12742500B07EBE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC2E2832C12742500B07EBE /* ContentView.swift */; };
@@ -290,7 +288,6 @@
 		9AA4130E2C259ACB005B9D73 /* Count.kcal.complications.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Count.kcal.complications.entitlements; sourceTree = "<group>"; };
 		9AA4130F2C2630D5005B9D73 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		9AA72DA72B02C33000E32650 /* BarBalanceGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraph.swift; sourceTree = "<group>"; };
-		9AA72DAA2B02EB8200E32650 /* BarBalanceGraphMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphMidnight.swift; sourceTree = "<group>"; };
 		9AA72DAD2B04CAAD00E32650 /* NutritionWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionWidget.swift; sourceTree = "<group>"; };
 		9AA785262B21CD9D007305F6 /* CircleProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleProgressView.swift; sourceTree = "<group>"; };
 		9AAF6E4F2B3F183900B9363E /* ThemeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButton.swift; sourceTree = "<group>"; };
@@ -501,9 +498,6 @@
 				9A616F482A642D3C00B713C4 /* CaloriesCard.swift */,
 				9A6DA88C2B361ABF00585788 /* CaloriesCardTopRow.swift */,
 				9A6DA88E2B361B3400585788 /* CaloriesCardTopRowCenter.swift */,
-				9AA72DA72B02C33000E32650 /* BarBalanceGraph.swift */,
-				9A6DA8902B361D0700585788 /* BarBalanceGraphTopRow.swift */,
-				9A6DA8922B361EC300585788 /* BarBalanceGraphBottomRow.swift */,
 			);
 			path = CaloriesCard;
 			sourceTree = "<group>";
@@ -678,9 +672,11 @@
 				9A616F462A642A6C00B713C4 /* Card.swift */,
 				9A92F1672B054C2F009C4A2A /* IconPicker.swift */,
 				9AB4BA092B00D7DD00176682 /* BalanceDataLabels.swift */,
+				9AA72DA72B02C33000E32650 /* BarBalanceGraph.swift */,
+				9A6DA8902B361D0700585788 /* BarBalanceGraphTopRow.swift */,
+				9A6DA8922B361EC300585788 /* BarBalanceGraphBottomRow.swift */,
 				9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */,
 				9AA785262B21CD9D007305F6 /* CircleProgressView.swift */,
-				9AA72DAA2B02EB8200E32650 /* BarBalanceGraphMidnight.swift */,
 				9ABBD8FE2BE8213F003EC608 /* WeekBalanceGraph.swift */,
 				9AE3D3A42B7970EC00483339 /* CDatePicker.swift */,
 				9AF4DC912BF2C4B5000EF0A5 /* MacroSlider.swift */,
@@ -916,7 +912,6 @@
 				9A0D04FE2C165E6B00AF7247 /* Connectivity.swift in Sources */,
 				9A7CC5342C6A3F3E0061451D /* StepsCard.swift in Sources */,
 				9A919DC32B233E380003C035 /* Extensions.swift in Sources */,
-				9AA72DAB2B02EB8200E32650 /* BarBalanceGraphMidnight.swift in Sources */,
 				9A206D7D2C5838E50079DE3D /* AppleHealthView.swift in Sources */,
 				9A6DA88F2B361B3400585788 /* CaloriesCardTopRowCenter.swift in Sources */,
 				9ABBD8FF2BE8213F003EC608 /* WeekBalanceGraph.swift in Sources */,
@@ -981,7 +976,6 @@
 				9ABFA7B72C0A3CBA00024D2F /* BarBalanceGraphTopRow.swift in Sources */,
 				9ABFA7AE2C0A3BC700024D2F /* ReachableView.swift in Sources */,
 				9ABFA7BE2C0A415400024D2F /* WeightDataViewModel.swift in Sources */,
-				9ABFA7C22C0A451A00024D2F /* BarBalanceGraphMidnight.swift in Sources */,
 				9AA72DAE2B04CAAD00E32650 /* NutritionWidget.swift in Sources */,
 				9ABFA7BC2C0A413400024D2F /* HKRepository.swift in Sources */,
 				9ABFA7BA2C0A411300024D2F /* Settings.swift in Sources */,

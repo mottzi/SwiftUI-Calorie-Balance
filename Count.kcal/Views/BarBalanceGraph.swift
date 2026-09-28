@@ -1,19 +1,26 @@
 import SwiftUI
 
+/// Shows recorded or projected energy in two horizontal bars.
 struct BarBalanceGraph: View {
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
+    @Environment(HealthInterface.self) private var day
 
+    let mode: GraphMode
+    let labels: Bool
 
-
-    var context: ViewContext = .app
-    var labels = true
+    init(mode: GraphMode, labels: Bool = true) {
+        self.mode = mode
+        self.labels = labels
+    }
     
     var body: some View {
+        let energy = mode == .now ? day.sample.now : day.sample.midnight
+
         GeometryReader { container in
             VStack(spacing: scheme == .light ? 1 : 2) {
                 GeometryReader { geometry in
-                    BarBalanceGraphTopRow(geometry: geometry, context: context, labels: labels)
+                    BarBalanceGraphTopRow(geometry: geometry, energy: energy, mode: mode, labels: labels)
                 }
                 .frame(height: container.size.height / 2 - 1)
                 .clipShape(UnevenRoundedRectangle(
@@ -25,7 +32,7 @@ struct BarBalanceGraph: View {
                 ))
                 
                 GeometryReader { geometry in
-                    BarBalanceGraphBottomRow(geometry: geometry, context: context, labels: labels)
+                    BarBalanceGraphBottomRow(geometry: geometry, energy: energy, mode: mode, labels: labels)
                 }
                 .frame(height: container.size.height / 2 - 1)
                 .clipShape(UnevenRoundedRectangle(

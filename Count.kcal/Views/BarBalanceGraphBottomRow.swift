@@ -1,16 +1,16 @@
 import SwiftUI
 
+/// Shows consumed energy against the selected balance total.
 struct BarBalanceGraphBottomRow: View {
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
     @EnvironmentObject private var AppSettings: Settings
 
-    @Environment(HealthInterface.self) private var DataViewModel
-    
     let geometry: GeometryProxy
-    let context: ViewContext
-    var labels = true
+    let energy: EnergyBalance
+    let mode: GraphMode
+    let labels: Bool
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -26,8 +26,7 @@ struct BarBalanceGraphBottomRow: View {
                         .opacity(0.25)
                 }
             
-            let widthConsumed = CGFloat(DataViewModel.sample.now.ratio(of: DataViewModel.sample.now.consumed))
-                * geometry.size.width
+            let widthConsumed = CGFloat(energy.ratio(of: energy.consumed)) * geometry.size.width
             
             Rectangle()
                 .fill(AppSettings.consumedColor)
@@ -45,16 +44,18 @@ struct BarBalanceGraphBottomRow: View {
                 .overlay {
                     if labels {
                         ViewThatFits {
-                            Text("\(DataViewModel.sample.consumed)").graphLabelStyle(scheme)
+                            Text("\(energy.consumed)").graphLabelStyle(scheme)
                             
                             Color.clear
                                 .frame(width: 0, height: 0)
                         }
-                        .transaction { transaction in transaction.animation = .none }
+                        .transaction { transaction in
+                            if mode == .now { transaction.animation = .none }
+                        }
                     }
                 }
             
-            if (DataViewModel.sample.consumed < calBurnedNowGraphTotal) {
+            if energy.consumed < energy.graphTotal {
                 let widthRest = geometry.size.width - widthConsumed
                 
                 ZStack {
@@ -65,11 +66,11 @@ struct BarBalanceGraphBottomRow: View {
                     
                     if labels {
                         if widthRest <= 25 {
-                            Text("\(calBurnedNowGraphTotal - DataViewModel.sample.consumed)")
+                            Text("\(energy.graphTotal - energy.consumed)")
                                 .graphLabelStyle(scheme)
                                 .padding(.leading, widthConsumed - 18)
                         } else {
-                            Text("\(calBurnedNowGraphTotal - DataViewModel.sample.consumed)")
+                            Text("\(energy.graphTotal - energy.consumed)")
                                 .graphLabelStyle(scheme)
                                 .padding(.leading, widthConsumed)
                         }
@@ -81,11 +82,5 @@ struct BarBalanceGraphBottomRow: View {
 //        .geometryGroup()
 //        .compositingGroup()
     }
-
-}
-
-extension BarBalanceGraphBottomRow {
-
-    var calBurnedNowGraphTotal: Int { DataViewModel.sample.now.graphTotal }
 
 }
