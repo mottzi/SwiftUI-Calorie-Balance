@@ -37,7 +37,6 @@
 		9A206D842C583B560079DE3D /* Welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D832C583B560079DE3D /* Welcome.swift */; };
 		9A25A9282C1B7B29008AB1B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */; };
 		9A25A9292C1B7B29008AB1B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */; };
-		9A2A67F729CF96C4001E58DF /* PrognosisCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2A67F629CF96C4001E58DF /* PrognosisCard.swift */; };
 		9A2A67FA29CF9D7F001E58DF /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A2A67F929CF9D7F001E58DF /* Charts.framework */; };
 		9A2F7E672C34989100498A67 /* BalanceCornerTextNowMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2F7E662C34989100498A67 /* BalanceCornerTextNowMidnight.swift */; };
 		9A31F9BD2B6AEBE800886BAE /* UnitsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A31F9BC2B6AEBE800886BAE /* UnitsCard.swift */; };
@@ -235,7 +234,6 @@
 		9A206D832C583B560079DE3D /* Welcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Welcome.swift; sourceTree = "<group>"; };
 		9A25A9222C1B7A4C008AB1B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		9A2A67F629CF96C4001E58DF /* PrognosisCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrognosisCard.swift; sourceTree = "<group>"; };
 		9A2A67F929CF9D7F001E58DF /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = System/Library/Frameworks/Charts.framework; sourceTree = SDKROOT; };
 		9A2F7E662C34989100498A67 /* BalanceCornerTextNowMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCornerTextNowMidnight.swift; sourceTree = "<group>"; };
 		9A31F9BC2B6AEBE800886BAE /* UnitsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitsCard.swift; sourceTree = "<group>"; };
@@ -474,7 +472,6 @@
 				9A001C3E29B6122500BB42B9 /* Dashboard.swift */,
 				9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */,
 				9A6DA88B2B361A7D00585788 /* CaloriesCard */,
-				9AAF6E522B3F1F4300B9363E /* PrognosisCard */,
 				9AAF6E512B3F1E9E00B9363E /* NutritionCard */,
 			);
 			path = Dashboard;
@@ -553,14 +550,6 @@
 				9A9BC9BD2A7E9C7300A4404A /* ReachableView.swift */,
 			);
 			path = NutritionCard;
-			sourceTree = "<group>";
-		};
-		9AAF6E522B3F1F4300B9363E /* PrognosisCard */ = {
-			isa = PBXGroup;
-			children = (
-				9A2A67F629CF96C4001E58DF /* PrognosisCard.swift */,
-			);
-			path = PrognosisCard;
 			sourceTree = "<group>";
 		};
 		9AB9ABF32C345C2B00DEE2D8 /* Graph */ = {
@@ -935,7 +924,6 @@
 				9A206D772C5837F70079DE3D /* BalanceGoalView.swift in Sources */,
 				9AB4BA0A2B00D7DD00176682 /* BalanceDataLabels.swift in Sources */,
 				9A206D792C58389B0079DE3D /* DataSourceView.swift in Sources */,
-				9A2A67F729CF96C4001E58DF /* PrognosisCard.swift in Sources */,
 				9A001C3D29B6122500BB42B9 /* CountApp.swift in Sources */,
 				9A616F472A642A6C00B713C4 /* Card.swift in Sources */,
 				9AD25EC02A65A82000C6E6E1 /* WeightCard.swift in Sources */,

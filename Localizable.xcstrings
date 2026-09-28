@@ -52,6 +52,7 @@
       }
     },
     "%@%@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
