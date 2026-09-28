@@ -39,8 +39,6 @@ private struct BalanceWidgetCircleContent: View {
             case .systemSmall:
                 ZStack(alignment: .center) {
                     HStack(spacing: 0) {
-                        //                    timeReloadButton
-                    
                         Spacer()
                     
                         modeLabel
@@ -96,8 +94,6 @@ private struct BalanceWidgetCircleContent: View {
             case .systemMedium:
                 ZStack(alignment: .top) {
                     HStack(alignment: .top, spacing: 0) {
-                        //                    timeReloadButton
-                    
                         Spacer()
                     
                         modeLabel
@@ -315,41 +311,6 @@ extension BalanceWidgetCircleContent {
             
             topGraphBalanceColumn
         }
-    }
-    
-    var timeReloadButton: some View {
-        Button(intent: TestAppIntent()) {
-            ZStack(alignment: .topLeading) {
-                // button hit-box
-                Color.clear
-                    .frame(width: 50, height: 35)
-                
-                // button label
-                Text(verbatim: "\(entry.date.shortTime)")
-                    .foregroundStyle(Color("SecondaryTextColor"))
-                    .font(.caption)
-                    .fontWeight(.thin)
-                    .padding(.leading, 12)
-                    .padding(.trailing, 9)
-                    .padding(.top, 2)
-                    .background {
-                        if scheme == .dark {
-                            UnevenRoundedRectangle(
-                                topLeadingRadius: 20,
-                                bottomLeadingRadius: 0,
-                                bottomTrailingRadius: 20,
-                                topTrailingRadius: 0,
-                                style: .continuous
-                            )
-                            .fill(Color("BackGroundColor").gradient)
-                        }
-                    }
-                    
-                    .opacity(0.8)
-            }
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
     }
     
 }
