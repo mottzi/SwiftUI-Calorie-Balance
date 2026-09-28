@@ -27,23 +27,21 @@ extension CGFloat {
 
 extension Color {
 
-    func brighten(_ level: Double) -> Color {
+    /// Adjusts HSV brightness while keeping the resolved hue, saturation, and opacity.
+    func brighten(_ level: Double, in environment: EnvironmentValues = EnvironmentValues()) -> Color {
         if level == 0 { return self }
-        
-        let uiColor = UIColor(self)
-        
-        var hue: CGFloat = 0
-        var saturation: CGFloat = 0
-        var brightness: CGFloat = 0
-        var alpha: CGFloat = 0
-        
-        uiColor.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
-        
-        brightness += level
 
-        let brighterUIColor = UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: alpha)
-        
-        return Color(brighterUIColor)
+        let resolved = resolve(in: environment)
+        let brightness = Double(max(resolved.red, resolved.green, resolved.blue))
+        let adjustedBrightness = min(max(brightness + level, 0), 1)
+
+        // scale RGB equally to keep HSV hue and saturation
+        let scale = brightness == 0 ? 0 : adjustedBrightness / brightness
+        let red = brightness == 0 ? adjustedBrightness : Double(resolved.red) * scale
+        let green = brightness == 0 ? adjustedBrightness : Double(resolved.green) * scale
+        let blue = brightness == 0 ? adjustedBrightness : Double(resolved.blue) * scale
+
+        return Color(.sRGB, red: red, green: green, blue: blue, opacity: Double(resolved.opacity))
     }
 
 }
