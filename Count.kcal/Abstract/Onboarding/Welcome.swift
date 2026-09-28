@@ -7,7 +7,6 @@ struct OnboardingWelcome: View {
             Image("icon")
                 .resizable()
                 .frame(width: 70, height: 70)
-                .clipShape(.rect(cornerRadius: 13))
             
             VStack(alignment: .leading, spacing: -6) {
                 Text("Welcome to")
