@@ -67,7 +67,7 @@ extension CaloriesCardTopRowCenter {
             
             Pager(lb: 6, tb: 1)
                 .environmentObject(Settings.shared)
-                .environment(WeightDataViewModel())
+                .environment(WeightHistory())
         }
     }
 }

@@ -7,7 +7,7 @@ struct CountApp: App {
     @StateObject private var AppSettings = Settings.shared
     @StateObject private var Watch = Connectivity.shared
 
-    @State private var WeightViewModel = WeightDataViewModel()
+    @State private var weightHistory = WeightHistory()
     @State private var StreakManager = Streak()
 
     var body: some Scene {
@@ -19,7 +19,7 @@ struct CountApp: App {
 
                     Pager(lb: 5, tb: 1)
                         .environmentObject(AppSettings)
-                        .environment(WeightViewModel)
+                        .environment(weightHistory)
                         .environment(StreakManager)
                 }
                 #if DEBUG && targetEnvironment(simulator)

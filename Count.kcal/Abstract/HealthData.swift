@@ -1,7 +1,7 @@
 import Foundation
 
 /// Daily energy, nutrient, step, and calculated balance values.
-struct HealthData: Equatable, Sendable {
+struct HealthData: Equatable {
 
     var date: Date
     var lastDataSync: Date?

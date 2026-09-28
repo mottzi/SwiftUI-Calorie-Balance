@@ -1,7 +1,7 @@
 import Foundation
 
 /// Energy totals and graph proportions for one point in the day.
-struct EnergyBalance: Equatable, Sendable {
+struct EnergyBalance: Equatable {
 
     let active: Int
     let resting: Int

@@ -36,6 +36,6 @@ struct AppleHealthView: View {
         }
     }
     .environmentObject(Settings.shared)
-    .environment(WeightDataViewModel())
+    .environment(WeightHistory())
     .environment(Streak())
 }

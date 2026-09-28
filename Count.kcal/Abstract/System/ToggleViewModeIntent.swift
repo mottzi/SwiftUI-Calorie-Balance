@@ -30,17 +30,3 @@ struct ToggleViewModeIntent: AppIntent {
     static var description = IntentDescription("Switch between now and midnight modes.")
 
 }
-
-struct TestAppIntent: AppIntent {
-
-    static var title: LocalizedStringResource = "Refresh widget data."
-    static var description = IntentDescription("This causes widget information to update.")
-    
-    func perform() async throws -> some IntentResult {
-        print("*** running AppIntent")
-
-        WidgetCenter.shared.reloadAllTimelines()
-        return .result()
-    }
-
-}

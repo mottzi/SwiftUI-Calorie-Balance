@@ -5,20 +5,20 @@ struct WeeklyChart: View {
 
     @EnvironmentObject private var AppSettings: Settings
 
-    @Environment(WeightDataViewModel.self) private var WeightViewModel
+    @Environment(WeightHistory.self) private var weightHistory
 
     var body: some View {
-        if WeightViewModel.dataLoaded {
+        if weightHistory.dataLoaded {
             Chart {
                 // average line horizontal
-                RuleMark(y: .value("Value", WeightViewModel.weightAvg7))
+                RuleMark(y: .value("Value", weightHistory.weightAvg7))
                     .foregroundStyle(trendColor.opacity(0.8))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [2, 3]))
                 
                 // today highlight background
                 RectangleMark(
-                    xStart: .value("Date", WeightViewModel.WeeklyWeightData.last!.date.tomorrow),
-                    xEnd: .value("Date", WeightViewModel.WeeklyWeightData.last!.date)
+                    xStart: .value("Date", weightHistory.weeklyAverages.last!.date.tomorrow),
+                    xEnd: .value("Date", weightHistory.weeklyAverages.last!.date)
                 )
                     .foregroundStyle(Color("SecondaryTextColor").opacity(0.1))
                 
@@ -28,7 +28,7 @@ struct WeeklyChart: View {
                     endPoint: .leading
                 )
                 
-                let validData = WeightViewModel.validData(.weekly)
+                let validData = weightHistory.validData(.weekly)
 
                 ForEach(Array(validData.enumerated()), id: \.element.id) { (index, item) in
                     // data point label
@@ -73,20 +73,20 @@ struct WeeklyChart: View {
             //.padding(.trailing, 15)
             .padding(.horizontal, 13)
 
-            .chartYScale(domain: WeightViewModel.getYRange(.weekly))
+            .chartYScale(domain: weightHistory.getYRange(.weekly))
             .chartYAxis {
-                AxisMarks(values: WeightViewModel.createYRangeArray(.weekly)) {
+                AxisMarks(values: weightHistory.createYRangeArray(.weekly)) {
                     AxisValueLabel()
                 }
                 
-                AxisMarks(values: [WeightViewModel.getYTopRange(.weekly), WeightViewModel.getYBottomRange(.weekly)]) {
+                AxisMarks(values: [weightHistory.getYTopRange(.weekly), weightHistory.getYBottomRange(.weekly)]) {
                     AxisGridLine()
                 }
                 
             }
             .chartXScale(
-                domain: WeightViewModel.WeeklyWeightData.first!.date ...
-                    WeightViewModel.WeeklyWeightData.last!.date.tomorrow
+                domain: weightHistory.weeklyAverages.first!.date ...
+                    weightHistory.weeklyAverages.last!.date.tomorrow
             )
             .chartXAxis {
                 AxisMarks(values: .stride(by: .day)) { day in
@@ -108,7 +108,7 @@ extension WeeklyChart {
 
     /// Uses the period trend to select the existing chart color.
     private var trendColor: Color {
-        switch WeightViewModel.trend(for: .weekly) {
+        switch weightHistory.trend(for: .weekly) {
             case .orderedAscending: AppSettings.burnedColor
             case .orderedDescending: AppSettings.consumedColor
             default: Color(white: 0.22)
@@ -124,7 +124,7 @@ extension WeeklyChart {
             
             Pager(lb: 6, tb: 1)
                 .environmentObject(Settings.shared)
-                .environment(WeightDataViewModel())
+                .environment(WeightHistory())
         }
     }
 }

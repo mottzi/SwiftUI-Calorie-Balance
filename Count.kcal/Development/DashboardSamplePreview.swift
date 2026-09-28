@@ -21,7 +21,7 @@ private struct DashboardSamplePreview: View {
     @State private var pages: [HealthInterface]
     @State private var selectedPage: HealthInterface?
     @State private var todayPageMode: PagerSelection = .first
-    @State private var weightModel: WeightDataViewModel
+    @State private var weightModel: WeightHistory
     @State private var streak: Streak
 
     init() {
@@ -43,15 +43,15 @@ private struct DashboardSamplePreview: View {
         _pages = State(initialValue: samplePages)
         _selectedPage = State(initialValue: samplePages.last)
 
-        let weights = WeightDataViewModel()
-        weights.WeightData = (0..<37).reversed().map { daysAgo in
+        let weights = WeightHistory()
+        weights.dailyAverages = (0..<37).reversed().map { daysAgo in
             WeightChartData(
                 date: today.subtractDays(daysAgo),
                 weightAvg: 81.5 - Double(36 - daysAgo) * 0.05
             )
         }
-        weights.weightLatest = 79.7
-        weights.weightLatestDate = today
+        weights.latestWeight = 79.7
+        weights.latestWeightDate = today
         _weightModel = State(initialValue: weights)
 
         let sampleStreak = Streak()

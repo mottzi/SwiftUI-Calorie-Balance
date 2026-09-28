@@ -42,7 +42,7 @@
 		9A31F9BD2B6AEBE800886BAE /* UnitsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A31F9BC2B6AEBE800886BAE /* UnitsCard.swift */; };
 		9A34AD4A2C2A1F4900A0C5A6 /* Connectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0D04FD2C165E6B00AF7247 /* Connectivity.swift */; };
 		9A34AD4B2C2A1F4A00A0C5A6 /* Connectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0D04FD2C165E6B00AF7247 /* Connectivity.swift */; };
-		9A368CA32A6E64F900280BF9 /* WeightDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */; };
+		9A368CA32A6E64F900280BF9 /* WeightHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightHistory.swift */; };
 		9A3B60152C1E77E0006000B4 /* EnergyBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */; };
 		9A3B87832C30C8DD002D02D1 /* BalanceCircleGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B87822C30C8DD002D02D1 /* BalanceCircleGauge.swift */; };
 		9A3F8EAA2B348C1F00B0DC74 /* CaloriesMidnightCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */; };
@@ -51,7 +51,7 @@
 		9A4B47DB2C17C13300F9168E /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A4B47D82C17C10000F9168E /* WatchConnectivity.framework */; };
 		9A4B728D2C13B639004853F0 /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CBB2B3E2E7A0037628F /* HealthData.swift */; };
 		9A4B728E2C13B63E004853F0 /* HealthInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */; };
-		9A4B728F2C13B648004853F0 /* WeightDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */; };
+		9A4B728F2C13B648004853F0 /* WeightHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightHistory.swift */; };
 		9A4B72902C13B64B004853F0 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A59C1EB2B0A2E180058A502 /* Settings.swift */; };
 		9A4B72912C13B651004853F0 /* HKRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HKRepository.swift */; };
 		9A4B72922C13B653004853F0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A919DC22B233E380003C035 /* Extensions.swift */; };
@@ -116,7 +116,7 @@
 		9ABFA7BB2C0A412D00024D2F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A919DC22B233E380003C035 /* Extensions.swift */; };
 		9ABFA7BC2C0A413400024D2F /* HKRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HKRepository.swift */; };
 		9ABFA7BD2C0A413A00024D2F /* ToggleViewModeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A480F692B19315600D79FAE /* ToggleViewModeIntent.swift */; };
-		9ABFA7BE2C0A415400024D2F /* WeightDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */; };
+		9ABFA7BE2C0A415400024D2F /* WeightHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightHistory.swift */; };
 		9ABFA7C02C0A450500024D2F /* BalanceDataLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB4BA092B00D7DD00176682 /* BalanceDataLabels.swift */; };
 		9ABFA7C42C0A453B00024D2F /* CircleBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */; };
 		9AC2E2822C12742500B07EBE /* WatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AC2E2812C12742500B07EBE /* WatchApp.swift */; };
@@ -130,7 +130,7 @@
 		9AD5F5502C277C2E003FE1C5 /* HealthDataTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFAAA6E2B5FF9DC00034CA9 /* HealthDataTimelineProvider.swift */; };
 		9AD5F5512C277C43003FE1C5 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A59C1EB2B0A2E180058A502 /* Settings.swift */; };
 		9AD5F5522C277C9D003FE1C5 /* HKRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HKRepository.swift */; };
-		9AD5F5532C277D14003FE1C5 /* WeightDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */; };
+		9AD5F5532C277D14003FE1C5 /* WeightHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightHistory.swift */; };
 		9AD5F5582C28279C003FE1C5 /* BalanceCornerText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD5F5572C28279C003FE1C5 /* BalanceCornerText.swift */; };
 		9ADC38112AF6FCBC005CCFEF /* CountWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC380F2AF6FC00005CCFEF /* CountWidgetBundle.swift */; };
 		9ADC38132AF6FD0C005CCFEF /* BalanceWidgetBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC38122AF6FD0C005CCFEF /* BalanceWidgetBar.swift */; };
@@ -237,7 +237,7 @@
 		9A2A67F929CF9D7F001E58DF /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = System/Library/Frameworks/Charts.framework; sourceTree = SDKROOT; };
 		9A2F7E662C34989100498A67 /* BalanceCornerTextNowMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCornerTextNowMidnight.swift; sourceTree = "<group>"; };
 		9A31F9BC2B6AEBE800886BAE /* UnitsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitsCard.swift; sourceTree = "<group>"; };
-		9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightDataViewModel.swift; sourceTree = "<group>"; };
+		9A368CA22A6E64F900280BF9 /* WeightHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightHistory.swift; sourceTree = "<group>"; };
 		9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBalance.swift; sourceTree = "<group>"; };
 		9A3B87822C30C8DD002D02D1 /* BalanceCircleGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGauge.swift; sourceTree = "<group>"; };
 		9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CaloriesMidnightCard.swift; path = Count.kcal/Dashboard/CaloriesMidnightCard.swift; sourceTree = SOURCE_ROOT; };
@@ -682,7 +682,7 @@
 				9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */,
 				9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */,
 				D7A8097F63844ED785702A10 /* DayPager.swift */,
-				9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */,
+				9A368CA22A6E64F900280BF9 /* WeightHistory.swift */,
 				9AD8FA0A2AF819B40064D501 /* System */,
 				9A206D752C5837A50079DE3D /* Onboarding */,
 			);
@@ -916,7 +916,7 @@
 				D7A8097F63844ED785702A11 /* DayPager.swift in Sources */,
 				9A206D822C583ADA0079DE3D /* Button.swift in Sources */,
 				9AF39CB32B3DBA4C0037628F /* WeightTopBar.swift in Sources */,
-				9A368CA32A6E64F900280BF9 /* WeightDataViewModel.swift in Sources */,
+				9A368CA32A6E64F900280BF9 /* WeightHistory.swift in Sources */,
 				9AF4DC922BF2C4B5000EF0A5 /* MacroSlider.swift in Sources */,
 				9A92F1682B054C30009C4A2A /* IconPicker.swift in Sources */,
 				9A5AF20630681DDE008CC950 /* SimulatorHealthSeeder.swift in Sources */,
@@ -945,7 +945,7 @@
 				9ADC38132AF6FD0C005CCFEF /* BalanceWidgetBar.swift in Sources */,
 				9ABFA7B72C0A3CBA00024D2F /* BarBalanceGraphTopRow.swift in Sources */,
 				9ABFA7AE2C0A3BC700024D2F /* ReachableView.swift in Sources */,
-				9ABFA7BE2C0A415400024D2F /* WeightDataViewModel.swift in Sources */,
+				9ABFA7BE2C0A415400024D2F /* WeightHistory.swift in Sources */,
 				9AA72DAE2B04CAAD00E32650 /* NutritionWidget.swift in Sources */,
 				9ABFA7BC2C0A413400024D2F /* HKRepository.swift in Sources */,
 				9ABFA7BA2C0A411300024D2F /* Settings.swift in Sources */,
@@ -975,7 +975,7 @@
 				9A6DBD5A2C28D42E000920DA /* CircleBalanceGraph.swift in Sources */,
 				9AE1804E2C35FCDA00C37AA9 /* RectangleBalance.swift in Sources */,
 				9AD5F5512C277C43003FE1C5 /* Settings.swift in Sources */,
-				9AD5F5532C277D14003FE1C5 /* WeightDataViewModel.swift in Sources */,
+				9AD5F5532C277D14003FE1C5 /* WeightHistory.swift in Sources */,
 				9AA413032C24D90D005B9D73 /* BalanceCornerGauge.swift in Sources */,
 				9A6DBD5C2C28D464000920DA /* EnergyBalance.swift in Sources */,
 				9A6DBD5B2C28D452000920DA /* HealthInterface.swift in Sources */,
@@ -1015,7 +1015,7 @@
 				9A0D04FF2C165E6B00AF7247 /* Connectivity.swift in Sources */,
 				9A4B72942C13B897004853F0 /* CircleProgressView.swift in Sources */,
 				9AC2E2822C12742500B07EBE /* WatchApp.swift in Sources */,
-				9A4B728F2C13B648004853F0 /* WeightDataViewModel.swift in Sources */,
+				9A4B728F2C13B648004853F0 /* WeightHistory.swift in Sources */,
 				9A0BAC062C244CA500622F9F /* CaloriesTab.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -118,7 +118,7 @@ struct IconPicker<T: RawRepresentable>: View where T.RawValue == Int {
 
 }
 
-enum PagerSelection: String, Hashable {
+enum PagerSelection: String {
 
     case first
     case second

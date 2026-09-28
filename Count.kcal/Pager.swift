@@ -13,7 +13,7 @@ struct Pager: View {
 
     @EnvironmentObject private var AppSettings: Settings
 
-    @Environment(WeightDataViewModel.self) private var WeightViewModel
+    @Environment(WeightHistory.self) private var weightHistory
     @Environment(Streak.self) private var streak
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.requestReview) private var requestReview
@@ -189,7 +189,7 @@ extension Pager {
         await AppSettings.updateShow()
         guard !Task.isCancelled else { return }
         let weekPages = navigation.weekPages.filter { $0.id != navigation.selectedDay }
-        async let weightRefresh: Void = WeightViewModel.fetchData()
+        async let weightRefresh: Void = weightHistory.fetchData()
         async let streakRefresh: Void = streak.updateStreaks()
         await withTaskGroup(of: Void.self) { group in
             for page in weekPages {
@@ -231,7 +231,7 @@ extension Pager {
                 let start = Double.random(in: 60 ... 150)
                 let end = start - Double.random(in: 1 ... 5)
 
-                WeightViewModel.randomizeWeightData(start: start, end: end)
+                weightHistory.randomizeWeightData(start: start, end: end)
             }
         } label: {
             Text(selectedPage?.id.relative ?? "")

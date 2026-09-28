@@ -5,18 +5,18 @@ struct MonthlyChart: View {
 
     @EnvironmentObject private var AppSettings: Settings
 
-    @Environment(WeightDataViewModel.self) private var WeightViewModel
+    @Environment(WeightHistory.self) private var weightHistory
 
     var body: some View {
-        if WeightViewModel.dataLoaded {
+        if weightHistory.dataLoaded {
             Chart {
-                RuleMark(y: .value("Value", WeightViewModel.weightAvg30))
+                RuleMark(y: .value("Value", weightHistory.weightAvg30))
                     .foregroundStyle(trendColor.opacity(0.8))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [2, 3]))
                 
                 RectangleMark(
-                    xStart: .value("Date", WeightViewModel.WeightData.last!.date.lastMonday),
-                    xEnd: .value("Date", WeightViewModel.WeightData.last!.date.nextSunday.tomorrow)
+                    xStart: .value("Date", weightHistory.dailyAverages.last!.date.lastMonday),
+                    xEnd: .value("Date", weightHistory.dailyAverages.last!.date.nextSunday.tomorrow)
                 )
                 .foregroundStyle(Color("SecondaryTextColor").opacity(0.1))
                 
@@ -26,7 +26,7 @@ struct MonthlyChart: View {
                     endPoint: .leading
                 )
                 
-                let validData = WeightViewModel.validData(.monthly)
+                let validData = weightHistory.validData(.monthly)
 
                 ForEach(Array(validData.enumerated()), id: \.element.id) { (index, item) in
                     LineMark(
@@ -59,10 +59,10 @@ struct MonthlyChart: View {
 //            .padding(.trailing, 15)
             .padding(.horizontal, 12)
 
-            .chartYScale(domain: WeightViewModel.getYRange(.monthly))
-            .chartYAxis { AxisMarks(position: .trailing, values: WeightViewModel.createYRangeArray(.monthly)) }
+            .chartYScale(domain: weightHistory.getYRange(.monthly))
+            .chartYAxis { AxisMarks(position: .trailing, values: weightHistory.createYRangeArray(.monthly)) }
             .chartXScale(
-                domain: WeightViewModel.WeightData.first!.date ... WeightViewModel.WeightData.last!.date.nextSunday.tomorrow
+                domain: weightHistory.dailyAverages.first!.date ... weightHistory.dailyAverages.last!.date.nextSunday.tomorrow
             )
             .chartXAxis {
                 AxisMarks(values: .stride(by: .day, count: 7)) { date in
@@ -80,7 +80,7 @@ extension MonthlyChart {
 
     /// Uses the period trend to select the existing chart color.
     private var trendColor: Color {
-        switch WeightViewModel.trend(for: .monthly) {
+        switch weightHistory.trend(for: .monthly) {
             case .orderedAscending: AppSettings.burnedColor
             case .orderedDescending: AppSettings.consumedColor
             default: Color(white: 0.22)

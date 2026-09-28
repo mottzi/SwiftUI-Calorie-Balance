@@ -133,6 +133,6 @@ extension BalanceGoalView {
         }
     }
     .environmentObject(Settings.shared)
-    .environment(WeightDataViewModel())
+    .environment(WeightHistory())
     .environment(Streak())
 }

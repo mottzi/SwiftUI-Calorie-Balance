@@ -3,7 +3,7 @@ import SwiftUI
 struct WeightTopBar: View {
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
-    @Environment(WeightDataViewModel.self) private var WeightViewModel
+    @Environment(WeightHistory.self) private var weightHistory
 
     @EnvironmentObject private var AppSettings: Settings
 
@@ -17,9 +17,9 @@ struct WeightTopBar: View {
                 HStack(spacing: 16) {
                     VStack(spacing: 0) {
                         Text(
-                            verbatim: WeightViewModel.weightAvg7 == 0.0
+                            verbatim: weightHistory.weightAvg7 == 0.0
                                 ? "-/-"
-                                : String(format: "%.1f", WeightViewModel.weightAvg7)
+                                : String(format: "%.1f", weightHistory.weightAvg7)
                         )
                             .font(.title3)
                             .foregroundStyle(pageSelection == .first ? Color("TextColor") : Color("SecondaryTextColor"))
@@ -45,9 +45,9 @@ struct WeightTopBar: View {
 
                     VStack(spacing: 0) {
                         Text(
-                            verbatim: WeightViewModel.weightAvg30 == 0.0
+                            verbatim: weightHistory.weightAvg30 == 0.0
                                 ? "-/-"
-                                : String(format: "%.1f", WeightViewModel.weightAvg30)
+                                : String(format: "%.1f", weightHistory.weightAvg30)
                         )
                             .font(.title3)
                             .foregroundStyle(pageSelection == .second ? Color("TextColor") : Color("SecondaryTextColor"))
@@ -92,9 +92,9 @@ struct WeightTopBar: View {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 2) {
                         Text(
-                            verbatim: WeightViewModel.weightLatest == nil
+                            verbatim: weightHistory.latestWeight == nil
                                 ? "-/-"
-                                : String(format: "%.1f", WeightViewModel.weightLatest!)
+                                : String(format: "%.1f", weightHistory.latestWeight!)
                         )
                             .font(.title3)
                             .foregroundStyle(Color("TextColor"))
@@ -110,9 +110,9 @@ struct WeightTopBar: View {
                     }
 
                     Text(
-                        WeightViewModel.weightLatestDate == nil
+                        weightHistory.latestWeightDate == nil
                             ? "Last Sample"
-                            : WeightViewModel.weightLatestDate!.relative
+                            : weightHistory.latestWeightDate!.relative
                     )
                         .font(.caption)
                         .foregroundStyle(Color("SecondaryTextColor"))
@@ -142,7 +142,7 @@ struct WeightTopBar: View {
             
             Pager(lb: 6, tb: 1)
                 .environmentObject(Settings.shared)
-                .environment(WeightDataViewModel())
+                .environment(WeightHistory())
         }
     }
 }

@@ -30,26 +30,9 @@ extension Connectivity: WCSessionDelegate {
     func sendSettingsContext() {
         guard WCSession.default.activationState == .activated else { return }
         guard WCSession.default.isWatchAppInstalled else { return }
-        
-        // convert settings saved in phone app storage to settings-dictionary
-        let d: [String: Any] =
-        [
-            "weightGoal": Settings.shared.weightGoal.rawValue,
-            "dataSource": Settings.shared.dataSource.rawValue,
-            "energyUnit": Settings.shared.energyUnit.rawValue,
-            "weightUnit": Settings.shared.weightUnit.rawValue,
-            "balanceGoal": Settings.shared.balanceGoal,
-            "customCalPassive": Settings.shared.customCalPassive,
-            "customCalActive": Settings.shared.customCalActive,
-            "proteinGoal": Settings.shared.proteinGoal,
-            "carbsGoal": Settings.shared.carbsGoal,
-            "fatsGoal": Settings.shared.fatsGoal,
-            "burnedColor": Settings.shared.burnedColor.rawValue,
-            "consumedColor": Settings.shared.consumedColor.rawValue,
-        ]
-        
-        // only send the most recently scheduled settings-directory to watch
-        try? WCSession.default.updateApplicationContext(d)
+        guard let context = WatchSettingsSnapshot(settings: .shared).context else { return }
+
+        try? WCSession.default.updateApplicationContext(context)
     }
     
     func sessionDidBecomeInactive(_ session: WCSession) { session.activate() }
@@ -70,70 +53,17 @@ extension Connectivity: WCSessionDelegate {
 
 }
 #endif
-    
+
 // receiver
 #if os(watchOS)
 extension Connectivity: WCSessionDelegate {
 
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
-        Task { @MainActor in
-            // extract individual settings from received phone settings-dictionary
-            // and persist them in watch app storage
-            withAnimation(.bouncy(duration: 0.6)) {
-                if let weightGoal = applicationContext["weightGoal"] as? Int,
-                   let translate = Settings.WeightGoals(rawValue: weightGoal) {
-                    Settings.shared.weightGoal = translate
-                }
-                
-                if let dataSource = applicationContext["dataSource"] as? Int,
-                   let translate = Settings.DataSources(rawValue: dataSource) {
-                    Settings.shared.dataSource = translate
-                }
-                
-                if let customCalPassive = applicationContext["customCalPassive"] as? Int {
-                    Settings.shared.customCalPassive = customCalPassive
-                }
-                
-                if let customCalActive = applicationContext["customCalActive"] as? Int {
-                    Settings.shared.customCalActive = customCalActive
-                }
-                
-                if let balanceGoal = applicationContext["balanceGoal"] as? Int {
-                    Settings.shared.balanceGoal = balanceGoal
-                }
-                
-                if let proteinGoal = applicationContext["proteinGoal"] as? Int {
-                    Settings.shared.proteinGoal = proteinGoal
-                }
-                
-                if let carbsGoal = applicationContext["carbsGoal"] as? Int {
-                    Settings.shared.carbsGoal = carbsGoal
-                }
-                
-                if let fatsGoal = applicationContext["fatsGoal"] as? Int {
-                    Settings.shared.fatsGoal = fatsGoal
-                }
-                
-                if let energyUnit = applicationContext["energyUnit"] as? String,
-                   let translate = Settings.EnergyUnit(rawValue: energyUnit) {
-                    Settings.shared.energyUnit = translate
-                }
-                
-                if let weightUnit = applicationContext["weightUnit"] as? String,
-                   let translate = Settings.WeightUnit(rawValue: weightUnit) {
-                    Settings.shared.weightUnit = translate
-                }
-                
-                if let raw = applicationContext["consumedColor"] as? String,
-                   let color = Color(rawValue: raw) {
-                    Settings.shared.consumedColor = color
-                }
+        guard let snapshot = WatchSettingsSnapshot(context: applicationContext) else { return }
 
-                if let raw = applicationContext["burnedColor"] as? String,
-                   let color = Color(rawValue: raw) {
-                    Settings.shared.burnedColor = color
-                }
-                
+        Task { @MainActor in
+            withAnimation(.bouncy(duration: 0.6)) {
+                snapshot.apply(to: .shared)
                 self.lastReceivedSettingsContext = .now
             }
         }
@@ -185,37 +115,108 @@ struct SettingsContextSync: ViewModifier {
             .onChange(of: currentSettings) { Connectivity.shared.sendSettingsContext() }
     }
 
-    private var currentSettings: SettingsValues {
-        SettingsValues(
-            weightGoal: weightGoal,
-            dataSource: dataSource,
-            energyUnit: energyUnit,
-            weightUnit: weightUnit,
+    private var currentSettings: WatchSettingsSnapshot {
+        WatchSettingsSnapshot(
+            weightGoal: weightGoal.rawValue,
+            dataSource: dataSource.rawValue,
+            energyUnit: energyUnit.rawValue,
+            weightUnit: weightUnit.rawValue,
             balanceGoal: balanceGoal,
             customCalPassive: customCalPassive,
             customCalActive: customCalActive,
             proteinGoal: proteinGoal,
             carbsGoal: carbsGoal,
             fatsGoal: fatsGoal,
-            burnedColor: burnedColor,
-            consumedColor: consumedColor
+            burnedColor: burnedColor.rawValue,
+            consumedColor: consumedColor.rawValue
         )
-    }
-
-    private struct SettingsValues: Equatable {
-        let weightGoal: Settings.WeightGoals
-        let dataSource: Settings.DataSources
-        let energyUnit: Settings.EnergyUnit
-        let weightUnit: Settings.WeightUnit
-        let balanceGoal: Int
-        let customCalPassive: Int
-        let customCalActive: Int
-        let proteinGoal: Int
-        let carbsGoal: Int
-        let fatsGoal: Int
-        let burnedColor: Color
-        let consumedColor: Color
     }
 
 }
 #endif
+
+/// Settings values exchanged with the Watch through a property-list context.
+private struct WatchSettingsSnapshot: Codable, Equatable {
+
+    let weightGoal: Int?
+    let dataSource: Int?
+    let energyUnit: String?
+    let weightUnit: String?
+    let balanceGoal: Int?
+    let customCalPassive: Int?
+    let customCalActive: Int?
+    let proteinGoal: Int?
+    let carbsGoal: Int?
+    let fatsGoal: Int?
+    let burnedColor: String?
+    let consumedColor: String?
+
+    var context: [String: Any]? {
+        guard let data = try? PropertyListEncoder().encode(self) else { return nil }
+        guard let propertyList = try? PropertyListSerialization.propertyList(from: data, format: nil) else { return nil }
+        return propertyList as? [String: Any]
+    }
+
+}
+
+extension WatchSettingsSnapshot {
+
+    init?(context: [String: Any]) {
+        guard let data = try? PropertyListSerialization.data(
+            fromPropertyList: context,
+            format: .binary,
+            options: 0
+        ) else { return nil }
+        guard let snapshot = try? PropertyListDecoder().decode(Self.self, from: data) else { return nil }
+        self = snapshot
+    }
+
+    @MainActor
+    init(settings: Settings) {
+
+        self.init(
+            weightGoal: settings.weightGoal.rawValue,
+            dataSource: settings.dataSource.rawValue,
+            energyUnit: settings.energyUnit.rawValue,
+            weightUnit: settings.weightUnit.rawValue,
+            balanceGoal: settings.balanceGoal,
+            customCalPassive: settings.customCalPassive,
+            customCalActive: settings.customCalActive,
+            proteinGoal: settings.proteinGoal,
+            carbsGoal: settings.carbsGoal,
+            fatsGoal: settings.fatsGoal,
+            burnedColor: settings.burnedColor.rawValue,
+            consumedColor: settings.consumedColor.rawValue
+        )
+    }
+
+    @MainActor
+    func apply(to settings: Settings) {
+
+        if let weightGoal, let value = Settings.WeightGoals(rawValue: weightGoal) {
+            settings.weightGoal = value
+        }
+        if let dataSource, let value = Settings.DataSources(rawValue: dataSource) {
+            settings.dataSource = value
+        }
+        if let energyUnit, let value = Settings.EnergyUnit(rawValue: energyUnit) {
+            settings.energyUnit = value
+        }
+        if let weightUnit, let value = Settings.WeightUnit(rawValue: weightUnit) {
+            settings.weightUnit = value
+        }
+        if let balanceGoal { settings.balanceGoal = balanceGoal }
+        if let customCalPassive { settings.customCalPassive = customCalPassive }
+        if let customCalActive { settings.customCalActive = customCalActive }
+        if let proteinGoal { settings.proteinGoal = proteinGoal }
+        if let carbsGoal { settings.carbsGoal = carbsGoal }
+        if let fatsGoal { settings.fatsGoal = fatsGoal }
+        if let burnedColor, let color = Color(rawValue: burnedColor) {
+            settings.burnedColor = color
+        }
+        if let consumedColor, let color = Color(rawValue: consumedColor) {
+            settings.consumedColor = color
+        }
+    }
+
+}
