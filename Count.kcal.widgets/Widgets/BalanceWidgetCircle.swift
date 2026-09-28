@@ -28,6 +28,7 @@ private struct BalanceWidgetCircleContent: View {
 
     @Environment(\.colorScheme) private var scheme
     @Environment(\.widgetFamily) var family: WidgetFamily
+    @Environment(\.widgetRenderingMode) private var renderingMode
     
     @EnvironmentObject private var AppSettings: Settings
 
@@ -163,7 +164,11 @@ extension BalanceWidgetCircleContent {
     
     var topGraphBalanceColumn: some View {
         ZStack {
-            CircleBalanceGraph(mode: mode, groupNowGeometry: mode == .midnight)
+            CircleBalanceGraph(
+                mode: mode,
+                groupNowGeometry: mode == .midnight,
+                accentedWidget: renderingMode == .accented
+            )
                 .frame(width: 130, height: 130)
                 .environment(HealthInterface(entry.data))
                 .brightness(-0.05)

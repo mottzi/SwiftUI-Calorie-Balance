@@ -12,6 +12,8 @@ struct CircleBalanceGraph: View {
     var lineWidth: CGFloat = 8
     let mode: GraphMode
     var groupNowGeometry = true
+    // Accented widgets replace colors with white but retain each ring's opacity.
+    var accentedWidget = false
 
     var body: some View {
         GeometryReader { geo in
@@ -23,6 +25,7 @@ struct CircleBalanceGraph: View {
                 // base
                 CircleProgressView(progress: 1, color: AppSettings.getGraphEmptyColor(scheme), lineWidth: lineWidth)
                     .brightness(level: .primary)
+                    .opacity(accentedWidget ? 0.25 : 1)
 
                 if mode == .midnight {
                     // passive future
@@ -32,6 +35,7 @@ struct CircleBalanceGraph: View {
                         lineWidth: lineWidth
                     )
                     .brightness(level: .tertiary, to: context)
+                    .opacity(accentedWidget ? 0.45 : 1)
                 }
 
                 // passive
@@ -41,6 +45,7 @@ struct CircleBalanceGraph: View {
                     lineWidth: lineWidth
                 )
                 .brightness(level: .secondary, to: context)
+                .opacity(accentedWidget ? 0.85 : 1)
 
                 // active
                 CircleProgressView(
@@ -54,6 +59,7 @@ struct CircleBalanceGraph: View {
                 CircleProgressView(progress: 1, color: AppSettings.getGraphEmptyColor(scheme), lineWidth: lineWidth)
                     .frame(width: geo.size.width - innerInset, height: geo.size.height - innerInset)
                     .brightness(level: .primary)
+                    .opacity(accentedWidget ? 0.25 : 1)
 
                 // consumed
                 CircleProgressView(
@@ -63,6 +69,7 @@ struct CircleBalanceGraph: View {
                 )
                 .frame(width: geo.size.width - innerInset, height: geo.size.height - innerInset)
                 .brightness(level: .primary)
+                .opacity(accentedWidget ? 0.6 : 1)
             }
 
             Group {
