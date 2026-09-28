@@ -1,39 +1,40 @@
 import SwiftUI
 import WidgetKit
 
-struct BalanceCornerTextComplicationView : View
-{
-    @Environment(\.widgetFamily) var family
+/// Corner balance amount and status for the selected mode.
+struct BalanceCornerTextContent: View {
 
-    var entry: HealthDataTimelineProvider.Entry
+    @Environment(\.widgetFamily) private var family
 
-    var balanceColor: Color
-    {
-        var c = entry.data.balanceNow > 0 ? Settings.shared.burnedColor : entry.data.balanceNow < 0 ? Settings.shared.consumedColor : Color.white
-        
-        c = c.brighten(0.6)
-        
-        return c
-    }
-    
-    var body: some View
-    {
-        switch family
-        {
-            case .accessoryCorner: do
-            {
-                Text("\(abs(entry.data.balanceNow))")
+    let entry: HealthDataTimelineProvider.Entry
+    let mode: GraphMode
+
+    var body: some View {
+        switch family {
+            case .accessoryCorner:
+                Text("\(abs(balance))")
                     .widgetCurvesContent()
-                    .widgetLabel
-                    {
-                        Text(entry.data.balanceNow > 0 ? "Deficit" : entry.data.balanceNow == 0 ? "Balance" : "Surplus")
+                    .widgetLabel {
+                        Text(balance > 0 ? "Deficit" : balance == 0 ? "Balance" : "Surplus")
                             .foregroundStyle(balanceColor)
                     }
-            }
-                
+
             default: EmptyView()
         }
     }
+
+    private var balance: Int {
+        switch mode {
+            case .now: entry.data.balanceNow
+            case .midnight: entry.data.balanceMidnight
+        }
+    }
+
+    private var balanceColor: Color {
+        let color = balance > 0 ? Settings.shared.burnedColor : balance < 0 ? Settings.shared.consumedColor : Color.white
+        return color.brighten(0.6)
+    }
+
 }
 
 struct BalanceCornerTextComplication: Widget
@@ -42,7 +43,7 @@ struct BalanceCornerTextComplication: Widget
     {
         StaticConfiguration(kind: "Balance.text.now", provider: HealthDataTimelineProvider())
         { entry in
-            BalanceCornerTextComplicationView(entry: entry)
+            BalanceCornerTextContent(entry: entry, mode: .now)
                 .containerBackground(.clear, for: .widget)
         }
         .configurationDisplayName(String("Number (now)"))
@@ -60,4 +61,3 @@ timeline:
 {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }
-

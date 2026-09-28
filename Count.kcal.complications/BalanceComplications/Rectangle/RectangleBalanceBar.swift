@@ -1,15 +1,30 @@
 import SwiftUI
 import WidgetKit
 
+/// Rectangular energy totals and balance bar for one mode.
 struct RectangleBalanceBarComplicationView : View
 {
     @Environment(\.widgetFamily) var family
 
-    var entry: HealthDataTimelineProvider.Entry
+    let entry: HealthDataTimelineProvider.Entry
+    let mode: GraphMode
 
-    var balanceSymbol: String
+    private var burnedTotal: Int
     {
-        entry.data.balanceNow > 0 ? "bolt.fill" : entry.data.balanceNow < 0 ? "fork.knife" : "dot"
+        switch mode
+        {
+            case .now: entry.data.now.burned
+            case .midnight: entry.data.midnight.burned
+        }
+    }
+
+    private var balance: Int
+    {
+        switch mode
+        {
+            case .now: entry.data.balanceNow
+            case .midnight: entry.data.balanceMidnight
+        }
     }
     
     var body: some View
@@ -29,7 +44,7 @@ struct RectangleBalanceBarComplicationView : View
                                 .fontWeight(.semibold)
                                 .foregroundStyle(Settings.shared.burnedColor.brighten(0.1).gradient)
                             
-                            Text("\(entry.data.now.burned)")
+                            Text("\(burnedTotal)")
                                 .fontWeight(.medium)
                                 .foregroundStyle(Settings.shared.burnedColor.brighten(0.3))
                         }
@@ -57,7 +72,7 @@ struct RectangleBalanceBarComplicationView : View
                                 .foregroundStyle(.primary)
                                 .offset(y: 1)
 
-                            Text("\(entry.data.balanceNow)")
+                            Text("\(balance)")
                                 .fontWeight(.medium)
                                 .foregroundStyle(.primary)
                         }
@@ -68,7 +83,7 @@ struct RectangleBalanceBarComplicationView : View
                     .padding(.bottom, 2)
                     .padding(.trailing, 4)
                     
-                    BarBalanceGraphWatch()
+                    BarBalanceGraphWatch(mode: mode)
                         .environmentObject(Settings.shared)
                         .environment(HealthInterface(entry.data))
                         .padding(.bottom)
@@ -87,7 +102,7 @@ struct RectangleBalanceBarComplication: Widget
     {
         StaticConfiguration(kind: "Balance.rect.bar.now", provider: HealthDataTimelineProvider())
         { entry in        
-            RectangleBalanceBarComplicationView(entry: entry)
+            RectangleBalanceBarComplicationView(entry: entry, mode: .now)
                 .containerBackground(Color(red: 30/255, green: 30/255, blue: 30/255), for: .widget)
 
         }

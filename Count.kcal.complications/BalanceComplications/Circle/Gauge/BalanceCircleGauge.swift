@@ -1,26 +1,24 @@
 import SwiftUI
 import WidgetKit
 
+/// Circular gauge for the selected calorie balance mode.
 struct BalanceCircleGaugeComplicationView : View
 {
     @Environment(\.widgetFamily) var family
 
-    var entry: HealthDataTimelineProvider.Entry
+    let entry: HealthDataTimelineProvider.Entry
+    let mode: GraphMode
     
     var range: ClosedRange<CGFloat> = -1.6 * CGFloat(Settings.shared.balanceGoal) ... 1.6 * CGFloat(Settings.shared.balanceGoal)
     
-    var balanceColor: Color
+    private var balance: Int
     {
-        var c = entry.data.balanceNow > 0 ? Settings.shared.burnedColor : entry.data.balanceNow < 0 ? Settings.shared.consumedColor : Color(white: 0.4)
-        
-        c = c.brighten(0.2)
-        
-        return c
+        mode == .now ? entry.data.balanceNow : entry.data.balanceMidnight
     }
-    
-    var balanceSymbol: String
+
+    private var balanceSymbol: String
     {
-        entry.data.balanceNow > 0 ? "bolt.fill" : entry.data.balanceNow < 0 ? "fork.knife" : "dot"
+        balance > 0 ? "bolt.fill" : balance < 0 ? "fork.knife" : "dot"
     }
 
     var body: some View
@@ -29,13 +27,13 @@ struct BalanceCircleGaugeComplicationView : View
         {
             case .accessoryCircular: do
             {
-                Gauge(value: CGFloat(entry.data.balanceNow).clamped(to: range), in: range)
+                Gauge(value: CGFloat(balance).clamped(to: range), in: range)
                 {
                     Image(systemName: balanceSymbol)
                 }
                 currentValueLabel:
                 {
-                    Text("\(entry.data.balanceNow)")
+                    Text("\(balance)")
                         .font(.subheadline)
                 }
                 .gaugeStyle(CircularGaugeStyle(tint: Gradient(colors: [Settings.shared.consumedColor, Settings.shared.burnedColor])))
@@ -52,7 +50,7 @@ struct BalanceCircleGaugeComplication: Widget
     {
         StaticConfiguration(kind: "Balance.circle.gauge.now", provider: HealthDataTimelineProvider())
         { entry in
-            BalanceCircleGaugeComplicationView(entry: entry)
+            BalanceCircleGaugeComplicationView(entry: entry, mode: .now)
                 .containerBackground(.clear, for: .widget)
         }
         .configurationDisplayName(String("Gauge (now)"))
@@ -70,4 +68,3 @@ timeline:
 {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now, balance: .deficit))
 }
-

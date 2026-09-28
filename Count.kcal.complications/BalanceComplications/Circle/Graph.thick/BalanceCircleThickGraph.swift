@@ -1,16 +1,23 @@
 import SwiftUI
 import WidgetKit
 
+/// Thick circular balance graph with amount and status for one mode.
 struct BalanceCircleThickGraphComplicationView : View
 {
     @Environment(\.widgetFamily) var family
     @Environment(\.widgetRenderingMode) var renderingMode
 
-    var entry: HealthDataTimelineProvider.Entry
+    let entry: HealthDataTimelineProvider.Entry
+    let mode: GraphMode
     
-    var balanceSymbol: String
+    private var balance: Int
     {
-        entry.data.balanceNow > 0 ? "bolt.fill" : entry.data.balanceNow < 0 ? "fork.knife" : "dot"
+        mode == .now ? entry.data.balanceNow : entry.data.balanceMidnight
+    }
+
+    private var balanceSymbol: String
+    {
+        balance > 0 ? "bolt.fill" : balance < 0 ? "fork.knife" : "dot"
     }
 
     var body: some View
@@ -19,7 +26,7 @@ struct BalanceCircleThickGraphComplicationView : View
         {
             case .accessoryCircular: do
             {
-                CircleBalanceGraphWatch(mode: .now, rendering: renderingMode, context: .circleThick, cutout: 0.35)
+                CircleBalanceGraphWatch(mode: mode, rendering: renderingMode, context: .circleThick, cutout: 0.35)
                     .widgetAccentable()
                     .environment(HealthInterface(entry.data))
                     .environmentObject(Settings.shared)
@@ -32,7 +39,7 @@ struct BalanceCircleThickGraphComplicationView : View
                     }
                     .overlay(alignment: .bottom)
                     {
-                        Text("\(abs(entry.data.balanceNow))")
+                        Text("\(abs(balance))")
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .minimumScaleFactor(0.6)
@@ -52,7 +59,7 @@ struct BalanceCircleThickGraphComplication: Widget
     {
         StaticConfiguration(kind: "Balance.circle.thick.graph.now", provider: HealthDataTimelineProvider())
         { entry in
-            BalanceCircleThickGraphComplicationView(entry: entry)
+            BalanceCircleThickGraphComplicationView(entry: entry, mode: .now)
                 .containerBackground(.background, for: .widget)
         }
         .supportedFamilies([.accessoryCircular])

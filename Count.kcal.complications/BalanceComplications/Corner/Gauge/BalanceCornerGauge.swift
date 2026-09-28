@@ -1,36 +1,48 @@
 import SwiftUI
 import WidgetKit
 
-struct BalanceCornerGaugeComplicationView : View
-{
-    @Environment(\.widgetFamily) var family
+/// Corner gauge for the selected calorie balance mode.
+struct BalanceCornerGaugeContent: View {
 
-    var entry: HealthDataTimelineProvider.Entry
-    
-    var range: ClosedRange<CGFloat> = -1.6 * CGFloat(Settings.shared.balanceGoal) ... 1.6 * CGFloat(Settings.shared.balanceGoal)
+    @Environment(\.widgetFamily) private var family
 
-    var body: some View 
-    {
-        switch family 
-        {
-            case .accessoryCorner: do
-            {
-                Text("\(entry.data.balanceNow)")
+    let entry: HealthDataTimelineProvider.Entry
+    let mode: GraphMode
+
+    private var range: ClosedRange<CGFloat> {
+        -1.6 * CGFloat(Settings.shared.balanceGoal) ... 1.6 * CGFloat(Settings.shared.balanceGoal)
+    }
+
+    var body: some View {
+        switch family {
+            case .accessoryCorner:
+                Text("\(balance)")
                     .widgetCurvesContent()
-                    .widgetLabel
-                    {
+                    .widgetLabel {
                         Gauge(
-                            value: CGFloat(entry.data.balanceNow).clamped(to: range),
+                            value: CGFloat(balance).clamped(to: range),
                             in: range,
                             label: { Text(verbatim: "") }
                         )
                         .tint(Gradient(colors: [Settings.shared.consumedColor, Settings.shared.burnedColor]))
                     }
-            }
-                
-            default: Text(verbatim: "No support.")
+
+            default:
+                if mode == .now {
+                    Text(verbatim: "No support.")
+                } else {
+                    EmptyView()
+                }
         }
     }
+
+    private var balance: Int {
+        switch mode {
+            case .now: entry.data.balanceNow
+            case .midnight: entry.data.balanceMidnight
+        }
+    }
+
 }
 
 struct BalanceCornerGaugeComplication: Widget
@@ -39,7 +51,7 @@ struct BalanceCornerGaugeComplication: Widget
     {
         StaticConfiguration(kind: "Balance.corner.gauge.now", provider: HealthDataTimelineProvider())
         { entry in
-            BalanceCornerGaugeComplicationView(entry: entry)
+            BalanceCornerGaugeContent(entry: entry, mode: .now)
                 .containerBackground(.clear, for: .widget)
         }
         .configurationDisplayName(String("Gauge (now)"))
@@ -57,4 +69,3 @@ timeline:
 {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }
-

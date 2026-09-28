@@ -27,8 +27,6 @@
 		9A16C8DA2C389EC100ED3B7E /* BarBalanceGraphWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8D82C389E5200ED3B7E /* BarBalanceGraphWatch.swift */; };
 		9A16C8DC2C38A34400ED3B7E /* RectangleBalanceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DB2C38A34400ED3B7E /* RectangleBalanceBar.swift */; };
 		9A16C8DE2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DD2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift */; };
-		9A16C8E02C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DF2C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift */; };
-		9A16C8E12C38BBF200ED3B7E /* BarBalanceGraphWatchMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DF2C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift */; };
 		9A206D772C5837F70079DE3D /* BalanceGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D762C5837F70079DE3D /* BalanceGoalView.swift */; };
 		9A206D792C58389B0079DE3D /* DataSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D782C58389B0079DE3D /* DataSourceView.swift */; };
 		9A206D7B2C5838C40079DE3D /* MainGoalVew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D7A2C5838C40079DE3D /* MainGoalVew.swift */; };
@@ -236,7 +234,6 @@
 		9A16C8D82C389E5200ED3B7E /* BarBalanceGraphWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphWatch.swift; sourceTree = "<group>"; };
 		9A16C8DB2C38A34400ED3B7E /* RectangleBalanceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleBalanceBar.swift; sourceTree = "<group>"; };
 		9A16C8DD2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleBalanceBarMidnight.swift; sourceTree = "<group>"; };
-		9A16C8DF2C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphWatchMidnight.swift; sourceTree = "<group>"; };
 		9A206D762C5837F70079DE3D /* BalanceGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceGoalView.swift; sourceTree = "<group>"; };
 		9A206D782C58389B0079DE3D /* DataSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceView.swift; sourceTree = "<group>"; };
 		9A206D7A2C5838C40079DE3D /* MainGoalVew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGoalVew.swift; sourceTree = "<group>"; };
@@ -426,7 +423,6 @@
 			children = (
 				9A0B0CC42C1FA08D00D94FB4 /* CircleBalanceGraphWatch.swift */,
 				9A16C8D82C389E5200ED3B7E /* BarBalanceGraphWatch.swift */,
-				9A16C8DF2C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift */,
 				9A0BAC072C244D0E00622F9F /* CircleBalanceGraphOverlay.swift */,
 				9A0BAC0A2C244D6800622F9F /* CaloricTotalsView.swift */,
 			);
@@ -1021,7 +1017,6 @@
 				9AD5F5532C277D14003FE1C5 /* WeightDataViewModel.swift in Sources */,
 				9AB9ABF22C344F6200DEE2D8 /* BalanceCircleThickGraphMidnight.swift in Sources */,
 				9A5A005C2C3210C1002D548C /* BalanceCircleGraphMidnight.swift in Sources */,
-				9A16C8E12C38BBF200ED3B7E /* BarBalanceGraphWatchMidnight.swift in Sources */,
 				9AA413032C24D90D005B9D73 /* BalanceCornerGauge.swift in Sources */,
 				9A6DBD5C2C28D464000920DA /* EnergyBalance.swift in Sources */,
 				9A6DBD5B2C28D452000920DA /* HealthInterface.swift in Sources */,
@@ -1057,7 +1052,6 @@
 				9AC2E2842C12742500B07EBE /* ContentView.swift in Sources */,
 				9A16C8D92C389E5200ED3B7E /* BarBalanceGraphWatch.swift in Sources */,
 				9A4B72922C13B653004853F0 /* Extensions.swift in Sources */,
-				9A16C8E02C38BBEA00ED3B7E /* BarBalanceGraphWatchMidnight.swift in Sources */,
 				9A4B728E2C13B63E004853F0 /* HealthInterface.swift in Sources */,
 				9A3B60152C1E77E0006000B4 /* EnergyBalance.swift in Sources */,
 				9A0BAC0B2C244D6800622F9F /* CaloricTotalsView.swift in Sources */,

@@ -1,16 +1,40 @@
 import SwiftUI
 import WidgetKit
 
+/// Rectangular balance circle and energy totals for one mode.
 struct RectangleBalanceComplicationView : View
 {
     @Environment(\.widgetFamily) var family
     @Environment(\.widgetRenderingMode) var renderingMode
 
-    var entry: HealthDataTimelineProvider.Entry
+    let entry: HealthDataTimelineProvider.Entry
+    let mode: GraphMode
 
-    var balanceSymbol: String
+    private var balanceSymbol: String
     {
-        entry.data.balanceNow > 0 ? "bolt.fill" : entry.data.balanceNow < 0 ? "fork.knife" : "dot"
+        switch mode
+        {
+            case .now: entry.data.balanceNow > 0 ? "bolt.fill" : entry.data.balanceNow < 0 ? "fork.knife" : "dot"
+            case .midnight: entry.data.balanceMidnight >= 0 ? "bolt.fill" : "fork.knife"
+        }
+    }
+
+    private var burnedTotal: Int
+    {
+        switch mode
+        {
+            case .now: entry.data.now.burned
+            case .midnight: entry.data.midnight.burned
+        }
+    }
+
+    private var balance: Int
+    {
+        switch mode
+        {
+            case .now: entry.data.balanceNow
+            case .midnight: entry.data.balanceMidnight
+        }
     }
     
     var body: some View
@@ -23,7 +47,7 @@ struct RectangleBalanceComplicationView : View
                 { geo in
                     HStack(spacing: 0)
                     {
-                        CircleBalanceGraphWatch(mode: .now, rendering: renderingMode, context: .circleFuller, cutout: 0.22)
+                        CircleBalanceGraphWatch(mode: mode, rendering: renderingMode, context: .circleFuller, cutout: 0.22)
                             .environment(HealthInterface(entry.data))
                             .environmentObject(Settings.shared)
                             .frame(width: geo.size.height * 0.8)
@@ -37,7 +61,7 @@ struct RectangleBalanceComplicationView : View
                             .offset(y: 3)
                             .widgetAccentable()
 
-                        Spacer()
+                        Spacer(minLength: mode == .midnight ? 2 : nil)
                         
                         VStack(alignment: .leading, spacing: 0)
                         {
@@ -52,7 +76,7 @@ struct RectangleBalanceComplicationView : View
                                 
                                 HStack(alignment: .lastTextBaseline, spacing: 2)
                                 {
-                                    Text("\(entry.data.now.burned)")
+                                    Text("\(burnedTotal)")
                                         .fontWeight(.medium)
                                         .foregroundStyle(Settings.shared.burnedColor.brighten(0.45))
                                         .frame(minWidth: 50, alignment: .trailing)
@@ -104,7 +128,7 @@ struct RectangleBalanceComplicationView : View
 
                                 HStack(alignment: .lastTextBaseline, spacing: 2)
                                 {
-                                    Text("\(entry.data.balanceNow)")
+                                    Text("\(balance)")
                                         .fontWeight(.medium)
                                         .foregroundStyle(.primary)
                                         .frame(minWidth: 50, alignment: .trailing)
@@ -122,7 +146,7 @@ struct RectangleBalanceComplicationView : View
                         .minimumScaleFactor(0.5)
                         .fixedSize()
                         
-                        Spacer()
+                        Spacer(minLength: mode == .midnight ? 2 : nil)
                     }
                 }
             }
@@ -140,7 +164,7 @@ struct RectangleBalanceComplication: Widget
         { entry in
             let c = entry.data.balanceNow >= 0 ? Settings.shared.burnedColor : Settings.shared.consumedColor
         
-            RectangleBalanceComplicationView(entry: entry)
+            RectangleBalanceComplicationView(entry: entry, mode: .now)
                 .containerBackground(c.brighten(0.1).gradient, for: .widget)
         }
         .configurationDisplayName(String("Circle (now)"))
