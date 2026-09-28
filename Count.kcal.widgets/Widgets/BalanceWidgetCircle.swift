@@ -11,18 +11,11 @@ struct BalanceWidgetCircle: Widget
             kind: "CircleBalanceGraphWidget",
             provider: HealthDataTimelineProvider())
             { entry in
-                if ModeToggleManager.buttonMode() == false
-                {
-                    BalanceWidgetCircleMidnight(entry: entry)
-                        .environmentObject(AppSettings)
-                        .containerBackground(Color("BackGroundColor"), for: .widget)
-                }
-                else
-                {
-                    BalanceWidgetCircleNow(entry: entry)
-                        .environmentObject(AppSettings)
-                        .containerBackground(Color("BackGroundColor"), for: .widget)
-                }
+                BalanceWidgetCircleContent(
+                    entry: entry,
+                    mode: ModeToggleManager.buttonMode() ? .now : .midnight)
+                    .environmentObject(AppSettings)
+                    .containerBackground(Color("BackGroundColor"), for: .widget)
             }
             .contentMarginsDisabled()
             .configurationDisplayName("Calorie Dashboard")
@@ -31,29 +24,41 @@ struct BalanceWidgetCircle: Widget
     }
 }
 
-struct BalanceWidgetCircleMidnight: View
+/// Calorie circle widget content for the selected balance mode.
+private struct BalanceWidgetCircleContent: View
 {
+
     @Environment(\.colorScheme) private var scheme
+
     @EnvironmentObject private var AppSettings: Settings
+
     @Environment(\.widgetFamily) var family: WidgetFamily
     
     var entry: HealthDataTimelineProvider.Entry
+    let mode: GraphMode
+
+    private var balance: Int
+    {
+        mode == .now ? entry.data.balanceNow : entry.data.balanceMidnight
+    }
+
+    private var burnedCalories: Int
+    {
+        mode == .now
+            ? entry.data.burnedActive + entry.data.burnedPassive
+            : entry.data.burnedActiveMidnight + entry.data.burnedPassive + entry.data.burnedPassiveRemaining
+    }
     
     private var goalReached: Bool
     {
         if AppSettings.weightGoal == .lose
         {
-            return entry.data.balanceMidnight >= Int(AppSettings.balanceGoal)
+            return balance >= Int(AppSettings.balanceGoal)
         }
         else
         {
-            return entry.data.balanceMidnight <= -Int(AppSettings.balanceGoal)
+            return balance <= -Int(AppSettings.balanceGoal)
         }
-    }
-    
-    func getActiveBurnedCalories() -> Int
-    {
-        entry.data.burnedActiveMidnight
     }
     
     var body: some View
@@ -69,7 +74,7 @@ struct BalanceWidgetCircleMidnight: View
                     
                     Spacer()
                     
-                    midnightLabel
+                    modeLabel
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 
@@ -82,7 +87,7 @@ struct BalanceWidgetCircleMidnight: View
                     {
                         HStack(spacing: 2)
                         {
-                            Text("\(getActiveBurnedCalories() + entry.data.burnedPassive + entry.data.burnedPassiveRemaining)")
+                            Text("\(burnedCalories)")
                                 .fontWeight(.medium)
                                 .foregroundStyle(Color("TextColor"))
 
@@ -132,18 +137,25 @@ struct BalanceWidgetCircleMidnight: View
                     
                     Spacer()
                     
-                    midnightLabel
+                    modeLabel
                 }
                 
                 topGraph
             }
 
             default:
-            Text(verbatim: "Widget size not supported")
+            if mode == .now
+            {
+                Text("Widget size not supported")
+            }
+            else
+            {
+                Text(verbatim: "Widget size not supported")
+            }
         }
     }
         
-    var midnightLabel: some View
+    var modeLabel: some View
     {
         Button(intent: ToggleViewModeIntent(), label:
         {
@@ -153,30 +165,47 @@ struct BalanceWidgetCircleMidnight: View
                 Color.clear
                     .frame(width: 50, height: 35)
                 
-                HStack
+                if mode == .midnight
                 {
-                    // button label
-                    Image(systemName: "moon.fill")
-                        .foregroundColor(Color("SecondaryTextColor"))
-                        .font(.caption)
-                        .fontWeight(.thin)
-                        .padding(.trailing, 12)
-                        .padding(.leading, 10)
-                        .padding(.top, 3)
-                        .background
-                        {
-                            if scheme == .dark
-                            {
-                                UnevenRoundedRectangle(topLeadingRadius: 0, bottomLeadingRadius: 20, bottomTrailingRadius: 0, topTrailingRadius: 20, style: .circular)
-                                    .fill(Color("BackGroundColor").gradient)
-                            }
-                        }
-                        .opacity(0.8)
+                    HStack
+                    {
+                        modeIcon
+                    }
+                }
+                else
+                {
+                    modeIcon
                 }
             }
             .contentShape(Rectangle())
         })
         .buttonStyle(.plain)
+    }
+
+    var modeIcon: some View
+    {
+        Image(systemName: mode == .now ? "sun.min.fill" : "moon.fill")
+            .foregroundColor(Color("SecondaryTextColor"))
+            .font(.caption)
+            .fontWeight(.thin)
+            .padding(.trailing, 12)
+            .padding(.leading, 10)
+            .padding(.top, 3)
+            .background
+            {
+                if scheme == .dark
+                {
+                    UnevenRoundedRectangle(
+                        topLeadingRadius: 0,
+                        bottomLeadingRadius: 20,
+                        bottomTrailingRadius: 0,
+                        topTrailingRadius: 20,
+                        style: .circular
+                    )
+                        .fill(Color("BackGroundColor").gradient)
+                }
+            }
+            .opacity(0.8)
     }
     
     var timeReloadButton: some View
@@ -213,319 +242,26 @@ struct BalanceWidgetCircleMidnight: View
         .buttonStyle(.plain)
     }
     
+    @ViewBuilder
     var topGraph: some View
     {
-        HStack(spacing: 0)
+        if mode == .now
         {
-            VStack(alignment: .leading, spacing: 16)
-            {
-                HStack(spacing: 14)
-                {
-                    Image(systemName: "bolt.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 23, height: 23)
-                        .foregroundStyle(AppSettings.burnedColor.gradient)
-                        .brightness(scheme == .dark ? 0.15 : 0)
-                        .background
-                        {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(entry.data.balanceMidnight > 0 ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1) : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
-                                .stroke(entry.data.balanceMidnight > 0 ? AppSettings.burnedColor.brighten(scheme == .light ? -0.15 : 0) : Color("TextColor").opacity(0.2), style: StrokeStyle(lineWidth: scheme == .light && entry.data.balanceMidnight > 0 ? 1.5 : 1))
-                                .padding(-8)
-                                .brightness(level: .secondary)
-                        }
-                        .padding(8)
-
-                    VStack(alignment: .leading, spacing: 0)
-                    {
-                        HStack(alignment: .lastTextBaseline, spacing: 2)
-                        {
-                            Text("\(getActiveBurnedCalories() + entry.data.burnedPassive + entry.data.burnedPassiveRemaining)")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color("TextColor"))
-                            
-                            Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
-                                .font(.system(size: 13))
-                                .foregroundStyle(Color("SecondaryTextColor"))
-                                .fontWeight(.medium)
-                        }
-                        
-                        Text(String(localized: "Burned"))
-                            .font(.caption)
-                            .fontWeight(.light)
-                            .foregroundColor(Color("SecondaryTextColor"))
-                    }
-                    .transaction { $0.animation = .none }
-                }
-                             
-                HStack(spacing: 14)
-                {
-                    Image(systemName: "fork.knife")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 23, height: 23)
-                        .foregroundStyle(AppSettings.consumedColor.gradient)
-                        .brightness(scheme == .dark ? 0.15 : 0)
-                        .background
-                        {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(entry.data.balanceMidnight < 0 ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1) : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
-                                .stroke(entry.data.balanceMidnight < 0 ? AppSettings.consumedColor.brighten(scheme == .light ? -0.15 : 0) : Color("TextColor").opacity(0.2), style: StrokeStyle(lineWidth: scheme == .light && entry.data.balanceMidnight < 0 ? 1.5 : 1))
-                                .brightness(level: .secondary)
-                                .padding(-8)
-
-                        }
-                        .padding(8)
-                    
-                    VStack(alignment: .leading, spacing: 0)
-                    {
-                        HStack(alignment: .lastTextBaseline, spacing: 2)
-                        {
-                            Text("\(entry.data.consumed)")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color("TextColor"))
-
-                            Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
-                                .font(.system(size: 13))
-                                .foregroundStyle(Color("SecondaryTextColor"))
-                                .fontWeight(.medium)
-                        }
-
-                        Text(String(localized: "Eaten"))
-                            .font(.caption)
-                            .fontWeight(.light)
-                            .foregroundColor(Color("SecondaryTextColor"))
-                    }
-                    .transaction { $0.animation = .none }
-                }
-            }
-            .fontDesign(.rounded)
-            .offset(y: -4)
-            .fixedSize()
-                
-            Spacer()
-            
-            topGraphBalanceColumn
+            topGraphContent
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(.top, 13)
+                .padding(.horizontal, 30)
         }
-        .padding(.top, 13)
-        .padding(.horizontal, 30)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-    }
-    
-    var topGraphBalanceColumn: some View
-    {
-        ZStack
-        {
-            CircleBalanceGraph(mode: .midnight)
-                .frame(width: 130, height: 130)
-                .environment(HealthInterface(entry.data))
-                .brightness(-0.05)
-            
-            VStack(spacing: 0)
-            {
-                Text("\(abs(entry.data.balanceMidnight))")
-                    .font(.system(size: 26))
-                    .fontWeight(.semibold)
-                    .foregroundColor(Color("TextColor"))
-                    .contentTransition(.numericText(value: Double(abs(entry.data.balanceMidnight))))
-                
-                Text(entry.data.balanceMidnight > 0 ? String(localized: "Deficit") : entry.data.balanceMidnight == 0 ? String("") : String(localized: "Surplus"))
-                    .font(.caption)
-                    .fontWeight(.light)
-                    .foregroundColor(Color("SecondaryTextColor"))
-                    .offset(y: -2)
-            }
-            .fontDesign(.rounded)
-            
-            Image(systemName: goalReached ? "checkmark" : "xmark")
-                .font(.system(size: 12))
-                .fontWeight(.semibold)
-                .foregroundColor(Color("SecondaryTextColor"))
-                .offset(y: 40)
-                .transaction { $0.animation = .none }
-        }
-    }
-}
-struct BalanceWidgetCircleNow: View
-{
-    @Environment(\.colorScheme) var scheme: ColorScheme
-    @EnvironmentObject private var AppSettings: Settings
-    @Environment(\.widgetFamily) var family: WidgetFamily
-    
-    var entry: HealthDataTimelineProvider.Entry
-    
-    private var goalReached: Bool
-    {
-        // loose weight goal
-        if AppSettings.weightGoal == .lose
-        {
-            return entry.data.balanceNow >= Int(AppSettings.balanceGoal)
-        }
-        // gain weight goal
         else
         {
-            return entry.data.balanceNow <= -Int(AppSettings.balanceGoal)
+            topGraphContent
+                .padding(.top, 13)
+                .padding(.horizontal, 30)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
-    
-    var body: some View
-    {
-        switch family
-        {
-            case .systemSmall:
-            ZStack(alignment: .center)
-            {
-                HStack(spacing: 0)
-                {
-//                    timeReloadButton
-                    
-                    Spacer()
-                    
-                    midnightLabel
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                
-                topGraphBalanceColumn
-                    .padding(.top, 5)
-                
-                GeometryReader
-                { geo in
-                    HStack(spacing: 20)
-                    {
-                        HStack(spacing: 2)
-                        {
-                            Text("\(entry.data.burnedActive + entry.data.burnedPassive)")
-                                .fontWeight(.medium)
-                                .foregroundStyle(Color("TextColor"))
 
-                            Image(systemName: "bolt.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .bold()
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(AppSettings.burnedColor)
-                                .brightness(level: .secondary)
-                        }
-                        .fontDesign(.rounded)
-                        .font(.caption)
-                        .fontWeight(.light)
-                        .frame(width: geo.size.width / 2 - 10, alignment: .trailing)
-                        
-                        HStack(spacing: 2)
-                        {
-                            Image(systemName: "fork.knife")
-                                .resizable()
-                                .scaledToFit()
-                                .bold()
-                                .frame(width: 10, height: 10)
-                                .foregroundStyle(AppSettings.consumedColor)
-                                .brightness(level: .secondary)
-
-                            Text("\(entry.data.consumed)")
-                                .fontWeight(.medium)
-                                .foregroundStyle(Color("TextColor"))
-                        }
-                        .fontDesign(.rounded)
-                        .font(.caption)
-                        .fontWeight(.light)
-                        .frame(width: geo.size.width / 2 - 10, alignment: .leading)
-                    }
-                    .padding(.bottom, 6)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                }
-            }
-                
-            case .systemMedium:
-            ZStack(alignment: .top)
-            {
-                HStack(alignment: .top, spacing: 0)
-                {
-//                    timeReloadButton
-                    
-                    Spacer()
-                    
-                    midnightLabel
-                }
-                
-                topGraph
-            }
-
-            default:
-            Text("Widget size not supported")
-        }
-    }
-    
-    var midnightLabel: some View
-    {
-        Button(intent: ToggleViewModeIntent(), label:
-        {
-            ZStack(alignment: .topTrailing)
-            {
-                // button hit-box
-                Color.clear
-                    .frame(width: 50, height: 35)
-                
-                // button label
-                Image(systemName: "sun.min.fill")
-                    .foregroundColor(Color("SecondaryTextColor"))
-                    .font(.caption)
-                    .fontWeight(.thin)
-                    .padding(.trailing, 12)
-                    .padding(.leading, 10)
-                    .padding(.top, 3)
-                    .background
-                    {
-                        if scheme == .dark
-                        {
-                            UnevenRoundedRectangle(topLeadingRadius: 0, bottomLeadingRadius: 20, bottomTrailingRadius: 0, topTrailingRadius: 20, style: .circular)
-                                .fill(Color("BackGroundColor").gradient)
-                        }
-                    }
-                    .opacity(0.8)
-            }
-            .contentShape(Rectangle())
-        })
-        .buttonStyle(.plain)
-    }
-        
-    var timeReloadButton: some View
-    {
-        Button(intent: TestAppIntent())
-        {
-            ZStack(alignment: .topLeading)
-            {
-                // button hit-box
-                Color.clear
-                    .frame(width: 50, height: 35)
-                
-                // button label
-                Text(verbatim: "\(entry.date.shortTime)")
-                    .foregroundStyle(Color("SecondaryTextColor"))
-                    .font(.caption)
-                    .fontWeight(.thin)
-                    .padding(.leading, 12)
-                    .padding(.trailing, 9)
-                    .padding(.top, 2)
-                    .background
-                    {
-                        if scheme == .dark
-                        {
-                            UnevenRoundedRectangle(topLeadingRadius: 20, bottomLeadingRadius: 0, bottomTrailingRadius: 20, topTrailingRadius: 0, style: .continuous)
-                                .fill(Color("BackGroundColor").gradient)
-                        }
-                    }
-                    .opacity(0.8)
-            }
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-    }
-    
-    var topGraph: some View
+    var topGraphContent: some View
     {
         HStack(spacing: 0)
         {
@@ -542,8 +278,15 @@ struct BalanceWidgetCircleNow: View
                         .background
                         {
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(entry.data.balanceNow > 0 ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1) : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
-                                .stroke(entry.data.balanceNow > 0 ? AppSettings.burnedColor.brighten(scheme == .light ? -0.15 : 0) : Color("TextColor").opacity(0.2), style: StrokeStyle(lineWidth: scheme == .light && entry.data.balanceNow > 0 ? 1.5 : 1))
+                                .fill(balance > 0
+                                    ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1)
+                                    : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
+                                .stroke(
+                                    balance > 0
+                                        ? AppSettings.burnedColor.brighten(scheme == .light ? -0.15 : 0)
+                                        : Color("TextColor").opacity(0.2),
+                                    style: StrokeStyle(lineWidth: scheme == .light && balance > 0 ? 1.5 : 1)
+                                )
                                 .padding(-8)
                                 .brightness(level: .secondary)
                         }
@@ -553,7 +296,7 @@ struct BalanceWidgetCircleNow: View
                     {
                         HStack(alignment: .lastTextBaseline, spacing: 2)
                         {
-                            Text("\(entry.data.burnedActive + entry.data.burnedPassive)")
+                            Text("\(burnedCalories)")
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color("TextColor"))
@@ -583,10 +326,18 @@ struct BalanceWidgetCircleNow: View
                         .background
                         {
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(entry.data.balanceNow < 0 ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1) : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
-                                .stroke(entry.data.balanceNow < 0 ? AppSettings.consumedColor.brighten(scheme == .light ? -0.15 : 0) : Color("TextColor").opacity(0.2), style: StrokeStyle(lineWidth: scheme == .light && entry.data.balanceNow < 0 ? 1.5 : 1))
+                                .fill(balance < 0
+                                    ? Color("TextColor").opacity(scheme == .dark ? 0.1 : 0.1)
+                                    : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
+                                .stroke(
+                                    balance < 0
+                                        ? AppSettings.consumedColor.brighten(scheme == .light ? -0.15 : 0)
+                                        : Color("TextColor").opacity(0.2),
+                                    style: StrokeStyle(lineWidth: scheme == .light && balance < 0 ? 1.5 : 1)
+                                )
                                 .brightness(level: .secondary)
                                 .padding(-8)
+
                         }
                         .padding(8)
                     
@@ -621,36 +372,33 @@ struct BalanceWidgetCircleNow: View
             
             topGraphBalanceColumn
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(.top, 13)
-        .padding(.horizontal, 30)
     }
     
     var topGraphBalanceColumn: some View
     {
         ZStack
         {
-            CircleBalanceGraph(mode: .now, groupNowGeometry: false)
+            CircleBalanceGraph(mode: mode, groupNowGeometry: mode == .midnight)
                 .frame(width: 130, height: 130)
                 .environment(HealthInterface(entry.data))
                 .brightness(-0.05)
             
             VStack(spacing: 0)
             {
-                Text("\(abs(entry.data.balanceNow))")
+                Text("\(abs(balance))")
                     .font(.system(size: 26))
                     .fontWeight(.semibold)
                     .foregroundColor(Color("TextColor"))
-                    .contentTransition(.numericText(value: Double(abs(entry.data.balanceNow))))
+                    .contentTransition(.numericText(value: Double(abs(balance))))
                 
-                Text(entry.data.balanceNow > 0 ? String(localized: "Deficit") : entry.data.balanceNow == 0 ? String("") : String(localized: "Surplus"))
+                Text(balance > 0 ? String(localized: "Deficit") : balance == 0 ? String("") : String(localized: "Surplus"))
                     .font(.caption)
                     .fontWeight(.light)
                     .foregroundColor(Color("SecondaryTextColor"))
                     .offset(y: -2)
             }
             .fontDesign(.rounded)
-        
+
             Image(systemName: goalReached ? "checkmark" : "xmark")
                 .font(.system(size: 12))
                 .fontWeight(.semibold)
@@ -659,6 +407,7 @@ struct BalanceWidgetCircleNow: View
                 .transaction { $0.animation = .none }
         }
     }
+
 }
 
 #Preview(as: .systemSmall)
