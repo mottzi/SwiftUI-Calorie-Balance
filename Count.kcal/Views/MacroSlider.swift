@@ -7,16 +7,16 @@ final class HSlider {
 
     @ObservationIgnored private let settings: Settings
 
-    var carbsWidthLast: CGFloat = 0
-    var fatsWidthLast: CGFloat = 0
-    var protsWidthLast: CGFloat = 0
+    private var carbsWidthLast: CGFloat = 0
+    private var fatsWidthLast: CGFloat = 0
+    private var protsWidthLast: CGFloat = 0
     
-    var carbsWidth: CGFloat = 0
-    var fatsWidth: CGFloat = 0
-    var protsWidth: CGFloat = 0
+    private(set) var carbsWidth: CGFloat = 0
+    private(set) var fatsWidth: CGFloat = 0
+    private(set) var protsWidth: CGFloat = 0
     
-    var minSegmentRatio: CGFloat = 0.1
-    var snapTo = 0.05
+    private let minSegmentRatio: CGFloat = 0.1
+    private let snapTo: CGFloat = 0.05
 
     init(settings: Settings = .shared) { self.settings = settings }
 
@@ -40,7 +40,7 @@ final class HSlider {
 
 extension HSlider {
 
-    var maxSegmentRatio: CGFloat { 1 - minSegmentRatio - minSegmentRatio }
+    private var maxSegmentRatio: CGFloat { 1 - minSegmentRatio - minSegmentRatio }
 
     func ratioToWidth(_ maxSlider: CGFloat) {
         guard maxSlider > 0 else { return }
@@ -64,14 +64,71 @@ extension HSlider {
         protsWidthLast = protsWidth
     }
     
-    func widthToRatio(_ maxSlider: CGFloat) {
+    private func widthToRatio(_ maxSlider: CGFloat) {
         guard maxSlider > 0 else { return }
         settings.carbsRatio = carbsWidth / maxSlider
         settings.fatsRatio = fatsWidth / maxSlider
         settings.proteinRatio = protsWidth / maxSlider
     }
+
+    /// Moves one slider handle while preserving the minimum width of each segment.
+    fileprivate func moveBoundary(_ handle: SliderHandle, translation: CGFloat, maxWidth: CGFloat) {
+
+        guard maxWidth > 0 else { return }
+        let minWidth = maxWidth * minSegmentRatio
+        let maxOuterWidth = maxWidth * maxSegmentRatio
+        let snapWidth = maxWidth * snapTo
+        let isLeading = handle == .leading
+        let outerWidth = isLeading ? carbsWidth : protsWidth
+        let outerWidthLast = isLeading ? carbsWidthLast : protsWidthLast
+        var oppositeWidth = isLeading ? protsWidth : carbsWidth
+        var middleWidth = fatsWidth
+
+        // snap the dragged outer segment before taking width from its neighbors
+        var newOuterWidth = outerWidthLast + translation * (isLeading ? 1 : -1)
+        newOuterWidth = (newOuterWidth / snapWidth).rounded() * snapWidth
+        newOuterWidth = max(minWidth, min(newOuterWidth, maxOuterWidth))
+        let widthAdded = newOuterWidth - outerWidth
+
+        if middleWidth - widthAdded >= minWidth {
+            middleWidth -= widthAdded
+        } else {
+            // use the opposite segment only after the middle segment reaches its minimum
+            let availableFromMiddle = middleWidth - minWidth
+            middleWidth = minWidth
+            let neededFromOpposite = widthAdded - availableFromMiddle
+            if oppositeWidth - neededFromOpposite >= minWidth {
+                oppositeWidth -= neededFromOpposite
+            } else {
+                oppositeWidth = minWidth
+                newOuterWidth = maxOuterWidth
+            }
+        }
+
+        fatsWidth = middleWidth
+        if isLeading {
+            carbsWidth = newOuterWidth
+            protsWidth = oppositeWidth
+        } else {
+            protsWidth = newOuterWidth
+            carbsWidth = oppositeWidth
+        }
+        widthToRatio(maxWidth)
+        updateMacroWeights()
+    }
+
+    /// Saves the segment widths after a handle drag ends.
+    fileprivate func finishDrag(maxWidth: CGFloat) {
+
+        guard maxWidth > 0 else { return }
+        carbsWidthLast = carbsWidth
+        fatsWidthLast = fatsWidth
+        protsWidthLast = protsWidth
+        widthToRatio(maxWidth)
+        updateMacroWeights()
+    }
     
-    func ratioToWeight(maxEatingEnergy: Int, ratio: Double, type: MacroType) -> Int {
+    private func ratioToWeight(maxEatingEnergy: Int, ratio: Double, type: MacroType) -> Int {
         var energyDensity: Double
         
         switch type {
@@ -149,7 +206,7 @@ struct MacroSlider: View {
                     .frame(width: 40)
                     .contentShape(.rect)
                     .offset(x: SliderData.carbsWidth - 20)
-                    .gesture(getLeadingGesture(maxSlider: maxSlider))
+                    .gesture(dragGesture(for: .leading, maxWidth: maxSlider))
 
                 // trailing handle
                 Rectangle()
@@ -158,7 +215,7 @@ struct MacroSlider: View {
                 
                 .contentShape(.rect)
                 .offset(x: (SliderData.carbsWidth + SliderData.fatsWidth) - 20)
-                .gesture(getTrailingGesture(maxSlider: maxSlider))
+                .gesture(dragGesture(for: .trailing, maxWidth: maxSlider))
             }
             .task {
                 SliderData.ratioToWidth(maxSlider)
@@ -196,128 +253,14 @@ extension MacroSlider {
         return "\(String(format: "%.0f", ratio * 100))\(ratio <= 0.11 ? "" : "%")"
     }
 
-    func getTrailingGesture(maxSlider: Double) -> _EndedGesture<_ChangedGesture<DragGesture>> {
+    private func dragGesture(for handle: SliderHandle, maxWidth: CGFloat) -> some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
-                guard maxSlider > 0 else { return }
-                let minSegment = maxSlider * SliderData.minSegmentRatio
-                let maxSegment = maxSlider * SliderData.maxSegmentRatio
-                
-                // Add dragged width to last prots bar width and clamp to constraints
-                let snapWidth = maxSlider * SliderData.snapTo  // Calculate width for 5% snap
-                var widthNew = SliderData.protsWidthLast + -value.translation.width
-                
-                // Snap to nearest 5%
-                widthNew = (widthNew / snapWidth).rounded() * snapWidth
-                widthNew = max(minSegment, min(widthNew, maxSegment))
-                
-                let widthAdded = widthNew - SliderData.protsWidth
-
-                // If fats width would stay within constraints ...
-                if SliderData.fatsWidth - widthAdded >= minSegment {
-                    // ... take dragged width from fats bar
-                    SliderData.fatsWidth -= widthAdded
-                }
-                // If fats bar is too small to donate in full ...
-                else {
-                    // ... take as much from fats as possible, setting it to the minimum
-                    let availableFromFats = SliderData.fatsWidth - minSegment
-                    SliderData.fatsWidth = minSegment
-
-                    let neededFromCarbs = widthAdded - availableFromFats
-
-                    // If carbs width would stay within constraints ...
-                    if SliderData.carbsWidth - neededFromCarbs >= minSegment {
-                        // ... take rest from carbs bar
-                        SliderData.carbsWidth -= neededFromCarbs
-                    }
-                    // If prots bar has been expanded maximally ...
-                    else {
-                        // ... collapse carbs maximally
-                        SliderData.carbsWidth = minSegment
-
-                        widthNew = maxSegment
-                    }
-                }
-
-                SliderData.protsWidth = widthNew
-                
-                SliderData.widthToRatio(maxSlider)
-                SliderData.updateMacroWeights()
-                
+                SliderData.moveBoundary(handle, translation: value.translation.width, maxWidth: maxWidth)
             }
             .onEnded { _ in
-                guard maxSlider > 0 else { return }
-                SliderData.carbsWidthLast = SliderData.carbsWidth
-                SliderData.fatsWidthLast = SliderData.fatsWidth
-                SliderData.protsWidthLast = SliderData.protsWidth
-
-                SliderData.widthToRatio(maxSlider)
-                SliderData.updateMacroWeights()
+                SliderData.finishDrag(maxWidth: maxWidth)
             }
-    }
-    
-    func getLeadingGesture(maxSlider: Double) -> _EndedGesture<_ChangedGesture<DragGesture>> {
-        let minSegment = maxSlider * SliderData.minSegmentRatio
-        let maxSegment = maxSlider * SliderData.maxSegmentRatio
-        
-        let r = DragGesture(minimumDistance: 0)
-            .onChanged { value in
-                guard maxSlider > 0 else { return }
-                // Add dragged width to latest carb segment width and clamp to constraints
-                let snapWidth = maxSlider * SliderData.snapTo  // Calculate width for 5% snap
-                var widthNew = SliderData.carbsWidthLast + value.translation.width
-                
-                // Snap to nearest 5%
-                widthNew = (widthNew / snapWidth).rounded() * snapWidth
-                widthNew = max(minSegment, min(widthNew, maxSegment))
-
-                let widthAdded = widthNew - SliderData.carbsWidth
-                
-                // If fats width would stay within constraints ...
-                if SliderData.fatsWidth - widthAdded >= minSegment {
-                    // ... take dragged width from fats bar
-                    SliderData.fatsWidth -= widthAdded
-                }
-                // If fats bar is too small to donate in full ...
-                else {
-                    // ... take as much from fats as possible, setting it to the minimum
-                    let availableFromFats = SliderData.fatsWidth - minSegment
-                    SliderData.fatsWidth = minSegment
-                    
-                    let neededFromProts = widthAdded - availableFromFats
-                    
-                    // If prots width would stay within constraints ...
-                    if SliderData.protsWidth - neededFromProts >= minSegment {
-                        // ... take rest from prots bar
-                        SliderData.protsWidth -= neededFromProts
-                    }
-                    // If carbs bar has been expanded maximally ...
-                    else {
-                        // ... collapse prots maximally
-                        SliderData.protsWidth = minSegment
-                        
-                        widthNew = maxSegment
-                    }
-                }
-
-                SliderData.carbsWidth = widthNew
-                SliderData.widthToRatio(maxSlider)
-                
-                SliderData.updateMacroWeights()
-            }
-            .onEnded { value in
-                guard maxSlider > 0 else { return }
-                SliderData.carbsWidthLast = SliderData.carbsWidth
-                SliderData.fatsWidthLast = SliderData.fatsWidth
-                SliderData.protsWidthLast = SliderData.protsWidth
-                
-                // translate raw ui-element data to macro ratios
-                SliderData.widthToRatio(maxSlider)
-                SliderData.updateMacroWeights()
-            }
-        
-        return r
     }
 
 }
@@ -335,6 +278,14 @@ enum MacroType {
     case carbohydrates
     case fats
     case proteins
+
+}
+
+/// Handle that moves one outer macro segment against the middle segment.
+fileprivate enum SliderHandle {
+
+    case leading
+    case trailing
 
 }
 
