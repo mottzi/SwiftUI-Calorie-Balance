@@ -52,7 +52,7 @@ struct BalanceCornerTextMidnightComplication: Widget
 
 #Preview(as: .accessoryCorner)
 {
-    BalanceCornerTextComplication()
+    BalanceCornerTextMidnightComplication()
 }
 timeline:
 {
