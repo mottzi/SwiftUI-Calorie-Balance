@@ -9,9 +9,6 @@ struct EnergySettingsView: View {
     
     @FocusState var focusedField: Field?
     
-//    @State private var showResting: Int = 0
-//    @State private var showActive: Int = 0
-    
     @Environment(HSlider.self) private var SliderData
         
     var body: some View {
@@ -44,32 +41,7 @@ struct EnergySettingsView: View {
                 }
                 .padding(.horizontal, 30)
                 .padding(.vertical, 20)
-                .background(
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .fill(
-                            .shadow(.inner(
-                                color: scheme == .dark
-                                    ? Color(white: 0.5).opacity(0.2)
-                                    : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5),
-                                radius: 2,
-                                x: 2,
-                                y: 2
-                            ))
-                            .shadow(.inner(
-                                color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white,
-                                radius: 2,
-                                x: -2,
-                                y: -2
-                            ))
-                        )
-                        .foregroundColor(AppSettings.CardBackground)
-                )
-                .shadow(
-                    color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0),
-                    radius: 4,
-                    x: 0,
-                    y: 4
-                )
+                .modifier(EnergySettingsCardStyle())
 
                 Spacer()
                 
@@ -98,153 +70,21 @@ struct EnergySettingsView: View {
                 }
                 .padding(.horizontal, 30)
                 .padding(.vertical, 20)
-                .background(
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .fill(
-                            .shadow(.inner(
-                                color: scheme == .dark
-                                    ? Color(white: 0.5).opacity(0.2)
-                                    : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5),
-                                radius: 2,
-                                x: 2,
-                                y: 2
-                            ))
-                            .shadow(.inner(
-                                color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white,
-                                radius: 2,
-                                x: -2,
-                                y: -2
-                            ))
-                        )
-                        .foregroundColor(AppSettings.CardBackground)
-                )
-                .shadow(
-                    color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0),
-                    radius: 4,
-                    x: 0,
-                    y: 4
-                )
+                .modifier(EnergySettingsCardStyle())
 
                 Spacer()
             }
                         
             VStack(spacing: 12) {
-                HStack(alignment: .lastTextBaseline) {
-                    HStack(spacing: 8) {
-                        Text("Resting Calories")
-                            .foregroundStyle(Color("TextColor"))
-                        
-                        if !AppSettings.isPassiveValid {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(Color.red.gradient)
-                                .offset(y: -1)
-                        }
-                    }
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .fixedSize()
+                BurnedEnergyInputRow(.resting, focusedField: $focusedField)
+                    .frame(height: 20)
+                    .padding(.top, 6)
+                    .padding(.horizontal, 15)
+                    .padding(.bottom, 8)
 
-                    Spacer()
-                    
-                    HStack(alignment: .lastTextBaseline) {
-                        if AppSettings.dataSource == .custom {
-                            TextField(String("0"), value: $AppSettings.customCalPassive, format: .number)
-                                .focused($focusedField, equals: .active)
-                                .keyboardType(.numberPad)
-                                .autocorrectionDisabled(true)
-                                .textInputAutocapitalization(.never)
-                                .multilineTextAlignment(.trailing)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(Color("TextColor"))
-                                .offset(x: 3)
-                                .underline()
-                                .onChange(of: AppSettings.customCalPassive) {
-                                    AppSettings.customCalPassive = abs(AppSettings.customCalPassive)
-                                    
-                                    SliderData.updateMacroWeights()
-                                }
-                        } else {
-                            Text("\(AppSettings.showResting)")
-                                .frame(width: 50, alignment: .trailing)
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(Color("TextColor"))
-                                .offset(x: 3)
-                                .opacity(0.6)
-                        }
-                        
-                        Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
-                            .font(.caption)
-                            .fontWeight(.thin)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(Color("TextColor"))
-                            .padding(.leading, 4)
-                    }
-                }
-                .frame(height: 20)
-                .padding(.top, 6)
-                .padding(.horizontal, 15)
-                .padding(.bottom, 8)
-
-                HStack(alignment: .lastTextBaseline) {
-                    HStack(spacing: 8) {
-                        Text("Active Calories")
-                            .foregroundStyle(Color("TextColor"))
-                        
-                        if !AppSettings.isActiveValid {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(Color.red.gradient)
-                                .offset(y: -1)
-                        }
-                    }
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .fixedSize()
-                    
-                    Spacer()
-                    
-                    HStack(alignment: .lastTextBaseline) {
-                        if AppSettings.dataSource == .custom {
-                            TextField(String("0"), value: $AppSettings.customCalActive, format: .number)
-                                .focused($focusedField, equals: .active)
-                                .keyboardType(.numberPad)
-                                .autocorrectionDisabled(true)
-                                .textInputAutocapitalization(.never)
-                                .multilineTextAlignment(.trailing)
-//                                .frame(width: 50, height: 20)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(Color("TextColor"))
-                                .offset(x: 3)
-                                .underline()
-                                .onChange(of: AppSettings.customCalActive) {
-                                    AppSettings.customCalActive = abs(AppSettings.customCalActive)
-                                    
-                                    SliderData.updateMacroWeights()
-                                }
-                        } else {
-                            Text("\(AppSettings.showActive)")
-                                .frame(width: 50, alignment: .trailing)
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                                .foregroundStyle(Color("TextColor"))
-                                .offset(x: 3)
-                                .opacity(0.6)
-                        }
-
-                        Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
-                            .font(.caption)
-                            .fontWeight(.thin)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(Color("TextColor"))
-                            .padding(.leading, 4)
-                    }
-                }
-                .frame(height: 20)
-                .padding(.horizontal, 15)
+                BurnedEnergyInputRow(.active, focusedField: $focusedField)
+                    .frame(height: 20)
+                    .padding(.horizontal, 15)
                 
                 HStack(alignment: .lastTextBaseline) {
                     HStack(spacing: 8) {
@@ -272,16 +112,10 @@ struct EnergySettingsView: View {
                             .fontWeight(.semibold)
                             .foregroundStyle(Color("TextColor"))
                         
-                        Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
-                            .font(.caption)
-                            .fontWeight(.thin)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(Color("TextColor"))
-                            .padding(.leading, 4)
+                        EnergyUnitLabel()
                     }
                 }
                 .frame(height: 20)
-//                .padding(.bottom, 6)
                 .background {
                     RoundedRectangle(cornerRadius: 40)
                         .fill(AppSettings.AppBackground)
@@ -301,32 +135,7 @@ struct EnergySettingsView: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 20)
-            .background(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(
-                        .shadow(.inner(
-                            color: scheme == .dark
-                                ? Color(white: 0.5).opacity(0.2)
-                                : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5),
-                            radius: 2,
-                            x: 2,
-                            y: 2
-                        ))
-                        .shadow(.inner(
-                            color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white,
-                            radius: 2,
-                            x: -2,
-                            y: -2
-                        ))
-                    )
-                    .foregroundColor(AppSettings.CardBackground)
-            )
-            .shadow(
-                color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0),
-                radius: 4,
-                x: 0,
-                y: 4
-            )
+            .modifier(EnergySettingsCardStyle())
             .overlay(alignment: .topLeading) {
                 ZStack {
                     Circle()
@@ -377,12 +186,7 @@ struct EnergySettingsView: View {
                                 SliderData.updateMacroWeights()
                             }
                     
-                        Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
-                            .font(.caption)
-                            .fontWeight(.thin)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(Color("TextColor"))
-                            .padding(.leading, 4)
+                        EnergyUnitLabel()
                     }
                 }
                 .padding(.horizontal, 15)
@@ -413,12 +217,7 @@ struct EnergySettingsView: View {
                             .foregroundStyle(Color("TextColor"))
                             .offset(x: 3)
 
-                        Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
-                            .font(.caption)
-                            .fontWeight(.thin)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(Color("TextColor"))
-                            .padding(.leading, 4)
+                        EnergyUnitLabel()
                     }
                 }
                 .frame(height: 20)
@@ -441,32 +240,7 @@ struct EnergySettingsView: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 20)
-            .background(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(
-                        .shadow(.inner(
-                            color: scheme == .dark
-                                ? Color(white: 0.5).opacity(0.2)
-                                : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5),
-                            radius: 2,
-                            x: 2,
-                            y: 2
-                        ))
-                        .shadow(.inner(
-                            color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white,
-                            radius: 2,
-                            x: -2,
-                            y: -2
-                        ))
-                    )
-                    .foregroundColor(AppSettings.CardBackground)
-            )
-            .shadow(
-                color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0),
-                radius: 4,
-                x: 0,
-                y: 4
-            )
+            .modifier(EnergySettingsCardStyle())
             .overlay(alignment: .topLeading) {
                 ZStack {
                     Circle()
@@ -485,10 +259,6 @@ struct EnergySettingsView: View {
             .padding(.horizontal, 40)
             .animation(.snappy, value: AppSettings.dataSource)
         }
-//        .task
-//        {
-//            await AppSettings.updateShow()
-//        }
         .onAppear {
             Task {
                 await AppSettings.updateShow()
@@ -505,6 +275,170 @@ struct EnergySettingsView: View {
             }
         }
     }
+
+}
+
+/// Resting or active calorie control for the selected energy source.
+private struct BurnedEnergyInputRow: View {
+
+    @EnvironmentObject private var settings: Settings
+
+    @Environment(HSlider.self) private var slider
+
+    private let kind: BurnedEnergyKind
+    private let focusedField: FocusState<Field?>.Binding
+
+    init(_ kind: BurnedEnergyKind, focusedField: FocusState<Field?>.Binding) {
+        self.kind = kind
+        self.focusedField = focusedField
+    }
+
+    var body: some View {
+        HStack(alignment: .lastTextBaseline) {
+            HStack(spacing: 8) {
+                Text(title)
+                    .foregroundStyle(Color("TextColor"))
+
+                if !isValid {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(Color.red.gradient)
+                        .offset(y: -1)
+                }
+            }
+            .font(.subheadline)
+            .fontWeight(.semibold)
+            .fixedSize()
+
+            Spacer()
+
+            HStack(alignment: .lastTextBaseline) {
+                if settings.dataSource == .custom {
+                    TextField(String("0"), value: customValue, format: .number)
+                        .focused(focusedField, equals: .active)
+                        .keyboardType(.numberPad)
+                        .autocorrectionDisabled(true)
+                        .textInputAutocapitalization(.never)
+                        .multilineTextAlignment(.trailing)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color("TextColor"))
+                        .offset(x: 3)
+                        .underline()
+                        .onChange(of: customValue.wrappedValue) {
+                            customValue.wrappedValue = abs(customValue.wrappedValue)
+                            slider.updateMacroWeights()
+                        }
+                } else {
+                    Text("\(healthValue)")
+                        .frame(width: 50, alignment: .trailing)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color("TextColor"))
+                        .offset(x: 3)
+                        .opacity(0.6)
+                }
+
+                EnergyUnitLabel()
+            }
+        }
+    }
+
+}
+
+extension BurnedEnergyInputRow {
+
+    private var title: LocalizedStringKey {
+        switch kind {
+            case .resting: "Resting Calories"
+            case .active: "Active Calories"
+        }
+    }
+
+    private var isValid: Bool {
+        switch kind {
+            case .resting: settings.isPassiveValid
+            case .active: settings.isActiveValid
+        }
+    }
+
+    private var customValue: Binding<Int> {
+        switch kind {
+            case .resting: $settings.customCalPassive
+            case .active: $settings.customCalActive
+        }
+    }
+
+    private var healthValue: Int {
+        switch kind {
+            case .resting: settings.showResting
+            case .active: settings.showActive
+        }
+    }
+
+}
+
+/// Energy unit shown beside calorie settings values.
+private struct EnergyUnitLabel: View {
+
+    @EnvironmentObject private var settings: Settings
+
+    var body: some View {
+        Text(verbatim: settings.energyUnit == .kJ ? "kJ" : "kcal")
+            .font(.caption)
+            .fontWeight(.thin)
+            .fontDesign(.rounded)
+            .foregroundStyle(Color("TextColor"))
+            .padding(.leading, 4)
+    }
+
+}
+
+/// Inset appearance shared by the energy settings cards.
+private struct EnergySettingsCardStyle: ViewModifier {
+
+    @Environment(\.colorScheme) private var scheme: ColorScheme
+
+    @EnvironmentObject private var settings: Settings
+
+    func body(content: Content) -> some View {
+
+        content
+            .background(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(
+                        .shadow(.inner(
+                            color: scheme == .dark
+                                ? Color(white: 0.5).opacity(0.2)
+                                : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5),
+                            radius: 2,
+                            x: 2,
+                            y: 2
+                        ))
+                        .shadow(.inner(
+                            color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white,
+                            radius: 2,
+                            x: -2,
+                            y: -2
+                        ))
+                    )
+                    .foregroundColor(settings.CardBackground)
+            )
+            .shadow(
+                color: Color(white: scheme == .light ? 0.8 : 0).opacity(scheme == .light ? 0.2 : 0),
+                radius: 4,
+                x: 0,
+                y: 4
+            )
+    }
+
+}
+
+/// Selects which burned calorie input the shared row controls.
+private enum BurnedEnergyKind {
+
+    case resting
+    case active
 
 }
 
