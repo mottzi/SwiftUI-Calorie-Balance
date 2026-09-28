@@ -21,16 +21,21 @@ struct HealthDataTimelineProvider: TimelineProvider {
         completion(placeholder(in: context))
     }
 
-    /// Loads the current day and requests another refresh after fifteen minutes.
+    /// Requests a refresh after fifteen minutes or at the next midnight.
     func getTimeline(in context: Context, completion: @escaping (Timeline<HealthDataEntry>) -> Void) {
 
         Task {
             // keep the entry and health query on the same day if midnight passes during the fetch
             let date = Date.now
             let data = await HKRepository.shared.fetchDailySnapshot(for: date, now: date)
+            let midnight = Calendar.current.nextDate(
+                after: date,
+                matching: DateComponents(hour: 0, minute: 0, second: 0),
+                matchingPolicy: .nextTime
+            )!
             let timeline = Timeline(
                 entries: [HealthDataEntry(date: date, data: data)],
-                policy: .after(date.addingTimeInterval(15 * 60))
+                policy: .after(min(date.addingTimeInterval(15 * 60), midnight))
             )
             completion(timeline)
         }
