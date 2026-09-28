@@ -37,25 +37,42 @@ struct BalanceCornerTextContent: View {
 
 }
 
-struct BalanceCornerTextComplication: Widget
-{
-    var body: some WidgetConfiguration
-    {
-        StaticConfiguration(kind: "Balance.text.now", provider: HealthDataTimelineProvider())
-        { entry in
-            BalanceCornerTextContent(entry: entry, mode: .now)
+/// Corner balance text complication for the selected mode.
+struct BalanceCornerTextComplication<Mode: BalanceComplicationMode>: Widget {
+
+    var body: some WidgetConfiguration {
+
+        StaticConfiguration(kind: kind, provider: HealthDataTimelineProvider()) { entry in
+            BalanceCornerTextContent(entry: entry, mode: Mode.graphMode)
                 .containerBackground(.clear, for: .widget)
         }
-        .configurationDisplayName(String("Number (now)"))
-        .description(String("Shows current caloric balance with text."))
+        .configurationDisplayName(Mode.graphMode == .now ? String("Number (now)") : String("Number (midnight)"))
+        .description(
+            Mode.graphMode == .now
+                ? String("Shows current caloric balance with text.")
+                : String("Shows caloric balance at midnight with text.")
+        )
         .supportedFamilies([.accessoryCorner])
     }
-}
 
+    private var kind: String {
+        Mode.graphMode == .now ? "Balance.text.now" : "Balance.text.midnight"
+    }
+
+}
 
 #Preview(as: .accessoryCorner)
 {
-    BalanceCornerTextComplication()
+    BalanceCornerTextComplication<NowComplicationMode>()
+}
+timeline:
+{
+    HealthDataEntry(date: .now, data: HealthData.example(for: .now))
+}
+
+#Preview(as: .accessoryCorner)
+{
+    BalanceCornerTextComplication<MidnightComplicationMode>()
 }
 timeline:
 {

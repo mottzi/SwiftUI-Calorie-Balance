@@ -44,25 +44,42 @@ struct BalanceCircleGaugeComplicationView : View
     }
 }
 
-struct BalanceCircleGaugeComplication: Widget
-{
-    var body: some WidgetConfiguration
-    {
-        StaticConfiguration(kind: "Balance.circle.gauge.now", provider: HealthDataTimelineProvider())
-        { entry in
-            BalanceCircleGaugeComplicationView(entry: entry, mode: .now)
+/// Circular gauge complication for the selected balance mode.
+struct BalanceCircleGaugeComplication<Mode: BalanceComplicationMode>: Widget {
+
+    var body: some WidgetConfiguration {
+
+        StaticConfiguration(kind: kind, provider: HealthDataTimelineProvider()) { entry in
+            BalanceCircleGaugeComplicationView(entry: entry, mode: Mode.graphMode)
                 .containerBackground(.clear, for: .widget)
         }
-        .configurationDisplayName(String("Gauge (now)"))
-        .description(String("Shows current caloric balance (gauge)"))
+        .configurationDisplayName(Mode.graphMode == .now ? String("Gauge (now)") : String("Gauge (midnight)"))
+        .description(
+            Mode.graphMode == .now
+                ? String("Shows current caloric balance (gauge)")
+                : String("Shows caloric balance at midnight (gauge)")
+        )
         .supportedFamilies([.accessoryCircular])
     }
-}
 
+    private var kind: String {
+        Mode.graphMode == .now ? "Balance.circle.gauge.now" : "Balance.circle.gauge.midnight"
+    }
+
+}
 
 #Preview(as: .accessoryCircular)
 {
-    BalanceCircleGaugeComplication()
+    BalanceCircleGaugeComplication<NowComplicationMode>()
+}
+timeline:
+{
+    HealthDataEntry(date: .now, data: HealthData.example(for: .now, balance: .deficit))
+}
+
+#Preview(as: .accessoryCircular)
+{
+    BalanceCircleGaugeComplication<MidnightComplicationMode>()
 }
 timeline:
 {

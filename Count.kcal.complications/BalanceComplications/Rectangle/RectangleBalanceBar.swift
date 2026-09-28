@@ -96,27 +96,43 @@ struct RectangleBalanceBarComplicationView : View
     }
 }
 
-struct RectangleBalanceBarComplication: Widget
-{
-    var body: some WidgetConfiguration
-    {
-        StaticConfiguration(kind: "Balance.rect.bar.now", provider: HealthDataTimelineProvider())
-        { entry in        
-            RectangleBalanceBarComplicationView(entry: entry, mode: .now)
-                .containerBackground(Color(red: 30/255, green: 30/255, blue: 30/255), for: .widget)
+/// Rectangular balance bar complication for the selected mode.
+struct RectangleBalanceBarComplication<Mode: BalanceComplicationMode>: Widget {
 
+    var body: some WidgetConfiguration {
+
+        StaticConfiguration(kind: kind, provider: HealthDataTimelineProvider()) { entry in
+            RectangleBalanceBarComplicationView(entry: entry, mode: Mode.graphMode)
+                .containerBackground(Color(red: 30/255, green: 30/255, blue: 30/255), for: .widget)
         }
-        .configurationDisplayName(String("Bar (now)"))
-        .description(String("Shows current caloric balance."))
+        .configurationDisplayName(Mode.graphMode == .now ? String("Bar (now)") : String("Bar (midnight)"))
+        .description(
+            Mode.graphMode == .now
+                ? String("Shows current caloric balance.")
+                : String("Shows caloric balance at midnight.")
+        )
         .supportedFamilies([.accessoryRectangular])
         .contentMarginsDisabled()
     }
-}
 
+    private var kind: String {
+        Mode.graphMode == .now ? "Balance.rect.bar.now" : "Balance.rect.bar.midnight"
+    }
+
+}
 
 #Preview(as: .accessoryRectangular)
 {
-    RectangleBalanceBarComplication()
+    RectangleBalanceBarComplication<NowComplicationMode>()
+}
+timeline:
+{
+    HealthDataEntry(date: .now, data: HealthData.example(for: .now))
+}
+
+#Preview(as: .accessoryRectangular)
+{
+    RectangleBalanceBarComplication<MidnightComplicationMode>()
 }
 timeline:
 {

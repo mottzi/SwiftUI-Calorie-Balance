@@ -16,12 +16,12 @@ struct CornerBundle: WidgetBundle
 {
     var body: some Widget
     {
-        BalanceCornerTextComplication()
-        BalanceCornerTextMidnightComplication()
+        BalanceCornerTextComplication<NowComplicationMode>()
+        BalanceCornerTextComplication<MidnightComplicationMode>()
         BalanceCornerTextNowMidnightComplication()
 
-        BalanceCornerGaugeComplication()
-        BalanceCornerGaugeMidnightComplication()
+        BalanceCornerGaugeComplication<NowComplicationMode>()
+        BalanceCornerGaugeComplication<MidnightComplicationMode>()
     }
 }
 
@@ -29,17 +29,17 @@ struct CircleBundle: WidgetBundle
 {
     var body: some Widget
     {
-        BalanceCircleGaugeComplication()
-        BalanceCircleGaugeMidnightComplication()
+        BalanceCircleGaugeComplication<NowComplicationMode>()
+        BalanceCircleGaugeComplication<MidnightComplicationMode>()
         
-        BalanceCircleGraphComplication()
-        BalanceCircleGraphMidnightComplication()
+        BalanceCircleGraphComplication<NowComplicationMode>()
+        BalanceCircleGraphComplication<MidnightComplicationMode>()
         
-        BalanceCircleThickGraphComplication()
-        BalanceCircleThickGraphMidnightComplication()
+        BalanceCircleThickGraphComplication<NowComplicationMode>()
+        BalanceCircleThickGraphComplication<MidnightComplicationMode>()
         
-        BalanceCircleFullGraphComplication()
-        BalanceCircleFullGraphMidnightComplication()
+        BalanceCircleFullGraphComplication<NowComplicationMode>()
+        BalanceCircleFullGraphComplication<MidnightComplicationMode>()
     }
 }
 
@@ -47,10 +47,31 @@ struct RectangleBundle: WidgetBundle
 {
     var body: some Widget
     {
-        RectangleBalanceComplication()
-        RectangleBalanceMidnightComplication()
+        RectangleBalanceComplication<NowComplicationMode>()
+        RectangleBalanceComplication<MidnightComplicationMode>()
         
-        RectangleBalanceBarComplication()
-        RectangleBalanceBarMidnightComplication()
+        RectangleBalanceBarComplication<NowComplicationMode>()
+        RectangleBalanceBarComplication<MidnightComplicationMode>()
     }
+}
+
+/// Fixed balance mode for one registered complication type.
+protocol BalanceComplicationMode {
+
+    static var graphMode: GraphMode { get }
+
+}
+
+/// Current balance mode for a complication registration.
+enum NowComplicationMode: BalanceComplicationMode {
+
+    static var graphMode: GraphMode { .now }
+
+}
+
+/// Midnight balance mode for a complication registration.
+enum MidnightComplicationMode: BalanceComplicationMode {
+
+    static var graphMode: GraphMode { .midnight }
+
 }

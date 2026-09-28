@@ -156,29 +156,48 @@ struct RectangleBalanceComplicationView : View
     }
 }
 
-struct RectangleBalanceComplication: Widget
-{
-    var body: some WidgetConfiguration
-    {
-        StaticConfiguration(kind: "Balance.rect.now", provider: HealthDataTimelineProvider())
-        { entry in
-            let c = entry.data.balanceNow >= 0 ? Settings.shared.burnedColor : Settings.shared.consumedColor
-        
-            RectangleBalanceComplicationView(entry: entry, mode: .now)
-                .containerBackground(c.brighten(0.1).gradient, for: .widget)
+/// Rectangular balance circle complication for the selected mode.
+struct RectangleBalanceComplication<Mode: BalanceComplicationMode>: Widget {
+
+    var body: some WidgetConfiguration {
+
+        StaticConfiguration(kind: kind, provider: HealthDataTimelineProvider()) { entry in
+            let balance = Mode.graphMode == .now ? entry.data.balanceNow : entry.data.balanceMidnight
+            let color = balance >= 0 ? Settings.shared.burnedColor : Settings.shared.consumedColor
+
+            RectangleBalanceComplicationView(entry: entry, mode: Mode.graphMode)
+                .containerBackground(color.brighten(0.1).gradient, for: .widget)
         }
-        .configurationDisplayName(String("Circle (now)"))
-        .description(String("Shows current caloric balance."))
+        .configurationDisplayName(Mode.graphMode == .now ? String("Circle (now)") : String("Circle (midnight)"))
+        .description(
+            Mode.graphMode == .now
+                ? String("Shows current caloric balance.")
+                : String("Shows caloric balance at midnight.")
+        )
         .supportedFamilies([.accessoryRectangular])
         .contentMarginsDisabled()
     }
+
+    private var kind: String {
+        Mode.graphMode == .now ? "Balance.rect.now" : "Balance.rect.midnight"
+    }
+
 }
 
 #Preview(as: .accessoryRectangular)
 {
-    RectangleBalanceComplication()
+    RectangleBalanceComplication<NowComplicationMode>()
 }
 timeline:
 {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now, random: true))
+}
+
+#Preview(as: .accessoryRectangular)
+{
+    RectangleBalanceComplication<MidnightComplicationMode>()
+}
+timeline:
+{
+    HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }

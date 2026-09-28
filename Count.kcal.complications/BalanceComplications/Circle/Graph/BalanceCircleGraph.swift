@@ -55,24 +55,42 @@ struct BalanceCircleGraphComplicationView : View
     }
 }
 
-struct BalanceCircleGraphComplication: Widget
-{
-    var body: some WidgetConfiguration
-    {
-        StaticConfiguration(kind: "Balance.circle.graph.now", provider: HealthDataTimelineProvider())
-        { entry in
-            BalanceCircleGraphComplicationView(entry: entry, mode: .now)
+/// Circular graph complication for the selected balance mode.
+struct BalanceCircleGraphComplication<Mode: BalanceComplicationMode>: Widget {
+
+    var body: some WidgetConfiguration {
+
+        StaticConfiguration(kind: kind, provider: HealthDataTimelineProvider()) { entry in
+            BalanceCircleGraphComplicationView(entry: entry, mode: Mode.graphMode)
                 .containerBackground(.background, for: .widget)
         }
-        .configurationDisplayName(String("Graph #1 (now)"))
-        .description(String("Shows current caloric balance (graph)"))
+        .configurationDisplayName(Mode.graphMode == .now ? String("Graph #1 (now)") : String("Graph #1 (midnight)"))
+        .description(
+            Mode.graphMode == .now
+                ? String("Shows current caloric balance (graph)")
+                : String("Shows caloric balance at midnight (graph)")
+        )
         .supportedFamilies([.accessoryCircular])
     }
+
+    private var kind: String {
+        Mode.graphMode == .now ? "Balance.circle.graph.now" : "Balance.circle.graph.midnight"
+    }
+
 }
 
 #Preview(as: .accessoryCircular)
 {
-    BalanceCircleGraphComplication()
+    BalanceCircleGraphComplication<NowComplicationMode>()
+}
+timeline:
+{
+    HealthDataEntry(date: .now, data: HealthData.example(for: .now))
+}
+
+#Preview(as: .accessoryCircular)
+{
+    BalanceCircleGraphComplication<MidnightComplicationMode>()
 }
 timeline:
 {

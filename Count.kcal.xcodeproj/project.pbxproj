@@ -26,7 +26,6 @@
 		9A16C8D92C389E5200ED3B7E /* BarBalanceGraphWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8D82C389E5200ED3B7E /* BarBalanceGraphWatch.swift */; };
 		9A16C8DA2C389EC100ED3B7E /* BarBalanceGraphWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8D82C389E5200ED3B7E /* BarBalanceGraphWatch.swift */; };
 		9A16C8DC2C38A34400ED3B7E /* RectangleBalanceBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DB2C38A34400ED3B7E /* RectangleBalanceBar.swift */; };
-		9A16C8DE2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16C8DD2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift */; };
 		9A206D772C5837F70079DE3D /* BalanceGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D762C5837F70079DE3D /* BalanceGoalView.swift */; };
 		9A206D792C58389B0079DE3D /* DataSourceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D782C58389B0079DE3D /* DataSourceView.swift */; };
 		9A206D7B2C5838C40079DE3D /* MainGoalVew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A206D7A2C5838C40079DE3D /* MainGoalVew.swift */; };
@@ -45,7 +44,6 @@
 		9A368CA32A6E64F900280BF9 /* WeightDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */; };
 		9A3B60152C1E77E0006000B4 /* EnergyBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */; };
 		9A3B87832C30C8DD002D02D1 /* BalanceCircleGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B87822C30C8DD002D02D1 /* BalanceCircleGauge.swift */; };
-		9A3B87852C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B87842C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift */; };
 		9A3F8EAA2B348C1F00B0DC74 /* CaloriesMidnightCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */; };
 		9A480F6A2B19315600D79FAE /* ToggleViewModeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A480F692B19315600D79FAE /* ToggleViewModeIntent.swift */; };
 		9A4B47D92C17C10000F9168E /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A4B47D82C17C10000F9168E /* WatchConnectivity.framework */; };
@@ -64,7 +62,6 @@
 		9A5828BD2C0A6683000AFE99 /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA785262B21CD9D007305F6 /* CircleProgressView.swift */; };
 		9A58E8E72C012F8A002C16D6 /* Streak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A58E8E62C012F8A002C16D6 /* Streak.swift */; };
 		9A59C1EC2B0A2E180058A502 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A59C1EB2B0A2E180058A502 /* Settings.swift */; };
-		9A5A005C2C3210C1002D548C /* BalanceCircleGraphMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5A005B2C3210C1002D548C /* BalanceCircleGraphMidnight.swift */; };
 		9A5AF20630681DDE008CC950 /* SimulatorHealthSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5AF20530681DDE008CC950 /* SimulatorHealthSeeder.swift */; };
 		9A5AF20830681E0B008CC950 /* DashboardSamplePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5AF20730681E0B008CC950 /* DashboardSamplePreview.swift */; };
 		9A616F472A642A6C00B713C4 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A616F462A642A6C00B713C4 /* Card.swift */; };
@@ -73,8 +70,6 @@
 		9A6DA88F2B361B3400585788 /* CaloriesCardTopRowCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA88E2B361B3400585788 /* CaloriesCardTopRowCenter.swift */; };
 		9A6DA8912B361D0700585788 /* BarBalanceGraphTopRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA8902B361D0700585788 /* BarBalanceGraphTopRow.swift */; };
 		9A6DA8932B361EC300585788 /* BarBalanceGraphBottomRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA8922B361EC300585788 /* BarBalanceGraphBottomRow.swift */; };
-		9A6DBD542C28CEE6000920DA /* BalanceCornerTextMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DBD532C28CEE6000920DA /* BalanceCornerTextMidnight.swift */; };
-		9A6DBD562C28D007000920DA /* BalanceCornerGaugeMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DBD552C28D007000920DA /* BalanceCornerGaugeMidnight.swift */; };
 		9A6DBD582C28D2E3000920DA /* BalanceCircleGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DBD572C28D2E3000920DA /* BalanceCircleGraph.swift */; };
 		9A6DBD592C28D35A000920DA /* CircleBalanceGraphWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0B0CC42C1FA08D00D94FB4 /* CircleBalanceGraphWatch.swift */; };
 		9A6DBD5A2C28D42E000920DA /* CircleBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */; };
@@ -87,7 +82,6 @@
 		9A7A4DA42C28A9EC0055C6CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */; };
 		9A7A4DA52C28AA1D0055C6CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */; };
 		9A7CC5342C6A3F3E0061451D /* StepsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7CC5332C6A3F3E0061451D /* StepsCard.swift */; };
-		9A85F1FA2C3756F1001FA5D0 /* RectangleBalanceMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A85F1F92C3756F1001FA5D0 /* RectangleBalanceMidnight.swift */; };
 		9A8BA4062B4054ED0011D412 /* BackgroundColorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BA4052B4054ED0011D412 /* BackgroundColorSection.swift */; };
 		9A8BA4092B4055B70011D412 /* ColorsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BA4082B4055B70011D412 /* ColorsCard.swift */; };
 		9A8BA40F2B4057720011D412 /* CalorieColorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8BA40E2B4057720011D412 /* CalorieColorSection.swift */; };
@@ -111,7 +105,6 @@
 		9AAF6E502B3F183900B9363E /* ThemeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAF6E4F2B3F183900B9363E /* ThemeButton.swift */; };
 		9AB4BA0A2B00D7DD00176682 /* BalanceDataLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB4BA092B00D7DD00176682 /* BalanceDataLabels.swift */; };
 		9AB9ABF02C344CEF00DEE2D8 /* BalanceCircleThickGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB9ABEF2C344CEF00DEE2D8 /* BalanceCircleThickGraph.swift */; };
-		9AB9ABF22C344F6200DEE2D8 /* BalanceCircleThickGraphMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB9ABF12C344F6200DEE2D8 /* BalanceCircleThickGraphMidnight.swift */; };
 		9ABBD8FF2BE8213F003EC608 /* WeekBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABBD8FE2BE8213F003EC608 /* WeekBalanceGraph.swift */; };
 		9ABFA7A22C0A3A6300024D2F /* CircleBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */; };
 		9ABFA7AE2C0A3BC700024D2F /* ReachableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9BC9BD2A7E9C7300A4404A /* ReachableView.swift */; };
@@ -145,7 +138,6 @@
 		9AEA55CA2A5B0081000AB057 /* HKRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HKRepository.swift */; };
 		9AEA55CC2A5D65DC000AB057 /* MacroCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55CB2A5D65DC000AB057 /* MacroCard.swift */; };
 		9AF309ED2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF309EC2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift */; };
-		9AF309EF2C32B3C70081FDCE /* BalanceCircleFullGraphMidnight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF309EE2C32B3C70081FDCE /* BalanceCircleFullGraphMidnight.swift */; };
 		9AF39CB32B3DBA4C0037628F /* WeightTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CB22B3DBA4C0037628F /* WeightTopBar.swift */; };
 		9AF39CB62B3DC61A0037628F /* MonthlyChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CB52B3DC61A0037628F /* MonthlyChart.swift */; };
 		9AF39CB82B3DC9180037628F /* WeeklyChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CB72B3DC9180037628F /* WeeklyChart.swift */; };
@@ -231,7 +223,6 @@
 		9A0F2DCE2AF6778E00780155 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A16C8D82C389E5200ED3B7E /* BarBalanceGraphWatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphWatch.swift; sourceTree = "<group>"; };
 		9A16C8DB2C38A34400ED3B7E /* RectangleBalanceBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleBalanceBar.swift; sourceTree = "<group>"; };
-		9A16C8DD2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleBalanceBarMidnight.swift; sourceTree = "<group>"; };
 		9A206D762C5837F70079DE3D /* BalanceGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceGoalView.swift; sourceTree = "<group>"; };
 		9A206D782C58389B0079DE3D /* DataSourceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceView.swift; sourceTree = "<group>"; };
 		9A206D7A2C5838C40079DE3D /* MainGoalVew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGoalVew.swift; sourceTree = "<group>"; };
@@ -248,7 +239,6 @@
 		9A368CA22A6E64F900280BF9 /* WeightDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightDataViewModel.swift; sourceTree = "<group>"; };
 		9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBalance.swift; sourceTree = "<group>"; };
 		9A3B87822C30C8DD002D02D1 /* BalanceCircleGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGauge.swift; sourceTree = "<group>"; };
-		9A3B87842C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGaugeMidnight.swift; sourceTree = "<group>"; };
 		9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CaloriesMidnightCard.swift; path = Count.kcal/Dashboard/CaloriesMidnightCard.swift; sourceTree = SOURCE_ROOT; };
 		9A480F692B19315600D79FAE /* ToggleViewModeIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleViewModeIntent.swift; sourceTree = "<group>"; };
 		9A4B47D82C17C10000F9168E /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
@@ -258,7 +248,6 @@
 		9A57F5382B66813D00B8DF6D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		9A58E8E62C012F8A002C16D6 /* Streak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Streak.swift; sourceTree = "<group>"; };
 		9A59C1EB2B0A2E180058A502 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
-		9A5A005B2C3210C1002D548C /* BalanceCircleGraphMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGraphMidnight.swift; sourceTree = "<group>"; };
 		9A5AF20530681DDE008CC950 /* SimulatorHealthSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatorHealthSeeder.swift; sourceTree = "<group>"; };
 		9A5AF20730681E0B008CC950 /* DashboardSamplePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSamplePreview.swift; sourceTree = "<group>"; };
 		9A616F462A642A6C00B713C4 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
@@ -267,11 +256,8 @@
 		9A6DA88E2B361B3400585788 /* CaloriesCardTopRowCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaloriesCardTopRowCenter.swift; sourceTree = "<group>"; };
 		9A6DA8902B361D0700585788 /* BarBalanceGraphTopRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphTopRow.swift; sourceTree = "<group>"; };
 		9A6DA8922B361EC300585788 /* BarBalanceGraphBottomRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphBottomRow.swift; sourceTree = "<group>"; };
-		9A6DBD532C28CEE6000920DA /* BalanceCornerTextMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCornerTextMidnight.swift; sourceTree = "<group>"; };
-		9A6DBD552C28D007000920DA /* BalanceCornerGaugeMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCornerGaugeMidnight.swift; sourceTree = "<group>"; };
 		9A6DBD572C28D2E3000920DA /* BalanceCircleGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGraph.swift; sourceTree = "<group>"; };
 		9A7CC5332C6A3F3E0061451D /* StepsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsCard.swift; sourceTree = "<group>"; };
-		9A85F1F92C3756F1001FA5D0 /* RectangleBalanceMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleBalanceMidnight.swift; sourceTree = "<group>"; };
 		9A8BA4052B4054ED0011D412 /* BackgroundColorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundColorSection.swift; sourceTree = "<group>"; };
 		9A8BA4082B4055B70011D412 /* ColorsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsCard.swift; sourceTree = "<group>"; };
 		9A8BA40E2B4057720011D412 /* CalorieColorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieColorSection.swift; sourceTree = "<group>"; };
@@ -295,7 +281,6 @@
 		9AB83A272AF5879B00FBF3B3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		9AB83A292AF5879B00FBF3B3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		9AB9ABEF2C344CEF00DEE2D8 /* BalanceCircleThickGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleThickGraph.swift; sourceTree = "<group>"; };
-		9AB9ABF12C344F6200DEE2D8 /* BalanceCircleThickGraphMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleThickGraphMidnight.swift; sourceTree = "<group>"; };
 		9ABBD8FE2BE8213F003EC608 /* WeekBalanceGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekBalanceGraph.swift; sourceTree = "<group>"; };
 		9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleBalanceGraph.swift; sourceTree = "<group>"; };
 		9AC2E27F2C12742500B07EBE /* Count.kcal.watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Count.kcal.watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -315,7 +300,6 @@
 		9AEA55C92A5B0081000AB057 /* HKRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKRepository.swift; sourceTree = "<group>"; };
 		9AEA55CB2A5D65DC000AB057 /* MacroCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacroCard.swift; sourceTree = "<group>"; };
 		9AF309EC2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleFullGraph.swift; sourceTree = "<group>"; };
-		9AF309EE2C32B3C70081FDCE /* BalanceCircleFullGraphMidnight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleFullGraphMidnight.swift; sourceTree = "<group>"; };
 		9AF39CB22B3DBA4C0037628F /* WeightTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightTopBar.swift; sourceTree = "<group>"; };
 		9AF39CB52B3DC61A0037628F /* MonthlyChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyChart.swift; sourceTree = "<group>"; };
 		9AF39CB72B3DC9180037628F /* WeeklyChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyChart.swift; sourceTree = "<group>"; };
@@ -579,7 +563,6 @@
 			isa = PBXGroup;
 			children = (
 				9A6DBD572C28D2E3000920DA /* BalanceCircleGraph.swift */,
-				9A5A005B2C3210C1002D548C /* BalanceCircleGraphMidnight.swift */,
 			);
 			path = Graph;
 			sourceTree = "<group>";
@@ -588,7 +571,6 @@
 			isa = PBXGroup;
 			children = (
 				9A3B87822C30C8DD002D02D1 /* BalanceCircleGauge.swift */,
-				9A3B87842C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift */,
 			);
 			path = Gauge;
 			sourceTree = "<group>";
@@ -597,7 +579,6 @@
 			isa = PBXGroup;
 			children = (
 				9AB9ABEF2C344CEF00DEE2D8 /* BalanceCircleThickGraph.swift */,
-				9AB9ABF12C344F6200DEE2D8 /* BalanceCircleThickGraphMidnight.swift */,
 			);
 			path = Graph.thick;
 			sourceTree = "<group>";
@@ -606,7 +587,6 @@
 			isa = PBXGroup;
 			children = (
 				9AF309EC2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift */,
-				9AF309EE2C32B3C70081FDCE /* BalanceCircleFullGraphMidnight.swift */,
 			);
 			path = Graph.full;
 			sourceTree = "<group>";
@@ -615,7 +595,6 @@
 			isa = PBXGroup;
 			children = (
 				9AD5F5572C28279C003FE1C5 /* BalanceCornerText.swift */,
-				9A6DBD532C28CEE6000920DA /* BalanceCornerTextMidnight.swift */,
 				9A2F7E662C34989100498A67 /* BalanceCornerTextNowMidnight.swift */,
 			);
 			path = Text;
@@ -625,7 +604,6 @@
 			isa = PBXGroup;
 			children = (
 				9AA413022C24D90D005B9D73 /* BalanceCornerGauge.swift */,
-				9A6DBD552C28D007000920DA /* BalanceCornerGaugeMidnight.swift */,
 			);
 			path = Gauge;
 			sourceTree = "<group>";
@@ -688,9 +666,7 @@
 			isa = PBXGroup;
 			children = (
 				9AE1804D2C35FCDA00C37AA9 /* RectangleBalance.swift */,
-				9A85F1F92C3756F1001FA5D0 /* RectangleBalanceMidnight.swift */,
 				9A16C8DB2C38A34400ED3B7E /* RectangleBalanceBar.swift */,
-				9A16C8DD2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift */,
 			);
 			path = Rectangle;
 			sourceTree = "<group>";
@@ -998,19 +974,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9AF309EF2C32B3C70081FDCE /* BalanceCircleFullGraphMidnight.swift in Sources */,
 				9A2F7E672C34989100498A67 /* BalanceCornerTextNowMidnight.swift in Sources */,
 				9A6DBD582C28D2E3000920DA /* BalanceCircleGraph.swift in Sources */,
 				9AD5F5522C277C9D003FE1C5 /* HKRepository.swift in Sources */,
 				9A16C8DC2C38A34400ED3B7E /* RectangleBalanceBar.swift in Sources */,
-				9A16C8DE2C38BA7D00ED3B7E /* RectangleBalanceBarMidnight.swift in Sources */,
 				9A6DBD5A2C28D42E000920DA /* CircleBalanceGraph.swift in Sources */,
 				9AE1804E2C35FCDA00C37AA9 /* RectangleBalance.swift in Sources */,
 				9AD5F5512C277C43003FE1C5 /* Settings.swift in Sources */,
-				9A6DBD562C28D007000920DA /* BalanceCornerGaugeMidnight.swift in Sources */,
 				9AD5F5532C277D14003FE1C5 /* WeightDataViewModel.swift in Sources */,
-				9AB9ABF22C344F6200DEE2D8 /* BalanceCircleThickGraphMidnight.swift in Sources */,
-				9A5A005C2C3210C1002D548C /* BalanceCircleGraphMidnight.swift in Sources */,
 				9AA413032C24D90D005B9D73 /* BalanceCornerGauge.swift in Sources */,
 				9A6DBD5C2C28D464000920DA /* EnergyBalance.swift in Sources */,
 				9A6DBD5B2C28D452000920DA /* HealthInterface.swift in Sources */,
@@ -1023,10 +994,7 @@
 				9AD5F5582C28279C003FE1C5 /* BalanceCornerText.swift in Sources */,
 				9AD5F54F2C277B6E003FE1C5 /* HealthData.swift in Sources */,
 				9A6DBD5F2C28D562000920DA /* ReachableView.swift in Sources */,
-				9A3B87852C30D1E7002D02D1 /* BalanceCircleGaugeMidnight.swift in Sources */,
 				9AD5F5502C277C2E003FE1C5 /* HealthDataTimelineProvider.swift in Sources */,
-				9A85F1FA2C3756F1001FA5D0 /* RectangleBalanceMidnight.swift in Sources */,
-				9A6DBD542C28CEE6000920DA /* BalanceCornerTextMidnight.swift in Sources */,
 				9AA413102C2630D5005B9D73 /* Bundle.swift in Sources */,
 				9A3B87832C30C8DD002D02D1 /* BalanceCircleGauge.swift in Sources */,
 				9AB9ABF02C344CEF00DEE2D8 /* BalanceCircleThickGraph.swift in Sources */,
