@@ -1,16 +1,14 @@
 import WidgetKit
 import SwiftUI
 
-struct NutritionWidget: Widget
-{
+/// Carbohydrate, fat, and protein goal progress for small and medium widgets.
+struct NutritionWidget: Widget {
     @StateObject private var AppSettings = Settings.shared
 
-    var body: some WidgetConfiguration
-    {
+    var body: some WidgetConfiguration {
         StaticConfiguration(
             kind: "BarNutritionBalanceGraphWidget",
-            provider: HealthDataTimelineProvider())
-        { entry in
+            provider: HealthDataTimelineProvider()) { entry in
             NutritionWidgetNow(entry: entry)
                 .containerRelativeFrame([.horizontal, .vertical])
                 .containerBackground(Color("BackGroundColor"), for: .widget)
@@ -23,49 +21,65 @@ struct NutritionWidget: Widget
     }
 }
 
-struct NutritionWidgetNow: View
-{
-    @EnvironmentObject private var AppSettings: Settings
-    
+/// Carbohydrate, fat, and protein progress for the selected widget size.
+struct NutritionWidgetNow: View {
     @Environment(\.colorScheme) var scheme: ColorScheme
     @Environment(\.widgetFamily) var family: WidgetFamily
+
+    @EnvironmentObject private var AppSettings: Settings
+    
     var entry: HealthDataTimelineProvider.Entry
     
-    var body: some View
-    {
-        switch family
-        {
+    /// Shows nutrient progress with short labels in the small widget.
+    var body: some View {
+        switch family {
             case .systemSmall, .systemMedium:
-            ZStack(alignment: .topLeading)
-            {
-//                timeReloadButton
+                ZStack(alignment: .topLeading) {
+                    //                timeReloadButton
                 
-                VStack(spacing: 14)
-                {
-                    ReachableView(family == .systemMedium ? "Carbs" : "C", context: .widget(family), consumedValue: entry.data.carbs, goalValue: AppSettings.carbsGoal, color: AppSettings.consumedColor, graphHeight: 10)
+                    VStack(spacing: 14) {
+                        ReachableView(
+                            family == .systemMedium ? "Carbs" : "C",
+                            context: .widget(family),
+                            consumedValue: entry.data.carbs,
+                            goalValue: AppSettings.carbsGoal,
+                            color: AppSettings.consumedColor,
+                            graphHeight: 10
+                        )
                     
-                    ReachableView(family == .systemMedium ? "Fats" : "F", context: .widget(family), consumedValue: entry.data.fats, goalValue: AppSettings.fatsGoal, color: AppSettings.consumedColor, graphHeight: 10)
+                        ReachableView(
+                            family == .systemMedium ? "Fats" : "F",
+                            context: .widget(family),
+                            consumedValue: entry.data.fats,
+                            goalValue: AppSettings.fatsGoal,
+                            color: AppSettings.consumedColor,
+                            graphHeight: 10
+                        )
                     
-                    ReachableView(family == .systemMedium ? "Protein" : "P", context: .widget(family), consumedValue: entry.data.protein, goalValue: AppSettings.proteinGoal, color: AppSettings.consumedColor, graphHeight: 10)
+                        ReachableView(
+                            family == .systemMedium ? "Protein" : "P",
+                            context: .widget(family),
+                            consumedValue: entry.data.protein,
+                            goalValue: AppSettings.proteinGoal,
+                            color: AppSettings.consumedColor,
+                            graphHeight: 10
+                        )
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(family == .systemMedium ? 20 : 5)
+                    .padding(.leading, 8)
+                    .padding(.trailing, 8)
+                    .padding(.bottom, family == .systemMedium ? 2 : -2)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(family == .systemMedium ? 20 : 5)
-                .padding(.leading, 8)
-                .padding(.trailing, 8)
-                .padding(.bottom, family == .systemMedium ? 2 : -2)
-            }
             
-        default:
-            Text(verbatim: "Widget size not supported")
+            default:
+                Text(verbatim: "Widget size not supported")
         }
     }
     
-    var timeReloadButton: some View
-    {
-        Button(intent: TestAppIntent())
-        {
-            ZStack(alignment: .topLeading)
-            {
+    var timeReloadButton: some View {
+        Button(intent: TestAppIntent()) {
+            ZStack(alignment: .topLeading) {
                 Color.clear
                     .frame(width: 80, height: 70)
                 
@@ -76,12 +90,16 @@ struct NutritionWidgetNow: View
                     .padding(.leading, 12)
                     .padding(.trailing, 9)
                     .padding(.top, 2)
-                    .background
-                    {
-                        if scheme == .dark
-                        {
-                            UnevenRoundedRectangle(topLeadingRadius: 20, bottomLeadingRadius: 0, bottomTrailingRadius: 20, topTrailingRadius: 0, style: .continuous)
-                                .fill(Color("BackGroundColor").gradient)
+                    .background {
+                        if scheme == .dark {
+                            UnevenRoundedRectangle(
+                                topLeadingRadius: 20,
+                                bottomLeadingRadius: 0,
+                                bottomTrailingRadius: 20,
+                                topTrailingRadius: 0,
+                                style: .continuous
+                            )
+                            .fill(Color("BackGroundColor").gradient)
                         }
                     }
                     .opacity(0.8)
@@ -92,11 +110,9 @@ struct NutritionWidgetNow: View
     }
 }
 
-#Preview(as: .systemSmall)
-{
+#Preview(as: .systemSmall) {
     NutritionWidget()
 }
-timeline:
-{
+timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
 }
