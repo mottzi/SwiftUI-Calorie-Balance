@@ -148,7 +148,7 @@ extension BalanceWidgetCircleContent {
             .padding(.leading, 10)
             .padding(.top, 3)
             .background {
-                if scheme == .dark {
+                if scheme == .dark || renderingMode == .accented {
                     UnevenRoundedRectangle(
                         topLeadingRadius: 0,
                         bottomLeadingRadius: 20,
@@ -157,6 +157,7 @@ extension BalanceWidgetCircleContent {
                         style: .circular
                     )
                     .fill(Color("BackGroundColor").gradient)
+                    .opacity(renderingMode == .accented ? 0.25 : 1)
                 }
             }
             .opacity(0.8)
