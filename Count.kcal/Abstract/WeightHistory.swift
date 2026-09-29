@@ -24,6 +24,14 @@ final class WeightHistory {
 
         requestID += 1
         let currentRequest = requestID
+        #if os(iOS) && DEBUG && targetEnvironment(simulator)
+        if SimulatorDashboardFixture.isEnabled {
+            dailyAverages = SimulatorDashboardFixture.weightHistory()
+            latestWeight = dailyAverages.last?.weightAvg
+            latestWeightDate = dailyAverages.last?.date
+            return
+        }
+        #endif
         let date = Date.now
         let weightUnit = settings.weightUnit
         async let data = hk.fetchInitialAvgWeightData(for: date, weightUnit: weightUnit)

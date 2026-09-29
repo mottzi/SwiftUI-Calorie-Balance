@@ -23,6 +23,12 @@ final class Streak {
 
         requestID += 1
         let currentRequest = requestID
+        #if os(iOS) && DEBUG && targetEnvironment(simulator)
+        if SimulatorDashboardFixture.isEnabled {
+            streaks = 5
+            return
+        }
+        #endif
         let goal = settings.balanceGoal
         let isLossGoal = settings.weightGoal == .lose
         let source = settings.dataSource

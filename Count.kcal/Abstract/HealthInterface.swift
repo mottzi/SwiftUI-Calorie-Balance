@@ -33,6 +33,12 @@ final class HealthInterface: Identifiable, Hashable {
 
         requestID += 1
         let currentRequest = requestID
+        #if os(iOS) && DEBUG && targetEnvironment(simulator)
+        if SimulatorDashboardFixture.isEnabled {
+            sample = SimulatorDashboardFixture.sample(for: id)
+            return
+        }
+        #endif
         let updated = await repository.fetchDailySnapshot(for: id, settings: settings)
         // discard a cancelled request or one superseded by a later refresh
         guard !Task.isCancelled, currentRequest == requestID else { return }

@@ -54,6 +54,10 @@ final class Settings: ObservableObject {
 
     private init() {
 
+        #if os(iOS) && DEBUG && targetEnvironment(simulator)
+        SimulatorDashboardFixture.prepareSettings()
+        #endif
+
         // apply the locale default only before the user has saved a weight unit
         if UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")?.object(forKey: "weightUnit") == nil {
             setDefaultWeightUnit()
@@ -63,6 +67,14 @@ final class Settings: ObservableObject {
     @MainActor
     /// Updates the active and resting energy estimates from HealthKit.
     public func updateShow() async {
+
+        #if os(iOS) && DEBUG && targetEnvironment(simulator)
+        if SimulatorDashboardFixture.isEnabled {
+            showResting = 1_650
+            showActive = 400
+            return
+        }
+        #endif
 
         let unit = energyUnit
         let date = Date.now
