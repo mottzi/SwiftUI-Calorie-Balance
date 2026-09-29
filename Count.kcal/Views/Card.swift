@@ -3,6 +3,7 @@ import SwiftUI
 /// Styled card with an optional title, subtitle, and controls.
 struct Card <Subtitle: View, Content: View>: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var AppSettings: Settings
 
     let title: LocalizedStringKey?
@@ -40,24 +41,48 @@ struct Card <Subtitle: View, Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             if let title {
-                HStack(spacing: 0) {
-                    Text(title)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .fontDesign(.rounded)
-                        .foregroundColor(Color("TextColor"))
-                        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
-                    
-                    if let secondaryTitle {
-                        Spacer()
-                        
-                        Text(secondaryTitle)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                            .fontDesign(.rounded)
-                            .foregroundColor(Color("SecondaryTextColor"))
-                            .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
-                            .transaction { $0.animation = .none }
+                Group {
+                    if dynamicType.isAccessibilitySize {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(title)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .fontDesign(.rounded)
+                                .foregroundColor(Color("TextColor"))
+                                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+                                .fixedSize(horizontal: false, vertical: true)
+
+                            if let secondaryTitle {
+                                Text(secondaryTitle)
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                    .fontDesign(.rounded)
+                                    .foregroundColor(Color("SecondaryTextColor"))
+                                    .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .transaction { $0.animation = .none }
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    } else {
+                        HStack(spacing: 0) {
+                            Text(title)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .fontDesign(.rounded)
+                                .foregroundColor(Color("TextColor"))
+
+                            if let secondaryTitle {
+                                Spacer()
+
+                                Text(secondaryTitle)
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                    .fontDesign(.rounded)
+                                    .foregroundColor(Color("SecondaryTextColor"))
+                                    .transaction { $0.animation = .none }
+                            }
+                        }
                     }
                 }
                 .padding(.leading, 4)

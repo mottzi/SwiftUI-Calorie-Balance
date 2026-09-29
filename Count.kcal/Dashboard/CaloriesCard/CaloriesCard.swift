@@ -28,7 +28,7 @@ struct CaloriesCard: View {
             CaloriesCardTopRow(mode: mode)
                 .padding(.top, 2)
 
-            BarBalanceGraph(mode: mode)
+            BarBalanceGraph(mode: mode, labels: !dynamicType.isAccessibilitySize)
                 .frame(height: sizeMapping[dynamicType, default: 44])
                 .padding(.top, 6)
                 .padding(.bottom, 2)

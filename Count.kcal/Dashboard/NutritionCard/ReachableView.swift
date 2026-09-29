@@ -54,6 +54,33 @@ extension ReachableView {
     var BarTypeView: some View {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 3) {
+                if dynamicType.isAccessibilitySize && context == .app {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(key)
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+
+                        if unit.isEmpty && dynamicType >= .accessibility3 {
+                            Text("\(consumedValue)")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                            Text("/ \(goalValue)")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                        } else {
+                            Text("\(consumedValue) / \(goalValue) \(unit)")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                    .fontDesign(.rounded)
+                    .padding(.horizontal, 4)
+                    #if !os(watchOS)
+                    .foregroundStyle(Color("TextColor"))
+                    #endif
+                } else {
                 HStack {
                     Text(key)
                         .font(.caption)
@@ -129,6 +156,7 @@ extension ReachableView {
                     #if !os(watchOS)
                     .foregroundStyle(Color("TextColor"))
                     #endif
+                }
                 }
                 
                 GeometryReader { geometry in

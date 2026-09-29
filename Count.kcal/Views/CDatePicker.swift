@@ -3,6 +3,7 @@ import SwiftUI
 /// Calendar that browses months without extending the dashboard's swipe range.
 struct CDatePicker: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
@@ -70,6 +71,7 @@ struct CDatePicker: View {
                         .font(.callout)
                         .fontWeight(.medium)
                         .fontDesign(.rounded)
+                        .lineLimit(1)
                         .padding(.bottom, 6)
                         .foregroundStyle(Color("TextColor"))
                         .dynamicTypeSize(...DynamicTypeSize.xxLarge)
@@ -85,6 +87,7 @@ struct CDatePicker: View {
                             .background { dayBackground(day.id, index: index, count: days.count) }
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(Text(day.id, format: .dateTime.weekday(.wide).month(.wide).day()))
                 }
             }
             .transaction { $0.animation = nil }
@@ -132,7 +135,11 @@ extension CDatePicker {
     }
 
     var weekdays: [String] {
-        Calendar.current.shortWeekdaySymbolsLocalized
+        let calendar = Calendar.current
+        guard dynamicType.isAccessibilitySize else { return calendar.shortWeekdaySymbolsLocalized }
+        let symbols = calendar.veryShortWeekdaySymbols
+        let start = calendar.firstWeekday - 1
+        return Array(symbols[start...] + symbols[..<start])
     }
 
     func getDayCellBrightness(d: Date) -> BrightnessLevel {

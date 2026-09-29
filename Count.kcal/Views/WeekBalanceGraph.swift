@@ -4,6 +4,8 @@ import Charts
 /// Recent daily balances with selection of a day in the dashboard.
 struct WeekBalanceGraph: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
+
     var DataPoints: [HealthInterface]
 
     let selectedDay: Date
@@ -23,9 +25,11 @@ struct WeekBalanceGraph: View {
                                 .opacity(isDaySelected(barDay: point.sample.date) ? 1 : 0)
                 
                             Text("\(point.sample.date.workday)")
-                                .font(.system(size: 12))
+                                .font(dynamicType.isAccessibilitySize ? .caption2 : .system(size: 12))
                                 .fontDesign(.rounded)
                                 .fontWeight(.bold)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
                                 .foregroundStyle(
                                     isDaySelected(barDay: point.sample.date) ? Color("ContrastColor") : Color("TextColor")
                                 )
@@ -42,6 +46,8 @@ struct WeekBalanceGraph: View {
                     .contentShape(.rect)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(Text(point.id, format: .dateTime.weekday(.wide).month().day()))
+                .accessibilityValue(Text("\(abs((point.isTodayPage ? point.sample.midnight : point.sample.now).balance))"))
             }
         }
     }
@@ -68,6 +74,8 @@ extension WeekBalanceGraph {
     struct VBarBalanceGraph: View {
 
         @EnvironmentObject private var AppSettings: Settings
+
+        @Environment(\.dynamicTypeSize) private var dynamicType
 
         @Environment(\.colorScheme) private var scheme
 
@@ -114,14 +122,16 @@ extension WeekBalanceGraph {
                 }
                 .frame(width: geo.size.width, height: geo.size.height)
                 .overlay {
-                    Text("\(abs(energy.balance))")
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
-                        .font(.caption)
-                        .fontDesign(.rounded)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(Color("TextColor"))
-                        .offset(y: energy.balance > 0 ? 14 : -14)
+                    if !dynamicType.isAccessibilitySize {
+                        Text("\(abs(energy.balance))")
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                            .font(.caption)
+                            .fontDesign(.rounded)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Color("TextColor"))
+                            .offset(y: energy.balance > 0 ? 14 : -14)
+                    }
                 }
 //                .opacity(c)
             }

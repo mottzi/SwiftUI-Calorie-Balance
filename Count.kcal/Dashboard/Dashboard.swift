@@ -37,7 +37,7 @@ private struct DashboardCalories: View {
             }
         }
         .overlay(alignment: .top) {
-            if day.isTodayPage {
+            if day.isTodayPage && !dynamicType.isAccessibilitySize {
                 HStack {
                     Circle()
                         .fill(Color("TextColor"))

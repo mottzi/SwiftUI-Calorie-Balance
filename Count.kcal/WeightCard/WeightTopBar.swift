@@ -2,6 +2,7 @@ import SwiftUI
 
 struct WeightTopBar: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(\.colorScheme) private var scheme: ColorScheme
     @Environment(WeightHistory.self) private var weightHistory
 
@@ -10,7 +11,9 @@ struct WeightTopBar: View {
     @Binding var pageSelection: PagerSelection?
 
     var body: some View {
-        HStack(alignment: .lastTextBaseline, spacing: 0) {
+        (dynamicType.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+            : AnyLayout(HStackLayout(alignment: .lastTextBaseline, spacing: 0))) {
             Button {
                 pageSelection?.toggle()
             } label: {
@@ -121,7 +124,7 @@ struct WeightTopBar: View {
                 }
                 
             }
-            .padding(.leading, 20)
+            .padding(.leading, dynamicType.isAccessibilitySize ? 12 : 20)
             .padding(2)
             .padding(.vertical, 6)
             .padding(.bottom, 2)

@@ -13,7 +13,9 @@ struct CaloriesCardTopRow: View {
     let mode: GraphMode
 
     var body: some View {
-        HStack(spacing: 0) {
+        (dynamicType.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .center, spacing: 16))
+            : AnyLayout(HStackLayout(spacing: 0))) {
             VStack(alignment: .leading, spacing: dynamicType <= .xxLarge ? 16 : 4) {
                 HStack(spacing: dynamicType <= .xxLarge ? 14 : 10) {
                     if dynamicType <= .accessibility3 {
@@ -123,13 +125,16 @@ struct CaloriesCardTopRow: View {
             }
             .fontDesign(.rounded)
             .padding(.leading, 13)
-            .offset(y: -4)
-            .fixedSize()
+            .offset(y: dynamicType.isAccessibilitySize ? 0 : -4)
+            .fixedSize(horizontal: !dynamicType.isAccessibilitySize, vertical: !dynamicType.isAccessibilitySize)
+            .frame(maxWidth: dynamicType.isAccessibilitySize ? .infinity : nil, alignment: .leading)
                 
-            Spacer()
+            if !dynamicType.isAccessibilitySize {
+                Spacer()
+            }
             
             CaloriesCardTopRowCenter(mode: mode)
-                .padding(.trailing, 19)
+                .padding(.trailing, dynamicType.isAccessibilitySize ? 0 : 19)
         }
     }
 
