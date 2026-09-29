@@ -1,10 +1,12 @@
 import SwiftUI
-import Charts
 
 /// Recent daily balances with selection of a day in the dashboard.
 struct WeekBalanceGraph: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
+    @EnvironmentObject private var settings: Settings
+
+    private let graphHeight: CGFloat = 60
 
     var DataPoints: [HealthInterface]
 
@@ -39,16 +41,62 @@ struct WeekBalanceGraph: View {
                         VBarBalanceGraph(
                             energy: point.isTodayPage ? point.sample.midnight : point.sample.now,
                             maxEnergy: maxEnergy,
-                            date: point.sample.date
+                            date: point.sample.date,
+                            isSelected: isDaySelected(barDay: point.id)
                         )
-                        .frame(height: 60)
+                        .frame(height: graphHeight)
                     }
+                    .frame(maxWidth: .infinity)
                     .contentShape(.rect)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(Text(point.id, format: .dateTime.weekday(.wide).month().day()))
                 .accessibilityValue(Text("\(abs((point.isTodayPage ? point.sample.midnight : point.sample.now).balance))"))
             }
+        }
+        .background {
+            GeometryReader { geometry in
+                // Keep the existing max-based scale. An out-of-range goal has
+                // no visible reference rather than being clamped to a false value.
+                if settings.balanceGoal > 0, settings.balanceGoal <= maxEnergy {
+                    let ratio = CGFloat(settings.balanceGoal) / CGFloat(maxEnergy)
+                    let direction: CGFloat = settings.weightGoal == .lose ? 1 : -1
+                    let baseline = geometry.size.height - graphHeight / 2
+                    let goalY = baseline - direction * (graphHeight / 2 * ratio + 1)
+
+                    Path { path in
+                        path.move(to: CGPoint(x: 0, y: goalY))
+                        path.addLine(to: CGPoint(x: geometry.size.width, y: goalY))
+                    }
+                    .stroke(
+                        Color("TextColor").opacity(0.45),
+                        style: StrokeStyle(lineWidth: 1.5, lineCap: .round, dash: [0.15, 6])
+                    )
+                    .mask {
+                        // Remove the bar silhouettes from the line itself so
+                        // translucent fills cannot let the dots show through.
+                        Path { mask in
+                            mask.addRect(CGRect(origin: .zero, size: geometry.size))
+                            let columnWidth = geometry.size.width / CGFloat(DataPoints.count)
+                            for (index, point) in DataPoints.enumerated() {
+                                let energy = point.isTodayPage ? point.sample.midnight : point.sample.now
+                                let isDeficit = energy.balance > 0
+                                let height = graphHeight / 2 * CGFloat(abs(energy.balance)) / CGFloat(maxEnergy)
+                                let barRect = CGRect(
+                                    x: CGFloat(index) * columnWidth + columnWidth * 0.125,
+                                    y: isDeficit ? baseline - height - 1 : baseline + 1,
+                                    width: columnWidth * 0.75,
+                                    height: height
+                                )
+                                mask.addPath(VBarBalanceGraph.barShape(isDeficit: isDeficit).path(in: barRect))
+                            }
+                        }
+                        .fill(style: FillStyle(eoFill: true))
+                    }
+                }
+            }
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
         }
     }
 
@@ -83,18 +131,21 @@ extension WeekBalanceGraph {
         let energy: EnergyBalance
         let maxEnergy: Int
         let date: Date
+        var isSelected: Bool = false
 
-        let cr = 10.0
+        static func barShape(isDeficit: Bool) -> UnevenRoundedRectangle {
+            UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(
+                topLeading: isDeficit ? 10 : 0,
+                bottomLeading: isDeficit ? 0 : 10,
+                bottomTrailing: isDeficit ? 0 : 10,
+                topTrailing: isDeficit ? 10 : 0
+            ))
+        }
         
         var body: some View {
             GeometryReader { geo in
                 ZStack {
-                    UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(
-                        topLeading: barChartRatio > 0 ? cr : 0,
-                        bottomLeading: barChartRatio > 0 ? 0 : cr,
-                        bottomTrailing: barChartRatio > 0 ? 0 : cr,
-                        topTrailing: barChartRatio > 0 ? cr : 0
-                    ))
+                    Self.barShape(isDeficit: barChartRatio > 0)
                         .fill(color.brighten(0.1).gradient)
                         .frame(width: geo.size.width * 0.75, height: (geo.size.height / 2.0) * abs(barChartRatio))
                         .overlay {
@@ -104,12 +155,7 @@ extension WeekBalanceGraph {
                                 endPoint: scheme == .dark ? .top : .bottom
                             )
                                 .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
-                                .clipShape(UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(
-                                    topLeading: barChartRatio > 0 ? cr : 0,
-                                    bottomLeading: barChartRatio > 0 ? 0 : cr,
-                                    bottomTrailing: barChartRatio > 0 ? 0 : cr,
-                                    topTrailing: barChartRatio > 0 ? cr : 0
-                                )))
+                                .clipShape(Self.barShape(isDeficit: barChartRatio > 0))
                         }
 
                         .offset(y: barChartRatio > 0
@@ -128,12 +174,11 @@ extension WeekBalanceGraph {
                             .minimumScaleFactor(0.5)
                             .font(.caption)
                             .fontDesign(.rounded)
-                            .fontWeight(.semibold)
+                            .fontWeight(isSelected ? .bold : .semibold)
                             .foregroundStyle(Color("TextColor"))
                             .offset(y: energy.balance > 0 ? 14 : -14)
                     }
                 }
-//                .opacity(c)
             }
         }
 

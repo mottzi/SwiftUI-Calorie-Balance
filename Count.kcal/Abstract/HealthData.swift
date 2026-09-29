@@ -133,6 +133,11 @@ enum SimulatorDashboardFixture {
         ProcessInfo.processInfo.arguments.contains("--seed-dashboard-fixture")
     }
 
+    /// Optional stress case for all seven recent balance labels.
+    static var usesFourDigitBalances: Bool {
+        ProcessInfo.processInfo.arguments.contains("--week-balance-four-digits")
+    }
+
     static func prepareSettings() {
         guard isEnabled else { return }
         let defaults = UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")
@@ -144,7 +149,7 @@ enum SimulatorDashboardFixture {
         defaults?.set("kg", forKey: "weightUnit")
         defaults?.set(1_650, forKey: "customCalPassive")
         defaults?.set(400, forKey: "customCalActive")
-        defaults?.set(300, forKey: "balanceGoal")
+        defaults?.set(usesFourDigitBalances ? 1_200 : 300, forKey: "balanceGoal")
         defaults?.set(150, forKey: "carbsGoal")
         defaults?.set(65, forKey: "fatsGoal")
         defaults?.set(110, forKey: "proteinGoal")
@@ -158,7 +163,7 @@ enum SimulatorDashboardFixture {
         let variation = daysAgo % 7
         let isToday = day == today
 
-        return HealthData(
+        var sample = HealthData(
             date: day,
             lastDataSync: isToday ? .now : Calendar.current.date(byAdding: .hour, value: 18, to: day),
             burnedActive: isToday ? 278 : 340 + variation * 37,
@@ -171,6 +176,15 @@ enum SimulatorDashboardFixture {
             fats: isToday ? 53 : 62 + variation * 3,
             steps: isToday ? 6_421 : 7_600 + variation * 430
         )
+
+        if usesFourDigitBalances {
+            let balances = [1_888, 1_587, 1_085, 1_242, 1_219, 1_196, 1_173]
+            let balance = balances[variation]
+            sample.burnedActive = 1_500
+            sample.burnedPassive = isToday ? 1_120 : 1_650
+            sample.consumed = 1_500 + 1_650 - balance
+        }
+        return sample
     }
 
     static func weightHistory() -> [WeightChartData] {

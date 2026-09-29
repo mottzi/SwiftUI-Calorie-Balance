@@ -26,7 +26,7 @@ private struct DashboardSamplePreview: View {
 
     init() {
         let today = Calendar.current.startOfDay(for: .now)
-        let samplePages = (0...5).reversed().map { daysAgo in
+        let samplePages = (0...6).reversed().map { daysAgo in
             let date = today.subtractDays(daysAgo)
             var data = HealthData.example(for: date)
             data.burnedActive = daysAgo == 0 ? 257 : 340 + daysAgo * 48

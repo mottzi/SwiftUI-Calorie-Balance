@@ -110,7 +110,7 @@ extension DayPager {
 
     private func updateWeek(for today: Date) {
 
-        weekPages = (0...5).reversed().map { offset in
+        weekPages = (0...6).reversed().map { offset in
             let day = Calendar.current.date(byAdding: .day, value: -offset, to: today) ?? today
             return model(for: day)
         }
