@@ -9,6 +9,7 @@ struct Pager: View {
     @State private var todayPageMode: PagerSelection = .first
     
     @State private var showCalendar: Bool = false
+    @State private var showSettings: Bool = false
     @State private var currentMonth: Date = .now
 
     @EnvironmentObject private var AppSettings: Settings
@@ -16,6 +17,7 @@ struct Pager: View {
     @Environment(WeightHistory.self) private var weightHistory
     @Environment(Streak.self) private var streak
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(\.requestReview) private var requestReview
     
     @State private var SliderData = HSlider()
@@ -69,7 +71,6 @@ struct Pager: View {
                     }
                 }
             }
-            .softTopScrollEdge()
             .scrollDisabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
             .frame(maxHeight: .infinity)
             .onChange(of: scenePhase) { _, newPhase in
@@ -98,44 +99,48 @@ struct Pager: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    if #available(iOS 26, *) {
-                        todayButton
-                    } else {
-                        todayButton.padding(.leading, 16)
-                    }
+                    todayButton.padding(.leading, toolbarOuterPadding)
                 }
-                
-                if #available(iOS 26, *) {
-                    ToolbarItem(placement: .topBarLeading) {
-                        selectedDateLabel
-                    }
-                    .sharedBackgroundVisibility(.hidden)
-                } else {
-                    ToolbarItem(placement: .topBarLeading) {
-                        selectedDateLabel
-                    }
+                .withoutGlassBackground()
+
+                ToolbarItem(placement: .topBarLeading) {
+                    selectedDateLabel
                 }
+                .withoutGlassBackground()
+                .keepVisibleWhenConstrained()
 
                 ToolbarItem(placement: .topBarTrailing) {
                     StreakToolbarButton()
                 }
+                .withoutGlassBackground()
+                .overflowBeforePrimaryItems()
 
-                ToolbarItem(placement: .topBarTrailing) {
-                    calendarButton
-                }
+                if #available(iOS 27, *), dynamicType.isAccessibilitySize {
+                    ToolbarItem(placement: .topBarPinnedTrailing) {
+                        accessibilityActionsMenu
+                    }
+                    .withoutGlassBackground()
+                } else {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        calendarButton
+                    }
+                    .withoutGlassBackground()
+                    .keepVisibleWhenConstrained()
 
-                if #available(iOS 26, *) {
-                    ToolbarSpacer(.fixed, placement: .topBarTrailing)
-                }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    if #available(iOS 26, *) {
-                        settingsButton
+                    if #available(iOS 27, *) {
+                        ToolbarItem(placement: .topBarPinnedTrailing) {
+                            settingsButton.padding(.trailing, toolbarOuterPadding)
+                        }
+                        .withoutGlassBackground()
                     } else {
-                        settingsButton.padding(.trailing, 16)
+                        ToolbarItem(placement: .topBarTrailing) {
+                            settingsButton.padding(.trailing, toolbarOuterPadding)
+                        }
+                        .withoutGlassBackground()
                     }
                 }
             }
+            .navigationDestination(isPresented: $showSettings) { settingsDestination }
             .safeAreaPadding(.top, 10)
         }
     }
@@ -145,6 +150,11 @@ struct Pager: View {
 extension Pager {
 
     private var selectedPage: HealthInterface? { navigation.page(for: navigation.selectedDay) }
+
+    // iOS 26 adds more outer toolbar spacing than earlier releases.
+    private var toolbarOuterPadding: CGFloat {
+        if #available(iOS 26, *) { 8 } else { 16 }
+    }
 
     private var selectedRefreshKey: DayRefreshKey {
         DayRefreshKey(
@@ -212,37 +222,17 @@ extension Pager {
         withAnimation(.snappy) { navigation.selectedDay = day }
     }
 
-    // The date describes the selected page; it does not share a glass background
-    // with the adjacent day/night action. Keep the development shortcut available.
+    // The date describes the selected page in every build configuration.
     private var selectedDateLabel: some View {
-        #if !DEBUG
         Text(selectedPage?.id.relative ?? "")
             .fontWeight(.semibold)
             .fontDesign(.rounded)
             .foregroundColor(Color("TextColor"))
+            .lineLimit(1)
+            .fixedSize(horizontal: true, vertical: false)
             .transaction { transaction in
                 transaction.animation = nil
             }
-        #else
-        Button {
-            withAnimation(.snappy) {
-                selectedPage?.randomizeHealthData()
-
-                let start = Double.random(in: 60 ... 150)
-                let end = start - Double.random(in: 1 ... 5)
-
-                weightHistory.randomizeWeightData(start: start, end: end)
-            }
-        } label: {
-            Text(selectedPage?.id.relative ?? "")
-                .fontWeight(.semibold)
-                .fontDesign(.rounded)
-                .foregroundColor(Color("TextColor"))
-                .transaction { transaction in
-                    transaction.animation = nil
-                }
-        }
-        #endif
     }
 
     private var isTodaySelected: Bool {
@@ -266,30 +256,52 @@ extension Pager {
     
     private var settingsButton: some View {
         NavigationLink {
-            SettingsPage()
-                .environmentObject(AppSettings)
-                .environment(SliderData)
-                .onDisappear {
-                    AppSettings.closedSettings += 1
-                    
-                    manualRefresh += 1
-                    calendarRefresh += 1
-                    Task {
-                        #if !DEBUG
-                        if AppSettings.isSettingsInputValid && AppSettings.closedSettings >= 1 {
-                            try? await Task.sleep(for: .seconds(0.2))
-                            
-                            requestReview()
-                            AppSettings.closedSettings = 0
-                        }
-                        #endif
-                    }
-                }
+            settingsDestination
         } label: {
             Image(systemName: "gear")
                 .foregroundColor(Color("TextColor"))
                 .fontWeight(.medium)
         }
+    }
+
+    private var accessibilityActionsMenu: some View {
+        Menu {
+            Button {
+                withAnimation(.snappy) { showCalendar.toggle() }
+            } label: {
+                Label("Calendar", systemImage: "calendar")
+            }
+
+            Button {
+                showSettings = true
+            } label: {
+                Label("Settings", systemImage: "gear")
+            }
+        } label: {
+            Image(systemName: "ellipsis.circle")
+                .foregroundColor(Color("TextColor"))
+                .accessibilityLabel("Calendar and Settings")
+        }
+    }
+
+    private var settingsDestination: some View {
+        SettingsPage()
+            .environmentObject(AppSettings)
+            .environment(SliderData)
+            .onDisappear {
+                AppSettings.closedSettings += 1
+                manualRefresh += 1
+                calendarRefresh += 1
+                Task {
+                    #if !DEBUG
+                    if AppSettings.isSettingsInputValid && AppSettings.closedSettings >= 1 {
+                        try? await Task.sleep(for: .seconds(0.2))
+                        requestReview()
+                        AppSettings.closedSettings = 0
+                    }
+                    #endif
+                }
+            }
     }
     
     private var todayButton: some View {
@@ -306,11 +318,7 @@ extension Pager {
                 }
             }
         } label: {
-            if #available(iOS 26, *) {
-                todaySymbol
-            } else {
-                todaySymbol.frame(width: 30)
-            }
+            todaySymbol.frame(width: 30)
         }
         .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
     }
@@ -337,7 +345,7 @@ private struct DayPageStrip: View {
 
     var body: some View {
         ScrollView(.horizontal) {
-            LazyHStack(spacing: 0) {
+            LazyHStack(alignment: .top, spacing: 0) {
                 ForEach(navigation.pages, id: \.id) { page in
                     Dashboard(todayPageMode: $todayPageMode)
                         .containerRelativeFrame(.horizontal, count: 1, span: 1, spacing: 10.0)
@@ -402,14 +410,43 @@ private struct StreakToolbarButton: View {
 
 #Preview { PreviewPager }
 
-// The navigation bar reads the top edge of its scroll view.
-// Keep the default effect on older iOS releases.
 extension View {
 
     @ViewBuilder
     func softTopScrollEdge() -> some View {
         if #available(iOS 26, *) {
             scrollEdgeEffectStyle(.soft, for: .top)
+        } else {
+            self
+        }
+    }
+
+}
+
+private extension ToolbarContent {
+
+    @ToolbarContentBuilder
+    func withoutGlassBackground() -> some ToolbarContent {
+        if #available(iOS 26, *) {
+            sharedBackgroundVisibility(.hidden)
+        } else {
+            self
+        }
+    }
+
+    @ToolbarContentBuilder
+    func keepVisibleWhenConstrained() -> some ToolbarContent {
+        if #available(iOS 27, *) {
+            visibilityPriority(.high)
+        } else {
+            self
+        }
+    }
+
+    @ToolbarContentBuilder
+    func overflowBeforePrimaryItems() -> some ToolbarContent {
+        if #available(iOS 27, *) {
+            visibilityPriority(.low)
         } else {
             self
         }
