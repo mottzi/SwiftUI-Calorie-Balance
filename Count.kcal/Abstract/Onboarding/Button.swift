@@ -2,11 +2,37 @@ import SwiftUI
 
 struct OnboardingButton: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var AppSettings: Settings
     
     @Binding var selection: OnboardingState
     
     var body: some View {
+        Group {
+            if dynamicType.isAccessibilitySize {
+                VStack(spacing: 12) {
+                    advanceButton
+                    progressDots
+                    if selection != .welcome { backButton }
+                }
+                .padding(.horizontal, 24)
+            } else {
+                advanceButton
+                    .padding(.horizontal, 55)
+                    .overlay(alignment: .top) {
+                        progressDots.offset(y: -20)
+                    }
+                    .overlay(alignment: .bottom) {
+                        if selection != .welcome {
+                            backButton.offset(y: 40)
+                        }
+                    }
+            }
+        }
+        .sensoryFeedback(.selection, trigger: selection)
+    }
+
+    private var advanceButton: some View {
         Button {
             if selection == .applehealth {
                 Task { @MainActor in
@@ -40,37 +66,31 @@ struct OnboardingButton: View {
         }
         .buttonStyle(.borderedProminent)
         .tint(selection == .balancegoal ? Color("ConsumedDefault") : .blue)
-        .padding(.horizontal, 55)
-        .overlay(alignment: .top) {
-            VStack {
-                HStack(spacing: 8) {
-                    ForEach(1..<OnboardingState.allCases.count, id: \.self) { i in
-                        Circle()
-                            .fill(Color("TextColor"))
-                            .frame(width: 8, height: 8)
-                            .opacity(selection.rawValue >= i ? 1 : 0.25)
-                    }
-                }
-            }
-            .offset(y: -20)
-        }
         .foregroundStyle(Color("TextColor"))
-        .overlay(alignment: .bottom) {
-            if selection != .welcome {
-                Button {
-                    if let new = OnboardingState(rawValue: selection.rawValue - 1) {
-                        withAnimation(.bouncy) {
-                            selection = new
-                        }
-                    }
-                } label: {
-                    Text("Back")
-                        .tint(selection == .balancegoal ? Color("ConsumedDefault").brighten(0.1) : .blue)
-                }
-                .offset(y: 40)
+    }
+
+    private var progressDots: some View {
+        HStack(spacing: 8) {
+            ForEach(1..<OnboardingState.allCases.count, id: \.self) { i in
+                Circle()
+                    .fill(Color("TextColor"))
+                    .frame(width: 8, height: 8)
+                    .opacity(selection.rawValue >= i ? 1 : 0.25)
             }
         }
-        .sensoryFeedback(.selection, trigger: selection)
+    }
+
+    private var backButton: some View {
+        Button {
+            if let new = OnboardingState(rawValue: selection.rawValue - 1) {
+                withAnimation(.bouncy) {
+                    selection = new
+                }
+            }
+        } label: {
+            Text("Back")
+                .tint(selection == .balancegoal ? Color("ConsumedDefault").brighten(0.1) : .blue)
+        }
     }
 
 }

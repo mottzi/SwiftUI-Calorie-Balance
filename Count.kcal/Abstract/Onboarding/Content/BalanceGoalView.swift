@@ -2,13 +2,14 @@ import SwiftUI
 
 struct BalanceGoalView: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var AppSettings: Settings
 
     
     @State private var balanceSlider = 0.0
     
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: dynamicType.isAccessibilitySize ? 16 : 30) {
             TitleSegment
             ControllerSegment
             InfoSegment
@@ -43,6 +44,7 @@ extension BalanceGoalView {
         .fontWeight(.semibold)
         .fontDesign(.rounded)
         .foregroundStyle(Color("TextColor").gradient)
+        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
     }
     
     var ControllerSegment: some View {
@@ -73,6 +75,7 @@ extension BalanceGoalView {
             .tint(Color("ConsumedDefault"))
             .sensoryFeedback(.selection, trigger: balanceSlider)
         }
+        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
     }
     
     var InfoSegment: some View {
@@ -81,7 +84,8 @@ extension BalanceGoalView {
             .foregroundStyle(Color("TextColor"))
             .fontWeight(.regular)
             .fontDesign(.rounded)
-            .padding(.top, 25)
+            .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+            .padding(.top, dynamicType.isAccessibilitySize ? 8 : 25)
     }
 
 }
