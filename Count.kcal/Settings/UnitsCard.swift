@@ -2,17 +2,20 @@ import SwiftUI
 
 struct UnitsCard: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var AppSettings: Settings
 
     var body: some View {
         Card("Units", titlePadding: false) {
             VStack(spacing: 8) {
-                HStack {
+                (dynamicType.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 6))
+                    : AnyLayout(HStackLayout())) {
                     Text("Energy")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     
-                    Spacer()
+                    if !dynamicType.isAccessibilitySize { Spacer() }
                     
                     Picker(String(""), selection: $AppSettings.energyUnit) {
                         ForEach(Settings.EnergyUnit.allCases) {
@@ -33,16 +36,19 @@ struct UnitsCard: View {
                         }
                     }
                 }
+                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
                 
                 Divider()
                     .padding(.vertical, 4)
                 
-                HStack {
+                (dynamicType.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 6))
+                    : AnyLayout(HStackLayout())) {
                     Text("Body weight")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     
-                    Spacer()
+                    if !dynamicType.isAccessibilitySize { Spacer() }
                     
                     Picker(String(""), selection: $AppSettings.weightUnit) {
                         ForEach(Settings.WeightUnit.allCases) {
@@ -52,6 +58,7 @@ struct UnitsCard: View {
                     .pickerStyle(.palette)
                     .frame(width: 180)
                 }
+                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
             }
             .padding(.horizontal, 8)
         }

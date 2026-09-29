@@ -8,6 +8,7 @@ struct ThemesSection: View {
                 Text("Themes")
                     .font(.subheadline)
                     .fontWeight(.semibold)
+                    .dynamicTypeSize(...DynamicTypeSize.accessibility2)
 
                 Spacer()
             }

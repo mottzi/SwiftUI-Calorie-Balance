@@ -2,6 +2,7 @@ import SwiftUI
 
 struct NutrientsCard: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var AppSettings: Settings
         
     var body: some View {
@@ -11,13 +12,15 @@ struct NutrientsCard: View {
                     .padding(.vertical, 2)
                     .padding(.horizontal, 8)
                 
-                HStack(spacing: 12) {
+                (dynamicType.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12))
+                    : AnyLayout(HStackLayout(spacing: 12))) {
                     VStack(spacing: 6) {
                         Text("Carbs")
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(Color("TextColor"))
-                            .fixedSize()
+                            .fixedSize(horizontal: !dynamicType.isAccessibilitySize, vertical: true)
 
                         HStack(spacing: 4) {
                             Text("\(AppSettings.carbsGoal)")
@@ -32,17 +35,22 @@ struct NutrientsCard: View {
                                 .fontDesign(.rounded)
                                 .foregroundStyle(Color("TextColor"))
                         }
+                        if dynamicType.isAccessibilitySize {
+                            Text(AppSettings.carbsRatio, format: .percent.precision(.fractionLength(0)))
+                                .font(.caption)
+                                .foregroundStyle(Color("SecondaryTextColor"))
+                        }
                     }
-                    .lineLimit(1)
+                    .lineLimit(dynamicType.isAccessibilitySize ? nil : 1)
                     
-                    Spacer()
+                    if !dynamicType.isAccessibilitySize { Spacer() }
                     
                     VStack(spacing: 6) {
                         Text("Fats")
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(Color("TextColor"))
-                            .fixedSize()
+                            .fixedSize(horizontal: !dynamicType.isAccessibilitySize, vertical: true)
 
                         HStack(spacing: 4) {
                             Text("\(AppSettings.fatsGoal)")
@@ -57,17 +65,22 @@ struct NutrientsCard: View {
                                 .fontDesign(.rounded)
                                 .foregroundStyle(Color("TextColor"))
                         }
+                        if dynamicType.isAccessibilitySize {
+                            Text(AppSettings.fatsRatio, format: .percent.precision(.fractionLength(0)))
+                                .font(.caption)
+                                .foregroundStyle(Color("SecondaryTextColor"))
+                        }
                     }
-                    .lineLimit(1)
+                    .lineLimit(dynamicType.isAccessibilitySize ? nil : 1)
                     
-                    Spacer()
+                    if !dynamicType.isAccessibilitySize { Spacer() }
                     
                     VStack(spacing: 6) {
                         Text("Protein")
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(Color("TextColor"))
-                            .fixedSize()
+                            .fixedSize(horizontal: !dynamicType.isAccessibilitySize, vertical: true)
 
                         HStack(spacing: 4) {
                             Text("\(AppSettings.proteinGoal)")
@@ -82,9 +95,15 @@ struct NutrientsCard: View {
                                 .fontDesign(.rounded)
                                 .foregroundStyle(Color("TextColor"))
                         }
+                        if dynamicType.isAccessibilitySize {
+                            Text(AppSettings.proteinRatio, format: .percent.precision(.fractionLength(0)))
+                                .font(.caption)
+                                .foregroundStyle(Color("SecondaryTextColor"))
+                        }
                     }
-                    .lineLimit(1)
+                    .lineLimit(dynamicType.isAccessibilitySize ? nil : 1)
                 }
+                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
                 .padding(.horizontal, 20)
             }
         }

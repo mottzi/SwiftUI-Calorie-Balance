@@ -4,6 +4,7 @@ import WidgetKit
 /// Settings screen for goals, units, and appearance.
 struct SettingsPage: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
@@ -32,17 +33,20 @@ struct SettingsPage: View {
                     UnitsCard()
                     ColorsCard()
                 }
+                .accessibilityScrollWidth(dynamicType.isAccessibilitySize)
                 
                 VStack(spacing: 2) {
                     HStack(spacing: 6) {
-                        Image(systemName: "laurel.leading")
-                            .font(.system(size: 42))
-                            .fontWeight(.black)
-                            .foregroundStyle(LinearGradient(
-                                colors: [Color("TextColor"), Color("TextColor").opacity(0.5)],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            ))
+                        if !dynamicType.isAccessibilitySize {
+                            Image(systemName: "laurel.leading")
+                                .font(.system(size: 42))
+                                .fontWeight(.black)
+                                .foregroundStyle(LinearGradient(
+                                    colors: [Color("TextColor"), Color("TextColor").opacity(0.5)],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                ))
+                        }
 
                         Link(
                             destination: URL(
@@ -50,11 +54,14 @@ struct SettingsPage: View {
                             )!
                         ) {
                             VStack(spacing: 4) {
-                                HStack(spacing: 4) {
+                                (dynamicType.isAccessibilitySize
+                                    ? AnyLayout(VStackLayout(alignment: .center, spacing: 4))
+                                    : AnyLayout(HStackLayout(spacing: 4))) {
                                     Text("Rate us on the")
                                         .font(.headline)
                                         .fontWeight(.semibold)
                                         .foregroundStyle(Color("TextColor").opacity(0.9))
+                                        .fixedSize(horizontal: false, vertical: true)
 
                                     Text(verbatim: "App Store")
                                         .font(.headline)
@@ -82,17 +89,20 @@ struct SettingsPage: View {
                         }
                         .buttonStyle(.plain)
                         
-                        Image(systemName: "laurel.trailing")
-                            .font(.system(size: 42))
-                            .fontWeight(.black)
-                            .foregroundStyle(LinearGradient(
-                                colors: [Color("TextColor"), Color("TextColor").opacity(0.5)],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            ))
+                        if !dynamicType.isAccessibilitySize {
+                            Image(systemName: "laurel.trailing")
+                                .font(.system(size: 42))
+                                .fontWeight(.black)
+                                .foregroundStyle(LinearGradient(
+                                    colors: [Color("TextColor"), Color("TextColor").opacity(0.5)],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                ))
+                        }
                     }
                     .padding(.top, 10)
                     .foregroundStyle(Color("TextColor"))
+                    .dynamicTypeSize(...DynamicTypeSize.accessibility2)
                     
                     Divider()
                         .frame(width: 190)
@@ -100,7 +110,9 @@ struct SettingsPage: View {
                         .padding(.top, 4)
                         .padding(.bottom, 6)
                 
-                    HStack(spacing: 24) {
+                    (dynamicType.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .center, spacing: 12))
+                        : AnyLayout(HStackLayout(spacing: 24))) {
                         Link(destination: URL(string: "https://x.com/BerkenSayilir")!) {
                             HStack(spacing: 3) {
                                 Text("Contact")
@@ -140,9 +152,11 @@ struct SettingsPage: View {
                         }
                         .buttonStyle(.plain)
                     }
+                    .dynamicTypeSize(...DynamicTypeSize.accessibility2)
                     .padding(.bottom)
                 }
                 .padding(.top, 6)
+                .accessibilityScrollWidth(dynamicType.isAccessibilitySize)
             }
             .scrollIndicators(.hidden)
             .softTopScrollEdge()
@@ -234,6 +248,19 @@ extension SettingsPage {
 
     private var usesLegacyToolbar: Bool {
         if #available(iOS 26, *) { false } else { true }
+    }
+
+}
+
+private extension View {
+
+    @ViewBuilder
+    func accessibilityScrollWidth(_ enabled: Bool) -> some View {
+        if enabled {
+            containerRelativeFrame(.horizontal)
+        } else {
+            self
+        }
     }
 
 }

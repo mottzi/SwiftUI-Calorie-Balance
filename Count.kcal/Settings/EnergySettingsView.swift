@@ -3,6 +3,7 @@ import SwiftUI
 /// Controls for the weight goal, energy source, and daily balance target.
 struct EnergySettingsView: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
     @EnvironmentObject private var AppSettings: Settings
@@ -13,8 +14,10 @@ struct EnergySettingsView: View {
         
     var body: some View {
         VStack(spacing: 22) {
-            HStack(alignment: .bottom) {
-                Spacer()
+            (dynamicType.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .center, spacing: 12))
+                : AnyLayout(HStackLayout(alignment: .bottom))) {
+                if !dynamicType.isAccessibilitySize { Spacer() }
                 
                 VStack(spacing: 12) {
                     Text("I want to...")
@@ -39,18 +42,21 @@ struct EnergySettingsView: View {
                         .foregroundStyle(Color("TextColor"))
                         
                 }
-                .padding(.horizontal, 30)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+                .padding(.horizontal, dynamicType.isAccessibilitySize ? 20 : 30)
                 .padding(.vertical, 20)
+                .frame(maxWidth: dynamicType.isAccessibilitySize ? .infinity : nil)
                 .modifier(EnergySettingsCardStyle())
 
-                Spacer()
+                if !dynamicType.isAccessibilitySize { Spacer() }
                 
                 VStack(spacing: 12) {
                     Text("For burned calories, use...")
                         .font(.subheadline)
                         .fontDesign(.rounded)
                         .foregroundStyle(Color("TextColor"))
-                        .frame(width: 100)
+                        .frame(width: dynamicType.isAccessibilitySize ? nil : 100)
+                        .fixedSize(horizontal: false, vertical: true)
                     
                     IconPicker(
                         firstIcon: "heart.fill",
@@ -68,25 +74,30 @@ struct EnergySettingsView: View {
                         .foregroundStyle(Color("TextColor"))
                     
                 }
-                .padding(.horizontal, 30)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+                .padding(.horizontal, dynamicType.isAccessibilitySize ? 20 : 30)
                 .padding(.vertical, 20)
+                .frame(maxWidth: dynamicType.isAccessibilitySize ? .infinity : nil)
                 .modifier(EnergySettingsCardStyle())
 
-                Spacer()
+                if !dynamicType.isAccessibilitySize { Spacer() }
             }
+            .padding(.horizontal, dynamicType.isAccessibilitySize ? 16 : 0)
                         
             VStack(spacing: 12) {
                 BurnedEnergyInputRow(.resting, focusedField: $focusedField)
-                    .frame(height: 20)
+                    .frame(height: dynamicType.isAccessibilitySize ? nil : 20)
                     .padding(.top, 6)
                     .padding(.horizontal, 15)
                     .padding(.bottom, 8)
 
                 BurnedEnergyInputRow(.active, focusedField: $focusedField)
-                    .frame(height: 20)
+                    .frame(height: dynamicType.isAccessibilitySize ? nil : 20)
                     .padding(.horizontal, 15)
                 
-                HStack(alignment: .lastTextBaseline) {
+                (dynamicType.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+                    : AnyLayout(HStackLayout(alignment: .lastTextBaseline))) {
                     HStack(spacing: 8) {
                         Text("Total Burned")
                             .foregroundStyle(Color("TextColor"))
@@ -99,9 +110,9 @@ struct EnergySettingsView: View {
                     }
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .fixedSize()
+                    .fixedSize(horizontal: !dynamicType.isAccessibilitySize, vertical: true)
                     
-                    Spacer()
+                    if !dynamicType.isAccessibilitySize { Spacer() }
                     
                     HStack(alignment: .lastTextBaseline) {
                         Text("\(AppSettings.dataSource == .apple ? (AppSettings.showActive + AppSettings.showResting) : (AppSettings.customCalActive + AppSettings.customCalPassive))")
@@ -115,7 +126,8 @@ struct EnergySettingsView: View {
                         EnergyUnitLabel()
                     }
                 }
-                .frame(height: 20)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+                .frame(height: dynamicType.isAccessibilitySize ? nil : 20)
                 .background {
                     RoundedRectangle(cornerRadius: 40)
                         .fill(AppSettings.AppBackground)
@@ -156,16 +168,18 @@ struct EnergySettingsView: View {
             .animation(.snappy, value: AppSettings.dataSource)
             
             VStack(spacing: 12) {
-                HStack(alignment: .lastTextBaseline) {
+                (dynamicType.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+                    : AnyLayout(HStackLayout(alignment: .lastTextBaseline))) {
                     Text(AppSettings.weightGoal == .lose ? "Calorie Deficit" : "Calorie Surplus")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
                         .animation(.default, value: AppSettings.weightGoal)
-                        .fixedSize()
+                        .fixedSize(horizontal: !dynamicType.isAccessibilitySize, vertical: true)
                     
-                    Spacer()
+                    if !dynamicType.isAccessibilitySize { Spacer() }
                     
                     HStack(alignment: .lastTextBaseline) {
                         TextField(String("0"), value: $AppSettings.balanceGoal, format: .number)
@@ -189,13 +203,17 @@ struct EnergySettingsView: View {
                         EnergyUnitLabel()
                     }
                 }
+                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
                 .padding(.horizontal, 15)
 
                 
-                HStack(alignment: .lastTextBaseline) {
+                (dynamicType.isAccessibilitySize
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+                    : AnyLayout(HStackLayout(alignment: .lastTextBaseline))) {
                     HStack(alignment: .center, spacing: 8) {
                         Text("Eating goal")
                             .foregroundStyle(Color("TextColor"))
+                            .fixedSize(horizontal: false, vertical: true)
                         
                         if AppSettings.maxEatingEnergy() <= 0 {
                             Image(systemName: "exclamationmark.triangle.fill")
@@ -206,12 +224,11 @@ struct EnergySettingsView: View {
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     
-                    Spacer()
+                    if !dynamicType.isAccessibilitySize { Spacer() }
                     
                     HStack(alignment: .lastTextBaseline) {
                         Text("\(AppSettings.maxEatingEnergy())")
                             .lineLimit(1)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundStyle(Color("TextColor"))
@@ -220,7 +237,8 @@ struct EnergySettingsView: View {
                         EnergyUnitLabel()
                     }
                 }
-                .frame(height: 20)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+                .frame(minHeight: 20)
                 .background {
                     RoundedRectangle(cornerRadius: 40)
                         .fill(AppSettings.AppBackground)
@@ -281,6 +299,7 @@ struct EnergySettingsView: View {
 /// Resting or active calorie control for the selected energy source.
 private struct BurnedEnergyInputRow: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var settings: Settings
 
     @Environment(HSlider.self) private var slider
@@ -294,7 +313,9 @@ private struct BurnedEnergyInputRow: View {
     }
 
     var body: some View {
-        HStack(alignment: .lastTextBaseline) {
+        (dynamicType.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+            : AnyLayout(HStackLayout(alignment: .lastTextBaseline))) {
             HStack(spacing: 8) {
                 Text(title)
                     .foregroundStyle(Color("TextColor"))
@@ -307,9 +328,9 @@ private struct BurnedEnergyInputRow: View {
             }
             .font(.subheadline)
             .fontWeight(.semibold)
-            .fixedSize()
+            .fixedSize(horizontal: !dynamicType.isAccessibilitySize, vertical: true)
 
-            Spacer()
+            if !dynamicType.isAccessibilitySize { Spacer() }
 
             HStack(alignment: .lastTextBaseline) {
                 if settings.dataSource == .custom {
@@ -318,8 +339,8 @@ private struct BurnedEnergyInputRow: View {
                         .keyboardType(.numberPad)
                         .autocorrectionDisabled(true)
                         .textInputAutocapitalization(.never)
-                        .multilineTextAlignment(.trailing)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .multilineTextAlignment(dynamicType.isAccessibilitySize ? .leading : .trailing)
+                        .frame(maxWidth: .infinity, alignment: dynamicType.isAccessibilitySize ? .leading : .trailing)
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundStyle(Color("TextColor"))
@@ -331,7 +352,7 @@ private struct BurnedEnergyInputRow: View {
                         }
                 } else {
                     Text("\(healthValue)")
-                        .frame(width: 50, alignment: .trailing)
+                        .frame(width: dynamicType.isAccessibilitySize ? nil : 50, alignment: dynamicType.isAccessibilitySize ? .leading : .trailing)
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundStyle(Color("TextColor"))
@@ -342,6 +363,7 @@ private struct BurnedEnergyInputRow: View {
                 EnergyUnitLabel()
             }
         }
+        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
     }
 
 }

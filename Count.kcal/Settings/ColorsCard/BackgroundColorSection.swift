@@ -2,15 +2,18 @@ import SwiftUI
 
 struct BackgroundColorSection: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var AppSettings: Settings
     
     var body: some View {
-        HStack(alignment: .top) {
+        (dynamicType.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
+            : AnyLayout(HStackLayout(alignment: .top))) {
             Text("Background")
                 .font(.subheadline)
                 .fontWeight(.semibold)
             
-            Spacer()
+            if !dynamicType.isAccessibilitySize { Spacer() }
             
             HStack(spacing: 24) {
                 VStack(spacing: 8) {
@@ -97,6 +100,7 @@ struct BackgroundColorSection: View {
             .padding(.vertical, 6)
             .sensoryFeedback(.selection, trigger: AppSettings.appBackground)
         }
+        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
         .padding(.top, 6)
         
         Divider()

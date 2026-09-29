@@ -9,6 +9,7 @@ struct CalorieColorSection: View {
             Text("Burned Calories")
                 .font(.subheadline)
                 .fontWeight(.semibold)
+                .fixedSize(horizontal: false, vertical: true)
 
             Spacer()
 
@@ -16,6 +17,7 @@ struct CalorieColorSection: View {
                 .brightness(level: .primary)
                 .saturation(Settings.baseSaturation)
         }
+        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
 
         Divider()
 
@@ -23,6 +25,7 @@ struct CalorieColorSection: View {
             Text("Consumed Calories")
                 .font(.subheadline)
                 .fontWeight(.semibold)
+                .fixedSize(horizontal: false, vertical: true)
 
             Spacer()
 
@@ -30,6 +33,7 @@ struct CalorieColorSection: View {
                 .brightness(level: .primary)
                 .saturation(Settings.baseSaturation)
         }
+        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
 
         Divider()
     }

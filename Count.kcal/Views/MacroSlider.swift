@@ -155,6 +155,7 @@ extension HSlider {
 /// Slider for adjusting carbohydrate, fat, and protein goal shares.
 struct MacroSlider: View {
 
+    @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.colorScheme) private var colorScheme
@@ -171,12 +172,14 @@ struct MacroSlider: View {
                     .fill(.orange.gradient)
                     .frame(width: SliderData.carbsWidth)
                     .overlay(alignment: .topLeading) {
-                        Text(segmentLabel(SliderData.carbsWidth, total: maxSlider))
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(Color("ContrastColor").brighten(-0.9, in: colorEnvironment))
-                            .offset(x: 6, y: 4)
+                        if !dynamicType.isAccessibilitySize {
+                            Text(segmentLabel(SliderData.carbsWidth, total: maxSlider))
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .fontDesign(.rounded)
+                                .foregroundStyle(Color("ContrastColor").brighten(-0.9, in: colorEnvironment))
+                                .offset(x: 6, y: 4)
+                        }
                     }
                 
                 // Fats slider segment
@@ -184,12 +187,14 @@ struct MacroSlider: View {
                     .fill(Color(red: 217/255, green: 220/255, blue: 214/255).gradient)
                     .frame(width: SliderData.fatsWidth)
                     .overlay(alignment: .topLeading) {
-                        Text(segmentLabel(SliderData.fatsWidth, total: maxSlider))
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(Color("ContrastColor").brighten(-0.9, in: colorEnvironment))
-                            .offset(x: 6, y: 4)
+                        if !dynamicType.isAccessibilitySize {
+                            Text(segmentLabel(SliderData.fatsWidth, total: maxSlider))
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .fontDesign(.rounded)
+                                .foregroundStyle(Color("ContrastColor").brighten(-0.9, in: colorEnvironment))
+                                .offset(x: 6, y: 4)
+                        }
                     }
                     .offset(x: SliderData.carbsWidth)
                     .sensoryFeedback(trigger: SliderData.fatsWidth) { o, n in o != 0 ? .selection : nil }
@@ -199,30 +204,32 @@ struct MacroSlider: View {
                     .fill(.red.gradient)
                     .frame(width: SliderData.protsWidth)
                     .overlay(alignment: .topLeading) {
-                        Text(segmentLabel(SliderData.protsWidth, total: maxSlider))
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(Color("ContrastColor").brighten(-0.9, in: colorEnvironment))
-                            .offset(x: 6, y: 4)
+                        if !dynamicType.isAccessibilitySize {
+                            Text(segmentLabel(SliderData.protsWidth, total: maxSlider))
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .fontDesign(.rounded)
+                                .foregroundStyle(Color("ContrastColor").brighten(-0.9, in: colorEnvironment))
+                                .offset(x: 6, y: 4)
+                        }
                     }
                     .offset(x: SliderData.carbsWidth + SliderData.fatsWidth)
                 
                 // leading handle
                 Rectangle()
                     .foregroundStyle(.clear)
-                    .frame(width: 40)
+                    .frame(width: dynamicType.isAccessibilitySize ? 48 : 40)
                     .contentShape(.rect)
-                    .offset(x: SliderData.carbsWidth - 20)
+                    .offset(x: SliderData.carbsWidth - (dynamicType.isAccessibilitySize ? 24 : 20))
                     .gesture(dragGesture(for: .leading, maxWidth: maxSlider))
 
                 // trailing handle
                 Rectangle()
                     .foregroundStyle(.clear)
-                    .frame(width: 40)
+                    .frame(width: dynamicType.isAccessibilitySize ? 48 : 40)
                 
                 .contentShape(.rect)
-                .offset(x: (SliderData.carbsWidth + SliderData.fatsWidth) - 20)
+                .offset(x: (SliderData.carbsWidth + SliderData.fatsWidth) - (dynamicType.isAccessibilitySize ? 24 : 20))
                 .gesture(dragGesture(for: .trailing, maxWidth: maxSlider))
             }
             .task {
@@ -236,7 +243,7 @@ struct MacroSlider: View {
                 SliderData.updateMacroWeights()
             }
         }
-        .frame(height: 40)
+        .frame(height: dynamicType.isAccessibilitySize ? 50 : 40)
         .frame(maxWidth: .infinity)
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
