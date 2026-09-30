@@ -47,7 +47,7 @@ struct Pager: View {
                         }
                         
                         if streak.showStreaksView {
-                            Card(level: .clear, innerPadding: 0, subtitle: { EmptyView() }) {
+                            Card(level: .clear, innerPadding: 0) {
                                 WeekBalanceGraph(
                                     DataPoints: navigation.weekPages,
                                     selectedDay: navigation.selectedDay,
@@ -67,7 +67,7 @@ struct Pager: View {
                             systemImage: "gear.badge.xmark",
                             description: Text("Set up calorie data and goals")
                         )
-                            .padding(.top, 35)
+                        .padding(.top, 35)
                     }
                 }
             }
