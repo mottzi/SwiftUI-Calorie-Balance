@@ -23,6 +23,9 @@
         }
       }
     },
+    "/ %lld" : {
+
+    },
     "%@" : {
       "localizations" : {
         "de" : {
@@ -110,6 +113,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "%lld / %lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld / %2$lld %3$@"
           }
         }
       }
@@ -1478,6 +1491,7 @@
       }
     },
     "Refresh widget data." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1839,6 +1853,7 @@
       }
     },
     "This causes widget information to update." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
