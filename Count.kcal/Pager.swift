@@ -92,8 +92,8 @@ struct Pager: View {
             .task(id: selectedRefreshKey) { await refreshSelectedDay() }
             .task(id: summaryRefreshKey) { await refreshSummary() }
             .refreshable {
-                await refreshSelectedDay()
-                await refreshSummary()
+                await refreshSelectedDay(force: true)
+                await refreshSummary(force: true)
                 calendarRefresh += 1
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -184,9 +184,9 @@ extension Pager {
     }
 
     /// Refreshes only the day being viewed; cancellation keeps rapid swipes cheap.
-    private func refreshSelectedDay() async {
+    private func refreshSelectedDay(force: Bool = false) async {
         guard scenePhase == .active, let selectedPage else { return }
-        await selectedPage.updateMetrics()
+        await selectedPage.updateMetrics(force: force)
         guard !Task.isCancelled else { return }
         if selectedPage.id == Calendar.current.startOfDay(for: .now) {
             WidgetCenter.shared.reloadAllTimelines()
@@ -194,7 +194,7 @@ extension Pager {
     }
 
     /// Refreshes Today summary data when its inputs change, independent of historical swipes.
-    private func refreshSummary() async {
+    private func refreshSummary(force: Bool = false) async {
         guard scenePhase == .active else { return }
         await AppSettings.updateShow()
         guard !Task.isCancelled else { return }
@@ -205,7 +205,7 @@ extension Pager {
             for page in weekPages {
                 group.addTask {
                     guard !Task.isCancelled else { return }
-                    await page.updateMetrics()
+                    await page.updateMetrics(force: force)
                 }
             }
         }

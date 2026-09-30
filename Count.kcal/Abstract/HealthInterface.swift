@@ -15,6 +15,7 @@ final class HealthInterface: Identifiable, Hashable {
     @ObservationIgnored private let repository: HKRepository
     @ObservationIgnored private let settings: Settings
     @ObservationIgnored private var requestID = 0
+    @ObservationIgnored private var loadedKey: SnapshotKey?
 
     init(_ healthData: HealthData, repository: HKRepository = .shared, settings: Settings = .shared) {
         let day = Calendar.current.startOfDay(for: healthData.date)
@@ -29,13 +30,23 @@ final class HealthInterface: Identifiable, Hashable {
     convenience init(data: HealthData) { self.init(data) }
 
     /// Loads the day and publishes only the latest completed request.
-    func updateMetrics() async {
+    func updateMetrics(animated: Bool = true, force: Bool = false) async {
 
+        guard !Task.isCancelled else { return }
         requestID += 1
         let currentRequest = requestID
+        let key = SnapshotKey(source: settings.dataSource.rawValue,
+                              unit: settings.energyUnit.rawValue,
+                              active: settings.customCalActive, passive: settings.customCalPassive)
+        // Reuse complete snapshots while browsing. Settings and explicit refreshes
+        // invalidate the cache; Today expires sooner because it is still changing.
+        let lifetime: TimeInterval = isTodayPage ? 15 : 60
+        if !force, loadedKey == key, let synced = sample.lastDataSync,
+           Date.now.timeIntervalSince(synced) < lifetime { return }
         #if os(iOS) && DEBUG && targetEnvironment(simulator)
         if SimulatorDashboardFixture.isEnabled {
             sample = SimulatorDashboardFixture.sample(for: id)
+            loadedKey = key
             return
         }
         #endif
@@ -43,7 +54,21 @@ final class HealthInterface: Identifiable, Hashable {
         // discard a cancelled request or one superseded by a later refresh
         guard !Task.isCancelled, currentRequest == requestID else { return }
 
-        withAnimation(.snappy) { sample = updated }
+        loadedKey = key
+        if animated {
+            withAnimation(.snappy) { sample = updated }
+        } else {
+            var transaction = Transaction(animation: nil)
+            transaction.disablesAnimations = true
+            withTransaction(transaction) { sample = updated }
+        }
+    }
+
+    private struct SnapshotKey: Equatable {
+        let source: Int
+        let unit: String
+        let active: Int
+        let passive: Int
     }
 
     /// Compares fixed calendar-day identities.
