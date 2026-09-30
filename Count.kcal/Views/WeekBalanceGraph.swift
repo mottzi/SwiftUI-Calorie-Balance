@@ -1,47 +1,276 @@
 import SwiftUI
 
-/// Recent daily balances with selection of a day in the dashboard.
+/// Week paging and day selection share the dashboard's calendar navigation.
 struct WeekBalanceGraph: View {
+
+    @EnvironmentObject private var settings: Settings
+    @Environment(\.scenePhase) private var scenePhase
+
+    @State private var completedRefreshRevision = 0
+
+    let navigation: DayPager
+    let refreshRevision: Int
+    let selectDay: (Date) -> Void
+
+    var body: some View {
+        ScrollView(.horizontal) {
+            // Loaded weeks retain their identities; SwiftUI creates only nearby charts.
+            LazyHStack(spacing: 0) {
+                ForEach(navigation.balanceWeeks) { week in
+                    WeekBalanceChart(
+                        dataPoints: week.days,
+                        selectedDay: navigation.selectedDay,
+                        selectDay: selectDay
+                    )
+                    .padding(.horizontal, 12)
+                    .containerRelativeFrame(.horizontal)
+                    .id(week.id)
+                }
+            }
+            .scrollTargetLayout()
+        }
+        .scrollIndicators(.hidden)
+        .calendarPaging(
+            selection: navigation.balanceWeekStart(for: navigation.selectedDay),
+            animated: true,
+            onSelect: { start in
+                navigation.selectDay(navigation.day(inBalanceWeek: start), animated: true)
+            },
+            onActivity: { scrolling in
+                navigation.weekIsScrolling = scrolling
+                navigation.ensureSelectionBuffer()
+            }
+        )
+        .accessibilityScrollAction { edge in
+            let offset = edge == .leading ? -7 : edge == .trailing ? 7 : 0
+            guard offset != 0 else { return }
+            let start = navigation.balanceWeekStart(for: navigation.selectedDay)
+            guard let next = Calendar.current.date(byAdding: .day, value: offset, to: start) else { return }
+            let day = navigation.day(inBalanceWeek: next)
+            navigation.ensurePagesForSelection(day)
+            navigation.selectDay(day, animated: true)
+        }
+        .task(id: refreshKey) { await refreshWeek() }
+    }
+
+    private var refreshKey: WeekRefreshKey {
+        WeekRefreshKey(
+            start: navigation.balanceWeekStart(for: navigation.selectedDay),
+            today: navigation.weekPages.last!.id,
+            active: scenePhase == .active,
+            source: settings.dataSource.rawValue,
+            unit: settings.energyUnit.rawValue,
+            activeGoal: settings.customCalActive,
+            passiveGoal: settings.customCalPassive,
+            revision: refreshRevision,
+            scrolling: navigation.isScrolling
+        )
+    }
+
+    private func refreshWeek() async {
+        let key = refreshKey
+        guard key.active else { return }
+        guard !key.scrolling else { return }
+        let force = completedRefreshRevision != key.revision
+
+        let calendar = Calendar.current
+        // Load the selected week first, then its immediate neighbours. Each shared
+        // day model owns snapshot freshness, including settings invalidation.
+        let weeks = navigation.balanceWeeks.filter {
+            abs(calendar.dateComponents([.day], from: key.start, to: $0.id).day ?? 0) <= 7
+        }.sorted {
+            abs($0.id.timeIntervalSince(key.start)) < abs($1.id.timeIntervalSince(key.start))
+        }
+        for week in weeks {
+            guard !Task.isCancelled else { return }
+            // Pager owns the latest week's refresh and the selected dashboard day.
+            guard week.id != navigation.weekPages.first?.id else { continue }
+            let days = week.days.filter { $0.id != navigation.selectedDay }
+            // Bound query fan-out instead of starting 7 x 8 HealthKit queries at once.
+            for offset in stride(from: 0, to: days.count, by: 2) {
+                guard !Task.isCancelled else { return }
+                let batch = days[offset..<min(offset + 2, days.count)]
+                await withTaskGroup(of: Void.self) { group in
+                    for day in batch {
+                        group.addTask {
+                            guard !Task.isCancelled else { return }
+                            await day.updateMetrics(animated: false, force: force)
+                        }
+                    }
+                }
+            }
+            guard !Task.isCancelled else { return }
+        }
+        completedRefreshRevision = key.revision
+    }
+
+}
+
+// Both calendar strips use the same native paging and visibility policy.
+extension View {
+    @ViewBuilder
+    func calendarPaging(
+        selection: Date,
+        animated: Bool,
+        onSelect: @escaping (Date) -> Void,
+        onActivity: @escaping (Bool) -> Void
+    ) -> some View {
+        if #available(iOS 18, *) {
+            modifier(CalendarPaging(selection: selection, animated: animated,
+                                    onSelect: onSelect, onActivity: onActivity))
+        } else {
+            modifier(LegacyCalendarPaging(selection: selection, animated: animated,
+                                          onSelect: onSelect, onActivity: onActivity))
+        }
+    }
+}
+
+@available(iOS 18, *)
+private struct CalendarPaging: ViewModifier {
+    let selection: Date
+    let animated: Bool
+    let onSelect: (Date) -> Void
+    let onActivity: (Bool) -> Void
+    @State private var position: ScrollPosition
+    @State private var phase: ScrollPhase = .idle
+    @State private var visibleID: Date?
+
+    init(selection: Date, animated: Bool,
+         onSelect: @escaping (Date) -> Void, onActivity: @escaping (Bool) -> Void) {
+        self.selection = selection
+        self.animated = animated
+        self.onSelect = onSelect
+        self.onActivity = onActivity
+        _position = State(initialValue: ScrollPosition(id: selection, anchor: .center))
+        _visibleID = State(initialValue: selection)
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .scrollTargetBehavior(.paging)
+            .scrollPosition($position, anchor: .center)
+            .onScrollTargetVisibilityChange(idType: Date.self, threshold: 0.5) { ids in
+                guard ids.count == 1, let id = ids.first else { return }
+                visibleID = id
+                guard phase == .interacting || phase == .decelerating, id != selection else { return }
+                onSelect(id)
+            }
+            .onAppear { position.scrollTo(id: selection, anchor: .center) }
+            .onChange(of: selection) { _, day in
+                // A user's midpoint selection already belongs to this scroll.
+                guard visibleID != day else { return }
+                withAnimation(animated ? .snappy : nil) {
+                    position.scrollTo(id: day, anchor: .center)
+                }
+            }
+            .onScrollPhaseChange { _, phase in
+                self.phase = phase
+                onActivity(phase != .idle)
+            }
+    }
+}
+
+/// iOS 17 uses SwiftUI's ID binding for native paging and selection.
+private struct LegacyCalendarPaging: ViewModifier {
+    let selection: Date
+    let animated: Bool
+    let onSelect: (Date) -> Void
+    let onActivity: (Bool) -> Void
+    @State private var position: Date?
+    @State private var programmaticTarget: Date?
+
+    init(selection: Date, animated: Bool,
+         onSelect: @escaping (Date) -> Void, onActivity: @escaping (Bool) -> Void) {
+        self.selection = selection
+        self.animated = animated
+        self.onSelect = onSelect
+        self.onActivity = onActivity
+        _position = State(initialValue: selection)
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .scrollTargetBehavior(.paging)
+            .scrollPosition(id: $position, anchor: .center)
+            .onChange(of: position) { _, day in
+                guard let day else { return }
+                if let target = programmaticTarget {
+                    if day == target { programmaticTarget = nil }
+                } else if day != selection {
+                    onSelect(day)
+                }
+            }
+            .onChange(of: selection) { _, day in
+                guard position != day else { return }
+                programmaticTarget = day
+                withAnimation(animated ? .snappy : nil) { position = day }
+            }
+    }
+}
+
+private struct WeekRefreshKey: Hashable {
+    var start: Date
+    let today: Date
+    let active: Bool
+    let source: Int
+    let unit: String
+    let activeGoal: Int
+    let passiveGoal: Int
+    let revision: Int
+    let scrolling: Bool
+}
+
+/// One compact seven-day balance page; also used by self-contained previews.
+struct WeekBalanceChart: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var settings: Settings
+    @Environment(\.layoutDirection) private var layoutDirection
 
     private let graphHeight: CGFloat = 60
 
-    var DataPoints: [HealthInterface]
+    let dataPoints: [HealthInterface]
 
     let selectedDay: Date
     let selectDay: (Date) -> Void
     
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(DataPoints, id: \.id) { point in
+            ForEach(dataPoints, id: \.id) { point in
                 Button {
                     selectDay(point.id)
                 } label: {
                     VStack(spacing: 6) {
-                        ZStack {
-                            Image(systemName: "circle.fill")
-                                .foregroundStyle(Color("TextColor"))
-                                .font(.system(size: 18))
-                                .opacity(isDaySelected(barDay: point.sample.date) ? 1 : 0)
-                
-                            Text("\(point.sample.date.workday)")
-                                .font(dynamicType.isAccessibilitySize ? .caption2 : .system(size: 12))
-                                .fontDesign(.rounded)
-                                .fontWeight(.bold)
+                        HStack(spacing: 2) {
+                            ZStack {
+                                Image(systemName: "circle.fill")
+                                    .foregroundStyle(Color("TextColor"))
+                                    .font(.system(size: 18))
+                                    .opacity(isDaySelected(barDay: point.id) ? 1 : 0)
+
+                                Text("\(point.id.workday)")
+                                    .font(dynamicType.isAccessibilitySize ? .caption2 : .system(size: 12))
+                                    .fontDesign(.rounded)
+                                    .fontWeight(.bold)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.7)
+                                    .foregroundStyle(
+                                        isDaySelected(barDay: point.id) ? Color("ContrastColor") : Color("TextColor")
+                                    )
+                                    .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+                            }
+                            .animation(.snappy, value: isDaySelected(barDay: point.id))
+                            Text(point.id, format: .dateTime.day())
+                                .font(.system(size: 10, weight: .medium, design: .rounded))
+                                .foregroundStyle(Color("SecondaryTextColor"))
                                 .lineLimit(1)
-                                .minimumScaleFactor(0.7)
-                                .foregroundStyle(
-                                    isDaySelected(barDay: point.sample.date) ? Color("ContrastColor") : Color("TextColor")
-                                )
-                                .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                         }
+                        .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                     
                         VBarBalanceGraph(
                             energy: point.isTodayPage ? point.sample.midnight : point.sample.now,
                             maxEnergy: maxEnergy,
-                            date: point.sample.date,
+                            date: point.id,
                             isSelected: isDaySelected(barDay: point.id)
                         )
                         .frame(height: graphHeight)
@@ -52,6 +281,7 @@ struct WeekBalanceGraph: View {
                 .buttonStyle(.plain)
                 .accessibilityLabel(Text(point.id, format: .dateTime.weekday(.wide).month().day()))
                 .accessibilityValue(Text("\(abs((point.isTodayPage ? point.sample.midnight : point.sample.now).balance))"))
+                .accessibilityAddTraits(isDaySelected(barDay: point.id) ? .isSelected : [])
             }
         }
         .background {
@@ -77,13 +307,13 @@ struct WeekBalanceGraph: View {
                         // translucent fills cannot let the dots show through.
                         Path { mask in
                             mask.addRect(CGRect(origin: .zero, size: geometry.size))
-                            let columnWidth = geometry.size.width / CGFloat(DataPoints.count)
-                            for (index, point) in DataPoints.enumerated() {
+                            let columnWidth = geometry.size.width / CGFloat(dataPoints.count)
+                            for (index, point) in dataPoints.enumerated() {
                                 let energy = point.isTodayPage ? point.sample.midnight : point.sample.now
                                 let isDeficit = energy.balance > 0
                                 let height = graphHeight / 2 * CGFloat(abs(energy.balance)) / CGFloat(maxEnergy)
                                 let barRect = CGRect(
-                                    x: CGFloat(index) * columnWidth + columnWidth * 0.125,
+                                    x: CGFloat(layoutDirection == .leftToRight ? index : dataPoints.count - index - 1) * columnWidth + columnWidth * 0.125,
                                     y: isDeficit ? baseline - height - 1 : baseline + 1,
                                     width: columnWidth * 0.75,
                                     height: height
@@ -102,21 +332,21 @@ struct WeekBalanceGraph: View {
 
 }
 
-extension WeekBalanceGraph {
+extension WeekBalanceChart {
 
     func isDaySelected(barDay: Date) -> Bool {
         Calendar.current.startOfDay(for: barDay) == selectedDay
     }
 
     var maxEnergy: Int {
-        DataPoints.map { point in
+        dataPoints.map { point in
             abs((point.isTodayPage ? point.sample.midnight : point.sample.now).balance)
         }.max() ?? 0
     }
 
 }
 
-extension WeekBalanceGraph {
+extension WeekBalanceChart {
 
     /// Daily balance bar with goal feedback for past days.
     struct VBarBalanceGraph: View {
@@ -186,7 +416,7 @@ extension WeekBalanceGraph {
 
 }
 
-extension WeekBalanceGraph.VBarBalanceGraph {
+extension WeekBalanceChart.VBarBalanceGraph {
 
     var barChartRatio: Double {
         guard maxEnergy > 0 else { return 0 }

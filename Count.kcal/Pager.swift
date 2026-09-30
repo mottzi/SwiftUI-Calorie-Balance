@@ -42,18 +42,17 @@ struct Pager: View {
                                 navigation: navigation,
                                 sceneActive: scenePhase == .active,
                                 refreshRevision: calendarRefresh,
-                                selectDay: selectDay
+                                selectDay: { selectDay($0) }
                             )
                         }
                         
                         if streak.showStreaksView {
                             Card(level: .clear, innerPadding: 0) {
                                 WeekBalanceGraph(
-                                    DataPoints: navigation.weekPages,
-                                    selectedDay: navigation.selectedDay,
-                                    selectDay: selectDay
+                                    navigation: navigation,
+                                    refreshRevision: manualRefresh + calendarRefresh,
+                                    selectDay: { selectDay($0) }
                                 )
-                                    .padding(.horizontal, 12)
                             }
                             .padding(.bottom, 15)
                         }
@@ -159,7 +158,7 @@ extension Pager {
     private var selectedRefreshKey: DayRefreshKey {
         DayRefreshKey(
             day: navigation.selectedDay,
-            active: scenePhase == .active,
+            active: scenePhase == .active && !navigation.isScrolling,
             source: AppSettings.dataSource.rawValue,
             unit: AppSettings.energyUnit.rawValue,
             activeGoal: AppSettings.customCalActive,
@@ -185,7 +184,7 @@ extension Pager {
 
     /// Refreshes only the day being viewed; cancellation keeps rapid swipes cheap.
     private func refreshSelectedDay(force: Bool = false) async {
-        guard scenePhase == .active, let selectedPage else { return }
+        guard scenePhase == .active, !navigation.isScrolling, let selectedPage else { return }
         await selectedPage.updateMetrics(force: force)
         guard !Task.isCancelled else { return }
         if selectedPage.id == Calendar.current.startOfDay(for: .now) {
@@ -212,14 +211,20 @@ extension Pager {
         _ = await (weightRefresh, streakRefresh)
     }
 
-    /// Animates navigation to the selected calendar day.
-    private func selectDay(_ date: Date) {
+    /// Selects a day, optionally animating the dashboard scroll.
+    private func selectDay(_ date: Date, animated: Bool = true) {
         let day = Calendar.current.startOfDay(for: date)
         // prepare scroll targets without animating inserted pages
         withTransaction(Transaction(animation: nil)) {
             navigation.ensurePagesForSelection(day)
         }
-        withAnimation(.snappy) { navigation.selectedDay = day }
+        if animated {
+            withAnimation(.snappy) { navigation.selectDay(day, animated: true) }
+        } else {
+            var transaction = Transaction(animation: nil)
+            transaction.disablesAnimations = true
+            withTransaction(transaction) { navigation.selectDay(day) }
+        }
     }
 
     // The date describes the selected page in every build configuration.
@@ -338,17 +343,15 @@ extension Pager {
 
 /// Horizontal day targets that keep their calendar-day identity while browsing.
 private struct DayPageStrip: View {
-
-    @Bindable var navigation: DayPager
-
+    let navigation: DayPager
     @Binding var todayPageMode: PagerSelection
 
     var body: some View {
         ScrollView(.horizontal) {
             LazyHStack(alignment: .top, spacing: 0) {
-                ForEach(navigation.pages, id: \.id) { page in
+                ForEach(navigation.pages) { page in
                     Dashboard(todayPageMode: $todayPageMode)
-                        .containerRelativeFrame(.horizontal, count: 1, span: 1, spacing: 10.0)
+                        .containerRelativeFrame(.horizontal)
                         .environment(page)
                         .id(page.id)
                 }
@@ -356,25 +359,17 @@ private struct DayPageStrip: View {
             .scrollTargetLayout()
             .padding(.bottom, 20)
         }
-        .scrollTargetBehavior(.paging)
         .scrollIndicators(.hidden)
-        .scrollPosition(id: scrollDay)
-    }
-
-}
-
-extension DayPageStrip {
-
-    private var scrollDay: Binding<Date?> {
-        Binding(
-            get: { navigation.selectedDay },
-            set: { day in
-                guard let day else { return }
-                navigation.selectedDay = Calendar.current.startOfDay(for: day)
+        .calendarPaging(
+            selection: navigation.selectedDay,
+            animated: navigation.animatesDayScroll,
+            onSelect: { navigation.selectDay($0) },
+            onActivity: { scrolling in
+                navigation.dayIsScrolling = scrolling
+                navigation.ensureSelectionBuffer()
             }
         )
     }
-
 }
 
 /// Toolbar control for the streak count and chart visibility.

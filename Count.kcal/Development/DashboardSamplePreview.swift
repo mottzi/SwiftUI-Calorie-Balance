@@ -68,8 +68,8 @@ private struct DashboardSamplePreview: View {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
                         Card(level: .clear, innerPadding: 0) {
-                            WeekBalanceGraph(
-                                DataPoints: pages,
+                            WeekBalanceChart(
+                                dataPoints: pages,
                                 selectedDay: selectedPage?.id ?? Calendar.current.startOfDay(for: .now),
                                 selectDay: { day in
                                     selectedPage = pages.first { $0.id == day }
