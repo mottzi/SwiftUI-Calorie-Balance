@@ -20,7 +20,8 @@ struct WeekBalanceGraph: View {
                     WeekBalanceChart(
                         dataPoints: week.days,
                         selectedDay: navigation.selectedDay,
-                        selectDay: selectDay
+                        selectDay: selectDay,
+                        navigation: navigation
                     )
                     .padding(.horizontal, 12)
                     .containerRelativeFrame(.horizontal)
@@ -28,13 +29,23 @@ struct WeekBalanceGraph: View {
                 }
             }
             .scrollTargetLayout()
+            .calendarScrollFollowing(navigation: navigation, strip: .week)
         }
         .scrollIndicators(.hidden)
         .calendarPaging(
+            navigation: navigation, strip: .week,
             selection: navigation.balanceWeekStart(for: navigation.selectedDay),
             animated: true,
             onSelect: { start in
-                navigation.selectDay(navigation.day(inBalanceWeek: start), animated: true)
+                if navigation.scroll.driver == .week {
+                    let origin = navigation.day(at: navigation.scroll.originDay)
+                    let originWeek = navigation.balanceWeekStart(for: origin)
+                    let day = start == originWeek ? origin : start < originWeek
+                        ? Calendar.current.date(byAdding: .day, value: 6, to: start)! : start
+                    navigation.selectDay(day)
+                } else {
+                    navigation.selectDay(navigation.day(inBalanceWeek: start), animated: true)
+                }
             },
             onActivity: { scrolling in
                 navigation.weekIsScrolling = scrolling
@@ -110,13 +121,14 @@ struct WeekBalanceGraph: View {
 extension View {
     @ViewBuilder
     func calendarPaging(
+        navigation: DayPager, strip: CalendarStrip,
         selection: Date,
         animated: Bool,
         onSelect: @escaping (Date) -> Void,
         onActivity: @escaping (Bool) -> Void
     ) -> some View {
         if #available(iOS 18, *) {
-            modifier(CalendarPaging(selection: selection, animated: animated,
+            modifier(CalendarPaging(navigation: navigation, strip: strip, selection: selection, animated: animated,
                                     onSelect: onSelect, onActivity: onActivity))
         } else {
             modifier(LegacyCalendarPaging(selection: selection, animated: animated,
@@ -127,6 +139,8 @@ extension View {
 
 @available(iOS 18, *)
 private struct CalendarPaging: ViewModifier {
+    let navigation: DayPager
+    let strip: CalendarStrip
     let selection: Date
     let animated: Bool
     let onSelect: (Date) -> Void
@@ -135,8 +149,10 @@ private struct CalendarPaging: ViewModifier {
     @State private var phase: ScrollPhase = .idle
     @State private var visibleID: Date?
 
-    init(selection: Date, animated: Bool,
+    init(navigation: DayPager, strip: CalendarStrip, selection: Date, animated: Bool,
          onSelect: @escaping (Date) -> Void, onActivity: @escaping (Bool) -> Void) {
+        self.navigation = navigation
+        self.strip = strip
         self.selection = selection
         self.animated = animated
         self.onSelect = onSelect
@@ -152,21 +168,83 @@ private struct CalendarPaging: ViewModifier {
             .onScrollTargetVisibilityChange(idType: Date.self, threshold: 0.5) { ids in
                 guard ids.count == 1, let id = ids.first else { return }
                 visibleID = id
-                guard phase == .interacting || phase == .decelerating, id != selection else { return }
+                guard navigation.scroll.driver == strip,
+                      phase == .interacting || phase == .decelerating, id != selection else { return }
                 onSelect(id)
             }
             .onAppear { position.scrollTo(id: selection, anchor: .center) }
             .onChange(of: selection) { _, day in
                 // A user's midpoint selection already belongs to this scroll.
-                guard visibleID != day else { return }
+                guard visibleID != day, navigation.scroll.driver == nil || navigation.scroll.driver == strip else { return }
                 withAnimation(animated ? .snappy : nil) {
                     position.scrollTo(id: day, anchor: .center)
                 }
             }
+            .onScrollGeometryChange(for: Double.self) { geometry in
+                guard geometry.containerSize.width > 0 else { return 0 }
+                return (geometry.contentOffset.x + geometry.contentInsets.leading) / geometry.containerSize.width
+            } action: { _, page in
+                let coordinate = firstCoordinate + page
+                navigation.scroll.observe(strip, coordinate: coordinate)
+                guard phase != .idle else { return }
+                navigation.scroll.update(strip, coordinate: coordinate)
+            }
+            .onChange(of: followerPage) { _, page in
+                guard let page else { return }
+                var transaction = Transaction(animation: nil)
+                transaction.disablesAnimations = true
+                withTransaction(transaction) {
+                    position.scrollTo(id: navigation.day(at: strip == .day ? page : page * 7), anchor: .center)
+                }
+            }
             .onScrollPhaseChange { _, phase in
                 self.phase = phase
+                if phase == .interacting {
+                    navigation.scroll.begin(strip, day: navigation.dayOffset(for: navigation.selectedDay))
+                } else if phase == .idle {
+                    navigation.scroll.end(strip)
+                }
                 onActivity(phase != .idle)
             }
+    }
+
+    private var firstCoordinate: Double {
+        if strip == .day { return navigation.dayOffset(for: navigation.pages.first!.id) }
+        return navigation.dayOffset(for: navigation.balanceWeeks.first!.id) / 7
+    }
+
+    private var followerPage: Double? {
+        guard let sample = navigation.scroll.sample, sample.source != strip else { return nil }
+        return (strip == .day ? sample.day : sample.week).rounded()
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func calendarScrollFollowing(navigation: DayPager, strip: CalendarStrip) -> some View {
+        if #available(iOS 18, *) {
+            modifier(CalendarScrollFollowing(navigation: navigation, strip: strip))
+        } else {
+            self
+        }
+    }
+}
+
+/// The follower's fractional movement is a visual effect; native paging loads its nearby pages.
+@available(iOS 18, *)
+private struct CalendarScrollFollowing: ViewModifier {
+    let navigation: DayPager
+    let strip: CalendarStrip
+
+    func body(content: Content) -> some View {
+        let sample = navigation.scroll.sample
+        let following = navigation.scroll.driver != nil && sample?.source == navigation.scroll.driver && sample?.source != strip
+        let coordinate = strip == .day ? sample?.day : sample?.week
+        let native = following ? (strip == .day ? navigation.scroll.dayPosition : navigation.scroll.weekPosition) : 0
+        content.visualEffect { content, geometry in
+            let width = geometry.bounds(of: .scrollView(axis: .horizontal))?.width ?? 0
+            return content.offset(x: following ? (native - (coordinate ?? native)) * width : 0)
+        }
     }
 }
 
@@ -233,6 +311,7 @@ struct WeekBalanceChart: View {
 
     let selectedDay: Date
     let selectDay: (Date) -> Void
+    var navigation: DayPager? = nil
     
     var body: some View {
         HStack(spacing: 0) {
@@ -242,24 +321,10 @@ struct WeekBalanceChart: View {
                 } label: {
                     VStack(spacing: 6) {
                         HStack(spacing: 2) {
-                            ZStack {
-                                Image(systemName: "circle.fill")
-                                    .foregroundStyle(Color("TextColor"))
-                                    .font(.system(size: 18))
-                                    .opacity(isDaySelected(barDay: point.id) ? 1 : 0)
-
-                                Text("\(point.id.workday)")
-                                    .font(dynamicType.isAccessibilitySize ? .caption2 : .system(size: 12))
-                                    .fontDesign(.rounded)
-                                    .fontWeight(.bold)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.7)
-                                    .foregroundStyle(
-                                        isDaySelected(barDay: point.id) ? Color("ContrastColor") : Color("TextColor")
-                                    )
-                                    .dynamicTypeSize(...DynamicTypeSize.xxLarge)
-                            }
-                            .animation(.snappy, value: isDaySelected(barDay: point.id))
+                            WeekDayIndicator(label: point.id.workday,
+                                             selected: isDaySelected(barDay: point.id),
+                                             dayOffset: navigation?.dayOffset(for: point.id),
+                                             scroll: navigation?.scroll)
                             Text(point.id, format: .dateTime.day())
                                 .font(.system(size: 10, weight: .medium, design: .rounded))
                                 .foregroundStyle(Color("SecondaryTextColor"))
@@ -453,3 +518,41 @@ extension WeekBalanceChart.VBarBalanceGraph {
 //}
 
 #Preview { PreviewPager }
+
+/// Frame-by-frame progress invalidates just the weekday marker, not health charts.
+private struct WeekDayIndicator: View {
+    @Environment(\.dynamicTypeSize) private var dynamicType
+    let label: String
+    let selected: Bool
+    let dayOffset: Double?
+    let scroll: CalendarScrollState?
+
+    private var weight: Double {
+        if let scroll, scroll.driver != nil, let sample = scroll.sample, sample.source == scroll.driver, let dayOffset {
+            return max(0, 1 - abs(sample.day - dayOffset))
+        }
+        return selected ? 1 : 0
+    }
+
+    var body: some View {
+        ZStack {
+            Image(systemName: "circle.fill")
+                .foregroundStyle(Color("TextColor"))
+                .font(.system(size: 18))
+                .opacity(weight)
+            Text(verbatim: label)
+                .foregroundStyle(Color("TextColor"))
+                .overlay {
+                    Text(verbatim: label)
+                        .foregroundStyle(Color("ContrastColor"))
+                        .opacity(weight)
+                }
+                .font(dynamicType.isAccessibilitySize ? .caption2 : .system(size: 12))
+                .fontDesign(.rounded)
+                .fontWeight(.bold)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+        }
+    }
+}
