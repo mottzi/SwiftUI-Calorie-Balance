@@ -13,7 +13,6 @@ final class DayPager {
     var weekIsScrolling = false
     var isScrolling: Bool { dayIsScrolling || weekIsScrolling }
     var selectedDay: Date
-    let scroll = CalendarScrollState()
 
     /// The day strip applies this intent to its own scroll-position update.
     @ObservationIgnored private(set) var animatesDayScroll = false
@@ -37,20 +36,7 @@ final class DayPager {
     /// Keeps programmatic navigation intent with the selected date.
     func selectDay(_ date: Date, animated: Bool = false) {
         animatesDayScroll = animated
-        let day = Calendar.current.startOfDay(for: date)
-        guard day != selectedDay else { return }
-        if #available(iOS 18, *), animated, scroll.driver == nil {
-            scroll.begin(.day, day: dayOffset(for: selectedDay))
-        }
-        selectedDay = day
-    }
-
-    func dayOffset(for date: Date) -> Double {
-        Double(Calendar.current.dateComponents([.day], from: weekPages.first!.id, to: date).day ?? 0)
-    }
-
-    func day(at offset: Double) -> Date {
-        Calendar.current.date(byAdding: .day, value: Int(offset.rounded()), to: weekPages.first!.id)!
+        selectedDay = Calendar.current.startOfDay(for: date)
     }
 
     /// Returns a cached model without creating one during view evaluation.
@@ -211,57 +197,4 @@ extension DayPager {
 struct BalanceWeek: Identifiable, Equatable {
     let id: Date
     let days: [HealthInterface]
-}
-
-/// Only the active native scroll publishes progress. Followers never publish it back.
-enum CalendarStrip { case day, week }
-
-struct CalendarScrollSample: Equatable {
-    let source: CalendarStrip
-    let day: Double
-    let week: Double
-}
-
-@MainActor
-@Observable
-final class CalendarScrollState {
-    private(set) var driver: CalendarStrip?
-    private(set) var sample: CalendarScrollSample?
-    private(set) var dayPosition = 0.0
-    private(set) var weekPosition = 0.0
-    @ObservationIgnored private(set) var originDay = 0.0
-
-    func begin(_ source: CalendarStrip, day: Double) {
-        guard driver != source else { return }
-        originDay = day
-        driver = source
-    }
-
-    func update(_ source: CalendarStrip, coordinate: Double) {
-        guard driver == source else { return }
-        if source == .day {
-            let week = floor(coordinate / 7)
-            // The week moves only while crossing its last-day/first-day boundary.
-            let transition = max(0, coordinate - week * 7 - 6)
-            sample = CalendarScrollSample(source: source, day: coordinate, week: week + transition)
-        } else {
-            let week = floor(originDay / 7)
-            let delta = coordinate - week
-            let distance = delta < 0 ? originDay - (week * 7 - 1) : (week + 1) * 7 - originDay
-            sample = CalendarScrollSample(source: source, day: originDay + delta * distance, week: coordinate)
-        }
-    }
-
-    func observe(_ source: CalendarStrip, coordinate: Double) {
-        if source == .day { dayPosition = coordinate }
-        else { weekPosition = coordinate }
-    }
-
-    func end(_ source: CalendarStrip) {
-        guard driver == source else { return }
-        if let sample {
-            update(source, coordinate: (source == .day ? sample.day : sample.week).rounded())
-        }
-        driver = nil
-    }
 }

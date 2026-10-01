@@ -352,18 +352,15 @@ private struct DayPageStrip: View {
                 ForEach(navigation.pages) { page in
                     Dashboard(todayPageMode: $todayPageMode)
                         .containerRelativeFrame(.horizontal)
-                        .clipped()
                         .environment(page)
                         .id(page.id)
                 }
             }
             .scrollTargetLayout()
-            .calendarScrollFollowing(navigation: navigation, strip: .day)
             .padding(.bottom, 20)
         }
         .scrollIndicators(.hidden)
         .calendarPaging(
-            navigation: navigation, strip: .day,
             selection: navigation.selectedDay,
             animated: navigation.animatesDayScroll,
             onSelect: { navigation.selectDay($0) },
