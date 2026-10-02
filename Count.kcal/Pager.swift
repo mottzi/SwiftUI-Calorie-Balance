@@ -57,7 +57,10 @@ struct Pager: View {
                             .padding(.bottom, 15)
                         }
                         
-                        DayPageStrip(navigation: navigation, todayPageMode: $todayPageMode)
+                        DayPageStrip(
+                            navigation: navigation,
+                            todayPageMode: $todayPageMode
+                        )
                         
                         WeightCard()
                     } else {
