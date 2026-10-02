@@ -22,7 +22,7 @@ struct WeekBalanceGraph: View {
                         selectedDay: navigation.selectedDay,
                         selectDay: selectDay
                     )
-                    .padding(.horizontal, 12)
+                    .padding(.horizontal, 6)
                     .containerRelativeFrame(.horizontal)
                     .id(week.id)
                 }
