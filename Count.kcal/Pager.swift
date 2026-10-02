@@ -11,6 +11,7 @@ struct Pager: View {
     @State private var showCalendar: Bool = false
     @State private var showSettings: Bool = false
     @State private var currentMonth: Date = .now
+    @State private var calendarDays: [HealthInterface] = []
 
     @EnvironmentObject private var AppSettings: Settings
 
@@ -39,6 +40,7 @@ struct Pager: View {
                         if showCalendar {
                             CDatePicker(
                                 currentMonth: $currentMonth,
+                                days: calendarDays,
                                 navigation: navigation,
                                 sceneActive: scenePhase == .active,
                                 refreshRevision: calendarRefresh,
@@ -90,6 +92,10 @@ struct Pager: View {
                 withTransaction(Transaction(animation: nil)) {
                     navigation.ensureSelectionBuffer()
                 }
+            }
+            .onChange(of: currentMonth) { _, month in
+                guard showCalendar else { return }
+                calendarDays = navigation.calendarPages(for: month)
             }
             .task(id: selectedRefreshKey) { await refreshSelectedDay() }
             .task(id: summaryRefreshKey) { await refreshSummary() }
@@ -248,18 +254,23 @@ extension Pager {
     }
     
     private var calendarButton: some View {
-        Button(action: {
-            withAnimation(.snappy) {
-                showCalendar.toggle()
-            }
-        }
-        , label: {
+        Button(action: toggleCalendar) {
             Image(showCalendar == false ? .customCalendar : .customCalendarSlash)
                 .symbolRenderingMode(.palette)
                 .foregroundStyle(Color("TextColor"))
                 .fontWeight(.medium)
-        })
+        }
         .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
+    }
+
+    private func toggleCalendar() {
+        // Populate the grid before insertion so its first layout has every row.
+        if !showCalendar {
+            calendarDays = navigation.calendarPages(for: currentMonth)
+        }
+        withAnimation(.snappy) {
+            showCalendar.toggle()
+        }
     }
     
     private var settingsButton: some View {
@@ -274,9 +285,7 @@ extension Pager {
 
     private var accessibilityActionsMenu: some View {
         Menu {
-            Button {
-                withAnimation(.snappy) { showCalendar.toggle() }
-            } label: {
+            Button(action: toggleCalendar) {
                 Label("Calendar", systemImage: "calendar")
             }
 

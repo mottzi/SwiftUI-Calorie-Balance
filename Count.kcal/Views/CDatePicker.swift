@@ -10,7 +10,7 @@ struct CDatePicker: View {
 
     @Binding var currentMonth: Date
 
-    @State private var days: [HealthInterface] = []
+    let days: [HealthInterface]
 
     let navigation: DayPager
     let sceneActive: Bool
@@ -106,7 +106,6 @@ struct CDatePicker: View {
         }
         .task(id: calendarRefreshKey) {
             let cells = navigation.calendarPages(for: currentMonth)
-            days = cells
             guard sceneActive else { return }
             let sharedDays = Set(navigation.weekPages.map(\.id) + [navigation.selectedDay])
             let pending = cells.filter { !sharedDays.contains($0.id) }
