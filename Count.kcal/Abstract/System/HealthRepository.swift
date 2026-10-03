@@ -11,8 +11,9 @@ final class HealthRepository {
     init(source: (any HealthDataSource)? = nil) { injectedSource = source }
 
     /// Fetches one daily value with fixed settings and calendar bounds.
-    func fetchDailySnapshot(for date: Date, settings: Settings = .shared, now: Date = .now) async -> HealthData {
+    func fetchDailySnapshot(for date: Date, settings: Settings? = nil, now: Date = .now) async -> HealthData {
 
+        let settings = settings ?? .shared
         // capture the policy and query range before any HealthKit suspension
         let measuredData = dataSource
         let calendar = Calendar.current
@@ -148,9 +149,10 @@ extension HealthRepository {
     func cumDataWeek(
         fetch dataType: HKQuantityTypeIdentifier,
         for date: Date,
-        energyUnit: Settings.EnergyUnit = Settings.shared.energyUnit
+        energyUnit: Settings.EnergyUnit? = nil
     ) async -> Int {
 
+        let energyUnit = energyUnit ?? Settings.shared.energyUnit
         let measuredData = dataSource
         let calendar = Calendar.current
         let end = calendar.startOfDay(for: date)

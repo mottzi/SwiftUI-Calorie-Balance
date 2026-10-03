@@ -20,7 +20,7 @@ final class HSlider {
     private let minSegmentRatio: CGFloat = 0.1
     private let snapTo: CGFloat = 0.05
 
-    init(settings: Settings = .shared) { self.settings = settings }
+    init(settings: Settings? = nil) { self.settings = settings ?? .shared }
 
     /// Updates macro weight goals from the current energy budget and ratios.
     func updateMacroWeights() {

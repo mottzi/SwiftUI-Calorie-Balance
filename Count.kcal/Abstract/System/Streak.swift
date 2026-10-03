@@ -13,9 +13,9 @@ final class Streak {
     @ObservationIgnored private let settings: Settings
     @ObservationIgnored private var requestID = 0
 
-    init(repository: HealthRepository? = nil, settings: Settings = .shared) {
+    init(repository: HealthRepository? = nil, settings: Settings? = nil) {
         self.repository = repository ?? .shared
-        self.settings = settings
+        self.settings = settings ?? .shared
     }
     
     /// Clears the count and invalidates any pending recount, preserving visibility.

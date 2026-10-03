@@ -14,9 +14,9 @@ final class WeightHistory {
     @ObservationIgnored private let settings: Settings
     @ObservationIgnored private var requestID = 0
 
-    init(repository: HealthRepository? = nil, settings: Settings = .shared) {
+    init(repository: HealthRepository? = nil, settings: Settings? = nil) {
         self.repository = repository ?? .shared
-        self.settings = settings
+        self.settings = settings ?? .shared
     }
 
     /// Clears displayed values and prevents an earlier refresh from repopulating them.

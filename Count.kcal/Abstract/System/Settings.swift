@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 /// Shared goals, units, data source, and appearance preferences.
 final class Settings: ObservableObject {
 
