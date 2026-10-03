@@ -252,8 +252,25 @@ extension Pager {
         }
     }
 
-    // The date describes the selected page in every build configuration.
+    @ViewBuilder
     private var selectedDateLabel: some View {
+        #if DEBUG
+        Button {
+            withAnimation(.snappy) {
+                selectedPage?.randomizeHealthData()
+            }
+        } label: {
+            selectedDateText
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint("Randomize this day's health data")
+        .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
+        #else
+        selectedDateText
+        #endif
+    }
+
+    private var selectedDateText: some View {
         Text(selectedPage?.id.relative ?? "")
             .fontWeight(.semibold)
             .fontDesign(.rounded)
