@@ -290,10 +290,10 @@ struct WeekBalanceChart: View {
                 // Keep the existing max-based scale. An out-of-range goal has
                 // no visible reference rather than being clamped to a false value.
                 if settings.balanceGoal > 0, settings.balanceGoal <= maxEnergy {
-                    let ratio = CGFloat(settings.balanceGoal) / CGFloat(maxEnergy)
+                    let ratio = Double(settings.balanceGoal) / Double(maxEnergy)
                     let direction: CGFloat = settings.weightGoal == .lose ? 1 : -1
                     let baseline = geometry.size.height - graphHeight / 2
-                    let goalY = baseline - direction * (graphHeight / 2 * ratio + 1)
+                    let goalY = baseline - direction * (VBarBalanceGraph.barHeight(graphHeight: graphHeight, ratio: ratio) + VBarBalanceGraph.baselineGap)
 
                     Path { path in
                         path.move(to: CGPoint(x: 0, y: goalY))
@@ -312,10 +312,10 @@ struct WeekBalanceChart: View {
                             for (index, point) in dataPoints.enumerated() {
                                 let energy = point.isTodayPage ? point.sample.midnight : point.sample.now
                                 let isDeficit = energy.balance > 0
-                                let height = graphHeight / 2 * CGFloat(abs(energy.balance)) / CGFloat(maxEnergy)
+                                let height = VBarBalanceGraph.barHeight(graphHeight: graphHeight, ratio: Double(energy.balance) / Double(maxEnergy))
                                 let barRect = CGRect(
                                     x: CGFloat(layoutDirection == .leftToRight ? index : dataPoints.count - index - 1) * columnWidth + columnWidth * 0.125,
-                                    y: isDeficit ? baseline - height - 1 : baseline + 1,
+                                    y: isDeficit ? baseline - height - VBarBalanceGraph.baselineGap : baseline + VBarBalanceGraph.baselineGap,
                                     width: columnWidth * 0.75,
                                     height: height
                                 )
@@ -364,6 +364,13 @@ extension WeekBalanceChart {
         let date: Date
         var isSelected: Bool = false
 
+        static let baselineGap: CGFloat = 1
+
+        static func barHeight(graphHeight: CGFloat, ratio: Double) -> CGFloat {
+            // Reserve the gap so maximum bars stay inside the scroll view's bounds.
+            max(0, graphHeight / 2 - baselineGap) * CGFloat(abs(ratio))
+        }
+
         static func barShape(isDeficit: Bool) -> UnevenRoundedRectangle {
             UnevenRoundedRectangle(cornerRadii: RectangleCornerRadii(
                 topLeading: isDeficit ? 10 : 0,
@@ -378,7 +385,7 @@ extension WeekBalanceChart {
                 ZStack {
                     Self.barShape(isDeficit: barChartRatio > 0)
                         .fill(color.brighten(0.1).gradient)
-                        .frame(width: geo.size.width * 0.75, height: (geo.size.height / 2.0) * abs(barChartRatio))
+                        .frame(width: geo.size.width * 0.75, height: barChartHeight(graphHeight: geo.size.height))
                         .overlay {
                             LinearGradient(
                                 colors: [scheme == .dark ? .black : .white, color.brighten(0.1)],
@@ -390,8 +397,8 @@ extension WeekBalanceChart {
                         }
 
                         .offset(y: barChartRatio > 0
-                            ? -barChartHeight(graphHeight: geo.size.height) / 2 - 1
-                            : barChartHeight(graphHeight: geo.size.height) / 2 + 1)
+                            ? -barChartHeight(graphHeight: geo.size.height) / 2 - Self.baselineGap
+                            : barChartHeight(graphHeight: geo.size.height) / 2 + Self.baselineGap)
                     
                     Rectangle()
                         .frame(width: geo.size.width, height: 2)
@@ -444,7 +451,7 @@ extension WeekBalanceChart.VBarBalanceGraph {
     }
 
     func barChartHeight(graphHeight: CGFloat) -> CGFloat {
-        (graphHeight / 2.0) * abs(barChartRatio)
+        Self.barHeight(graphHeight: graphHeight, ratio: barChartRatio)
     }
 
 }
