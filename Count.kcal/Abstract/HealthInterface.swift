@@ -16,50 +16,68 @@ final class HealthInterface: Identifiable, Hashable {
     @ObservationIgnored private let settings: Settings
     @ObservationIgnored private var requestID = 0
     @ObservationIgnored private var loadedKey: SnapshotKey?
+    @ObservationIgnored private var pendingKey: SnapshotKey?
+    @ObservationIgnored private var pendingLoad: Task<Void, Never>?
 
-    init(_ healthData: HealthData, repository: HealthRepository? = nil, settings: Settings? = nil) {
+    init(_ healthData: HealthData, repository: HealthRepository? = nil, settings: Settings = .shared) {
         let day = Calendar.current.startOfDay(for: healthData.date)
         id = day
         var initial = healthData
         initial.date = day
         sample = initial
         self.repository = repository ?? .shared
-        self.settings = settings ?? .shared
+        self.settings = settings
     }
 
     convenience init(data: HealthData) { self.init(data) }
 
-    /// Loads the day and publishes only the latest completed request.
+    /// Shares a day load across callers, including callers cancelled by paging.
     func updateMetrics(animated: Bool = true, force: Bool = false) async {
 
         guard !Task.isCancelled else { return }
+        let key = snapshotKey
+        if pendingKey == key, let pendingLoad {
+            await pendingLoad.value
+            return
+        }
+        let lifetime: TimeInterval = isTodayPage ? 15 : 60
+        if !force, loadedKey == key, let synced = sample.lastDataSync,
+           Date.now.timeIntervalSince(synced) < lifetime { return }
+
+        pendingLoad?.cancel()
         requestID += 1
         let currentRequest = requestID
-        let revision = repository.revision
-        let key = SnapshotKey(
-            revision: revision,
+        pendingKey = key
+        // The day owns this finite load. A cancelled view task must not discard
+        // measurements that another chart or the next swipe can still use.
+        let load = Task { @MainActor in
+            let updated = await repository.fetchDailySnapshot(for: id, settings: settings)
+            guard currentRequest == requestID else { return }
+            pendingLoad = nil
+            pendingKey = nil
+            guard !Task.isCancelled, snapshotKey == key else { return }
+
+            loadedKey = key
+            if animated, sample.lastDataSync != nil {
+                withAnimation(.snappy) { sample = updated }
+            } else {
+                var transaction = Transaction(animation: nil)
+                transaction.disablesAnimations = true
+                withTransaction(transaction) { sample = updated }
+            }
+        }
+        pendingLoad = load
+        await load.value
+    }
+
+    private var snapshotKey: SnapshotKey {
+        SnapshotKey(
+            revision: repository.revision,
             source: settings.dataSource.rawValue,
             unit: settings.energyUnit.rawValue,
             active: settings.customCalActive,
             passive: settings.customCalPassive
         )
-        // Reuse complete snapshots while browsing. Settings and explicit refreshes
-        // invalidate the cache; Today expires sooner because it is still changing.
-        let lifetime: TimeInterval = isTodayPage ? 15 : 60
-        if !force, loadedKey == key, let synced = sample.lastDataSync,
-           Date.now.timeIntervalSince(synced) < lifetime { return }
-        let updated = await repository.fetchDailySnapshot(for: id, settings: settings)
-        // discard a cancelled request or one superseded by a later refresh
-        guard !Task.isCancelled, currentRequest == requestID, repository.revision == revision else { return }
-
-        loadedKey = key
-        if animated {
-            withAnimation(.snappy) { sample = updated }
-        } else {
-            var transaction = Transaction(animation: nil)
-            transaction.disablesAnimations = true
-            withTransaction(transaction) { sample = updated }
-        }
     }
 
     private struct SnapshotKey: Equatable {
@@ -86,6 +104,9 @@ extension HealthInterface {
     /// Fills the visible day with sample values for development controls.
     func randomizeHealthData() {
 
+        pendingLoad?.cancel()
+        pendingLoad = nil
+        pendingKey = nil
         requestID += 1
         var updated = sample
         updated.burnedActive = Int.random(in: 100...1000)
