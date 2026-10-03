@@ -1,11 +1,8 @@
 import SwiftUI
 import WidgetKit
 
-/// Mirrors the top-trailing mode icon's styling at the widget's leading edge.
+/// Marks sample data at the widget's leading edge.
 private struct WidgetSampleDataBadge: View {
-
-    @Environment(\.colorScheme) private var scheme
-    @Environment(\.widgetRenderingMode) private var renderingMode
 
     var body: some View {
         Image(systemName: "testtube.2")
@@ -17,19 +14,6 @@ private struct WidgetSampleDataBadge: View {
             .padding(.leading, 12)
             .padding(.trailing, 10)
             .padding(.top, 3)
-            .background {
-                if scheme == .dark || renderingMode == .accented {
-                    UnevenRoundedRectangle(
-                        topLeadingRadius: 20,
-                        bottomLeadingRadius: 0,
-                        bottomTrailingRadius: 20,
-                        topTrailingRadius: 0,
-                        style: .circular
-                    )
-                    .fill(Color("BackGroundColor").gradient)
-                    .opacity(renderingMode == .accented ? 0.25 : 1)
-                }
-            }
             .opacity(0.8)
     }
 

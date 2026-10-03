@@ -14,7 +14,7 @@ struct NutritionWidget: Widget {
             NutritionWidgetNow(entry: entry)
                 .containerRelativeFrame([.horizontal, .vertical])
                 .sampleHealthDataIndicator(entry)
-                .containerBackground(Color("BackGroundColor"), for: .widget)
+                .containerBackground(Color("BackGroundColorBlack"), for: .widget)
                 .environmentObject(AppSettings)
         }
         .contentMarginsDisabled()

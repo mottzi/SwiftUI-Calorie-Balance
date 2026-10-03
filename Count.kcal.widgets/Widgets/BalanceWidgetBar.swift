@@ -17,7 +17,7 @@ struct BalanceWidgetBar: Widget {
                 mode: ModeToggleManager.buttonMode() ? .now : .midnight
             )
             .sampleHealthDataIndicator(entry)
-            .containerBackground(Color("BackGroundColor"), for: .widget)
+            .containerBackground(Color("BackGroundColorBlack"), for: .widget)
             .environmentObject(AppSettings)
         }
         .contentMarginsDisabled()
@@ -107,18 +107,6 @@ extension BalanceWidgetBarContent {
                             .padding(.trailing, 12)
                             .padding(.leading, 10)
                             .padding(.top, 3)
-                            .background {
-                                if scheme == .dark {
-                                    UnevenRoundedRectangle(
-                                        topLeadingRadius: 0,
-                                        bottomLeadingRadius: 20,
-                                        bottomTrailingRadius: 0,
-                                        topTrailingRadius: 20,
-                                        style: .circular
-                                    )
-                                    .fill(Color("BackGroundColor").gradient)
-                                }
-                            }
                             .opacity(0.8)
                     }
                 }
