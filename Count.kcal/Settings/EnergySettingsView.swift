@@ -10,7 +10,6 @@ struct EnergySettingsView: View {
     
     @FocusState var focusedField: Field?
     
-    @Environment(HSlider.self) private var SliderData
     @State private var healthDataMode = HealthDataMode.shared
         
     var body: some View {
@@ -216,8 +215,6 @@ struct EnergySettingsView: View {
                             .underline()
                             .onChange(of: AppSettings.balanceGoal) {
                                 AppSettings.balanceGoal = abs(AppSettings.balanceGoal)
-
-                                SliderData.updateMacroWeights()
                             }
                     
                         EnergyUnitLabel()
@@ -320,8 +317,6 @@ private struct BurnedEnergyInputRow: View {
     @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var settings: Settings
 
-    @Environment(HSlider.self) private var slider
-
     private let kind: BurnedEnergyKind
     private let usesCustomEnergy: Bool
     private let focusedField: FocusState<Field?>.Binding
@@ -368,7 +363,6 @@ private struct BurnedEnergyInputRow: View {
                         .underline()
                         .onChange(of: customValue.wrappedValue) {
                             customValue.wrappedValue = abs(customValue.wrappedValue)
-                            slider.updateMacroWeights()
                         }
                 } else {
                     Text("\(healthValue)")

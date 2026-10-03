@@ -22,25 +22,6 @@ final class HSlider {
 
     init(settings: Settings? = nil) { self.settings = settings ?? .shared }
 
-    /// Updates macro weight goals from the current energy budget and ratios.
-    func updateMacroWeights() {
-        let maxEnergy = settings.maxEatingEnergy()
-        let carbsGoal = ratioToWeight(
-            maxEatingEnergy: maxEnergy,
-            ratio: settings.carbsRatio,
-            type: .carbohydrates
-        )
-        let fatsGoal = ratioToWeight(maxEatingEnergy: maxEnergy, ratio: settings.fatsRatio, type: .fats)
-        let proteinGoal = ratioToWeight(
-            maxEatingEnergy: maxEnergy,
-            ratio: settings.proteinRatio,
-            type: .proteins
-        )
-        if settings.carbsGoal != carbsGoal { settings.carbsGoal = carbsGoal }
-        if settings.fatsGoal != fatsGoal { settings.fatsGoal = fatsGoal }
-        if settings.proteinGoal != proteinGoal { settings.proteinGoal = proteinGoal }
-    }
-
 }
 
 extension HSlider {
@@ -56,16 +37,6 @@ extension HSlider {
     func ratioToWidth(_ maxSlider: CGFloat) {
         guard maxSlider > 0 else { return }
         sliderWidth = maxSlider
-        let minSegment = maxSlider * minSegmentRatio
-
-        if settings.carbsRatio * maxSlider < minSegment
-            || settings.fatsRatio * maxSlider < minSegment
-            || settings.proteinRatio * maxSlider < minSegment {
-            settings.carbsRatio = 0.4
-            settings.fatsRatio = 0.35
-            settings.proteinRatio = 0.25
-        }
-        
         carbsWidth = maxSlider * settings.carbsRatio
         carbsWidthLast = carbsWidth
         
@@ -124,7 +95,6 @@ extension HSlider {
             carbsWidth = oppositeWidth
         }
         widthToRatio(maxWidth)
-        updateMacroWeights()
         selectionFeedbackTrigger += 1
     }
 
@@ -135,7 +105,6 @@ extension HSlider {
         carbsWidthLast = carbsWidth
         protsWidthLast = protsWidth
         widthToRatio(maxWidth)
-        updateMacroWeights()
     }
 
 }
@@ -154,20 +123,6 @@ extension HSlider {
         if abs(settings.proteinRatio - proteinRatio) > 0.000000001 { settings.proteinRatio = proteinRatio }
     }
 
-    private func ratioToWeight(maxEatingEnergy: Int, ratio: Double, type: MacroType) -> Int {
-        var energyDensity: Double
-        
-        switch type {
-            case .carbohydrates: energyDensity = 4
-            case .fats: energyDensity = 9
-            case .proteins: energyDensity = 4
-        }
-        
-        energyDensity = settings.energyUnit == .kcal ? energyDensity : energyDensity * 4.184
-        
-        return Int((Double(maxEatingEnergy) * ratio / Double(energyDensity)).rounded())
-    }
-
 }
 
 /// Slider for adjusting carbohydrate, fat, and protein goal shares.
@@ -175,7 +130,6 @@ struct MacroSlider: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(\.displayScale) private var displayScale
-    @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.colorScheme) private var colorScheme
     
@@ -253,13 +207,9 @@ struct MacroSlider: View {
             .sensoryFeedback(.selection, trigger: SliderData.selectionFeedbackTrigger)
             .task {
                 SliderData.ratioToWidth(maxSlider)
-                SliderData.updateMacroWeights()
             }
             .onChange(of: maxSlider) { _, width in
                 SliderData.resize(to: width, displayScale: displayScale)
-            }
-            .onChange(of: macroGoalInput) {
-                SliderData.updateMacroWeights()
             }
         }
         .frame(height: dynamicType.isAccessibilitySize ? 50 : 40)
@@ -277,10 +227,6 @@ extension MacroSlider {
         return values
     }
 
-    private var macroGoalInput: MacroGoalInput {
-        MacroGoalInput(energy: AppSettings.maxEatingEnergy(), unit: AppSettings.energyUnit)
-    }
-
     private func segmentLabel(_ width: CGFloat, total: CGFloat) -> String {
         guard total > 0 else { return "0" }
         let ratio = width / total
@@ -296,22 +242,6 @@ extension MacroSlider {
                 SliderData.finishDrag(maxWidth: maxWidth)
             }
     }
-
-}
-
-/// Energy inputs that change macro weight goals without changing the slider ratios.
-private struct MacroGoalInput: Equatable {
-
-    let energy: Int
-    let unit: Settings.EnergyUnit
-
-}
-
-enum MacroType {
-
-    case carbohydrates
-    case fats
-    case proteins
 
 }
 

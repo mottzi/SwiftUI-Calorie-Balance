@@ -4,8 +4,16 @@ import SwiftUI
 /// Shared goals, units, data source, and appearance preferences.
 final class Settings: ObservableObject {
 
-    @Published var showResting: Int = 0
-    @Published var showActive: Int = 0
+    @Published var showResting: Int = 0 {
+        didSet {
+            if showResting != oldValue { updateNutrientGoals() }
+        }
+    }
+    @Published var showActive: Int = 0 {
+        didSet {
+            if showActive != oldValue { updateNutrientGoals() }
+        }
+    }
 
     @AppStorage("showWelcome", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     public var showWelcome: Bool = true
@@ -13,16 +21,36 @@ final class Settings: ObservableObject {
     public var closedSettings: Int = 0
 
     @AppStorage("weightGoal", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
-    public var weightGoal: WeightGoals = .lose
+    public var weightGoal: WeightGoals = .lose {
+        didSet {
+            if weightGoal != oldValue { updateNutrientGoals() }
+        }
+    }
     @AppStorage("dataSource", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
-    public var dataSource: DataSources = .apple
+    public var dataSource: DataSources = .apple {
+        didSet {
+            if dataSource != oldValue { updateNutrientGoals() }
+        }
+    }
     
     @AppStorage("customCalPassive", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
-    public var customCalPassive: Int = 0
+    public var customCalPassive: Int = 0 {
+        didSet {
+            if customCalPassive != oldValue { updateNutrientGoals() }
+        }
+    }
     @AppStorage("customCalActive", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
-    public var customCalActive: Int = 0
+    public var customCalActive: Int = 0 {
+        didSet {
+            if customCalActive != oldValue { updateNutrientGoals() }
+        }
+    }
     @AppStorage("balanceGoal", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
-    public var balanceGoal: Int = 0
+    public var balanceGoal: Int = 0 {
+        didSet {
+            if balanceGoal != oldValue { updateNutrientGoals() }
+        }
+    }
     
     @AppStorage("proteinGoal", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     public var proteinGoal: Int = 0
@@ -32,11 +60,23 @@ final class Settings: ObservableObject {
     public var fatsGoal: Int = 0
     
     @AppStorage("proteinRatio", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
-    public var proteinRatio: Double = 0
+    public var proteinRatio: Double = 0 {
+        didSet {
+            if proteinRatio != oldValue { updateNutrientGoals() }
+        }
+    }
     @AppStorage("carbsRatio", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
-    public var carbsRatio: Double = 0
+    public var carbsRatio: Double = 0 {
+        didSet {
+            if carbsRatio != oldValue { updateNutrientGoals() }
+        }
+    }
     @AppStorage("fatsRatio", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
-    public var fatsRatio: Double = 0
+    public var fatsRatio: Double = 0 {
+        didSet {
+            if fatsRatio != oldValue { updateNutrientGoals() }
+        }
+    }
     
     @AppStorage("appBackground", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     public var appBackground: AppBackgrounds = .dark
@@ -46,12 +86,18 @@ final class Settings: ObservableObject {
     public var consumedColor: Color = Color("ConsumedDefault")
     
     @AppStorage("energyUnit", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
-    public var energyUnit: EnergyUnit = .kcal
+    public var energyUnit: EnergyUnit = .kcal {
+        didSet {
+            if energyUnit != oldValue { updateNutrientGoals() }
+        }
+    }
     @AppStorage("weightUnit", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     public var weightUnit: WeightUnit = .kg
     
     @AppStorage("stepsGoal", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     public var stepsGoal: Int = 10000
+
+    private var nutrientGoalsReady = false
 
     private init() {
 
@@ -59,6 +105,15 @@ final class Settings: ObservableObject {
         if UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")?.object(forKey: "weightUnit") == nil {
             setDefaultWeightUnit()
         }
+        // set default ratios if the saved values are below the slider minimum
+        if carbsRatio < 0.1 || fatsRatio < 0.1 || proteinRatio < 0.1 {
+            carbsRatio = 0.4
+            fatsRatio = 0.35
+            proteinRatio = 0.25
+        }
+        nutrientGoalsReady = true
+        // keep saved HealthKit goals until the estimates are loaded
+        if usesCustomEnergy { updateNutrientGoals() }
     }
 
     @MainActor
@@ -79,6 +134,7 @@ final class Settings: ObservableObject {
               energyUnit == unit, repository.revision == revision else { return }
         showResting = estimates.0
         showActive = estimates.1
+        updateNutrientGoals()
     }
 
 }
@@ -89,6 +145,21 @@ extension Settings {
     /// Sample mode uses measured sample energy without changing the saved source preference.
     var usesCustomEnergy: Bool {
         Self.usesCustomEnergy(for: dataSource)
+    }
+
+    /// Persists derived goals so widgets and Watch can use the latest phone budget.
+    private func updateNutrientGoals() {
+        #if !os(watchOS)
+        guard nutrientGoalsReady else { return }
+        let energy = Double(maxEatingEnergy())
+        let unitFactor = energyUnit == .kcal ? 1.0 : 4.184
+        let carbs = Int((energy * carbsRatio / (4 * unitFactor)).rounded())
+        let fats = Int((energy * fatsRatio / (9 * unitFactor)).rounded())
+        let protein = Int((energy * proteinRatio / (4 * unitFactor)).rounded())
+        if carbsGoal != carbs { carbsGoal = carbs }
+        if fatsGoal != fats { fatsGoal = fats }
+        if proteinGoal != protein { proteinGoal = protein }
+        #endif
     }
 
     /// Returns the eating goal after the weight goal adjusts the selected energy source.
