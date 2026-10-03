@@ -58,6 +58,7 @@ private struct BalanceWidgetCircleContent: View {
                         HStack(spacing: 20) {
                             HStack(spacing: 2) {
                                 Text("\(burnedCalories)")
+                                    .contentTransition(.numericText(value: Double(burnedCalories)))
                                     .fontWeight(.medium)
                                     .foregroundStyle(Color("TextColor"))
 
@@ -84,6 +85,7 @@ private struct BalanceWidgetCircleContent: View {
                                     .brightness(level: .secondary)
 
                                 Text("\(entry.data.consumed)")
+                                    .contentTransition(.numericText(value: Double(entry.data.consumed)))
                                     .fontWeight(.medium)
                                     .foregroundStyle(Color("TextColor"))
                             }
@@ -188,19 +190,11 @@ extension BalanceWidgetCircleContent {
         }
     }
 
-    @ViewBuilder
     var topGraph: some View {
-        if mode == .now {
-            topGraphContent
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(.top, 13)
-                .padding(.horizontal, 30)
-        } else {
-            topGraphContent
-                .padding(.top, 13)
-                .padding(.horizontal, 30)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
+        topGraphContent
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.top, 13)
+            .padding(.horizontal, 30)
     }
 
     var topGraphContent: some View {
@@ -237,19 +231,21 @@ extension BalanceWidgetCircleContent {
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color("TextColor"))
+                                .contentTransition(.numericText(value: Double(burnedCalories)))
                             
                             Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
                                 .font(.system(size: 13))
                                 .foregroundStyle(Color("SecondaryTextColor"))
                                 .fontWeight(.medium)
+                                .transaction { $0.animation = .none }
                         }
                         
                         Text(String(localized: "Burned"))
                             .font(.caption)
                             .fontWeight(.light)
                             .foregroundColor(Color("SecondaryTextColor"))
+                            .transaction { $0.animation = .none }
                     }
-                    .transaction { $0.animation = .none }
                 }
                              
                 HStack(spacing: 14) {
@@ -284,19 +280,21 @@ extension BalanceWidgetCircleContent {
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color("TextColor"))
+                                .contentTransition(.numericText(value: Double(entry.data.consumed)))
 
                             Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
                                 .font(.system(size: 13))
                                 .foregroundStyle(Color("SecondaryTextColor"))
                                 .fontWeight(.medium)
+                                .transaction { $0.animation = .none }
                         }
 
                         Text(String(localized: "Eaten"))
                             .font(.caption)
                             .fontWeight(.light)
                             .foregroundColor(Color("SecondaryTextColor"))
+                            .transaction { $0.animation = .none }
                     }
-                    .transaction { $0.animation = .none }
                 }
             }
             .fontDesign(.rounded)
