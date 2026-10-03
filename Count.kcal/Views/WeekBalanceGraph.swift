@@ -65,21 +65,20 @@ struct WeekBalanceGraph: View {
             activeGoal: settings.customCalActive,
             passiveGoal: settings.customCalPassive,
             revision: refreshRevision,
-            scrolling: navigation.isScrolling
+            bufferedWeeks: navigation.balanceWeeks.count
         )
     }
 
     private func refreshWeek() async {
         let key = refreshKey
         guard key.active else { return }
-        guard !key.scrolling else { return }
         let force = completedRefreshRevision != key.revision
 
         let calendar = Calendar.current
-        // Load the selected week first, then its immediate neighbours. Each shared
-        // day model owns snapshot freshness, including settings invalidation.
+        // Load all five buffered weeks, nearest first. Scrolling can change the
+        // priority, but each day retains and completes its in-progress load.
         let weeks = navigation.balanceWeeks.filter {
-            abs(calendar.dateComponents([.day], from: key.start, to: $0.id).day ?? 0) <= 7
+            abs(calendar.dateComponents([.day], from: key.start, to: $0.id).day ?? 0) <= 14
         }.sorted {
             abs($0.id.timeIntervalSince(key.start)) < abs($1.id.timeIntervalSince(key.start))
         }
@@ -219,7 +218,7 @@ private struct WeekRefreshKey: Hashable {
     let activeGoal: Int
     let passiveGoal: Int
     let revision: Int
-    let scrolling: Bool
+    let bufferedWeeks: Int
 }
 
 /// One compact seven-day balance page; also used by self-contained previews.

@@ -177,7 +177,7 @@ extension Pager {
     private var selectedRefreshKey: DayRefreshKey {
         DayRefreshKey(
             day: navigation.selectedDay,
-            active: scenePhase == .active && !navigation.isScrolling,
+            active: scenePhase == .active,
             source: AppSettings.dataSource.rawValue,
             unit: AppSettings.energyUnit.rawValue,
             activeGoal: AppSettings.customCalActive,
@@ -203,10 +203,10 @@ extension Pager {
         )
     }
 
-    /// Refreshes only the day being viewed; cancellation keeps rapid swipes cheap.
+    /// Prioritizes the visible day while shared loads survive rapid swipes.
     private func refreshSelectedDay(force: Bool = false) async {
-        guard scenePhase == .active, !navigation.isScrolling, let selectedPage else { return }
-        await selectedPage.updateMetrics(force: force)
+        guard scenePhase == .active, let selectedPage else { return }
+        await selectedPage.updateMetrics(animated: false, force: force)
         guard !Task.isCancelled else { return }
         if selectedPage.id == Calendar.current.startOfDay(for: .now) {
             WidgetCenter.shared.reloadAllTimelines()
