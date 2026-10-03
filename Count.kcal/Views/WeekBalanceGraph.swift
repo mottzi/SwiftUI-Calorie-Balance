@@ -23,6 +23,8 @@ struct WeekBalanceGraph: View {
                         selectDay: selectDay
                     )
                     .padding(.horizontal, 6)
+                    // Keep chart insets inside each page so the pager clips at the screen edge.
+                    .padding(.horizontal)
                     .containerRelativeFrame(.horizontal)
                     .id(week.id)
                 }

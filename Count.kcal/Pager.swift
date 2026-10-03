@@ -49,14 +49,12 @@ struct Pager: View {
                         }
                         
                         if streak.showStreaksView {
-                            Card(level: .clear, innerPadding: 0) {
-                                WeekBalanceGraph(
-                                    navigation: navigation,
-                                    refreshRevision: manualRefresh + calendarRefresh,
-                                    selectDay: { selectDay($0) }
-                                )
-                            }
-                            .padding(.bottom, 15)
+                            WeekBalanceGraph(
+                                navigation: navigation,
+                                refreshRevision: manualRefresh + calendarRefresh,
+                                selectDay: { selectDay($0) }
+                            )
+                            .padding(.bottom, 18)
                         }
                         
                         DayPageStrip(
