@@ -260,7 +260,7 @@ struct WeekBalanceChart: View {
                                     )
                                     .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                             }
-                            .animation(.snappy, value: isDaySelected(barDay: point.id))
+                            .animation(nil, value: isDaySelected(barDay: point.id))
                             Text(point.id, format: .dateTime.day())
                                 .font(.system(size: 10, weight: .medium, design: .rounded))
                                 .foregroundStyle(Color("SecondaryTextColor"))
