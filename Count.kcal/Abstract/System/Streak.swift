@@ -9,26 +9,27 @@ final class Streak {
     var streaks: Int = 0
     var showStreaksView: Bool = true
 
-    @ObservationIgnored private let repository: HKRepository
+    @ObservationIgnored private let repository: HealthRepository
     @ObservationIgnored private let settings: Settings
     @ObservationIgnored private var requestID = 0
 
-    init(repository: HKRepository = .shared, settings: Settings = .shared) {
-        self.repository = repository
+    init(repository: HealthRepository? = nil, settings: Settings = .shared) {
+        self.repository = repository ?? .shared
         self.settings = settings
     }
     
+    /// Clears the count and invalidates any pending recount, preserving visibility.
+    func reset() {
+        requestID += 1
+        streaks = 0
+    }
+
     /// Recounts goal days from yesterday until a day fails or the limit is reached.
     func updateStreaks() async {
 
         requestID += 1
         let currentRequest = requestID
-        #if os(iOS) && DEBUG && targetEnvironment(simulator)
-        if SimulatorDashboardFixture.isEnabled {
-            streaks = 5
-            return
-        }
-        #endif
+        let revision = repository.revision
         let goal = settings.balanceGoal
         let isLossGoal = settings.weightGoal == .lose
         let source = settings.dataSource
@@ -46,7 +47,7 @@ final class Streak {
             customActive: customActive,
             customPassive: customPassive
         )
-        guard !Task.isCancelled, currentRequest == requestID else { return }
+        guard !Task.isCancelled, currentRequest == requestID, repository.revision == revision else { return }
         for day in days {
             guard day.consumed > 0, day.meetsGoal(goal, isLoss: isLossGoal) else { break }
             streak += 1

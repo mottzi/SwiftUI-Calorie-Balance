@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B803154C8084D7EAD9193C0 /* SampleHealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385A13964874208A838B836 /* SampleHealthDataSource.swift */; };
+		CD70499262B84E06B2FF7BFB /* SampleHealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385A13964874208A838B836 /* SampleHealthDataSource.swift */; };
+		34A97C68B19141E2BC01A901 /* SampleHealthDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */; };
+		EB2955F8EE7F49BF86B22DA0 /* SampleHealthDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */; };
+		F48E98FC1F5348DE95541597 /* HealthDataMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */; };
+		EA9F2514D5314340973D289E /* HealthDataMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */; };
+		B000EE657E13458EB316F6F8 /* HealthDataMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */; };
+		C4BAC6B4781541E9A4B835D4 /* HealthDataMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */; };
+		B813FAD0704F4C2994DA76FE /* HealthKitDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCAE384FE9D4F5DA573DDB5 /* HealthKitDataSource.swift */; };
+		AB607FCE0C0D473596960D11 /* HealthKitDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCAE384FE9D4F5DA573DDB5 /* HealthKitDataSource.swift */; };
+		4BD4A383E51E42F1A23DB146 /* HealthKitDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCAE384FE9D4F5DA573DDB5 /* HealthKitDataSource.swift */; };
+		01E95393BE824509B36CA193 /* HealthKitDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCAE384FE9D4F5DA573DDB5 /* HealthKitDataSource.swift */; };
+		9773BF21F714487189E63B20 /* HealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87B951148234A488A029FAF /* HealthDataSource.swift */; };
+		30093F94B40F42E3911F505B /* HealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87B951148234A488A029FAF /* HealthDataSource.swift */; };
+		C58530D9E0E349C59E0D5B72 /* HealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87B951148234A488A029FAF /* HealthDataSource.swift */; };
+		C788291040A0473184ED46D7 /* HealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87B951148234A488A029FAF /* HealthDataSource.swift */; };
 		B7C001000000000000000001 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = B7C001000000000000000003 /* AppIcon.icon */; };
 		B7C001000000000000000002 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = B7C001000000000000000003 /* AppIcon.icon */; };
 		D7A8097F63844ED785702A13 /* EnergyBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */; };
@@ -53,7 +69,7 @@
 		9A4B728E2C13B63E004853F0 /* HealthInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */; };
 		9A4B728F2C13B648004853F0 /* WeightHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightHistory.swift */; };
 		9A4B72902C13B64B004853F0 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A59C1EB2B0A2E180058A502 /* Settings.swift */; };
-		9A4B72912C13B651004853F0 /* HKRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HKRepository.swift */; };
+		9A4B72912C13B651004853F0 /* HealthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HealthRepository.swift */; };
 		9A4B72922C13B653004853F0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A919DC22B233E380003C035 /* Extensions.swift */; };
 		9A4B72932C13B886004853F0 /* CircleBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */; };
 		9A4B72942C13B897004853F0 /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA785262B21CD9D007305F6 /* CircleProgressView.swift */; };
@@ -114,7 +130,7 @@
 		9ABFA7B72C0A3CBA00024D2F /* BarBalanceGraphTopRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA8902B361D0700585788 /* BarBalanceGraphTopRow.swift */; };
 		9ABFA7BA2C0A411300024D2F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A59C1EB2B0A2E180058A502 /* Settings.swift */; };
 		9ABFA7BB2C0A412D00024D2F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A919DC22B233E380003C035 /* Extensions.swift */; };
-		9ABFA7BC2C0A413400024D2F /* HKRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HKRepository.swift */; };
+		9ABFA7BC2C0A413400024D2F /* HealthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HealthRepository.swift */; };
 		9ABFA7BD2C0A413A00024D2F /* ToggleViewModeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A480F692B19315600D79FAE /* ToggleViewModeIntent.swift */; };
 		9ABFA7BE2C0A415400024D2F /* WeightHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightHistory.swift */; };
 		9ABFA7C02C0A450500024D2F /* BalanceDataLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB4BA092B00D7DD00176682 /* BalanceDataLabels.swift */; };
@@ -129,14 +145,14 @@
 		9AD5F54F2C277B6E003FE1C5 /* HealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CBB2B3E2E7A0037628F /* HealthData.swift */; };
 		9AD5F5502C277C2E003FE1C5 /* HealthDataTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFAAA6E2B5FF9DC00034CA9 /* HealthDataTimelineProvider.swift */; };
 		9AD5F5512C277C43003FE1C5 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A59C1EB2B0A2E180058A502 /* Settings.swift */; };
-		9AD5F5522C277C9D003FE1C5 /* HKRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HKRepository.swift */; };
+		9AD5F5522C277C9D003FE1C5 /* HealthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HealthRepository.swift */; };
 		9AD5F5532C277D14003FE1C5 /* WeightHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A368CA22A6E64F900280BF9 /* WeightHistory.swift */; };
 		9AD5F5582C28279C003FE1C5 /* BalanceCornerText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD5F5572C28279C003FE1C5 /* BalanceCornerText.swift */; };
 		9ADC38112AF6FCBC005CCFEF /* CountWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC380F2AF6FC00005CCFEF /* CountWidgetBundle.swift */; };
 		9ADC38132AF6FD0C005CCFEF /* BalanceWidgetBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ADC38122AF6FD0C005CCFEF /* BalanceWidgetBar.swift */; };
 		9AE1804E2C35FCDA00C37AA9 /* RectangleBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE1804D2C35FCDA00C37AA9 /* RectangleBalance.swift */; };
 		9AE3D3A52B7970EC00483339 /* CDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE3D3A42B7970EC00483339 /* CDatePicker.swift */; };
-		9AEA55CA2A5B0081000AB057 /* HKRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HKRepository.swift */; };
+		9AEA55CA2A5B0081000AB057 /* HealthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55C92A5B0081000AB057 /* HealthRepository.swift */; };
 		9AEA55CC2A5D65DC000AB057 /* MacroCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AEA55CB2A5D65DC000AB057 /* MacroCard.swift */; };
 		9AF309ED2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF309EC2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift */; };
 		9AF39CB32B3DBA4C0037628F /* WeightTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF39CB22B3DBA4C0037628F /* WeightTopBar.swift */; };
@@ -210,6 +226,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B385A13964874208A838B836 /* SampleHealthDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHealthDataSource.swift; sourceTree = "<group>"; };
+		01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHealthDay.swift; sourceTree = "<group>"; };
+		BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataMode.swift; sourceTree = "<group>"; };
+		1DCAE384FE9D4F5DA573DDB5 /* HealthKitDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitDataSource.swift; sourceTree = "<group>"; };
+		F87B951148234A488A029FAF /* HealthDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataSource.swift; sourceTree = "<group>"; };
 		B7C001000000000000000003 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = "com.apple.iconcomposer.icon"; path = AppIcon.icon; sourceTree = "<group>"; };
 		D7A8097F63844ED785702A10 /* DayPager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPager.swift; sourceTree = "<group>"; };
 		9A001C3929B6122500BB42B9 /* Count.kcal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Count.kcal.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -298,7 +319,7 @@
 		9AE3D3A42B7970EC00483339 /* CDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDatePicker.swift; sourceTree = "<group>"; };
 		9AE457DC2B169C72009FA321 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9AEA55C42A5AD1F5000AB057 /* Count.kcal.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Count.kcal.entitlements; sourceTree = "<group>"; };
-		9AEA55C92A5B0081000AB057 /* HKRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKRepository.swift; sourceTree = "<group>"; };
+		9AEA55C92A5B0081000AB057 /* HealthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRepository.swift; sourceTree = "<group>"; };
 		9AEA55CB2A5D65DC000AB057 /* MacroCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacroCard.swift; sourceTree = "<group>"; };
 		9AF309EC2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleFullGraph.swift; sourceTree = "<group>"; };
 		9AF39CB22B3DBA4C0037628F /* WeightTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightTopBar.swift; sourceTree = "<group>"; };
@@ -461,6 +482,8 @@
 			isa = PBXGroup;
 			children = (
 				9A5AF20530681DDE008CC950 /* SimulatorHealthSeeder.swift */,
+				B385A13964874208A838B836 /* SampleHealthDataSource.swift */,
+				01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */,
 				9A5AF20730681E0B008CC950 /* DashboardSamplePreview.swift */,
 			);
 			path = Development;
@@ -627,7 +650,10 @@
 			isa = PBXGroup;
 			children = (
 				9A59C1EB2B0A2E180058A502 /* Settings.swift */,
-				9AEA55C92A5B0081000AB057 /* HKRepository.swift */,
+				9AEA55C92A5B0081000AB057 /* HealthRepository.swift */,
+				BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */,
+				1DCAE384FE9D4F5DA573DDB5 /* HealthKitDataSource.swift */,
+				F87B951148234A488A029FAF /* HealthDataSource.swift */,
 				9AFAAA6E2B5FF9DC00034CA9 /* HealthDataTimelineProvider.swift */,
 				9A919DC22B233E380003C035 /* Extensions.swift */,
 				9A58E8E62C012F8A002C16D6 /* Streak.swift */,
@@ -909,7 +935,12 @@
 				9A616F492A642D3C00B713C4 /* CaloriesCard.swift in Sources */,
 				9A206D842C583B560079DE3D /* Welcome.swift in Sources */,
 				9A001C3F29B6122500BB42B9 /* Dashboard.swift in Sources */,
-				9AEA55CA2A5B0081000AB057 /* HKRepository.swift in Sources */,
+				9AEA55CA2A5B0081000AB057 /* HealthRepository.swift in Sources */,
+				CD70499262B84E06B2FF7BFB /* SampleHealthDataSource.swift in Sources */,
+				EB2955F8EE7F49BF86B22DA0 /* SampleHealthDay.swift in Sources */,
+				C4BAC6B4781541E9A4B835D4 /* HealthDataMode.swift in Sources */,
+				01E95393BE824509B36CA193 /* HealthKitDataSource.swift in Sources */,
+				C788291040A0473184ED46D7 /* HealthDataSource.swift in Sources */,
 				9AA785272B21CD9D007305F6 /* CircleProgressView.swift in Sources */,
 				9AD25EBE2A656A5E00C6E6E1 /* HealthInterface.swift in Sources */,
 				D7A8097F63844ED785702A12 /* EnergyBalance.swift in Sources */,
@@ -947,7 +978,12 @@
 				9ABFA7AE2C0A3BC700024D2F /* ReachableView.swift in Sources */,
 				9ABFA7BE2C0A415400024D2F /* WeightHistory.swift in Sources */,
 				9AA72DAE2B04CAAD00E32650 /* NutritionWidget.swift in Sources */,
-				9ABFA7BC2C0A413400024D2F /* HKRepository.swift in Sources */,
+				9ABFA7BC2C0A413400024D2F /* HealthRepository.swift in Sources */,
+				0B803154C8084D7EAD9193C0 /* SampleHealthDataSource.swift in Sources */,
+				34A97C68B19141E2BC01A901 /* SampleHealthDay.swift in Sources */,
+				B000EE657E13458EB316F6F8 /* HealthDataMode.swift in Sources */,
+				4BD4A383E51E42F1A23DB146 /* HealthKitDataSource.swift in Sources */,
+				C58530D9E0E349C59E0D5B72 /* HealthDataSource.swift in Sources */,
 				9ABFA7BA2C0A411300024D2F /* Settings.swift in Sources */,
 				9ABFA7BB2C0A412D00024D2F /* Extensions.swift in Sources */,
 				9AF39CBD2B3E2E980037628F /* HealthData.swift in Sources */,
@@ -970,7 +1006,10 @@
 			files = (
 				9A2F7E672C34989100498A67 /* BalanceCornerTextNowMidnight.swift in Sources */,
 				9A6DBD582C28D2E3000920DA /* BalanceCircleGraph.swift in Sources */,
-				9AD5F5522C277C9D003FE1C5 /* HKRepository.swift in Sources */,
+				9AD5F5522C277C9D003FE1C5 /* HealthRepository.swift in Sources */,
+				EA9F2514D5314340973D289E /* HealthDataMode.swift in Sources */,
+				AB607FCE0C0D473596960D11 /* HealthKitDataSource.swift in Sources */,
+				30093F94B40F42E3911F505B /* HealthDataSource.swift in Sources */,
 				9A16C8DC2C38A34400ED3B7E /* RectangleBalanceBar.swift in Sources */,
 				9A6DBD5A2C28D42E000920DA /* CircleBalanceGraph.swift in Sources */,
 				9AE1804E2C35FCDA00C37AA9 /* RectangleBalance.swift in Sources */,
@@ -1000,7 +1039,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A0B0CC62C203FB400D94FB4 /* ReachableView.swift in Sources */,
-				9A4B72912C13B651004853F0 /* HKRepository.swift in Sources */,
+				9A4B72912C13B651004853F0 /* HealthRepository.swift in Sources */,
+				F48E98FC1F5348DE95541597 /* HealthDataMode.swift in Sources */,
+				B813FAD0704F4C2994DA76FE /* HealthKitDataSource.swift in Sources */,
+				9773BF21F714487189E63B20 /* HealthDataSource.swift in Sources */,
 				9A0BAC082C244D0E00622F9F /* CircleBalanceGraphOverlay.swift in Sources */,
 				9A0B0CC52C1FA08D00D94FB4 /* CircleBalanceGraphWatch.swift in Sources */,
 				9A4B72902C13B64B004853F0 /* Settings.swift in Sources */,

@@ -88,7 +88,7 @@ struct ContentView: View {
             .tabViewStyle(.verticalPage)
             .task {
                 // the watch has no onboarding flow, so request access before its first refresh
-                _ = await HKRepository.shared.requestPermission()
+                _ = await HealthRepository.shared.requestPermission()
                 guard !Task.isCancelled else { return }
                 healthAccessRequested = true
                 refreshRevision += 1

@@ -10,35 +10,36 @@ final class WeightHistory {
     var latestWeight: Double?
     var latestWeightDate: Date?
 
-    @ObservationIgnored private let hk: HKRepository
+    @ObservationIgnored private let repository: HealthRepository
     @ObservationIgnored private let settings: Settings
     @ObservationIgnored private var requestID = 0
 
-    init(repository: HKRepository = .shared, settings: Settings = .shared) {
-        hk = repository
+    init(repository: HealthRepository? = nil, settings: Settings = .shared) {
+        self.repository = repository ?? .shared
         self.settings = settings
     }
 
-    /// Loads daily weight averages and the latest weight sample from HealthKit.
+    /// Clears displayed values and prevents an earlier refresh from repopulating them.
+    func reset() {
+        requestID += 1
+        dailyAverages = []
+        latestWeight = nil
+        latestWeightDate = nil
+    }
+
+    /// Loads daily weight averages and the latest weight measurement.
     func fetchData() async {
 
         requestID += 1
         let currentRequest = requestID
-        #if os(iOS) && DEBUG && targetEnvironment(simulator)
-        if SimulatorDashboardFixture.isEnabled {
-            dailyAverages = SimulatorDashboardFixture.weightHistory()
-            latestWeight = dailyAverages.last?.weightAvg
-            latestWeightDate = dailyAverages.last?.date
-            return
-        }
-        #endif
+        let revision = repository.revision
         let date = Date.now
         let weightUnit = settings.weightUnit
-        async let data = hk.fetchInitialAvgWeightData(for: date, weightUnit: weightUnit)
-        async let latest = hk.fetchLatestWeightData(for: date, weightUnit: weightUnit)
+        async let data = repository.fetchInitialAvgWeightData(for: date, weightUnit: weightUnit)
+        async let latest = repository.fetchLatestWeightData(for: date, weightUnit: weightUnit)
         let (weights, latestSample) = await (data, latest)
         // publish both query results only if this refresh is still current
-        guard !Task.isCancelled, currentRequest == requestID else { return }
+        guard !Task.isCancelled, currentRequest == requestID, repository.revision == revision else { return }
 
         dailyAverages = weights
         latestWeight = latestSample.0

@@ -10,6 +10,8 @@ struct CountApp: App {
     @State private var weightHistory = WeightHistory()
     @State private var StreakManager = Streak()
 
+    init() { HealthDataMode.shared.configureLaunchArguments() }
+
     var body: some Scene {
         WindowGroup {
             NavigationStack {

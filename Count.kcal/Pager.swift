@@ -22,6 +22,7 @@ struct Pager: View {
     @Environment(\.requestReview) private var requestReview
     
     @State private var SliderData = HSlider()
+    @State private var healthDataMode = HealthDataMode.shared
     @State private var manualRefresh = 0
     @State private var calendarRefresh = 0
     
@@ -90,6 +91,17 @@ struct Pager: View {
                 withTransaction(Transaction(animation: nil)) {
                     navigation.ensureSelectionBuffer()
                 }
+            }
+            .onChange(of: healthDataMode.revision) {
+                let selectedDay = navigation.selectedDay
+                navigation = DayPager(past: 5, future: 1)
+                navigation.ensurePagesForSelection(selectedDay)
+                navigation.selectDay(selectedDay)
+                calendarDays = showCalendar ? navigation.calendarPages(for: currentMonth) : []
+                weightHistory.reset()
+                streak.reset()
+                manualRefresh += 1
+                calendarRefresh += 1
             }
             .onChange(of: currentMonth) { _, month in
                 guard showCalendar else { return }
@@ -170,7 +182,8 @@ extension Pager {
             unit: AppSettings.energyUnit.rawValue,
             activeGoal: AppSettings.customCalActive,
             passiveGoal: AppSettings.customCalPassive,
-            revision: manualRefresh
+            revision: manualRefresh,
+            healthRevision: healthDataMode.revision
         )
     }
 
@@ -185,7 +198,8 @@ extension Pager {
             balanceGoal: AppSettings.balanceGoal,
             activeGoal: AppSettings.customCalActive,
             passiveGoal: AppSettings.customCalPassive,
-            revision: manualRefresh
+            revision: manualRefresh,
+            healthRevision: healthDataMode.revision
         )
     }
 
@@ -469,6 +483,7 @@ private struct DayRefreshKey: Hashable {
     let activeGoal: Int
     let passiveGoal: Int
     let revision: Int
+    let healthRevision: String
 
 }
 
@@ -485,5 +500,6 @@ private struct SummaryRefreshKey: Hashable {
     let activeGoal: Int
     let passiveGoal: Int
     let revision: Int
+    let healthRevision: String
 
 }

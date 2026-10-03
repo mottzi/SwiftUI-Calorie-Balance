@@ -54,10 +54,6 @@ final class Settings: ObservableObject {
 
     private init() {
 
-        #if os(iOS) && DEBUG && targetEnvironment(simulator)
-        SimulatorDashboardFixture.prepareSettings()
-        #endif
-
         // apply the locale default only before the user has saved a weight unit
         if UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")?.object(forKey: "weightUnit") == nil {
             setDefaultWeightUnit()
@@ -65,39 +61,41 @@ final class Settings: ObservableObject {
     }
 
     @MainActor
-    /// Updates the active and resting energy estimates from HealthKit.
-    public func updateShow() async {
+    /// Updates active and resting estimates from the selected health measurements.
+    public func updateShow(repository: HealthRepository? = nil) async {
 
-        #if os(iOS) && DEBUG && targetEnvironment(simulator)
-        if SimulatorDashboardFixture.isEnabled {
-            showResting = 1_650
-            showActive = 400
-            return
-        }
-        #endif
+        let repository = repository ?? .shared
 
+        let revision = repository.revision
         let unit = energyUnit
         let date = Date.now
-        async let resting = HKRepository.shared.cumDataWeek(fetch: .basalEnergyBurned, for: date, energyUnit: unit)
-        async let active = HKRepository.shared.cumDataWeek(fetch: .activeEnergyBurned, for: date, energyUnit: unit)
+        async let resting = repository.cumDataWeek(fetch: .basalEnergyBurned, for: date, energyUnit: unit)
+        async let active = repository.cumDataWeek(fetch: .activeEnergyBurned, for: date, energyUnit: unit)
         let estimates = await (resting, active)
 
-        // discard estimates if the user changed units during the queries
-        guard !Task.isCancelled, energyUnit == unit else { return }
+        // Discard estimates if the user changed units or health mode during the queries.
+        guard !Task.isCancelled,
+              energyUnit == unit, repository.revision == revision else { return }
         showResting = estimates.0
         showActive = estimates.1
     }
 
 }
 
+@MainActor
 extension Settings {
+
+    /// Sample mode uses measured sample energy without changing the saved source preference.
+    var usesCustomEnergy: Bool {
+        Self.usesCustomEnergy(for: dataSource)
+    }
 
     /// Returns the eating goal after the weight goal adjusts the selected energy source.
     func maxEatingEnergy() -> Int {
         var activeCalories: Int = 0
         var balanceAdjustment: Int = 0
 
-        if self.dataSource == .apple {
+        if !usesCustomEnergy {
             activeCalories = self.showActive + self.showResting
         } else {
             activeCalories = self.customCalActive + self.customCalPassive
@@ -110,18 +108,19 @@ extension Settings {
 
 }
 
+@MainActor
 extension Settings {
 
     var isSettingsInputValid: Bool {
         if self.balanceGoal < 0 { return false }
-        if self.dataSource == .custom && (self.customCalActive + self.customCalPassive <= 0) { return false }
+        if usesCustomEnergy && (self.customCalActive + self.customCalPassive <= 0) { return false }
         if self.maxEatingEnergy() <= 0 { return false }
         
         return true
     }
     
     var isPassiveValid: Bool {
-        if self.dataSource == .apple {
+        if !usesCustomEnergy {
             if self.showResting <= 0 { return false }
         } else {
             if self.customCalPassive <= 0 { return false }
@@ -131,7 +130,7 @@ extension Settings {
     }
     
     var isActiveValid: Bool {
-        if self.dataSource == .apple {
+        if !usesCustomEnergy {
             if self.showActive <= 0 { return false }
         } else {
             if self.customCalActive <= 0 { return false }
@@ -141,13 +140,23 @@ extension Settings {
     }
     
     var isBurnedValid: Bool {
-        if self.dataSource == .apple {
+        if !usesCustomEnergy {
             if self.showActive + self.showResting <= 0 { return false }
         } else {
             if self.customCalActive + self.customCalPassive <= 0 { return false }
         }
         
         return true
+    }
+
+}
+
+@MainActor
+extension Settings {
+
+    /// Uses custom energy if sample mode is off and the saved source is custom.
+    static func usesCustomEnergy(for source: DataSources) -> Bool {
+        source == .custom && !HealthDataMode.isSampleDataEnabled
     }
 
 }

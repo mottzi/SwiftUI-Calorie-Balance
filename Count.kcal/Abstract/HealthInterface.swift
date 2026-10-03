@@ -12,18 +12,18 @@ final class HealthInterface: Identifiable, Hashable {
     /// The last complete health snapshot published for this day.
     private(set) var sample: HealthData
 
-    @ObservationIgnored private let repository: HKRepository
+    @ObservationIgnored private let repository: HealthRepository
     @ObservationIgnored private let settings: Settings
     @ObservationIgnored private var requestID = 0
     @ObservationIgnored private var loadedKey: SnapshotKey?
 
-    init(_ healthData: HealthData, repository: HKRepository = .shared, settings: Settings = .shared) {
+    init(_ healthData: HealthData, repository: HealthRepository? = nil, settings: Settings = .shared) {
         let day = Calendar.current.startOfDay(for: healthData.date)
         id = day
         var initial = healthData
         initial.date = day
         sample = initial
-        self.repository = repository
+        self.repository = repository ?? .shared
         self.settings = settings
     }
 
@@ -35,24 +35,22 @@ final class HealthInterface: Identifiable, Hashable {
         guard !Task.isCancelled else { return }
         requestID += 1
         let currentRequest = requestID
-        let key = SnapshotKey(source: settings.dataSource.rawValue,
-                              unit: settings.energyUnit.rawValue,
-                              active: settings.customCalActive, passive: settings.customCalPassive)
+        let revision = repository.revision
+        let key = SnapshotKey(
+            revision: revision,
+            source: settings.dataSource.rawValue,
+            unit: settings.energyUnit.rawValue,
+            active: settings.customCalActive,
+            passive: settings.customCalPassive
+        )
         // Reuse complete snapshots while browsing. Settings and explicit refreshes
         // invalidate the cache; Today expires sooner because it is still changing.
         let lifetime: TimeInterval = isTodayPage ? 15 : 60
         if !force, loadedKey == key, let synced = sample.lastDataSync,
            Date.now.timeIntervalSince(synced) < lifetime { return }
-        #if os(iOS) && DEBUG && targetEnvironment(simulator)
-        if SimulatorDashboardFixture.isEnabled {
-            sample = SimulatorDashboardFixture.sample(for: id)
-            loadedKey = key
-            return
-        }
-        #endif
         let updated = await repository.fetchDailySnapshot(for: id, settings: settings)
         // discard a cancelled request or one superseded by a later refresh
-        guard !Task.isCancelled, currentRequest == requestID else { return }
+        guard !Task.isCancelled, currentRequest == requestID, repository.revision == revision else { return }
 
         loadedKey = key
         if animated {
@@ -65,6 +63,7 @@ final class HealthInterface: Identifiable, Hashable {
     }
 
     private struct SnapshotKey: Equatable {
+        let revision: String
         let source: Int
         let unit: String
         let active: Int

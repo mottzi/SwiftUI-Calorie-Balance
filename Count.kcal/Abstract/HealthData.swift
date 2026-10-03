@@ -21,7 +21,7 @@ struct HealthData: Equatable {
     var steps: Int
 
     /// Selects actual active energy for the midnight estimate.
-    var usesAppleActiveAtMidnight: Bool = true
+    var usesMeasuredActiveAtMidnight: Bool = true
     
     /// Energy recorded for the sample date.
     var now: EnergyBalance {
@@ -41,7 +41,7 @@ struct HealthData: Equatable {
     var balanceNow: Int { now.balance }
 
     /// Active energy used by the midnight balance and graphs.
-    var burnedActiveMidnight: Int { usesAppleActiveAtMidnight ? burnedActive : burnedActive7 }
+    var burnedActiveMidnight: Int { usesMeasuredActiveAtMidnight ? burnedActive : burnedActive7 }
 
     var balanceMidnight: Int { midnight.balance }
     
@@ -123,79 +123,3 @@ enum BalanceOption {
     case surplus
 
 }
-
-#if DEBUG && targetEnvironment(simulator)
-/// Repeatable, in-memory dashboard data for simulator layout checks. Launch with
-/// --seed-dashboard-fixture; production builds never include this path.
-enum SimulatorDashboardFixture {
-
-    static var isEnabled: Bool {
-        ProcessInfo.processInfo.arguments.contains("--seed-dashboard-fixture")
-    }
-
-    /// Optional stress case for all seven recent balance labels.
-    static var usesFourDigitBalances: Bool {
-        ProcessInfo.processInfo.arguments.contains("--week-balance-four-digits")
-    }
-
-    static func prepareSettings() {
-        guard isEnabled else { return }
-        let defaults = UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")
-        defaults?.set(false, forKey: "showWelcome")
-        defaults?.set(1, forKey: "dataSource")
-        defaults?.set(0, forKey: "weightGoal")
-        defaults?.set(1, forKey: "appBackground")
-        defaults?.set("kcal", forKey: "energyUnit")
-        defaults?.set("kg", forKey: "weightUnit")
-        defaults?.set(1_650, forKey: "customCalPassive")
-        defaults?.set(400, forKey: "customCalActive")
-        defaults?.set(usesFourDigitBalances ? 1_200 : 300, forKey: "balanceGoal")
-        defaults?.set(150, forKey: "carbsGoal")
-        defaults?.set(65, forKey: "fatsGoal")
-        defaults?.set(110, forKey: "proteinGoal")
-        defaults?.set(10_000, forKey: "stepsGoal")
-    }
-
-    static func sample(for date: Date) -> HealthData {
-        let day = Calendar.current.startOfDay(for: date)
-        let today = Calendar.current.startOfDay(for: .now)
-        let daysAgo = max(0, Calendar.current.dateComponents([.day], from: day, to: today).day ?? 0)
-        let variation = daysAgo % 7
-        let isToday = day == today
-
-        var sample = HealthData(
-            date: day,
-            lastDataSync: isToday ? .now : Calendar.current.date(byAdding: .hour, value: 18, to: day),
-            burnedActive: isToday ? 278 : 340 + variation * 37,
-            burnedActive7: 420,
-            burnedPassive: isToday ? 1_120 : 1_650 + variation * 25,
-            burnedPassive7: 1_650,
-            consumed: isToday ? 1_236 : 1_670 + variation * 64,
-            protein: isToday ? 92 : 105 + variation * 4,
-            carbs: isToday ? 138 : 180 + variation * 7,
-            fats: isToday ? 53 : 62 + variation * 3,
-            steps: isToday ? 6_421 : 7_600 + variation * 430
-        )
-
-        if usesFourDigitBalances {
-            let balances = [1_888, 1_587, 1_085, 1_242, 1_219, 1_196, 1_173]
-            let balance = balances[variation]
-            sample.burnedActive = 1_500
-            sample.burnedPassive = isToday ? 1_120 : 1_650
-            sample.consumed = 1_500 + 1_650 - balance
-        }
-        return sample
-    }
-
-    static func weightHistory() -> [WeightChartData] {
-        let today = Calendar.current.startOfDay(for: .now)
-        return (0..<37).reversed().compactMap { daysAgo in
-            guard let day = Calendar.current.date(byAdding: .day, value: -daysAgo, to: today) else {
-                return nil
-            }
-            return WeightChartData(date: day, weightAvg: 79.6 + Double(daysAgo) * 0.045)
-        }
-    }
-
-}
-#endif

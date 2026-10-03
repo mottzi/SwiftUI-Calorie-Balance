@@ -36,7 +36,7 @@ struct OnboardingButton: View {
         Button {
             if selection == .applehealth {
                 Task { @MainActor in
-                    _ = await HKRepository.shared.requestPermission()
+                    _ = await HealthRepository.shared.requestPermission()
                     // keep a later navigation choice if permission completed after the user moved back
                     guard selection == .applehealth else { return }
                     withAnimation {

@@ -1,4 +1,5 @@
 import WidgetKit
+import SwiftUI
 
 /// Health snapshots and refresh timing shared by widgets and complications.
 struct HealthDataTimelineProvider: TimelineProvider {
@@ -6,17 +7,24 @@ struct HealthDataTimelineProvider: TimelineProvider {
     /// Requests a refresh after fifteen minutes or at the next midnight.
     func getTimeline(in context: Context, completion: @escaping (Timeline<HealthDataEntry>) -> Void) {
 
-        Task {
+        Task { @MainActor in
             // keep the entry and health query on the same day if midnight passes during the fetch
             let date = Date.now
-            let data = await HKRepository.shared.fetchDailySnapshot(for: date, now: date)
+            var revision: String
+            var data: HealthData
+            var isSampleData: Bool
+            repeat {
+                revision = HealthRepository.shared.revision
+                isSampleData = HealthDataMode.isSampleDataEnabled
+                data = await HealthRepository.shared.fetchDailySnapshot(for: date, now: date)
+            } while revision != HealthRepository.shared.revision && !Task.isCancelled
             let midnight = Calendar.current.nextDate(
                 after: date,
                 matching: DateComponents(hour: 0, minute: 0, second: 0),
                 matchingPolicy: .nextTime
             )!
             let timeline = Timeline(
-                entries: [HealthDataEntry(date: date, data: data)],
+                entries: [HealthDataEntry(date: date, data: data, isSampleData: isSampleData)],
                 policy: .after(min(date.addingTimeInterval(15 * 60), midnight))
             )
             completion(timeline)
@@ -44,5 +52,6 @@ struct HealthDataEntry: TimelineEntry {
 
     let date: Date
     let data: HealthData
+    var isSampleData: Bool = false
 
 }
