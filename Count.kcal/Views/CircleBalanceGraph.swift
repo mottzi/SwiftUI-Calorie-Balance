@@ -11,20 +11,19 @@ struct CircleBalanceGraph: View {
 
     var lineWidth: CGFloat = 8
     let mode: GraphMode
-    var groupNowGeometry = true
     // Accented widgets replace colors with white but retain each ring's opacity.
     var accentedWidget = false
 
     var body: some View {
         GeometryReader { geo in
             let energy = mode == .now ? DataViewModel.sample.now : DataViewModel.sample.midnight
-            let context: BrightnessContext = mode == .now ? .circlegraphNow : .circlegraphMidnight
             let innerInset = scheme == .dark ? lineWidth * 2.5 : lineWidth * 2.25
 
-            let rings = ZStack {
+            // Keep color effects in one rendering path; a geometry group clips brightened channels.
+            ZStack {
                 // base
                 CircleProgressView(progress: 1, color: AppSettings.getGraphEmptyColor(scheme), lineWidth: lineWidth)
-                    .brightness(level: .primary)
+                    .brightness(level: .primary, to: .bargraph)
                     .opacity(accentedWidget ? 0.25 : 1)
 
                 if mode == .midnight {
@@ -34,7 +33,7 @@ struct CircleBalanceGraph: View {
                         color: AppSettings.burnedColor,
                         lineWidth: lineWidth
                     )
-                    .brightness(level: .tertiary, to: context)
+                    .brightness(level: .tertiary, to: .circlegraphMidnight)
                     .opacity(accentedWidget ? 0.45 : 1)
                 }
 
@@ -44,7 +43,7 @@ struct CircleBalanceGraph: View {
                     color: AppSettings.burnedColor,
                     lineWidth: lineWidth
                 )
-                .brightness(level: .secondary, to: context)
+                .brightness(level: .secondary, to: .circlegraphMidnight)
                 .opacity(accentedWidget ? 0.85 : 1)
 
                 // active
@@ -53,12 +52,12 @@ struct CircleBalanceGraph: View {
                     color: AppSettings.burnedColor,
                     lineWidth: lineWidth
                 )
-                .brightness(level: .primary, to: context)
+                .brightness(level: .primary, to: .circlegraphMidnight)
 
                 // base
                 CircleProgressView(progress: 1, color: AppSettings.getGraphEmptyColor(scheme), lineWidth: lineWidth)
                     .frame(width: geo.size.width - innerInset, height: geo.size.height - innerInset)
-                    .brightness(level: .primary)
+                    .brightness(level: .primary, to: .bargraph)
                     .opacity(accentedWidget ? 0.25 : 1)
 
                 // consumed
@@ -68,17 +67,10 @@ struct CircleBalanceGraph: View {
                     lineWidth: lineWidth
                 )
                 .frame(width: geo.size.width - innerInset, height: geo.size.height - innerInset)
-                .brightness(level: .primary)
+                .brightness(level: .primary, to: .bargraph)
                 .opacity(accentedWidget ? 0.6 : 1)
             }
 
-            Group {
-                if mode == .now && groupNowGeometry {
-                    rings.geometryGroup()
-                } else {
-                    rings
-                }
-            }
             .saturation(Settings.baseSaturation)
             .brightness(scheme == .dark ? -0.1 : 0.0)
         }

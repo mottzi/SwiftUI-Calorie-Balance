@@ -159,12 +159,10 @@ extension BalanceWidgetCircleContent {
         ZStack {
             CircleBalanceGraph(
                 mode: mode,
-                groupNowGeometry: mode == .midnight,
                 accentedWidget: renderingMode == .accented
             )
                 .frame(width: 130, height: 130)
                 .environment(HealthInterface(entry.data))
-                .brightness(-0.05)
             
             VStack(spacing: 0) {
                 Text("\(abs(balance))")
