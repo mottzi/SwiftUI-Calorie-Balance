@@ -58,10 +58,8 @@ struct DebugSettingsCard: View {
 extension DebugSettingsCard {
 
     private func restartOnboarding() {
+        dismiss()
         AppSettings.showWelcome = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            dismiss()
-        }
     }
 
     #if targetEnvironment(simulator)

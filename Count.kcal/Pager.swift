@@ -31,136 +31,140 @@ struct Pager: View {
     }
 
     var body: some View {
-        if AppSettings.showWelcome {
-            Onboarding()
-                .environment(SliderData)
-        } else {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 0) {
-                    if AppSettings.isSettingsInputValid {
-                        if showCalendar {
-                            CDatePicker(
-                                currentMonth: $currentMonth,
-                                days: calendarDays,
+        Group {
+            if AppSettings.showWelcome {
+                Onboarding()
+                    .environment(SliderData)
+            } else {
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        if AppSettings.isSettingsInputValid {
+                            if showCalendar {
+                                CDatePicker(
+                                    currentMonth: $currentMonth,
+                                    days: calendarDays,
+                                    navigation: navigation,
+                                    sceneActive: scenePhase == .active,
+                                    refreshRevision: calendarRefresh,
+                                    selectDay: { selectDay($0) }
+                                )
+                            }
+
+                            if streak.showStreaksView {
+                                WeekBalanceGraph(
+                                    navigation: navigation,
+                                    refreshRevision: manualRefresh + calendarRefresh,
+                                    selectDay: { selectDay($0) }
+                                )
+                                .padding(.bottom, 18)
+                            }
+
+                            DayPageStrip(
                                 navigation: navigation,
-                                sceneActive: scenePhase == .active,
-                                refreshRevision: calendarRefresh,
-                                selectDay: { selectDay($0) }
+                                todayPageMode: $todayPageMode
                             )
-                        }
-                        
-                        if streak.showStreaksView {
-                            WeekBalanceGraph(
-                                navigation: navigation,
-                                refreshRevision: manualRefresh + calendarRefresh,
-                                selectDay: { selectDay($0) }
+
+                            WeightCard()
+                        } else {
+                            ContentUnavailableView(
+                                "Calorie data incomplete",
+                                systemImage: "gear.badge.xmark",
+                                description: Text("Set up calorie data and goals")
                             )
-                            .padding(.bottom, 18)
+                            .padding(.top, 35)
                         }
-                        
-                        DayPageStrip(
-                            navigation: navigation,
-                            todayPageMode: $todayPageMode
-                        )
-                        
-                        WeightCard()
-                    } else {
-                        ContentUnavailableView(
-                            "Calorie data incomplete",
-                            systemImage: "gear.badge.xmark",
-                            description: Text("Set up calorie data and goals")
-                        )
-                        .padding(.top, 35)
                     }
                 }
-            }
-            .scrollDisabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
-            .frame(maxHeight: .infinity)
-            .onChange(of: scenePhase) { _, newPhase in
-                if newPhase == .active {
+                .scrollDisabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
+                .frame(maxHeight: .infinity)
+                .onChange(of: scenePhase) { _, newPhase in
+                    if newPhase == .active {
+                        navigation.rolloverIfNeeded()
+                    } else if newPhase == .inactive {
+                        WidgetCenter.shared.reloadAllTimelines()
+                    }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged)) { _ in
                     navigation.rolloverIfNeeded()
-                } else if newPhase == .inactive {
-                    WidgetCenter.shared.reloadAllTimelines()
+                }
+                .onChange(of: navigation.selectedDay) { _, _ in
+                    // extend the range without animating inserted pages
+                    withTransaction(Transaction(animation: nil)) {
+                        navigation.ensureSelectionBuffer()
+                    }
+                }
+                .onChange(of: healthDataMode.revision) {
+                    let selectedDay = navigation.selectedDay
+                    navigation = DayPager(past: 5, future: 1)
+                    navigation.ensurePagesForSelection(selectedDay)
+                    navigation.selectDay(selectedDay)
+                    calendarDays = showCalendar ? navigation.calendarPages(for: currentMonth) : []
+                    weightHistory.reset()
+                    streak.reset()
+                    manualRefresh += 1
+                    calendarRefresh += 1
+                }
+                .onChange(of: currentMonth) { _, month in
+                    guard showCalendar else { return }
+                    calendarDays = navigation.calendarPages(for: month)
+                }
+                .task(id: selectedRefreshKey) { await refreshSelectedDay() }
+                .task(id: summaryRefreshKey) { await refreshSummary() }
+                .refreshable {
+                    await refreshSelectedDay(force: true)
+                    await refreshSummary(force: true)
+                    calendarRefresh += 1
                 }
             }
-            .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged)) { _ in
-                navigation.rolloverIfNeeded()
+        }
+        // Keep navigation attached while onboarding replaces the dashboard.
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(AppSettings.showWelcome ? .hidden : .visible, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                todayButton.padding(.leading, toolbarOuterPadding)
             }
-            .onChange(of: navigation.selectedDay) { _, _ in
-                // extend the range without animating inserted pages
-                withTransaction(Transaction(animation: nil)) {
-                    navigation.ensureSelectionBuffer()
-                }
+            .withoutGlassBackground()
+
+            ToolbarItem(placement: .topBarLeading) {
+                selectedDateLabel
             }
-            .onChange(of: healthDataMode.revision) {
-                let selectedDay = navigation.selectedDay
-                navigation = DayPager(past: 5, future: 1)
-                navigation.ensurePagesForSelection(selectedDay)
-                navigation.selectDay(selectedDay)
-                calendarDays = showCalendar ? navigation.calendarPages(for: currentMonth) : []
-                weightHistory.reset()
-                streak.reset()
-                manualRefresh += 1
-                calendarRefresh += 1
+            .withoutGlassBackground()
+            .keepVisibleWhenConstrained()
+
+            ToolbarItem(placement: .topBarTrailing) {
+                StreakToolbarButton()
             }
-            .onChange(of: currentMonth) { _, month in
-                guard showCalendar else { return }
-                calendarDays = navigation.calendarPages(for: month)
-            }
-            .task(id: selectedRefreshKey) { await refreshSelectedDay() }
-            .task(id: summaryRefreshKey) { await refreshSummary() }
-            .refreshable {
-                await refreshSelectedDay(force: true)
-                await refreshSummary(force: true)
-                calendarRefresh += 1
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    todayButton.padding(.leading, toolbarOuterPadding)
+            .withoutGlassBackground()
+            .overflowBeforePrimaryItems()
+
+            if #available(iOS 27, *), dynamicType.isAccessibilitySize {
+                ToolbarItem(placement: .topBarPinnedTrailing) {
+                    accessibilityActionsMenu
                 }
                 .withoutGlassBackground()
-
-                ToolbarItem(placement: .topBarLeading) {
-                    selectedDateLabel
+            } else {
+                ToolbarItem(placement: .topBarTrailing) {
+                    calendarButton
                 }
                 .withoutGlassBackground()
                 .keepVisibleWhenConstrained()
 
-                ToolbarItem(placement: .topBarTrailing) {
-                    StreakToolbarButton()
-                }
-                .withoutGlassBackground()
-                .overflowBeforePrimaryItems()
-
-                if #available(iOS 27, *), dynamicType.isAccessibilitySize {
+                if #available(iOS 27, *) {
                     ToolbarItem(placement: .topBarPinnedTrailing) {
-                        accessibilityActionsMenu
+                        settingsButton.padding(.trailing, toolbarOuterPadding)
                     }
                     .withoutGlassBackground()
                 } else {
                     ToolbarItem(placement: .topBarTrailing) {
-                        calendarButton
+                        settingsButton.padding(.trailing, toolbarOuterPadding)
                     }
                     .withoutGlassBackground()
-                    .keepVisibleWhenConstrained()
-
-                    if #available(iOS 27, *) {
-                        ToolbarItem(placement: .topBarPinnedTrailing) {
-                            settingsButton.padding(.trailing, toolbarOuterPadding)
-                        }
-                        .withoutGlassBackground()
-                    } else {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            settingsButton.padding(.trailing, toolbarOuterPadding)
-                        }
-                        .withoutGlassBackground()
-                    }
                 }
             }
-            .navigationDestination(isPresented: $showSettings) { settingsDestination }
-            .safeAreaPadding(.top, 10)
         }
+        .navigationDestination(isPresented: $showSettings) { settingsDestination }
+        .safeAreaPadding(.top, AppSettings.showWelcome ? 0 : 10)
     }
 
 }
@@ -286,8 +290,8 @@ extension Pager {
     }
     
     private var settingsButton: some View {
-        NavigationLink {
-            settingsDestination
+        Button {
+            showSettings = true
         } label: {
             Image(systemName: "gear")
                 .foregroundColor(Color("TextColor"))
