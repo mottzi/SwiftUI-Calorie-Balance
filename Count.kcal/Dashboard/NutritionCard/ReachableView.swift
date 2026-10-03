@@ -83,6 +83,7 @@ extension ReachableView {
                 } else {
                 HStack {
                     Text(key)
+                        .transaction { $0.animation = .none }
                         .font(.caption)
                         .fontWeight(.bold)
                         .fontDesign(.rounded)
@@ -127,13 +128,20 @@ extension ReachableView {
                     HStack(spacing: 0) {
                         if case .widget = context {
                             Text(verbatim: consumedValue.stringFormat())
+                                .contentTransition(.numericText(value: Double(consumedValue)))
                                 .frame(minWidth: minWidthLeading[dynamicType, default: 30], alignment: .trailing)
                                 .dynamicTypeSize(...DynamicTypeSize.accessibility2)
 
                             Text(verbatim: "   / ")
+                                .transaction { $0.animation = .none }
                                 .dynamicTypeSize(...DynamicTypeSize.accessibility2)
 
-                            Text(verbatim: "\(goalValue.stringFormat()) g")
+                            HStack(spacing: 0) {
+                                Text(verbatim: goalValue.stringFormat())
+                                    .contentTransition(.numericText(value: Double(goalValue)))
+                                Text(verbatim: " g")
+                                    .transaction { $0.animation = .none }
+                            }
                                 .frame(minWidth: minWidthTrailing[dynamicType, default: 40], alignment: .trailing)
                                 .dynamicTypeSize(...DynamicTypeSize.accessibility2)
                         } else {
@@ -151,7 +159,7 @@ extension ReachableView {
                     .fontDesign(.rounded)
                     .fontWeight(.bold)
                     .padding(.trailing, 4)
-                    .transaction { $0.animation = .none }
+                    .transaction { if context == .app { $0.animation = .none } }
                     .dynamicTypeSize(...DynamicTypeSize.accessibility2)
                     #if !os(watchOS)
                     .foregroundStyle(Color("TextColor"))
