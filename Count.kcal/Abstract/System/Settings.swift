@@ -285,7 +285,15 @@ extension Settings {
             consumed: Color(red: 120/255, green: 211/255, blue: 248/255)
         ),
         
-        Theme(burned: Color(white: 0.4), consumed: Color(white: 0.9))
+        Theme(burned: Color(white: 0.4), consumed: Color(white: 0.9)),
+        Theme(
+            burned: Color(red: 155/255, green: 114/255, blue: 221/255),
+            consumed: Color(red: 244/255, green: 199/255, blue: 95/255)
+        ),
+        Theme(
+            burned: Color(red: 55/255, green: 181/255, blue: 160/255),
+            consumed: Color(red: 244/255, green: 128/255, blue: 133/255)
+        )
 
     ]
 
