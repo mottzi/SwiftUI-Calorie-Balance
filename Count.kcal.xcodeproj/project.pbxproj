@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		C5EF091B1D64437A8418B978 /* DebugSettingsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78867D21416946C0A1B75C42 /* DebugSettingsCard.swift */; };
 		A089523BC0B84BA4B3C4BC21 /* WidgetSampleDataBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409447FEBDE9467D941AC39E /* WidgetSampleDataBadge.swift */; };
-		C01100000000000000000001 /* HealthDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01100000000000000000002; };
 		0B803154C8084D7EAD9193C0 /* SampleHealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385A13964874208A838B836 /* SampleHealthDataSource.swift */; };
 		CD70499262B84E06B2FF7BFB /* SampleHealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385A13964874208A838B836 /* SampleHealthDataSource.swift */; };
 		34A97C68B19141E2BC01A901 /* SampleHealthDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */; };
@@ -169,7 +168,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		C0110000000000000000000A = {isa = PBXContainerItemProxy; containerPortal = 9A001C3129B6122500BB42B9; proxyType = 1; remoteGlobalIDString = 9A001C3829B6122500BB42B9; remoteInfo = Count.kcal; };
 		9A0F2DCF2AF6778E00780155 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9A001C3129B6122500BB42B9 /* Project object */;
@@ -232,8 +230,6 @@
 /* Begin PBXFileReference section */
 		78867D21416946C0A1B75C42 /* DebugSettingsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSettingsCard.swift; sourceTree = "<group>"; };
 		409447FEBDE9467D941AC39E /* WidgetSampleDataBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSampleDataBadge.swift; sourceTree = "<group>"; };
-		C01100000000000000000002 /* HealthDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Count.kcalTests/HealthDataTests.swift; sourceTree = "<group>"; };
-		C01100000000000000000003 /* Count.kcalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = Count.kcalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B385A13964874208A838B836 /* SampleHealthDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHealthDataSource.swift; sourceTree = "<group>"; };
 		01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHealthDay.swift; sourceTree = "<group>"; };
 		BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataMode.swift; sourceTree = "<group>"; };
@@ -339,7 +335,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		C01100000000000000000007 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 		9A001C3629B6122500BB42B9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -389,7 +384,6 @@
 				9A0F2DC72AF6778D00780155 /* Count.kcal.widgets */,
 				9AC2E2802C12742500B07EBE /* Count.kcal.watch */,
 				9AA413012C24D90D005B9D73 /* Count.kcal.complications */,
-				C01100000000000000000002 /* HealthDataTests.swift */,
 				9A001C3A29B6122500BB42B9 /* Products */,
 				9A2A67F829CF9D7F001E58DF /* Frameworks */,
 			);
@@ -402,7 +396,6 @@
 				9A0F2DC42AF6778D00780155 /* Count.kcal.widget.appex */,
 				9AC2E27F2C12742500B07EBE /* Count.kcal.watch.app */,
 				9AA412FE2C24D90D005B9D73 /* Count.kcal.complications.appex */,
-				C01100000000000000000003 /* Count.kcalTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -741,17 +734,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C01100000000000000000004 /* Count.kcalTests */ = {
-            isa = PBXNativeTarget;
-            buildConfigurationList = C01100000000000000000005;
-            buildPhases = (C01100000000000000000006, C01100000000000000000007, C01100000000000000000008);
-            buildRules = ();
-            dependencies = (C01100000000000000000009);
-            name = Count.kcalTests;
-            productName = Count.kcalTests;
-            productReference = C01100000000000000000003;
-            productType = "com.apple.product-type.bundle.unit-test";
-        };
 		9A001C3829B6122500BB42B9 /* Count.kcal */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9A001C4729B6122700BB42B9 /* Build configuration list for PBXNativeTarget "Count.kcal" */;
@@ -872,7 +854,6 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C01100000000000000000004 /* Count.kcalTests */,
 				9A001C3829B6122500BB42B9 /* Count.kcal */,
 				9A0F2DC32AF6778C00780155 /* Count.kcal.widget */,
 				9AC2E27E2C12742500B07EBE /* Count.kcal.watch */,
@@ -882,7 +863,6 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		C01100000000000000000008 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 		9A001C3729B6122500BB42B9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -926,7 +906,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		C01100000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (C01100000000000000000001); runOnlyForDeploymentPostprocessing = 0; };
 		9A001C3529B6122500BB42B9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1094,7 +1073,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		C01100000000000000000009 = {isa = PBXTargetDependency; target = 9A001C3829B6122500BB42B9; targetProxy = C0110000000000000000000A; };
 		9A0F2DD02AF6778E00780155 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 9A0F2DC32AF6778C00780155 /* Count.kcal.widget */;
@@ -1113,33 +1091,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		C0110000000000000000000B = {isa = XCBuildConfiguration; buildSettings = {
-                BUNDLE_LOADER = "$(TEST_HOST)";
-                TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Count.kcal.app/Count.kcal";
-                GENERATE_INFOPLIST_FILE = YES;
-                IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-                PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.tests;
-                PRODUCT_NAME = "$(TARGET_NAME)";
-                SDKROOT = iphoneos;
-                SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-                SWIFT_VERSION = 5.0;
-                SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-                TARGETED_DEVICE_FAMILY = 1;
-                LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-            }; name = Debug; };
-		C0110000000000000000000C = {isa = XCBuildConfiguration; buildSettings = {
-                BUNDLE_LOADER = "$(TEST_HOST)";
-                TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Count.kcal.app/Count.kcal";
-                GENERATE_INFOPLIST_FILE = YES;
-                IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-                PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.tests;
-                PRODUCT_NAME = "$(TARGET_NAME)";
-                SDKROOT = iphoneos;
-                SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-                SWIFT_VERSION = 5.0;
-                TARGETED_DEVICE_FAMILY = 1;
-                LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-            }; name = Release; };
 		9A001C4529B6122700BB42B9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1575,7 +1526,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01100000000000000000005 = {isa = XCConfigurationList; buildConfigurations = (C0110000000000000000000B, C0110000000000000000000C); defaultConfigurationIsVisible = 0; defaultConfigurationName = Debug; };
 		9A001C3429B6122500BB42B9 /* Build configuration list for PBXProject "Count.kcal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

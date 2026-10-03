@@ -9,11 +9,13 @@ final class HSlider {
     private(set) var fatsWidth: CGFloat = 0
     private(set) var protsWidth: CGFloat = 0
 
-    @ObservationIgnored private let settings: Settings
+    private(set) var selectionFeedbackTrigger = 0
 
-    private var carbsWidthLast: CGFloat = 0
-    private var fatsWidthLast: CGFloat = 0
-    private var protsWidthLast: CGFloat = 0
+    @ObservationIgnored private let settings: Settings
+    @ObservationIgnored private var sliderWidth: CGFloat = 0
+
+    @ObservationIgnored private var carbsWidthLast: CGFloat = 0
+    @ObservationIgnored private var protsWidthLast: CGFloat = 0
     
     private let minSegmentRatio: CGFloat = 0.1
     private let snapTo: CGFloat = 0.05
@@ -23,25 +25,37 @@ final class HSlider {
     /// Updates macro weight goals from the current energy budget and ratios.
     func updateMacroWeights() {
         let maxEnergy = settings.maxEatingEnergy()
-        settings.carbsGoal = ratioToWeight(
+        let carbsGoal = ratioToWeight(
             maxEatingEnergy: maxEnergy,
             ratio: settings.carbsRatio,
             type: .carbohydrates
         )
-        settings.fatsGoal = ratioToWeight(maxEatingEnergy: maxEnergy, ratio: settings.fatsRatio, type: .fats)
-        settings.proteinGoal = ratioToWeight(
+        let fatsGoal = ratioToWeight(maxEatingEnergy: maxEnergy, ratio: settings.fatsRatio, type: .fats)
+        let proteinGoal = ratioToWeight(
             maxEatingEnergy: maxEnergy,
             ratio: settings.proteinRatio,
             type: .proteins
         )
+        if settings.carbsGoal != carbsGoal { settings.carbsGoal = carbsGoal }
+        if settings.fatsGoal != fatsGoal { settings.fatsGoal = fatsGoal }
+        if settings.proteinGoal != proteinGoal { settings.proteinGoal = proteinGoal }
     }
 
 }
 
 extension HSlider {
 
+    /// Resizes only when the measured width changes by at least a screen pixel.
+    func resize(to width: CGFloat, displayScale: CGFloat) {
+        guard width > 0, displayScale > 0 else { return }
+        // Layout noise must not overwrite the saved origin of an active drag.
+        guard abs(width - sliderWidth) * displayScale >= 1 else { return }
+        ratioToWidth(width)
+    }
+
     func ratioToWidth(_ maxSlider: CGFloat) {
         guard maxSlider > 0 else { return }
+        sliderWidth = maxSlider
         let minSegment = maxSlider * minSegmentRatio
 
         if settings.carbsRatio * maxSlider < minSegment
@@ -56,7 +70,6 @@ extension HSlider {
         carbsWidthLast = carbsWidth
         
         fatsWidth = maxSlider * settings.fatsRatio
-        fatsWidthLast = fatsWidth
         
         protsWidth = maxSlider * settings.proteinRatio
         protsWidthLast = protsWidth
@@ -83,6 +96,8 @@ extension HSlider {
         var newOuterWidth = outerWidthLast + translation * (isLeading ? 1 : -1)
         newOuterWidth = (newOuterWidth / snapWidth).rounded() * snapWidth
         newOuterWidth = max(minWidth, min(newOuterWidth, maxOuterWidth))
+        // Ignore callbacks within the same snap, including floating-point layout noise.
+        guard abs(newOuterWidth - outerWidth) / maxWidth > 0.000000001 else { return }
         let widthAdded = newOuterWidth - outerWidth
 
         if middleWidth - widthAdded >= minWidth {
@@ -110,6 +125,7 @@ extension HSlider {
         }
         widthToRatio(maxWidth)
         updateMacroWeights()
+        selectionFeedbackTrigger += 1
     }
 
     /// Saves the segment widths after a handle drag ends.
@@ -117,7 +133,6 @@ extension HSlider {
 
         guard maxWidth > 0 else { return }
         carbsWidthLast = carbsWidth
-        fatsWidthLast = fatsWidth
         protsWidthLast = protsWidth
         widthToRatio(maxWidth)
         updateMacroWeights()
@@ -131,9 +146,12 @@ extension HSlider {
 
     private func widthToRatio(_ maxSlider: CGFloat) {
         guard maxSlider > 0 else { return }
-        settings.carbsRatio = carbsWidth / maxSlider
-        settings.fatsRatio = fatsWidth / maxSlider
-        settings.proteinRatio = protsWidth / maxSlider
+        let carbsRatio = carbsWidth / maxSlider
+        let fatsRatio = fatsWidth / maxSlider
+        let proteinRatio = protsWidth / maxSlider
+        if abs(settings.carbsRatio - carbsRatio) > 0.000000001 { settings.carbsRatio = carbsRatio }
+        if abs(settings.fatsRatio - fatsRatio) > 0.000000001 { settings.fatsRatio = fatsRatio }
+        if abs(settings.proteinRatio - proteinRatio) > 0.000000001 { settings.proteinRatio = proteinRatio }
     }
 
     private func ratioToWeight(maxEatingEnergy: Int, ratio: Double, type: MacroType) -> Int {
@@ -156,6 +174,7 @@ extension HSlider {
 struct MacroSlider: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
+    @Environment(\.displayScale) private var displayScale
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.colorScheme) private var colorScheme
@@ -197,7 +216,6 @@ struct MacroSlider: View {
                         }
                     }
                     .offset(x: SliderData.carbsWidth)
-                    .sensoryFeedback(trigger: SliderData.fatsWidth) { o, n in o != 0 ? .selection : nil }
                 
                 // Prots slider segment
                 Rectangle()
@@ -232,12 +250,13 @@ struct MacroSlider: View {
                 .offset(x: (SliderData.carbsWidth + SliderData.fatsWidth) - (dynamicType.isAccessibilitySize ? 24 : 20))
                 .gesture(dragGesture(for: .trailing, maxWidth: maxSlider))
             }
+            .sensoryFeedback(.selection, trigger: SliderData.selectionFeedbackTrigger)
             .task {
                 SliderData.ratioToWidth(maxSlider)
                 SliderData.updateMacroWeights()
             }
             .onChange(of: maxSlider) { _, width in
-                SliderData.ratioToWidth(width)
+                SliderData.resize(to: width, displayScale: displayScale)
             }
             .onChange(of: macroGoalInput) {
                 SliderData.updateMacroWeights()
