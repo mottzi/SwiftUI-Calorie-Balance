@@ -19,14 +19,14 @@ final class HealthInterface: Identifiable, Hashable {
     @ObservationIgnored private var pendingKey: SnapshotKey?
     @ObservationIgnored private var pendingLoad: Task<Void, Never>?
 
-    init(_ healthData: HealthData, repository: HealthRepository? = nil, settings: Settings = .shared) {
+    init(_ healthData: HealthData, repository: HealthRepository? = nil, settings: Settings? = nil) {
         let day = Calendar.current.startOfDay(for: healthData.date)
         id = day
         var initial = healthData
         initial.date = day
         sample = initial
         self.repository = repository ?? .shared
-        self.settings = settings
+        self.settings = settings ?? .shared
     }
 
     convenience init(data: HealthData) { self.init(data) }
