@@ -11,8 +11,17 @@ struct BarBalanceGraphBottomRow: View {
     let energy: EnergyBalance
     let mode: GraphMode
     let labels: Bool
+    let animateNumericValues: Bool
     
     var body: some View {
+        if animateNumericValues {
+            rowContent
+        } else {
+            rowContent.drawingGroup()
+        }
+    }
+
+    private var rowContent: some View {
         ZStack(alignment: .leading) {
             Rectangle()
                 .fill(AppSettings.getGraphEmptyColor(scheme).opacity(scheme == .light ? 0.4 : 1))
@@ -44,13 +53,15 @@ struct BarBalanceGraphBottomRow: View {
                 .overlay {
                     if labels {
                         ViewThatFits {
-                            Text("\(energy.consumed)").graphLabelStyle(scheme)
+                            Text("\(energy.consumed)")
+                                .graphLabelStyle(scheme)
+                                .contentTransition(animateNumericValues ? .numericText(value: Double(energy.consumed)) : .identity)
                             
                             Color.clear
                                 .frame(width: 0, height: 0)
                         }
                         .transaction { transaction in
-                            if mode == .now { transaction.animation = .none }
+                            if !animateNumericValues && mode == .now { transaction.animation = .none }
                         }
                     }
                 }
@@ -65,22 +76,14 @@ struct BarBalanceGraphBottomRow: View {
                         .padding(.leading, widthConsumed)
                     
                     if labels {
-                        if widthRest <= 25 {
-                            Text("\(energy.graphTotal - energy.consumed)")
-                                .graphLabelStyle(scheme)
-                                .padding(.leading, widthConsumed - 18)
-                        } else {
-                            Text("\(energy.graphTotal - energy.consumed)")
-                                .graphLabelStyle(scheme)
-                                .padding(.leading, widthConsumed)
-                        }
+                        Text("\(energy.graphTotal - energy.consumed)")
+                            .graphLabelStyle(scheme)
+                            .contentTransition(animateNumericValues ? .numericText(value: Double(energy.graphTotal - energy.consumed)) : .identity)
+                            .padding(.leading, widthConsumed - (widthRest <= 25 ? 18 : 0))
                     }
                 }
             }
         }
-        .drawingGroup()
-//        .geometryGroup()
-//        .compositingGroup()
     }
 
 }

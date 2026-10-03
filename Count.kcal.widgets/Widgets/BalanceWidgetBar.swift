@@ -161,6 +161,7 @@ extension BalanceWidgetBarContent {
                         .brightness(scheme == .dark ? 0.15 : 0)
                     
                     Text("\(burnedTotal)")
+                        .contentTransition(.numericText(value: Double(burnedTotal)))
                         .font(.title3)
                         .fontWeight(.semibold)
                         .foregroundColor(Color("TextColor"))
@@ -169,6 +170,7 @@ extension BalanceWidgetBarContent {
                         .foregroundColor(Color("SecondaryTextColor"))
                         .font(.caption)
                         .fontWeight(.light)
+                        .transaction { $0.animation = .none }
                 }
                 
                 Spacer()
@@ -180,6 +182,7 @@ extension BalanceWidgetBarContent {
                         .brightness(scheme == .dark ? 0.15 : 0)
 
                     Text("\(entry.data.consumed)")
+                        .contentTransition(.numericText(value: Double(entry.data.consumed)))
                         .font(.title3)
                         .fontWeight(.semibold)
                         .foregroundColor(Color("TextColor"))
@@ -188,6 +191,7 @@ extension BalanceWidgetBarContent {
                         .foregroundColor(Color("SecondaryTextColor"))
                         .font(.caption)
                         .fontWeight(.light)
+                        .transaction { $0.animation = .none }
                 }
             }
             .padding(.horizontal, 10)
@@ -202,25 +206,19 @@ extension BalanceWidgetBarContent {
                 .fontWeight(.semibold)
                 .foregroundColor(Color("SecondaryTextColor"))
                 .padding(.bottom, 4)
+                .transaction { $0.animation = .none }
             
-            if mode == .now {
-                Text("\(abs(balance))")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .foregroundColor(Color("TextColor"))
-                    .contentTransition(.numericText(value: Double(abs(balance))))
-            } else {
-                Text("\(abs(balance))")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(Color("TextColor"))
-                    .contentTransition(.numericText(value: Double(abs(balance))))
-            }
+            Text("\(abs(balance))")
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundStyle(Color("TextColor"))
+                .contentTransition(.numericText(value: Double(abs(balance))))
             
             Text(String(localized: balance > 0 ? "Deficit" : "Surplus"))
                 .font(.caption)
                 .fontWeight(.light)
                 .foregroundColor(Color("TextColor"))
+                .transaction { $0.animation = .none }
         }
         .fontDesign(.rounded)
     }
@@ -230,7 +228,7 @@ extension BalanceWidgetBarContent {
 extension BalanceWidgetBarContent {
 
     private func barGraph(for family: WidgetFamily) -> some View {
-        BarBalanceGraph(mode: mode)
+        BarBalanceGraph(mode: mode, animateNumericValues: true)
             .environment(HealthInterface(entry.data))
             .frame(height: 44)
             .padding(.bottom, 4)

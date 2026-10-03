@@ -20,15 +20,16 @@ struct BalanceDataLabelSimple: View {
                 .padding(.bottom, 4)
             
             Text("\(data)")
+                .contentTransition(.numericText(value: Double(data)))
                 .font(.title3)
                 .fontWeight(.semibold)
                 .foregroundColor(Color("TextColor"))
-                .transaction { transaction in transaction.animation = .none }
             
             Text("\(label)")
                 .font(.caption)
                 .foregroundColor(Color("SecondaryTextColor"))
                 .fontWeight(.light)
+                .transaction { $0.animation = .none }
         }
         .fontDesign(.rounded)
     }
@@ -60,15 +61,16 @@ struct BalanceDataLabelExtra: View {
             .offset(x: 3)
             
             Text("\(dataMain)")
+                .contentTransition(.numericText(value: Double(dataMain)))
                 .font(.title3)
                 .fontWeight(.semibold)
                 .foregroundColor(Color("TextColor"))
-                .transaction { transaction in transaction.animation = .none }
             
             Text("\(label)")
                 .foregroundColor(Color("SecondaryTextColor"))
                 .font(.caption)
                 .fontWeight(.light)
+                .transaction { $0.animation = .none }
         }
         .fontDesign(.rounded)
     }

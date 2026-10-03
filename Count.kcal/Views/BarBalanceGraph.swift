@@ -8,10 +8,12 @@ struct BarBalanceGraph: View {
 
     let mode: GraphMode
     let labels: Bool
+    let animateNumericValues: Bool
 
-    init(mode: GraphMode, labels: Bool = true) {
+    init(mode: GraphMode, labels: Bool = true, animateNumericValues: Bool = false) {
         self.mode = mode
         self.labels = labels
+        self.animateNumericValues = animateNumericValues
     }
     
     var body: some View {
@@ -20,7 +22,7 @@ struct BarBalanceGraph: View {
         GeometryReader { container in
             VStack(spacing: scheme == .light ? 1 : 2) {
                 GeometryReader { geometry in
-                    BarBalanceGraphTopRow(geometry: geometry, energy: energy, mode: mode, labels: labels)
+                    BarBalanceGraphTopRow(geometry: geometry, energy: energy, mode: mode, labels: labels, animateNumericValues: animateNumericValues)
                 }
                 .frame(height: container.size.height / 2 - 1)
                 .clipShape(UnevenRoundedRectangle(
@@ -32,7 +34,7 @@ struct BarBalanceGraph: View {
                 ))
                 
                 GeometryReader { geometry in
-                    BarBalanceGraphBottomRow(geometry: geometry, energy: energy, mode: mode, labels: labels)
+                    BarBalanceGraphBottomRow(geometry: geometry, energy: energy, mode: mode, labels: labels, animateNumericValues: animateNumericValues)
                 }
                 .frame(height: container.size.height / 2 - 1)
                 .clipShape(UnevenRoundedRectangle(

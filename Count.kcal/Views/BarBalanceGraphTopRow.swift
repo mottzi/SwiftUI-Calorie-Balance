@@ -14,8 +14,17 @@ struct BarBalanceGraphTopRow: View {
     let energy: EnergyBalance
     let mode: GraphMode
     let labels: Bool
+    let animateNumericValues: Bool
 
     var body: some View {
+        if animateNumericValues {
+            rowContent
+        } else {
+            rowContent.drawingGroup()
+        }
+    }
+
+    private var rowContent: some View {
         ZStack(alignment: .leading) {
             Rectangle()
                 .fill(AppSettings.getGraphEmptyColor(scheme).opacity(scheme == .light ? 0.4 : 1))
@@ -47,12 +56,14 @@ struct BarBalanceGraphTopRow: View {
                 .overlay {
                     if labels {
                         ViewThatFits {
-                            Text("\(energy.active)").graphLabelStyle(scheme)
+                            Text("\(energy.active)")
+                                .graphLabelStyle(scheme)
+                                .contentTransition(animateNumericValues ? .numericText(value: Double(energy.active)) : .identity)
                             
                             Color.clear.frame(width: 0, height: 0)
                         }
                         .transaction { transaction in
-                            if mode == .now { transaction.animation = .none }
+                            if !animateNumericValues && mode == .now { transaction.animation = .none }
                         }
                     }
                 }
@@ -77,13 +88,15 @@ struct BarBalanceGraphTopRow: View {
                 .overlay {
                     if labels {
                         ViewThatFits {
-                            Text("\(energy.resting)").graphLabelStyle(scheme)
+                            Text("\(energy.resting)")
+                                .graphLabelStyle(scheme)
+                                .contentTransition(animateNumericValues ? .numericText(value: Double(energy.resting)) : .identity)
 
                             Color.clear
                                 .frame(width: 0, height: 0)
                         }
                         .transaction { transaction in
-                            if mode == .now { transaction.animation = .none }
+                            if !animateNumericValues && mode == .now { transaction.animation = .none }
                         }
                     }
                 }
@@ -112,7 +125,9 @@ struct BarBalanceGraphTopRow: View {
                     .overlay {
                         if labels {
                             ViewThatFits {
-                                Text("\(energy.restingRemaining)").graphLabelStyle(scheme)
+                                Text("\(energy.restingRemaining)")
+                                    .graphLabelStyle(scheme)
+                                    .contentTransition(animateNumericValues ? .numericText(value: Double(energy.restingRemaining)) : .identity)
 
                                 Color.clear.frame(width: 0, height: 0)
                             }
@@ -131,22 +146,14 @@ struct BarBalanceGraphTopRow: View {
                         .padding(.leading, widthActive + widthPassive + widthProjected)
                     
                     if labels {
-                        if widthRest <= 25 {
-                            Text("\(energy.graphTotal - energy.burned)")
-                                .graphLabelStyle(scheme)
-                                .padding(.leading, widthActive + widthPassive + widthProjected - 18)
-                        } else {
-                            Text("\(energy.graphTotal - energy.burned)")
-                                .graphLabelStyle(scheme)
-                                .padding(.leading, widthActive + widthPassive + widthProjected)
-                        }
+                        Text("\(energy.graphTotal - energy.burned)")
+                            .graphLabelStyle(scheme)
+                            .contentTransition(animateNumericValues ? .numericText(value: Double(energy.graphTotal - energy.burned)) : .identity)
+                            .padding(.leading, widthActive + widthPassive + widthProjected - (widthRest <= 25 ? 18 : 0))
                     }
                 }
             }
         }
-        .drawingGroup()
-//        .geometryGroup()
-//        .compositingGroup()
     }
 
 }
