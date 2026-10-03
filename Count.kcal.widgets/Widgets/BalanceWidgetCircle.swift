@@ -17,6 +17,7 @@ struct BalanceWidgetCircle: Widget {
                 mode: ModeToggleManager.buttonMode() ? .now : .midnight
             )
             .environmentObject(AppSettings)
+            .sampleHealthDataIndicator(entry)
             .containerBackground(Color("BackGroundColor"), for: .widget)
         }
         .contentMarginsDisabled()

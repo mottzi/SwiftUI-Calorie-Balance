@@ -11,6 +11,7 @@ struct EnergySettingsView: View {
     @FocusState var focusedField: Field?
     
     @Environment(HSlider.self) private var SliderData
+    @State private var healthDataMode = HealthDataMode.shared
         
     var body: some View {
         VStack(spacing: 22) {
@@ -58,15 +59,27 @@ struct EnergySettingsView: View {
                         .frame(width: dynamicType.isAccessibilitySize ? nil : 100)
                         .fixedSize(horizontal: false, vertical: true)
                     
-                    IconPicker(
-                        firstIcon: "heart.fill",
-                        secondIcon: "pencil.and.list.clipboard",
-                        selection: $AppSettings.dataSource
-                    )
+                    if healthDataMode.usesSampleData {
+                        Image(systemName: "testtube.2")
+                            .font(.title3)
+                            .foregroundStyle(Color("SecondaryTextColor"))
+                            .frame(width: 100, height: 35)
+                            .accessibilityHidden(true)
+                    } else {
+                        IconPicker(
+                            firstIcon: "heart.fill",
+                            secondIcon: "pencil.and.list.clipboard",
+                            selection: $AppSettings.dataSource
+                        )
                         .frame(width: 100, height: 35)
                         .sensoryFeedback(.selection, trigger: AppSettings.dataSource)
-                    
-                    Text(AppSettings.dataSource == .apple ? String("Apple Health") : String(localized: "Custom Data"))
+                    }
+
+                    Text(
+                        healthDataMode.usesSampleData
+                            ? "Sample Data"
+                            : AppSettings.dataSource == .apple ? "Apple Health" : "Custom Data"
+                    )
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .animation(.linear, value: AppSettings.dataSource)
@@ -79,19 +92,20 @@ struct EnergySettingsView: View {
                 .padding(.vertical, 20)
                 .frame(maxWidth: dynamicType.isAccessibilitySize ? .infinity : nil)
                 .modifier(EnergySettingsCardStyle())
+                .disabled(healthDataMode.usesSampleData)
 
                 if !dynamicType.isAccessibilitySize { Spacer() }
             }
             .padding(.horizontal, dynamicType.isAccessibilitySize ? 16 : 0)
                         
             VStack(spacing: 12) {
-                BurnedEnergyInputRow(.resting, focusedField: $focusedField)
+                BurnedEnergyInputRow(.resting, focusedField: $focusedField, usesCustomEnergy: AppSettings.usesCustomEnergy)
                     .frame(height: dynamicType.isAccessibilitySize ? nil : 20)
                     .padding(.top, 6)
                     .padding(.horizontal, 15)
                     .padding(.bottom, 8)
 
-                BurnedEnergyInputRow(.active, focusedField: $focusedField)
+                BurnedEnergyInputRow(.active, focusedField: $focusedField, usesCustomEnergy: AppSettings.usesCustomEnergy)
                     .frame(height: dynamicType.isAccessibilitySize ? nil : 20)
                     .padding(.horizontal, 15)
                 
@@ -115,7 +129,13 @@ struct EnergySettingsView: View {
                     if !dynamicType.isAccessibilitySize { Spacer() }
                     
                     HStack(alignment: .lastTextBaseline) {
-                        Text("\(AppSettings.dataSource == .apple ? (AppSettings.showActive + AppSettings.showResting) : (AppSettings.customCalActive + AppSettings.customCalPassive))")
+                        Text(
+                            """
+                            \(AppSettings.usesCustomEnergy
+                                ? (AppSettings.customCalActive + AppSettings.customCalPassive)
+                                : (AppSettings.showActive + AppSettings.showResting))
+                            """
+                        )
                             .lineLimit(1)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .offset(x: 3)
@@ -277,21 +297,19 @@ struct EnergySettingsView: View {
             .padding(.horizontal, 40)
             .animation(.snappy, value: AppSettings.dataSource)
         }
-        .onAppear {
-            Task {
-                await AppSettings.updateShow()
-            }
+        .task(id: EstimateKey(
+            source: AppSettings.dataSource.rawValue,
+            unit: AppSettings.energyUnit.rawValue,
+            revision: healthDataMode.revision
+        )) {
+            await AppSettings.updateShow()
         }
-        .onChange(of: AppSettings.dataSource) {
-            Task {
-                await AppSettings.updateShow()
-            }
-        }
-        .onChange(of: AppSettings.energyUnit) {
-            Task {
-                await AppSettings.updateShow()
-            }
-        }
+    }
+
+    private struct EstimateKey: Hashable {
+        let source: Int
+        let unit: String
+        let revision: String
     }
 
 }
@@ -305,10 +323,12 @@ private struct BurnedEnergyInputRow: View {
     @Environment(HSlider.self) private var slider
 
     private let kind: BurnedEnergyKind
+    private let usesCustomEnergy: Bool
     private let focusedField: FocusState<Field?>.Binding
 
-    init(_ kind: BurnedEnergyKind, focusedField: FocusState<Field?>.Binding) {
+    init(_ kind: BurnedEnergyKind, focusedField: FocusState<Field?>.Binding, usesCustomEnergy: Bool) {
         self.kind = kind
+        self.usesCustomEnergy = usesCustomEnergy
         self.focusedField = focusedField
     }
 
@@ -333,7 +353,7 @@ private struct BurnedEnergyInputRow: View {
             if !dynamicType.isAccessibilitySize { Spacer() }
 
             HStack(alignment: .lastTextBaseline) {
-                if settings.dataSource == .custom {
+                if usesCustomEnergy {
                     TextField(String("0"), value: customValue, format: .number)
                         .focused(focusedField, equals: .active)
                         .keyboardType(.numberPad)
@@ -352,7 +372,10 @@ private struct BurnedEnergyInputRow: View {
                         }
                 } else {
                     Text("\(healthValue)")
-                        .frame(width: dynamicType.isAccessibilitySize ? nil : 50, alignment: dynamicType.isAccessibilitySize ? .leading : .trailing)
+                        .frame(
+                            width: dynamicType.isAccessibilitySize ? nil : 50,
+                            alignment: dynamicType.isAccessibilitySize ? .leading : .trailing
+                        )
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundStyle(Color("TextColor"))

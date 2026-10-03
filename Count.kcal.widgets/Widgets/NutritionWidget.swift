@@ -13,6 +13,7 @@ struct NutritionWidget: Widget {
         ) { entry in
             NutritionWidgetNow(entry: entry)
                 .containerRelativeFrame([.horizontal, .vertical])
+                .sampleHealthDataIndicator(entry)
                 .containerBackground(Color("BackGroundColor"), for: .widget)
                 .environmentObject(AppSettings)
         }

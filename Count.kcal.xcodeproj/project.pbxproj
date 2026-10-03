@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C5EF091B1D64437A8418B978 /* DebugSettingsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78867D21416946C0A1B75C42 /* DebugSettingsCard.swift */; };
+		A089523BC0B84BA4B3C4BC21 /* WidgetSampleDataBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409447FEBDE9467D941AC39E /* WidgetSampleDataBadge.swift */; };
 		0B803154C8084D7EAD9193C0 /* SampleHealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385A13964874208A838B836 /* SampleHealthDataSource.swift */; };
 		CD70499262B84E06B2FF7BFB /* SampleHealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385A13964874208A838B836 /* SampleHealthDataSource.swift */; };
 		34A97C68B19141E2BC01A901 /* SampleHealthDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */; };
@@ -226,6 +228,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		78867D21416946C0A1B75C42 /* DebugSettingsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSettingsCard.swift; sourceTree = "<group>"; };
+		409447FEBDE9467D941AC39E /* WidgetSampleDataBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSampleDataBadge.swift; sourceTree = "<group>"; };
 		B385A13964874208A838B836 /* SampleHealthDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHealthDataSource.swift; sourceTree = "<group>"; };
 		01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHealthDay.swift; sourceTree = "<group>"; };
 		BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataMode.swift; sourceTree = "<group>"; };
@@ -549,6 +553,7 @@
 				9A92F16C2B06CE1D009C4A2A /* EnergySettingsView.swift */,
 				9A92F16E2B06CF06009C4A2A /* NutrientsCard.swift */,
 				9A7CC5332C6A3F3E0061451D /* StepsCard.swift */,
+				78867D21416946C0A1B75C42 /* DebugSettingsCard.swift */,
 				9A8BA4162B4079B90011D412 /* ColorsCard */,
 				9A31F9BC2B6AEBE800886BAE /* UnitsCard.swift */,
 			);
@@ -719,6 +724,7 @@
 			isa = PBXGroup;
 			children = (
 				9A0F2DCA2AF6778D00780155 /* BalanceWidgetCircle.swift */,
+				409447FEBDE9467D941AC39E /* WidgetSampleDataBadge.swift */,
 				9ADC38122AF6FD0C005CCFEF /* BalanceWidgetBar.swift */,
 				9AA72DAD2B04CAAD00E32650 /* NutritionWidget.swift */,
 			);
@@ -908,6 +914,7 @@
 				9A9BC9BE2A7E9C7300A4404A /* ReachableView.swift in Sources */,
 				9A0D04FE2C165E6B00AF7247 /* Connectivity.swift in Sources */,
 				9A7CC5342C6A3F3E0061451D /* StepsCard.swift in Sources */,
+				C5EF091B1D64437A8418B978 /* DebugSettingsCard.swift in Sources */,
 				9A919DC32B233E380003C035 /* Extensions.swift in Sources */,
 				9A206D7D2C5838E50079DE3D /* AppleHealthView.swift in Sources */,
 				9A6DA88F2B361B3400585788 /* CaloriesCardTopRowCenter.swift in Sources */,
@@ -995,6 +1002,7 @@
 				9ABFA7B02C0A3C5A00024D2F /* BarBalanceGraph.swift in Sources */,
 				9ABFA7C02C0A450500024D2F /* BalanceDataLabels.swift in Sources */,
 				9A0F2DCB2AF6778D00780155 /* BalanceWidgetCircle.swift in Sources */,
+				A089523BC0B84BA4B3C4BC21 /* WidgetSampleDataBadge.swift in Sources */,
 				9ADC38112AF6FCBC005CCFEF /* CountWidgetBundle.swift in Sources */,
 				9ABFA7BD2C0A413A00024D2F /* ToggleViewModeIntent.swift in Sources */,
 			);

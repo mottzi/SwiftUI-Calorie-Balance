@@ -16,6 +16,7 @@ struct BalanceWidgetBar: Widget {
                 entry: entry,
                 mode: ModeToggleManager.buttonMode() ? .now : .midnight
             )
+            .sampleHealthDataIndicator(entry)
             .containerBackground(Color("BackGroundColor"), for: .widget)
             .environmentObject(AppSettings)
         }
