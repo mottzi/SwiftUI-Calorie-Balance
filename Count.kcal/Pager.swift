@@ -56,7 +56,7 @@ struct Pager: View {
                                     refreshRevision: manualRefresh + calendarRefresh,
                                     selectDay: { selectDay($0) }
                                 )
-                                .padding(.bottom, 18)
+                                .padding(.bottom, 16)
                             }
 
                             DayPageStrip(
