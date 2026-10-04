@@ -43,6 +43,8 @@ struct WeekBalanceGraph: View {
                 navigation.ensureSelectionBuffer()
             }
         )
+        // Reveal the chart without animating the new horizontal pager's layout.
+        .transaction { $0.animation = nil }
         .accessibilityScrollAction { edge in
             let offset = edge == .leading ? -7 : edge == .trailing ? 7 : 0
             guard offset != 0 else { return }
@@ -150,19 +152,17 @@ private struct CalendarPaging: ViewModifier {
         content
             .scrollTargetBehavior(.paging)
             .scrollPosition($position, anchor: .center)
+            .animation(animated ? .snappy : nil, value: position)
             .onScrollTargetVisibilityChange(idType: Date.self, threshold: 0.5) { ids in
                 guard ids.count == 1, let id = ids.first else { return }
                 visibleID = id
                 guard phase == .interacting || phase == .decelerating, id != selection else { return }
                 onSelect(id)
             }
-            .onAppear { position.scrollTo(id: selection, anchor: .center) }
             .onChange(of: selection) { _, day in
                 // A user's midpoint selection already belongs to this scroll.
                 guard visibleID != day else { return }
-                withAnimation(animated ? .snappy : nil) {
-                    position.scrollTo(id: day, anchor: .center)
-                }
+                position.scrollTo(id: day, anchor: .center)
             }
             .onScrollPhaseChange { _, phase in
                 self.phase = phase
@@ -193,6 +193,7 @@ private struct LegacyCalendarPaging: ViewModifier {
         content
             .scrollTargetBehavior(.paging)
             .scrollPosition(id: $position, anchor: .center)
+            .animation(animated ? .snappy : nil, value: position)
             .onChange(of: position) { _, day in
                 guard let day else { return }
                 if let target = programmaticTarget {
@@ -204,7 +205,7 @@ private struct LegacyCalendarPaging: ViewModifier {
             .onChange(of: selection) { _, day in
                 guard position != day else { return }
                 programmaticTarget = day
-                withAnimation(animated ? .snappy : nil) { position = day }
+                position = day
             }
     }
 }
