@@ -18,7 +18,6 @@ struct Pager: View {
     @Environment(WeightHistory.self) private var weightHistory
     @Environment(Streak.self) private var streak
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(\.requestReview) private var requestReview
     
     @State private var SliderData = HSlider()
@@ -116,49 +115,7 @@ struct Pager: View {
         // Keep navigation attached while onboarding replaces the dashboard.
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(AppSettings.showWelcome ? .hidden : .visible, for: .navigationBar)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                todayButton.padding(.leading, toolbarOuterPadding)
-            }
-            .withoutGlassBackground()
-
-            ToolbarItem(placement: .topBarLeading) {
-                selectedDateLabel
-            }
-            .withoutGlassBackground()
-            .keepVisibleWhenConstrained()
-
-            ToolbarItem(placement: .topBarTrailing) {
-                StreakToolbarButton()
-            }
-            .withoutGlassBackground()
-            .overflowBeforePrimaryItems()
-
-            if #available(iOS 27, *), dynamicType.isAccessibilitySize {
-                ToolbarItem(placement: .topBarPinnedTrailing) {
-                    accessibilityActionsMenu
-                }
-                .withoutGlassBackground()
-            } else {
-                ToolbarItem(placement: .topBarTrailing) {
-                    calendarButton
-                }
-                .withoutGlassBackground()
-                .keepVisibleWhenConstrained()
-
-                if #available(iOS 27, *) {
-                    ToolbarItem(placement: .topBarPinnedTrailing) {
-                        settingsButton.padding(.trailing, toolbarOuterPadding)
-                    }
-                    .withoutGlassBackground()
-                } else {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        settingsButton.padding(.trailing, toolbarOuterPadding)
-                    }
-                    .withoutGlassBackground()
-                }
-            }
-        }
+        .toolbar { Toolbar }
         .navigationDestination(isPresented: $showSettings) { settingsDestination }
         .safeAreaPadding(.top, AppSettings.showWelcome ? 0 : 10)
     }
@@ -167,12 +124,21 @@ struct Pager: View {
 
 extension Pager {
 
-    private var selectedPage: HealthInterface? { navigation.page(for: navigation.selectedDay) }
-
-    // iOS 26 adds more outer toolbar spacing than earlier releases.
-    private var toolbarOuterPadding: CGFloat {
-        if #available(iOS 26, *) { 8 } else { 16 }
+    private var Toolbar: some ToolbarContent {
+        DashboardToolbar(
+            navigation: navigation,
+            todayPageMode: $todayPageMode,
+            showCalendar: $showCalendar,
+            showSettings: $showSettings,
+            currentMonth: $currentMonth,
+            calendarDays: $calendarDays,
+            controlsDisabled: AppSettings.showWelcome || !AppSettings.isSettingsInputValid,
+            streakColor: AppSettings.weightGoal == .lose ? AppSettings.burnedColor : AppSettings.consumedColor,
+            selectDay: { selectDay($0) }
+        )
     }
+
+    private var selectedPage: HealthInterface? { navigation.page(for: navigation.selectedDay) }
 
     private var selectedRefreshKey: DayRefreshKey {
         DayRefreshKey(
@@ -248,88 +214,6 @@ extension Pager {
         }
     }
 
-    @ViewBuilder
-    private var selectedDateLabel: some View {
-        #if DEBUG
-        Button {
-            withAnimation(.snappy) {
-                selectedPage?.randomizeHealthData()
-            }
-        } label: {
-            selectedDateText
-        }
-        .buttonStyle(.plain)
-        .accessibilityHint("Randomize this day's health data")
-        .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
-        #else
-        selectedDateText
-        #endif
-    }
-
-    private var selectedDateText: some View {
-        Text(selectedPage?.id.relative ?? "")
-            .fontWeight(.semibold)
-            .fontDesign(.rounded)
-            .foregroundColor(Color("TextColor"))
-            .lineLimit(1)
-            .fixedSize(horizontal: true, vertical: false)
-            .transaction { transaction in
-                transaction.animation = nil
-            }
-    }
-
-    private var isTodaySelected: Bool {
-        navigation.selectedDay == Calendar.current.startOfDay(for: .now)
-    }
-    
-    private var calendarButton: some View {
-        Button(action: toggleCalendar) {
-            Image(showCalendar == false ? .customCalendar : .customCalendarSlash)
-                .symbolRenderingMode(.palette)
-                .foregroundStyle(Color("TextColor"))
-                .fontWeight(.medium)
-        }
-        .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
-    }
-
-    private func toggleCalendar() {
-        // Populate the grid before insertion so its first layout has every row.
-        if !showCalendar {
-            calendarDays = navigation.calendarPages(for: currentMonth)
-        }
-        withAnimation(.snappy) {
-            showCalendar.toggle()
-        }
-    }
-    
-    private var settingsButton: some View {
-        Button {
-            showSettings = true
-        } label: {
-            Image(systemName: "gear")
-                .foregroundColor(Color("TextColor"))
-                .fontWeight(.medium)
-        }
-    }
-
-    private var accessibilityActionsMenu: some View {
-        Menu {
-            Button(action: toggleCalendar) {
-                Label("Calendar", systemImage: "calendar")
-            }
-
-            Button {
-                showSettings = true
-            } label: {
-                Label("Settings", systemImage: "gear")
-            }
-        } label: {
-            Image(systemName: "ellipsis.circle")
-                .foregroundColor(Color("TextColor"))
-                .accessibilityLabel("Calendar and Settings")
-        }
-    }
-
     private var settingsDestination: some View {
         SettingsPage()
             .environmentObject(AppSettings)
@@ -348,36 +232,6 @@ extension Pager {
                     #endif
                 }
             }
-    }
-    
-    private var todayButton: some View {
-        Button {
-            if !isTodaySelected {
-                let now = Date.now
-                selectDay(now)
-                if !Calendar.current.isDate(currentMonth, equalTo: now, toGranularity: .month) {
-                    withAnimation(.snappy) { currentMonth = now }
-                }
-            } else {
-                withAnimation(.snappy) {
-                    todayPageMode = todayPageMode == .first ? .second : .first
-                }
-            }
-        } label: {
-            todaySymbol.frame(width: 30)
-        }
-        .disabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
-    }
-
-    private var todaySymbol: some View {
-        Image(
-            systemName: !isTodaySelected
-                ? "arrow.turn.down.left"
-                : todayPageMode == .first ? "sun.min.fill" : "moon.stars.fill"
-        )
-        .foregroundColor(Color("TextColor"))
-        .contentTransition(.symbolEffect(.replace))
-        .fontWeight(.medium)
     }
 
 }
@@ -413,37 +267,6 @@ private struct DayPageStrip: View {
     }
 }
 
-/// Toolbar control for the streak count and chart visibility.
-private struct StreakToolbarButton: View {
-
-    @EnvironmentObject private var settings: Settings
-
-    @Environment(Streak.self) private var streak
-
-    var body: some View {
-        Button {
-            streak.toggleStreaksView()
-        } label: {
-            let color = settings.weightGoal == .lose ? settings.burnedColor : settings.consumedColor
-            HStack(spacing: 4) {
-                Image(systemName: "flame.fill")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(color.brighten(-0.1).gradient)
-                    .fontWeight(.bold)
-
-                Text("\(streak.streaks)")
-                    .font(.callout)
-                    .fontDesign(.rounded)
-                    .fontWeight(.bold)
-                    .foregroundStyle(Color("TextColor"))
-            }
-        }
-        .disabled(settings.showWelcome || !settings.isSettingsInputValid)
-    }
-
-}
-
-
 #Preview { PreviewPager }
 
 extension View {
@@ -452,37 +275,6 @@ extension View {
     func softTopScrollEdge() -> some View {
         if #available(iOS 26, *) {
             scrollEdgeEffectStyle(.soft, for: .top)
-        } else {
-            self
-        }
-    }
-
-}
-
-private extension ToolbarContent {
-
-    @ToolbarContentBuilder
-    func withoutGlassBackground() -> some ToolbarContent {
-        if #available(iOS 26, *) {
-            sharedBackgroundVisibility(.hidden)
-        } else {
-            self
-        }
-    }
-
-    @ToolbarContentBuilder
-    func keepVisibleWhenConstrained() -> some ToolbarContent {
-        if #available(iOS 27, *) {
-            visibilityPriority(.high)
-        } else {
-            self
-        }
-    }
-
-    @ToolbarContentBuilder
-    func overflowBeforePrimaryItems() -> some ToolbarContent {
-        if #available(iOS 27, *) {
-            visibilityPriority(.low)
         } else {
             self
         }

@@ -169,6 +169,13 @@
 		9AF4DC922BF2C4B5000EF0A5 /* MacroSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF4DC912BF2C4B5000EF0A5 /* MacroSlider.swift */; };
 		9AFAAA6F2B5FF9DC00034CA9 /* HealthDataTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AFAAA6E2B5FF9DC00034CA9 /* HealthDataTimelineProvider.swift */; };
 		9AFDBA992AF822FE003E8B9C /* HealthInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */; };
+		A14CC1000000000000000002 /* DashboardToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14CC1000000000000000001 /* DashboardToolbar.swift */; };
+		A14CC1000000000000000004 /* StreakToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14CC1000000000000000003 /* StreakToolbarButton.swift */; };
+		A14CC2000000000000000002 /* TodayToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14CC2000000000000000001 /* TodayToolbarButton.swift */; };
+		A14CC2000000000000000004 /* SelectedDateToolbarLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14CC2000000000000000003 /* SelectedDateToolbarLabel.swift */; };
+		A14CC2000000000000000006 /* CalendarToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14CC2000000000000000005 /* CalendarToolbarButton.swift */; };
+		A14CC2000000000000000008 /* SettingsToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14CC2000000000000000007 /* SettingsToolbarButton.swift */; };
+		A14CC200000000000000000A /* DashboardToolbarActionsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14CC2000000000000000009 /* DashboardToolbarActionsMenu.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -336,6 +343,13 @@
 		9AF39CBB2B3E2E7A0037628F /* HealthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthData.swift; sourceTree = "<group>"; };
 		9AF4DC912BF2C4B5000EF0A5 /* MacroSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacroSlider.swift; sourceTree = "<group>"; };
 		9AFAAA6E2B5FF9DC00034CA9 /* HealthDataTimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataTimelineProvider.swift; sourceTree = "<group>"; };
+		A14CC1000000000000000001 /* DashboardToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardToolbar.swift; sourceTree = "<group>"; };
+		A14CC1000000000000000003 /* StreakToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakToolbarButton.swift; sourceTree = "<group>"; };
+		A14CC2000000000000000001 /* TodayToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayToolbarButton.swift; sourceTree = "<group>"; };
+		A14CC2000000000000000003 /* SelectedDateToolbarLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedDateToolbarLabel.swift; sourceTree = "<group>"; };
+		A14CC2000000000000000005 /* CalendarToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarToolbarButton.swift; sourceTree = "<group>"; };
+		A14CC2000000000000000007 /* SettingsToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsToolbarButton.swift; sourceTree = "<group>"; };
+		A14CC2000000000000000009 /* DashboardToolbarActionsMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardToolbarActionsMenu.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -412,6 +426,7 @@
 				9AF39CBE2B3E2EC10037628F /* Abstract */,
 				9A001C3C29B6122500BB42B9 /* CountApp.swift */,
 				9A5460342B27C0D3009BF0A4 /* Pager.swift */,
+				A14CC3000000000000000001 /* Toolbar */,
 				9A6DA88A2B36194800585788 /* Dashboard */,
 				9AF39CB42B3DC57A0037628F /* WeightCard */,
 				9A92F16B2B06CD94009C4A2A /* Settings */,
@@ -735,6 +750,20 @@
 			path = Widgets;
 			sourceTree = "<group>";
 		};
+		A14CC3000000000000000001 /* Toolbar */ = {
+			isa = PBXGroup;
+			children = (
+				A14CC1000000000000000001 /* DashboardToolbar.swift */,
+				A14CC1000000000000000003 /* StreakToolbarButton.swift */,
+				A14CC2000000000000000001 /* TodayToolbarButton.swift */,
+				A14CC2000000000000000003 /* SelectedDateToolbarLabel.swift */,
+				A14CC2000000000000000005 /* CalendarToolbarButton.swift */,
+				A14CC2000000000000000007 /* SettingsToolbarButton.swift */,
+				A14CC2000000000000000009 /* DashboardToolbarActionsMenu.swift */,
+			);
+			path = Toolbar;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -932,6 +961,13 @@
 				9AE3D3A52B7970EC00483339 /* CDatePicker.swift in Sources */,
 				9AEA55CC2A5D65DC000AB057 /* MacroCard.swift in Sources */,
 				9A5460352B27C0D3009BF0A4 /* Pager.swift in Sources */,
+				A14CC1000000000000000004 /* StreakToolbarButton.swift in Sources */,
+				A14CC1000000000000000002 /* DashboardToolbar.swift in Sources */,
+				A14CC200000000000000000A /* DashboardToolbarActionsMenu.swift in Sources */,
+				A14CC2000000000000000008 /* SettingsToolbarButton.swift in Sources */,
+				A14CC2000000000000000006 /* CalendarToolbarButton.swift in Sources */,
+				A14CC2000000000000000004 /* SelectedDateToolbarLabel.swift in Sources */,
+				A14CC2000000000000000002 /* TodayToolbarButton.swift in Sources */,
 				9A480F6A2B19315600D79FAE /* ToggleViewModeIntent.swift in Sources */,
 				9A8BA4092B4055B70011D412 /* ColorsCard.swift in Sources */,
 				9ABFA7A22C0A3A6300024D2F /* CircleBalanceGraph.swift in Sources */,
