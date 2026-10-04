@@ -49,6 +49,7 @@ struct CaloriesCardTopRow: View {
                     VStack(alignment: .leading, spacing: 0) {
                         HStack(alignment: .lastTextBaseline, spacing: 2) {
                             Text("\(energy.burned)")
+                                .contentTransition(.numericText(value: Double(energy.burned)))
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color("TextColor"))
@@ -58,6 +59,7 @@ struct CaloriesCardTopRow: View {
                                 .font(mode == .now ? .caption : .system(size: 13))
                                 .foregroundStyle(Color("SecondaryTextColor"))
                                 .fontWeight(.medium)
+                                .transaction { $0.animation = .none }
                                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                         }
                         
@@ -65,9 +67,9 @@ struct CaloriesCardTopRow: View {
                             .font(.caption)
                             .fontWeight(.light)
                             .foregroundColor(Color("SecondaryTextColor"))
+                            .transaction { $0.animation = .none }
                             .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                     }
-                    .transaction { $0.animation = .none }
                 }
                              
                 HStack(spacing: dynamicType <= .xxLarge ? 14 : 10) {
@@ -102,6 +104,7 @@ struct CaloriesCardTopRow: View {
                     VStack(alignment: .leading, spacing: 0) {
                         HStack(alignment: .lastTextBaseline, spacing: 2) {
                             Text("\(DataViewModel.sample.consumed)")
+                                .contentTransition(.numericText(value: Double(DataViewModel.sample.consumed)))
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Color("TextColor"))
@@ -111,6 +114,7 @@ struct CaloriesCardTopRow: View {
                                 .font(mode == .now ? .caption : .system(size: 13))
                                 .foregroundStyle(Color("SecondaryTextColor"))
                                 .fontWeight(.medium)
+                                .transaction { $0.animation = .none }
                                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                         }
 
@@ -118,9 +122,9 @@ struct CaloriesCardTopRow: View {
                             .font(.caption)
                             .fontWeight(.light)
                             .foregroundColor(Color("SecondaryTextColor"))
+                            .transaction { $0.animation = .none }
                             .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                     }
-                    .transaction { $0.animation = .none }
                 }
             }
             .fontDesign(.rounded)
