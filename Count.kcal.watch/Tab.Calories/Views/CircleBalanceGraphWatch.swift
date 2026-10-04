@@ -83,7 +83,6 @@ struct CircleBalanceGraphWatch: View {
                     .brightness(level: .primary)
             }
             .frame(maxWidth: .infinity)
-            .geometryGroup()
             .saturation(Settings.baseSaturation)
             .brightness(scheme == .dark ? -0.1 : 0.0)
         }
