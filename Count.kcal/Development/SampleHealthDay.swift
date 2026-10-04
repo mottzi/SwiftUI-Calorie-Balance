@@ -1,4 +1,4 @@
-#if DEBUG && os(iOS)
+#if DEBUG && (os(iOS) || os(watchOS))
 import HealthKit
 
 /// One repeatable dataset for app-local samples and simulator HealthKit seeding.

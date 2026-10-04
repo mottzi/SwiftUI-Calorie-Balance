@@ -1,4 +1,4 @@
-#if DEBUG && os(iOS)
+#if DEBUG && (os(iOS) || os(watchOS))
 import HealthKit
 
 /// Supplies measurements without creating or accessing an HKHealthStore.

@@ -1,5 +1,6 @@
 import SwiftUI
 import WatchConnectivity
+import WidgetKit
 
 /// Phone and watch settings transfer through the active connectivity session.
 final class Connectivity: NSObject, ObservableObject {
@@ -65,6 +66,7 @@ extension Connectivity: WCSessionDelegate {
             withAnimation(.bouncy(duration: 0.6)) {
                 snapshot.apply(to: .shared)
                 self.lastReceivedSettingsContext = .now
+                WidgetCenter.shared.reloadAllTimelines()
             }
         }
     }
@@ -111,6 +113,7 @@ struct SettingsContextSync: ViewModifier {
         content
             .onAppear { Connectivity.shared.sendSettingsContext() }
             .onChange(of: currentSettings) { Connectivity.shared.sendSettingsContext() }
+            .onChange(of: HealthDataMode.shared.revision) { Connectivity.shared.sendSettingsContext() }
     }
 
     private var currentSettings: WatchSettingsSnapshot {
@@ -150,6 +153,7 @@ private struct WatchSettingsSnapshot: Codable, Equatable {
     let fatsGoal: Int?
     let burnedColor: String?
     let consumedColor: String?
+    var usesSampleData: Bool? = nil
 
     var context: [String: Any]? {
         guard let data = try? PropertyListEncoder().encode(self) else { return nil }
@@ -186,12 +190,25 @@ extension WatchSettingsSnapshot {
             carbsGoal: settings.carbsGoal,
             fatsGoal: settings.fatsGoal,
             burnedColor: settings.burnedColor.rawValue,
-            consumedColor: settings.consumedColor.rawValue
+            consumedColor: settings.consumedColor.rawValue,
+            usesSampleData: Self.sampleModeForTransfer
         )
     }
 
     @MainActor
+    private static var sampleModeForTransfer: Bool? {
+        #if DEBUG
+        HealthDataMode.isSampleDataEnabled
+        #else
+        nil
+        #endif
+    }
+
+    @MainActor
     func apply(to settings: Settings) {
+        #if DEBUG && os(watchOS)
+        if let usesSampleData { HealthDataMode.shared.usesSampleData = usesSampleData }
+        #endif
 
         if let weightGoal, let value = Settings.WeightGoals(rawValue: weightGoal) {
             settings.weightGoal = value

@@ -153,6 +153,7 @@ struct RectangleBalanceComplication<Mode: BalanceComplicationMode>: Widget {
             let color = balance >= 0 ? Settings.shared.burnedColor : Settings.shared.consumedColor
 
             RectangleBalanceComplicationView(entry: entry, mode: Mode.graphMode)
+                .accessibilityHint(entry.isSampleData ? Text("Sample Data") : Text(""))
                 .containerBackground(color.brighten(0.1).gradient, for: .widget)
         }
         .configurationDisplayName(Mode.graphMode == .now ? String("Circle (now)") : String("Circle (midnight)"))

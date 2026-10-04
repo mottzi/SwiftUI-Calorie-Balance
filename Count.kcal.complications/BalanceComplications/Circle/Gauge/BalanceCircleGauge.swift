@@ -59,6 +59,7 @@ struct BalanceCircleGaugeComplication<Mode: BalanceComplicationMode>: Widget {
 
         StaticConfiguration(kind: kind, provider: HealthDataTimelineProvider()) { entry in
             BalanceCircleGaugeComplicationView(entry: entry, mode: Mode.graphMode)
+                .accessibilityHint(entry.isSampleData ? Text("Sample Data") : Text(""))
                 .containerBackground(.clear, for: .widget)
         }
         .configurationDisplayName(Mode.graphMode == .now ? String("Gauge (now)") : String("Gauge (midnight)"))

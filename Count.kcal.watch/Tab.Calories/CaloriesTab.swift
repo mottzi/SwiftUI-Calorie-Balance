@@ -12,17 +12,11 @@ struct CaloriesTab: View {
     var body: some View {
         VStack {
             Button {
-                #if !DEBUG
                 toggleMode()
-                #else
-                withAnimation(.snappy) {
-                    Interface.randomizeHealthData()
-                }
-                #endif
             }
             label: {
                 CircleBalanceGraphWatch(mode: mode)
-                    .overlay { CircleBalanceGraphOverlay(balance: balance) }
+                    .overlay { CircleBalanceGraphOverlay(balance: balance, isSampleData: Interface.sample.isSampleData) }
             }
             .buttonStyle(.plain)
             

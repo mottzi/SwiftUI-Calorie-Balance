@@ -97,6 +97,7 @@ struct RectangleBalanceBarComplication<Mode: BalanceComplicationMode>: Widget {
 
         StaticConfiguration(kind: kind, provider: HealthDataTimelineProvider()) { entry in
             RectangleBalanceBarComplicationView(entry: entry, mode: Mode.graphMode)
+                .accessibilityHint(entry.isSampleData ? Text("Sample Data") : Text(""))
                 .containerBackground(Color(red: 30/255, green: 30/255, blue: 30/255), for: .widget)
         }
         .configurationDisplayName(Mode.graphMode == .now ? String("Bar (now)") : String("Bar (midnight)"))

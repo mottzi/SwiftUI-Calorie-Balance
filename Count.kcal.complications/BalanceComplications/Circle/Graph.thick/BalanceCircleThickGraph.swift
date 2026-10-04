@@ -58,6 +58,7 @@ struct BalanceCircleThickGraphComplication<Mode: BalanceComplicationMode>: Widge
 
         StaticConfiguration(kind: kind, provider: HealthDataTimelineProvider()) { entry in
             BalanceCircleThickGraphComplicationView(entry: entry, mode: Mode.graphMode)
+                .accessibilityHint(entry.isSampleData ? Text("Sample Data") : Text(""))
                 .containerBackground(.background, for: .widget)
         }
         .configurationDisplayName(Mode.graphMode == .now ? String("Graph #2 (now)") : String("Graph #2 (midnight)"))

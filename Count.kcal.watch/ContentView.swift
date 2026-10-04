@@ -10,6 +10,7 @@ struct ContentView: View {
     @StateObject private var Watch = Connectivity.shared
     @State private var Interface: HealthInterface
 
+    @State private var healthDataMode = HealthDataMode.shared
     @State private var refreshRevision = 0
     @State private var healthAccessRequested = false
     @State private var tabSelection = 0
@@ -86,8 +87,9 @@ struct ContentView: View {
                 
             }
             .tabViewStyle(.verticalPage)
-            .task {
-                // the watch has no onboarding flow, so request access before its first refresh
+            .task(id: healthDataMode.usesSampleData) {
+                healthAccessRequested = false
+                // Sample reads bypass authorization; returning to HealthKit requests access.
                 _ = await HealthRepository.shared.requestPermission()
                 guard !Task.isCancelled else { return }
                 healthAccessRequested = true

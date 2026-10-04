@@ -2,7 +2,7 @@ import Foundation
 import Observation
 import WidgetKit
 
-/// Debug mode shared by the iPhone app and its widgets. Watch and Release always use HealthKit.
+/// Debug mode shared locally by apps and extensions, and sent from phone to watch.
 @MainActor
 @Observable
 final class HealthDataMode {
@@ -23,7 +23,7 @@ final class HealthDataMode {
 
     /// Also used after simulator seeding so cached empty results do not survive a save.
     func invalidateData() {
-        #if DEBUG && os(iOS)
+        #if DEBUG && (os(iOS) || os(watchOS))
         revision = UUID().uuidString
         Self.defaults.set(["enabled": usesSampleData, "revision": revision], forKey: Self.key)
         WidgetCenter.shared.reloadAllTimelines()
@@ -45,9 +45,9 @@ final class HealthDataMode {
 
 extension HealthDataMode {
 
-    /// Read defaults for every request so a running widget sees phone changes.
+    /// Read defaults for every request so extensions see the latest local mode.
     static var isSampleDataEnabled: Bool {
-        #if DEBUG && os(iOS)
+        #if DEBUG && (os(iOS) || os(watchOS))
         return defaults.dictionary(forKey: key)?["enabled"] as? Bool ?? false
         #else
         return false
@@ -55,7 +55,7 @@ extension HealthDataMode {
     }
 
     static var currentRevision: String {
-        #if DEBUG && os(iOS)
+        #if DEBUG && (os(iOS) || os(watchOS))
         return defaults.dictionary(forKey: key)?["revision"] as? String ?? "healthkit"
         #else
         return "healthkit"
@@ -73,6 +73,7 @@ extension HealthDataMode {
 extension HealthDataMode {
 
     private static let defaults = UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app")!
+
     private static let key = "debugHealthDataMode"
 
 }

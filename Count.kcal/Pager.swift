@@ -94,11 +94,7 @@ struct Pager: View {
                     }
                 }
                 .onChange(of: healthDataMode.revision) {
-                    let selectedDay = navigation.selectedDay
-                    navigation = DayPager(past: 5, future: 1)
-                    navigation.ensurePagesForSelection(selectedDay)
-                    navigation.selectDay(selectedDay)
-                    calendarDays = showCalendar ? navigation.calendarPages(for: currentMonth) : []
+                    // Keep the visible day's model and refresh it with the new source revision.
                     weightHistory.reset()
                     streak.reset()
                     manualRefresh += 1

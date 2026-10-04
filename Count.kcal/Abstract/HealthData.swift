@@ -20,6 +20,9 @@ struct HealthData: Equatable {
     
     var steps: Int
 
+    /// Records the source used for this snapshot, including while the mode changes.
+    var isSampleData: Bool = false
+
     /// Selects actual active energy for the midnight estimate.
     var usesMeasuredActiveAtMidnight: Bool = true
     

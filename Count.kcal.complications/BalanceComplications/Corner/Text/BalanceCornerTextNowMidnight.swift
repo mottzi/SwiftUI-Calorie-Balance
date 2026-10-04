@@ -46,6 +46,7 @@ struct BalanceCornerTextNowMidnightComplication: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "Balance.text.now.midnight", provider: HealthDataTimelineProvider()) { entry in
             BalanceCornerTextNowMidnightComplicationView(entry: entry)
+                .accessibilityHint(entry.isSampleData ? Text("Sample Data") : Text(""))
                 .containerBackground(.clear, for: .widget)
         }
         .configurationDisplayName(String("Number (both)"))

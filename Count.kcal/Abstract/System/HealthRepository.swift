@@ -27,6 +27,7 @@ final class HealthRepository {
         let isToday = calendar.isDate(date, inSameDayAs: now)
         var snapshot = HealthData.empty(for: dayStart)
         snapshot.usesMeasuredActiveAtMidnight = !usesCustomEnergy
+        snapshot.isSampleData = injectedSource == nil && HealthDataMode.isSampleDataEnabled
 
         if !Task.isCancelled {
             let energy: HKUnit = energyUnit == .kJ ? .jouleUnit(with: .kilo) : .kilocalorie()
@@ -195,7 +196,7 @@ extension HealthRepository {
 
     private var dataSource: any HealthDataSource {
         if let injectedSource { return injectedSource }
-        #if DEBUG && os(iOS)
+        #if DEBUG && (os(iOS) || os(watchOS))
         if HealthDataMode.isSampleDataEnabled { return SampleHealthDataSource() }
         #endif
         return healthKit

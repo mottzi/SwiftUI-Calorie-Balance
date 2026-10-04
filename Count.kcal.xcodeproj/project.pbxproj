@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		569E7BBC28AE49AABDC7EDE2 /* SampleHealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385A13964874208A838B836 /* SampleHealthDataSource.swift */; };
+		E26633B63BA348AA8A4A03F9 /* SampleHealthDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */; };
+		BECAFAEF3180414EABDE5997 /* SampleHealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385A13964874208A838B836 /* SampleHealthDataSource.swift */; };
+		49090B9B336D42BA9E33B7D1 /* SampleHealthDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */; };
 		C5EF091B1D64437A8418B978 /* DebugSettingsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78867D21416946C0A1B75C42 /* DebugSettingsCard.swift */; };
 		A089523BC0B84BA4B3C4BC21 /* WidgetSampleDataBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409447FEBDE9467D941AC39E /* WidgetSampleDataBadge.swift */; };
 		0B803154C8084D7EAD9193C0 /* SampleHealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385A13964874208A838B836 /* SampleHealthDataSource.swift */; };
@@ -1012,6 +1016,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				569E7BBC28AE49AABDC7EDE2 /* SampleHealthDataSource.swift in Sources */,
+				E26633B63BA348AA8A4A03F9 /* SampleHealthDay.swift in Sources */,
 				9A2F7E672C34989100498A67 /* BalanceCornerTextNowMidnight.swift in Sources */,
 				9A6DBD582C28D2E3000920DA /* BalanceCircleGraph.swift in Sources */,
 				9AD5F5522C277C9D003FE1C5 /* HealthRepository.swift in Sources */,
@@ -1046,6 +1052,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BECAFAEF3180414EABDE5997 /* SampleHealthDataSource.swift in Sources */,
+				49090B9B336D42BA9E33B7D1 /* SampleHealthDay.swift in Sources */,
 				9A0B0CC62C203FB400D94FB4 /* ReachableView.swift in Sources */,
 				9A4B72912C13B651004853F0 /* HealthRepository.swift in Sources */,
 				F48E98FC1F5348DE95541597 /* HealthDataMode.swift in Sources */,

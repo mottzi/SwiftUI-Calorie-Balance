@@ -3,6 +3,7 @@ import SwiftUI
 struct CircleBalanceGraphOverlay: View {
 
     var balance: Int
+    var isSampleData = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -18,6 +19,15 @@ struct CircleBalanceGraphOverlay: View {
                 .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                 .opacity(0.8)
                 .offset(y: -4)
+        }
+        .overlay(alignment: .bottom) {
+            if isSampleData {
+                Image(systemName: "testtube.2")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .accessibilityLabel("Sample Data")
+                    .offset(y: 24)
+            }
         }
         .fontDesign(.rounded)
         .offset(y: -2)
