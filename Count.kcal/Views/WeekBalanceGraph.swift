@@ -43,8 +43,9 @@ struct WeekBalanceGraph: View {
                 navigation.ensureSelectionBuffer()
             }
         )
-        // Reveal the chart without animating the new horizontal pager's layout.
+        // Keep pager initialization stable; animate ancestor movement as one transform.
         .transaction { $0.animation = nil }
+        .geometryGroup()
         .accessibilityScrollAction { edge in
             let offset = edge == .leading ? -7 : edge == .trailing ? 7 : 0
             guard offset != 0 else { return }
@@ -330,6 +331,8 @@ struct WeekBalanceChart: View {
             .allowsHitTesting(false)
             .accessibilityHidden(true)
         }
+        // Data changes animate within the chart, independently of pager layout.
+        .transaction(value: energyBalances) { $0.animation = .snappy }
     }
 
 }
@@ -340,10 +343,12 @@ extension WeekBalanceChart {
         Calendar.current.startOfDay(for: barDay) == selectedDay
     }
 
+    private var energyBalances: [EnergyBalance] {
+        dataPoints.map { $0.isTodayPage ? $0.sample.midnight : $0.sample.now }
+    }
+
     var maxEnergy: Int {
-        dataPoints.map { point in
-            abs((point.isTodayPage ? point.sample.midnight : point.sample.now).balance)
-        }.max() ?? 0
+        energyBalances.map { abs($0.balance) }.max() ?? 0
     }
 
 }
