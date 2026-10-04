@@ -74,6 +74,7 @@ struct Pager: View {
                         }
                     }
                 }
+                .softTopScrollEdge()
                 .scrollDisabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
                 .frame(maxHeight: .infinity)
                 .onChange(of: scenePhase) { _, newPhase in
