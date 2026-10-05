@@ -1,0 +1,36 @@
+# Watch weight visual references
+
+Research date: 2026-10-04. These comparisons use actual images viewed in Safari, rather than image-search descriptions. They guide the weekly and monthly weight tab. They do not establish one universally optimal watch layout.
+
+## Reference apps and evidence
+
+The ratings below are rounded counts on the US App Store, checked today. They establish substantial use of the apps, not Apple Watch installation counts or design quality. Gentler Streak has direct Apple award recognition instead.
+
+| App | Evidence | Inspected visual and relevant observation |
+| --- | --- | --- |
+| Apple Activity training load | Native Apple reference. [watchOS 11 announcement](https://www.apple.com/newsroom/2024/06/watchos-11-brings-powerful-health-and-fitness-insights/) | [Official steady chart image](https://www.apple.com/newsroom/images/2024/06/watchos-11-brings-powerful-health-and-fitness-insights/article/Apple-WWDC24-watchOS-11-training-load-steady-240610_inline.jpg.large.jpg). A wide graph occupies the upper content area. Sparse weekdays, a bright last-point ring, and restrained reference lines keep the data readable. The interpretation sits below the chart in a shaded card. |
+| Apple Vitals | Native Apple reference. [Vitals guide](https://support.apple.com/en-euro/guide/watch/apd15aa7ed96/watchos) | [Official typical overview image](https://www.apple.com/newsroom/images/2024/06/watchos-11-brings-powerful-health-and-fitness-insights/article/Apple-WWDC24-watchOS-11-Vitals-app-typical-240610_inline.jpg.large.jpg). Bright blue metric marks occupy a broad region above a shaded summary card with a large Typical status. This is the overview, not the seven-day detail. |
+| Gentler Streak | Apple Watch App of the Year 2022 and Apple Design Award 2024 for Social Impact. [Apple's award account](https://developer.apple.com/news/?id=3m0ht22s) | [Official heart-rate chart image](https://framerusercontent.com/images/WrwglM488cMqMOQXksTMrY1VA50.png?width=1000&height=1600) from [the developer site](https://gentlerstories.com/gentlerstreak). A wide chart has a clear colored reference line and sparse range labels. One large 40 MIN interpretation sits below it. The workout zones and warning colors belong to that app's purpose. |
+| Pedometer++ | 183K ratings, 4.8. [App Store](https://apps.apple.com/us/app/pedometer/id712286167?platform=watch) | [Official current device image](https://images.squarespace-cdn.com/content/v1/65b442e9bce8250fe9be34c6/995de20f-e381-44fd-92f7-1d4250645a22/Web%2B1.png?format=1500w) from [the developer site](https://pedometer.app/). The watch emphasizes 5,677 steps within a green progress ring. Distance and stairs are much smaller. This supports a dominant relevant number; its watch overview is not a history chart. |
+| AutoSleep | 62K ratings, 4.7. [App Store](https://apps.apple.com/us/app/autosleep-watch-sleep-tracker/id1164801111) | [Official Session screenshot and explanation](https://autosleepapp.tantsissa.com/watch-use#h.f4iirfoew5in). Three compact primary values sit above a wide sleep-stage chart, with secondary stages below. The chart takes about half the content region and has no surrounding border. Its categorical colors represent sleep stages. |
+| HeartWatch | 14K ratings, 4.7. [App Store](https://apps.apple.com/us/app/heartwatch-heart-rate-monitor/id1062745479?platform=watch) | [Official Daily screenshots](https://heartwatch.tantsissa.com/watch-use/watch-use-pulse#h.p_z7HHXlHPkpmN). The average 66 dominates the summary badge. A separate graph screen uses almost its full width, sparse ticks, and a large selected value below. These guide images show legacy navigation, so use their hierarchy rather than copying their controls. |
+
+HeartWatch and AutoSleep screenshots loaded within their official guide pages. Their direct Google-hosted image URLs returned 403. The guide section links above retain the images and their context. No official Vitals seven-day image was located in this research, so the overview cannot support claims about that detail screen.
+
+## Assessment and decisions for Count.kcal
+
+The first scrollable weight design gave the latest sample the largest text while the requested averages were small values at the right of section labels. The weekly gray data line also competed poorly with its guides and axis labels. That hierarchy made the tab read as a latest-weight screen with secondary charts.
+
+The inspected apps use different cards, rings, and positions. The useful common choices are an unmistakable primary metric and enough width for the graph. Apple Vitals and Activity do use shaded cards. Our plain sections and absence of boxed controls follow this user's preference, not a claim that the HIG forbids cards. Apple's Charts guidance supports maximizing plot width in compact spaces. [Charts HIG](https://developer.apple.com/design/human-interface-guidelines/charts)
+
+1. Put Weekly average and Monthly average above their own large, left-aligned values with smaller units. Move the latest measurement and date to one compact footer after both sections. This makes each number's meaning clear and gives the requested averages priority.
+2. Give each chart about 120 pt height at the normal watch text size and the available safe-area width. Keep a few short date ticks and inset scale limits. Use faint guides and a brighter neutral line for a flat trend, while preserving the iPhone trend colors and calculations. These exact dimensions and opacities are design choices to verify on the simulator, not Apple rules.
+3. Keep Weekly then Monthly in one ordinary Crown-scrollable page, separated by whitespace. Preserve the native title and clock. Let text use system scene margins while charts extend wider. Avoid additional controls, scrubbing, or a new chart abstraction for this small feature. Apple's watch navigation guide supports longer scrolling pages after fixed-height pages. [watchOS navigation guidance](https://developer.apple.com/documentation/watchos-apps/creating-an-intuitive-and-effective-ui-in-watchos-10)
+
+These refinements change presentation. Daily averages, rolling periods, missing days, units, latest-sample timestamps, and trend meanings must continue to come from the shared iPhone calculations. A watch layout can simplify axes without changing what the chart describes.
+
+## Implemented and verified
+
+The sections now use the average label, a large left-aligned average, and a 120 pt chart that grows with text size. The latest measurement is a compact footer. Flat trends use a brighter neutral line. Both line and area retain Catmull–Rom interpolation.
+
+The Debug phone/watch simulator build passed without compiler warnings. The production-model semantic runner passed. On the 208×248 watch simulator at standard text size, the full weekly chart fits on arrival; the German average headings fit on one line. Crown scrolling reveals the monthly chart and latest-sample footer, then returns to the macro tab. Weekly 79.8 kg and monthly 80.1 kg remain separate accessible averages; the footer separately identifies the latest 79.8 kg sample and date. Both scale limits, smooth curves, and endpoints fit. Smaller watch sizes and larger accessibility text remain unverified.
