@@ -8,6 +8,17 @@ struct Bundle: WidgetBundle {
         CornerBundle().body
         CircleBundle().body
         RectangleBundle().body
+        GoalBundle().body
+    }
+
+}
+
+struct GoalBundle: WidgetBundle {
+
+    var body: some Widget {
+        CalorieRoomComplication()
+        MacroGoalsComplication()
+        StepGoalComplication()
     }
 
 }
