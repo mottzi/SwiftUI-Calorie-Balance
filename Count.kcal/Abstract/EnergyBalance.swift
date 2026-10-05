@@ -28,6 +28,9 @@ struct EnergyBalance: Equatable {
     /// Positive values are a deficit; negative values are a surplus.
     var balance: Int { burned - consumed }
 
+    /// Both displayed energy totals are empty.
+    var isEmpty: Bool { burned == 0 && consumed == 0 }
+
     /// Larger side of the graph, or zero if both totals are empty.
     var graphTotal: Int { max(burned, consumed) }
 

@@ -181,12 +181,14 @@ extension BalanceWidgetCircleContent {
             }
             .fontDesign(.rounded)
 
-            Image(systemName: goalReached ? "checkmark" : "xmark")
-                .font(.system(size: 12))
-                .fontWeight(.semibold)
-                .foregroundColor(Color("SecondaryTextColor"))
-                .offset(y: 40)
-                .transaction { $0.animation = .none }
+            if !AppSettings.hideCalorieStatusIcons {
+                Image(systemName: goalReached ? "checkmark" : "xmark")
+                    .font(.system(size: 12))
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color("SecondaryTextColor"))
+                    .offset(y: 40)
+                    .transaction { $0.animation = .none }
+            }
         }
     }
 

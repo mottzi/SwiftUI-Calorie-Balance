@@ -20,6 +20,9 @@ final class Settings: ObservableObject {
     @AppStorage("closedSettings", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     public var closedSettings: Int = 0
 
+    @AppStorage("hideCalorieStatusIcons", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
+    public var hideCalorieStatusIcons: Bool = false
+
     @AppStorage("weightGoal", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     public var weightGoal: WeightGoals = .lose {
         didSet {

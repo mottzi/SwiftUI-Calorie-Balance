@@ -201,12 +201,14 @@ extension BalanceWidgetBarContent {
     
     var topGraphBalanceColumn: some View {
         VStack(spacing: 0) {
-            Image(systemName: goalReached ? "checkmark" : "xmark")
-                .font(.system(size: 14))
-                .fontWeight(.semibold)
-                .foregroundColor(Color("SecondaryTextColor"))
-                .padding(.bottom, 4)
-                .transaction { $0.animation = .none }
+            if !AppSettings.hideCalorieStatusIcons {
+                Image(systemName: goalReached ? "checkmark" : "xmark")
+                    .font(.system(size: 14))
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color("SecondaryTextColor"))
+                    .padding(.bottom, 4)
+                    .transaction { $0.animation = .none }
+            }
             
             Text("\(abs(balance))")
                 .font(.title3)

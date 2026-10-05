@@ -18,12 +18,10 @@ struct CaloriesCardTopRowCenter: View {
                 Text("\(abs(balance))")
                     .font(.system(size: 26))
                     .fontWeight(.semibold)
-                    .foregroundColor(Color("TextColor"))
+                    .foregroundStyle(Color(energy.isEmpty ? "SecondaryTextColor" : "TextColor"))
                     .contentTransition(.numericText(value: Double(abs(balance))))
                 
-                Text(balance > 0
-                    ? String(localized: "Deficit")
-                    : balance == 0 ? String("") : String(localized: "Surplus"))
+                Text(balanceLabel)
                     .font(.caption)
                     .fontWeight(.light)
                     .foregroundColor(Color("SecondaryTextColor"))
@@ -32,12 +30,14 @@ struct CaloriesCardTopRowCenter: View {
             }
             .fontDesign(.rounded)
         
-            Image(systemName: goalReached ? "checkmark" : "xmark")
-                .font(.system(size: 12))
-                .fontWeight(.semibold)
-                .foregroundColor(Color("SecondaryTextColor"))
-                .offset(y: 40)
-                .transaction { $0.animation = .none }
+            if !AppSettings.hideCalorieStatusIcons && !energy.isEmpty {
+                Image(systemName: goalReached ? "checkmark" : "xmark")
+                    .font(.system(size: 12))
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color("SecondaryTextColor"))
+                    .offset(y: 40)
+                    .transaction { $0.animation = .none }
+            }
         }
     }
 
@@ -51,6 +51,13 @@ extension CaloriesCardTopRowCenter {
 
     private var balance: Int { energy.balance }
 
+    private var balanceLabel: LocalizedStringKey {
+        if energy.isEmpty { return "Balance" }
+        if balance > 0 { return "Deficit" }
+        if balance < 0 { return "Surplus" }
+        return ""
+    }
+
     private var goalReached: Bool {
         energy.meetsGoal(
             AppSettings.balanceGoal,
@@ -60,14 +67,4 @@ extension CaloriesCardTopRowCenter {
 
 }
 
-#Preview {
-    NavigationView {
-        ZStack {
-            Settings.shared.AppBackground.ignoresSafeArea(.all)
-            
-            Pager(lb: 6, tb: 1)
-                .environmentObject(Settings.shared)
-                .environment(WeightHistory())
-        }
-    }
-}
+#Preview { PreviewPager }

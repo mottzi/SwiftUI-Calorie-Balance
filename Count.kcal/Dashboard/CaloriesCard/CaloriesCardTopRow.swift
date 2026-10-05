@@ -23,8 +23,8 @@ struct CaloriesCardTopRow: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 23, height: 23)
-                            .foregroundStyle(AppSettings.burnedColor.gradient)
-                            .brightness(scheme == .dark ? 0.15 : 0)
+                            .foregroundStyle((energy.isEmpty ? Color("SecondaryTextColor") : AppSettings.burnedColor).gradient)
+                            .brightness(!energy.isEmpty && scheme == .dark ? 0.15 : 0)
                             .background {
                                 if dynamicType <= .xxLarge {
                                     RoundedRectangle(cornerRadius: 10)
@@ -52,7 +52,7 @@ struct CaloriesCardTopRow: View {
                                 .contentTransition(.numericText(value: Double(energy.burned)))
                                 .font(.title3)
                                 .fontWeight(.semibold)
-                                .foregroundColor(Color("TextColor"))
+                                .foregroundStyle(Color(energy.isEmpty ? "SecondaryTextColor" : "TextColor"))
                                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                             
                             Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
@@ -78,8 +78,8 @@ struct CaloriesCardTopRow: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 23, height: 23)
-                            .foregroundStyle(AppSettings.consumedColor.gradient)
-                            .brightness(scheme == .dark ? 0.15 : 0)
+                            .foregroundStyle((energy.isEmpty ? Color("SecondaryTextColor") : AppSettings.consumedColor).gradient)
+                            .brightness(!energy.isEmpty && scheme == .dark ? 0.15 : 0)
                             .background {
                                 if dynamicType <= .xxLarge {
                                     RoundedRectangle(cornerRadius: 10)
@@ -107,7 +107,7 @@ struct CaloriesCardTopRow: View {
                                 .contentTransition(.numericText(value: Double(DataViewModel.sample.consumed)))
                                 .font(.title3)
                                 .fontWeight(.semibold)
-                                .foregroundColor(Color("TextColor"))
+                                .foregroundStyle(Color(energy.isEmpty ? "SecondaryTextColor" : "TextColor"))
                                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
 
                             Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
@@ -154,15 +154,4 @@ extension CaloriesCardTopRow {
 
 }
 
-#Preview {
-    NavigationView {
-        ZStack {
-            Settings.shared.AppBackground.ignoresSafeArea(.all)
-            
-            Pager(lb: 6, tb: 1)
-                .environmentObject(Settings.shared)
-                .environment(WeightHistory())
-                .environment(Streak())
-        }
-    }
-}
+#Preview { PreviewPager }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C8F4A0010000000000000001 /* OtherSettingsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F4A0010000000000000002 /* OtherSettingsCard.swift */; };
         A2C000000000000000000005 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = A2C000000000000000000006; };
         A2C000000000000000000007 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = A2C000000000000000000006; };
 		287E203B37D64B989EF7DF78 /* ProgressHealthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC7581F17D24EE196D1EA21 /* ProgressHealthRepository.swift */; };
@@ -259,6 +260,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C8F4A0010000000000000002 /* OtherSettingsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherSettingsCard.swift; sourceTree = "<group>"; };
 		EDC7581F17D24EE196D1EA21 /* ProgressHealthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressHealthRepository.swift; sourceTree = "<group>"; };
 		00B9F8B8C7AE409C9D8D82F0 /* DayChoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayChoice.swift; sourceTree = "<group>"; };
 		F1AD5B5167AD4A2AAC8B2912 /* ProgressSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSummary.swift; sourceTree = "<group>"; };
@@ -647,6 +649,7 @@
 				78867D21416946C0A1B75C42 /* DebugSettingsCard.swift */,
 				9A8BA4162B4079B90011D412 /* ColorsCard */,
 				9A31F9BC2B6AEBE800886BAE /* UnitsCard.swift */,
+				C8F4A0010000000000000002 /* OtherSettingsCard.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1128,6 +1131,7 @@
 				9A92F16F2B06CF06009C4A2A /* NutrientsCard.swift in Sources */,
 				9AF39CB62B3DC61A0037628F /* MonthlyChart.swift in Sources */,
 				9A31F9BD2B6AEBE800886BAE /* UnitsCard.swift in Sources */,
+				C8F4A0010000000000000001 /* OtherSettingsCard.swift in Sources */,
 				9A54D74A2C4FE79C0000A107 /* Onboarding.swift in Sources */,
 				9A616F492A642D3C00B713C4 /* CaloriesCard.swift in Sources */,
 				9A206D842C583B560079DE3D /* Welcome.swift in Sources */,

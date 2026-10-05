@@ -24,6 +24,7 @@ struct SettingsPage: View {
                     NutrientsCard()
                     StepsCard(focusedField: _focusedField)
                     UnitsCard()
+                    OtherSettingsCard()
                     ColorsCard()
                 }
                 .accessibilityScrollWidth(dynamicType.isAccessibilitySize)
