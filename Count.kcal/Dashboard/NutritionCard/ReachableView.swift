@@ -1,27 +1,21 @@
 import SwiftUI
 import WidgetKit
 
+/// A labeled total and goal with a progress bar, shared by the apps and widgets.
 struct ReachableView: View {
 
-    @Environment(\.dynamicTypeSize) private var dynamicType
-    @Environment(\.colorScheme) private var scheme: ColorScheme
+    @Environment(\.colorScheme) private var scheme
 
-    @EnvironmentObject private var AppSettings: Settings
+    @EnvironmentObject private var settings: Settings
 
     private let context: ViewContext
-    private var graphHeight: CGFloat = 18.0
-    
-    private var consumedValue: Int
-    private var goalValue: Int
-    
+    private let consumedValue: Int
+    private let goalValue: Int
     private let key: LocalizedStringKey
-    private let color: Color
-    
     private let unit: String
+    private let color: Color
+    private let graphHeight: CGFloat
 
-    private let gradientOpacityLight: Double = 0.10
-    private let gradientOpacityDark: Double = 0.20
-    
     init(
         _ key: LocalizedStringKey,
         context: ViewContext = .app,
@@ -29,212 +23,124 @@ struct ReachableView: View {
         goalValue: Int,
         unit: String = "g",
         color: Color = Color("SecondaryTextColor"),
-        graphHeight: CGFloat = 18.0
+        graphHeight: CGFloat = 18
     ) {
+        self.key = key
         self.context = context
-        self.graphHeight = graphHeight
-        
         self.consumedValue = consumedValue
         self.goalValue = goalValue
-                
-        self.key = key
-        self.color = color
-        
         self.unit = unit
+        self.color = color
+        self.graphHeight = graphHeight
     }
-    
+
     var body: some View {
-        BarTypeView
+        VStack(alignment: .leading, spacing: 3) {
+            ReachableHeader(
+                key: key,
+                consumedValue: consumedValue,
+                goalValue: goalValue,
+                unit: unit,
+                animatesValues: context != .app
+            )
+
+            ReachableBar(
+                progress: goalValue > 0 ? Double(consumedValue) / Double(goalValue) : 0,
+                color: color,
+                emptyColor: settings.getGraphEmptyColor(scheme),
+                height: graphHeight
+            )
+        }
+        .accessibilityElement(children: .combine)
     }
-    
+
 }
 
-extension ReachableView {
+/// Keeps the numeric total together and gives it space before the label.
+private struct ReachableHeader: View {
 
-    var BarTypeView: some View {
-        HStack(alignment: .bottom) {
-            VStack(alignment: .leading, spacing: 3) {
-                if dynamicType.isAccessibilitySize && context == .app {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(key)
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+    @Environment(\.dynamicTypeSize) private var dynamicType
 
-                        if unit.isEmpty && dynamicType >= .accessibility3 {
-                            Text("\(consumedValue)")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                            Text("/ \(goalValue)")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                        } else {
-                            Text("\(consumedValue) / \(goalValue) \(unit)")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
-                    }
-                    .fontDesign(.rounded)
-                    .padding(.horizontal, 4)
-                    #if !os(watchOS)
-                    .foregroundStyle(Color("TextColor"))
-                    #endif
-                } else {
-                HStack {
-                    Text(key)
-                        .transaction { $0.animation = .none }
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .fontDesign(.rounded)
-                        .padding(.leading, 4)
-                        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
-                        #if !os(watchOS)
-                        .foregroundStyle(Color("TextColor"))
-                        #endif
-                                        
-                    let minWidthLeading: [DynamicTypeSize: CGFloat] =
-                    [
-                        .xSmall: 35,
-                        .small: 35,
-                        .medium: 35,
-                        .large: 35,
-                        .xLarge: 35,
-                        .xxLarge: 50,
-                        .xxxLarge: 65,
-                        .accessibility1: 70,
-                        .accessibility2: 70,
-                        .accessibility3: 70,
-                        .accessibility4: 70,
-                        .accessibility5: 70,
-                    ]
-                    
-                    let minWidthTrailing: [DynamicTypeSize: CGFloat] =
-                    [
-                        .xSmall: 35,
-                        .small: 35,
-                        .medium: 35,
-                        .large: 40,
-                        .xLarge: 45,
-                        .xxLarge: 55,
-                        .xxxLarge: 65,
-                        .accessibility1: 70,
-                        .accessibility2: 80,
-                        .accessibility3: 80,
-                        .accessibility4: 80,
-                        .accessibility5: 80,
-                    ]
-                    
-                    HStack(spacing: 0) {
-                        if case .widget = context {
-                            Text(verbatim: consumedValue.stringFormat())
-                                .contentTransition(.numericText(value: Double(consumedValue)))
-                                .frame(minWidth: minWidthLeading[dynamicType, default: 30], alignment: .trailing)
-                                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+    let key: LocalizedStringKey
+    let consumedValue: Int
+    let goalValue: Int
+    let unit: String
+    let animatesValues: Bool
 
-                            Text(verbatim: "   / ")
-                                .transaction { $0.animation = .none }
-                                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+    var body: some View {
+        let stacked = dynamicType.isAccessibilitySize
+        let layout = stacked ? AnyLayout(VStackLayout(alignment: .leading, spacing: 2)) : AnyLayout(HStackLayout())
+        layout {
+            Text(key)
+                .lineLimit(stacked ? nil : 1)
+                .transaction { $0.animation = nil }
 
-                            HStack(spacing: 0) {
-                                Text(verbatim: goalValue.stringFormat())
-                                    .contentTransition(.numericText(value: Double(goalValue)))
-                                Text(verbatim: " g")
-                                    .transaction { $0.animation = .none }
-                            }
-                                .frame(minWidth: minWidthTrailing[dynamicType, default: 40], alignment: .trailing)
-                                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
-                        } else {
-                            Text("\(consumedValue)")
-                                .frame(minWidth: minWidthLeading[dynamicType, default: 30], alignment: .trailing)
-
-                            Text(verbatim: "   / ")
-
-                            Text("\(goalValue) \(String(unit))")
-                                .frame(minWidth: minWidthTrailing[dynamicType, default: 40], alignment: .trailing)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .font(.caption)
-                    .fontDesign(.rounded)
-                    .fontWeight(.bold)
-                    .padding(.trailing, 4)
-                    .transaction { if context == .app { $0.animation = .none } }
-                    .dynamicTypeSize(...DynamicTypeSize.accessibility2)
-                    #if !os(watchOS)
-                    .foregroundStyle(Color("TextColor"))
-                    #endif
-                }
-                }
-                
-                GeometryReader { geometry in
-                    NutritionBar(geometry)
-                }
-                .frame(height: graphHeight)
-            }
+            values
+                .contentTransition(.numericText(value: Double(consumedValue)))
+                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
+                .layoutPriority(1)
+                .frame(maxWidth: .infinity, alignment: stacked ? .leading : .trailing)
+                .transaction { if !animatesValues { $0.animation = nil } }
         }
-    }
-    
-    func NutritionBar(_ geometry: GeometryProxy) -> some View {
-        ZStack(alignment: .leading) {
-            Capsule()
-                .fill(AppSettings.getGraphEmptyColor(scheme).brighten(scheme == .light ? 0.15 : -0.05))
-                .frame(height: graphHeight)
-
-            Capsule()
-                .fill(color.brighten(0.1))
-                .saturation(Settings.baseSaturation - 0.2)
-                .frame(width: getConsumedWidth(geometry), height: graphHeight)
-                .overlay {
-                    LinearGradient(
-                        colors: [scheme == .dark ? .black : .white, color.brighten(0.1)],
-                        startPoint: scheme == .dark ? .bottom : .top,
-                        endPoint: scheme == .dark ? .top : .bottom
-                    )
-                        .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
-                        .clipShape(Capsule())
-                }
-        }
-        .clipShape(Capsule())
+        .font(.caption.bold())
+        .fontDesign(.rounded)
+        .padding(.horizontal, 4)
+        #if !os(watchOS)
+        .foregroundStyle(Color("TextColor"))
+        #endif
     }
 
-    func getConsumedWidth(_ geometry: GeometryProxy) -> CGFloat {
-        if goalValue == 0 {
-            return 0
-        }
-
-        return max(0, min(geometry.size.width, CGFloat(Double(consumedValue) / Double(goalValue) * geometry.size.width)))
-    }
-
-    func getConsumedRatio(cap: Double? = nil) -> Double {
-        if goalValue == 0 {
-            return 0
-        }
-
-        if cap == nil {
-            return Double(consumedValue) / Double(goalValue)
+    @ViewBuilder
+    private var values: some View {
+        if goalValue > 0 {
+            Text(
+                """
+                \(consumedValue, format: .number.grouping(.never)) / \
+                \(goalValue, format: .number.grouping(.never)) \(unit)
+                """
+            )
         } else {
-            return min(cap!, Double(consumedValue) / Double(goalValue))
+            Text("\(consumedValue, format: .number.grouping(.never)) \(unit)")
         }
     }
 
 }
 
-extension ReachableView {
+/// Draws a clamped fraction without storing layout measurements in state.
+private struct ReachableBar: View {
 
-    private var percent: Int {
-        goalValue - consumedValue
-    }
+    @Environment(\.colorScheme) private var scheme
 
-}
+    let progress: Double
+    let color: Color
+    let emptyColor: Color
+    let height: CGFloat
 
-extension Int {
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(emptyColor.brighten(scheme == .light ? 0.15 : -0.05))
 
-    func stringFormat() -> String {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .none
-
-        return numberFormatter.string(from: NSNumber(value: self)) ?? String("")
+                Capsule()
+                    .fill(color.brighten(0.1))
+                    .saturation(Settings.baseSaturation - 0.2)
+                    .frame(width: geometry.size.width * min(max(progress, 0), 1))
+                    .overlay {
+                        LinearGradient(
+                            colors: [scheme == .dark ? .black : .white, color.brighten(0.1)],
+                            startPoint: scheme == .dark ? .bottom : .top,
+                            endPoint: scheme == .dark ? .top : .bottom
+                        )
+                        .opacity(scheme == .dark ? 0.20 : 0.10)
+                        .clipShape(Capsule())
+                    }
+            }
+            .clipShape(Capsule())
+        }
+        .frame(height: height)
+        .accessibilityHidden(true)
     }
 
 }

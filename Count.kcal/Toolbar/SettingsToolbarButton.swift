@@ -10,7 +10,12 @@ struct SettingsToolbarButton: View {
                 .foregroundStyle(Color("TextColor"))
                 .fontWeight(.medium)
         }
+        .accessibilityLabel("Settings")
     }
+
+}
+
+extension SettingsToolbarButton {
 
     private func openSettings() {
         showSettings = true

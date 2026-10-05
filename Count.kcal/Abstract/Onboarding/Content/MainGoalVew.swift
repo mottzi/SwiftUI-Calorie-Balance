@@ -28,9 +28,13 @@ struct MaingoalView: View {
             .foregroundStyle(Color("TextColor").gradient)
             
             IconPicker(
+                selection: $AppSettings.weightGoal,
+                first: .lose,
+                second: .gain,
+                firstLabel: "Lose Weight",
+                secondLabel: "Gain Weight",
                 firstIcon: "arrowshape.down.fill",
-                secondIcon: "arrowshape.up.fill",
-                selection: $AppSettings.weightGoal
+                secondIcon: "arrowshape.up.fill"
             )
                 .frame(width: 120, height: 40)
                 .scaleEffect(1.4)

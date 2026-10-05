@@ -1,162 +1,78 @@
 import SwiftUI
 
-/// Styled card with an optional title, subtitle, and controls.
-struct Card <Subtitle: View, Content: View>: View {
+/// Styled card with an optional title and secondary title.
+struct Card<Content: View>: View {
 
-    @Environment(\.dynamicTypeSize) private var dynamicType
-    @EnvironmentObject private var AppSettings: Settings
+    @EnvironmentObject private var settings: Settings
 
-    let title: LocalizedStringKey?
-    let secondaryTitle: String?
-    let titlePadding: Bool
-    
-    let innerPadding: CGFloat
-    let controls: CardPickerType
-    let level: CardLevel
-    let subtitle: (() -> Subtitle)?
-    let content: () -> Content
-    
-    let borderRadius: CGFloat = 10
-    
+    private let title: LocalizedStringKey?
+    private let secondaryTitle: String?
+    private let innerPadding: CGFloat
+    private let level: CardLevel
+    private let content: Content
+
     init(
         _ title: LocalizedStringKey? = nil,
         level: CardLevel = .primary,
         secondaryTitle: String? = nil,
-        titlePadding: Bool = true,
         innerPadding: CGFloat = 16,
-        controls: CardPickerType = .none,
-        subtitle: (() -> Subtitle)? = nil,
-        @ViewBuilder content: @escaping () -> Content
+        @ViewBuilder content: () -> Content
     ) {
         self.title = title
         self.secondaryTitle = secondaryTitle
         self.level = level
-        self.titlePadding = titlePadding
-        self.subtitle = subtitle
         self.innerPadding = innerPadding
-        self.content = content
-        self.controls = controls
+        self.content = content()
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             if let title {
-                Group {
-                    if dynamicType.isAccessibilitySize {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(title)
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                                .fontDesign(.rounded)
-                                .foregroundColor(Color("TextColor"))
-                                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
-                                .fixedSize(horizontal: false, vertical: true)
-
-                            if let secondaryTitle {
-                                Text(secondaryTitle)
-                                    .font(.subheadline)
-                                    .fontWeight(.medium)
-                                    .fontDesign(.rounded)
-                                    .foregroundColor(Color("SecondaryTextColor"))
-                                    .dynamicTypeSize(...DynamicTypeSize.accessibility2)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .transaction { $0.animation = .none }
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    } else {
-                        HStack(spacing: 0) {
-                            Text(title)
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                                .fontDesign(.rounded)
-                                .foregroundColor(Color("TextColor"))
-
-                            if let secondaryTitle {
-                                Spacer()
-
-                                Text(secondaryTitle)
-                                    .font(.subheadline)
-                                    .fontWeight(.medium)
-                                    .fontDesign(.rounded)
-                                    .foregroundColor(Color("SecondaryTextColor"))
-                                    .transaction { $0.animation = .none }
-                            }
-                        }
-                    }
-                }
-                .padding(.leading, 4)
-                .padding(.trailing, 8)
+                CardHeader(title: title, secondaryTitle: secondaryTitle)
             }
-            
-            Group {
-                if isContentEmpty(c: content) {
-                    Color.gray.frame(height: 0).hidden()
-                } else {
-                    content()
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding(innerPadding)
-            .background(background)
-            .cornerRadius(borderRadius)
-  
-            if let subtitle {
-                subtitle()
-            }
+
+            content
+                .frame(maxWidth: .infinity)
+                .padding(innerPadding)
+                .background(level == .clear ? .clear : settings.CardBackground)
+                .clipShape(.rect(cornerRadius: 10))
         }
         .padding(.horizontal)
     }
 
 }
 
-extension Card {
+/// Adapts the card's heading without observing content or settings changes.
+private struct CardHeader: View {
 
-    var background: Color {
-        switch level {
-            case .clear: Color.clear
-            case .primary: AppSettings.CardBackground
+    @Environment(\.dynamicTypeSize) private var dynamicType
+
+    let title: LocalizedStringKey
+    let secondaryTitle: String?
+
+    var body: some View {
+        let layout = dynamicType.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 2))
+            : AnyLayout(HStackLayout(spacing: 0))
+        layout {
+            Text(title)
+                .foregroundStyle(Color("TextColor"))
+
+            if let secondaryTitle {
+                if !dynamicType.isAccessibilitySize { Spacer() }
+                Text(secondaryTitle)
+                    .foregroundStyle(Color("SecondaryTextColor"))
+                    .transaction { $0.animation = nil }
+            }
         }
+        .font(.subheadline.weight(.medium))
+        .fontDesign(.rounded)
+        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+        .fixedSize(horizontal: false, vertical: true)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.leading, 4)
+        .padding(.trailing, 8)
     }
-
-}
-
-extension Card {
-
-    private func isContentEmpty(c: () -> Content) -> Bool {
-        Mirror(reflecting: c()).children.isEmpty
-    }
-
-}
-
-extension Card where Subtitle == EmptyView {
-
-    init(
-        _ title: LocalizedStringKey? = nil,
-        level: CardLevel = .primary,
-        secondaryTitle: String? = nil,
-        titlePadding: Bool = true,
-        innerPadding: CGFloat = 16,
-        controls: CardPickerType = .none,
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.title = title
-        self.secondaryTitle = secondaryTitle
-        self.level = level
-        self.titlePadding = titlePadding
-        self.subtitle = nil
-        self.innerPadding = innerPadding
-        self.content = content
-        self.controls = controls
-    }
-
-}
-
-enum CardPickerType {
-
-    case none
-    case balance
-    case weight
 
 }
 
@@ -167,15 +83,4 @@ enum CardLevel {
 
 }
 
-#Preview {
-    NavigationView {
-        ZStack {
-            Settings.shared.AppBackground.ignoresSafeArea(.all)
-            
-            Pager(lb: 6, tb: 1)
-                .environmentObject(Settings.shared)
-                .environment(WeightHistory())
-                .environment(Streak())
-        }
-    }
-}
+#Preview { PreviewPager }

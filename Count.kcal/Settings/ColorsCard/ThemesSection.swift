@@ -15,8 +15,8 @@ struct ThemesSection: View {
             .padding(.vertical, 6)
 
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 20) {
-                ForEach(Settings.Themes) { theme in
-                    ThemeButton(theme: theme)
+                ForEach(Array(Settings.Themes.enumerated()), id: \.element.id) { index, theme in
+                    ThemeButton(theme: theme, number: index + 1)
                 }
             }
             .transition(.move(edge: .trailing))

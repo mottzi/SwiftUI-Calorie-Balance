@@ -5,7 +5,7 @@ struct ColorsCard: View {
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
     var body: some View {
-        Card("Colors", titlePadding: false) {
+        Card("Colors") {
             VStack(spacing: 8) {
                 if scheme == .dark {
                     BackgroundColorSection()

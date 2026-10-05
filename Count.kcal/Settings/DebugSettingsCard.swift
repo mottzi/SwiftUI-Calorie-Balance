@@ -19,7 +19,7 @@ struct DebugSettingsCard: View {
     var body: some View {
         @Bindable var mode = healthDataMode
 
-        Card("Debug", titlePadding: false) {
+        Card("Debug") {
             VStack(alignment: .leading, spacing: 8) {
                 Toggle("Use Sample Health Data", isOn: $mode.usesSampleData)
                     .tint(.green)

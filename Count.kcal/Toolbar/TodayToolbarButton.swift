@@ -3,9 +3,13 @@ import SwiftUI
 /// Returns to today or switches between today's two dashboard pages.
 struct TodayToolbarButton: View {
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     let navigation: DayPager
+
     @Binding var todayPageMode: PagerSelection
     @Binding var currentMonth: Date
+
     let controlsDisabled: Bool
     let selectDay: (Date) -> Void
 
@@ -23,6 +27,23 @@ struct TodayToolbarButton: View {
         }
         .padding(.leading, leadingPadding)
         .disabled(controlsDisabled)
+        .accessibilityLabel(actionLabel)
+    }
+
+}
+
+extension TodayToolbarButton {
+
+    private func selectToday() {
+        if !isTodaySelected {
+            let now = Date.now
+            selectDay(now)
+            if !Calendar.current.isDate(currentMonth, equalTo: now, toGranularity: .month) {
+                withAnimation(reduceMotion ? nil : .snappy) { currentMonth = now }
+            }
+        } else {
+            withAnimation(reduceMotion ? nil : .snappy) { todayPageMode.toggle() }
+        }
     }
 
     private var isTodaySelected: Bool {
@@ -37,18 +58,8 @@ struct TodayToolbarButton: View {
         if #available(iOS 26, *) { 0 } else { 16 }
     }
 
-    private func selectToday() {
-        if !isTodaySelected {
-            let now = Date.now
-            selectDay(now)
-            if !Calendar.current.isDate(currentMonth, equalTo: now, toGranularity: .month) {
-                withAnimation(.snappy) { currentMonth = now }
-            }
-        } else {
-            withAnimation(.snappy) {
-                todayPageMode = todayPageMode == .first ? .second : .first
-            }
-        }
+    private var actionLabel: LocalizedStringKey {
+        !isTodaySelected ? "Today" : todayPageMode == .first ? "Midnight" : "Now"
     }
 
 }

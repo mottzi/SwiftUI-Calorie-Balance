@@ -3,6 +3,7 @@ import SwiftUI
 struct CalendarToolbarButton: View {
 
     @Binding var showCalendar: Bool
+
     let controlsDisabled: Bool
     let toggleCalendar: () -> Void
 
@@ -14,6 +15,8 @@ struct CalendarToolbarButton: View {
                 .fontWeight(.medium)
         }
         .disabled(controlsDisabled)
+        .accessibilityLabel("Calendar")
+        .accessibilityAddTraits(showCalendar ? .isSelected : [])
     }
 
 }

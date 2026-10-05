@@ -3,10 +3,11 @@ import SwiftUI
 struct UnitsCard: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
+
     @EnvironmentObject private var AppSettings: Settings
 
     var body: some View {
-        Card("Units", titlePadding: false) {
+        Card("Units") {
             VStack(spacing: 8) {
                 (dynamicType.isAccessibilitySize
                     ? AnyLayout(VStackLayout(alignment: .leading, spacing: 6))

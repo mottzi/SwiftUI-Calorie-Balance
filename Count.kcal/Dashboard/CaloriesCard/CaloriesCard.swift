@@ -39,14 +39,4 @@ struct CaloriesCard: View {
 
 }
 
-#Preview {
-    NavigationView {
-        ZStack {
-            Settings.shared.AppBackground.ignoresSafeArea(.all)
-            
-            Pager(lb: 6, tb: 1)
-                .environmentObject(Settings.shared)
-                .environment(WeightHistory())
-        }
-    }
-}
+#Preview { PreviewPager }

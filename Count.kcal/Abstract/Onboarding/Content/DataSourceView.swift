@@ -30,9 +30,13 @@ struct DataSourceView: View {
                 .foregroundStyle(Color("TextColor").gradient)
                 
                 IconPicker(
+                    selection: $AppSettings.dataSource.animation(.bouncy),
+                    first: .apple,
+                    second: .custom,
+                    firstLabel: "Apple Health",
+                    secondLabel: "Custom Data",
                     firstIcon: "heart.fill",
-                    secondIcon: "pencil.and.list.clipboard",
-                    selection: $AppSettings.dataSource.animation(.bouncy)
+                    secondIcon: "pencil.and.list.clipboard"
                 )
                     .frame(width: 120, height: 40)
                     .scaleEffect(1.4)
