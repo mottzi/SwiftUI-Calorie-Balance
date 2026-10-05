@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+        A2C000000000000000000005 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = A2C000000000000000000006; };
+        A2C000000000000000000007 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = A2C000000000000000000006; };
+		287E203B37D64B989EF7DF78 /* ProgressHealthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC7581F17D24EE196D1EA21 /* ProgressHealthRepository.swift */; };
+		2CB1780BE440487389C68E2B /* DayChoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B9F8B8C7AE409C9D8D82F0 /* DayChoice.swift */; };
+		9823A97E9C574F1397BEE8EA /* ProgressSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AD5B5167AD4A2AAC8B2912 /* ProgressSummary.swift */; };
+		BD31BFA18863447D8BD8CDC0 /* ProgressHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ABE8B8BC524364939276A9 /* ProgressHistory.swift */; };
+		206860A43D894917907F5D18 /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56206F2B493B44268EE3995C /* AppDatabase.swift */; };
+		BBBDF8DCD7C54C28B1CCDA6C /* DatabaseGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AAAEC24D7A492CA4F00B31 /* DatabaseGate.swift */; };
+		358D645EC04143EBAB48D635 /* DayChoiceButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5932B5624094397BA49636F /* DayChoiceButton.swift */; };
+		F929F3EB33D943D3A537E637 /* ProgressMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 368EE330C63D41D1A746FEB6 /* ProgressMetrics.swift */; };
+		6AB4983DAA32421CBD303058 /* ProgressDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = C682D9D0C89F41D1A4BD0CCC /* ProgressDetails.swift */; };
+		A2C000000000000000000001 /* SQLiteData in Frameworks */ = {isa = PBXBuildFile; productRef = A2C000000000000000000002 /* SQLiteData */; };
 		F50C04B06AD541A8B94EB372 /* WeightTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = F50C04B06AD541A8B94EB371 /* WeightTab.swift */; };
 		01E95393BE824509B36CA193 /* HealthKitDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCAE384FE9D4F5DA573DDB5 /* HealthKitDataSource.swift */; };
 		0B803154C8084D7EAD9193C0 /* SampleHealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385A13964874208A838B836 /* SampleHealthDataSource.swift */; };
@@ -177,6 +189,12 @@
 		EA9F2514D5314340973D289E /* HealthDataMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */; };
 		EB2955F8EE7F49BF86B22DA0 /* SampleHealthDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */; };
 		F48E98FC1F5348DE95541597 /* HealthDataMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */; };
+        A3C000000000000000000005 /* ProgressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C000000000000000000004; };
+        A3C00000000000000000000E /* SQLiteData in Frameworks */ = {isa = PBXBuildFile; productRef = A2C000000000000000000002; };
+        A2C00000000000000000000B /* StructuredQueriesSQLite in Frameworks */ = {isa = PBXBuildFile; productRef = A2C00000000000000000000A; };
+        A2C00000000000000000000C /* StructuredQueriesSQLite in Frameworks */ = {isa = PBXBuildFile; productRef = A2C00000000000000000000A; };
+        A2C00000000000000000000F /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = A2C00000000000000000000E; };
+        A2C000000000000000000010 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = A2C00000000000000000000E; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -201,6 +219,7 @@
 			remoteGlobalIDString = 9AC2E27E2C12742500B07EBE;
 			remoteInfo = "Count.kcal.watch Watch App";
 		};
+        A3C00000000000000000000D = {isa = PBXContainerItemProxy; containerPortal = 9A001C3129B6122500BB42B9; proxyType = 1; remoteGlobalIDString = 9A001C3829B6122500BB42B9; remoteInfo = Count.kcal; };
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -240,6 +259,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EDC7581F17D24EE196D1EA21 /* ProgressHealthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressHealthRepository.swift; sourceTree = "<group>"; };
+		00B9F8B8C7AE409C9D8D82F0 /* DayChoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayChoice.swift; sourceTree = "<group>"; };
+		F1AD5B5167AD4A2AAC8B2912 /* ProgressSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSummary.swift; sourceTree = "<group>"; };
+		35ABE8B8BC524364939276A9 /* ProgressHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressHistory.swift; sourceTree = "<group>"; };
+		56206F2B493B44268EE3995C /* AppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabase.swift; sourceTree = "<group>"; };
+		F7AAAEC24D7A492CA4F00B31 /* DatabaseGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseGate.swift; sourceTree = "<group>"; };
+		D5932B5624094397BA49636F /* DayChoiceButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayChoiceButton.swift; sourceTree = "<group>"; };
+		368EE330C63D41D1A746FEB6 /* ProgressMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressMetrics.swift; sourceTree = "<group>"; };
+		C682D9D0C89F41D1A4BD0CCC /* ProgressDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDetails.swift; sourceTree = "<group>"; };
 
 		F50C04B06AD541A8B94EB371 /* WeightTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightTab.swift; sourceTree = "<group>"; };
 		01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHealthDay.swift; sourceTree = "<group>"; };
@@ -353,13 +381,16 @@
 		BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataMode.swift; sourceTree = "<group>"; };
 		D7A8097F63844ED785702A10 /* DayPager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPager.swift; sourceTree = "<group>"; };
 		F87B951148234A488A029FAF /* HealthDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataSource.swift; sourceTree = "<group>"; };
+        A3C000000000000000000004 /* ProgressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTests.swift; sourceTree = "<group>"; };
+        A3C000000000000000000003 /* Count.kcalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = Count.kcalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		9A001C3629B6122500BB42B9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
-			files = (
+			files = (A2C000000000000000000005, A2C00000000000000000000F, A2C00000000000000000000B,
+				A2C000000000000000000001 /* SQLiteData in Frameworks */,
 
 				9A2A67FA29CF9D7F001E58DF /* Charts.framework in Frameworks */,
 				9A4B47D92C17C10000F9168E /* WatchConnectivity.framework in Frameworks */,
@@ -392,9 +423,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+        A3C000000000000000000007 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (A2C000000000000000000007, A2C000000000000000000010, A2C00000000000000000000C,A3C00000000000000000000E,); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5601119B8911426B91BFFC98 /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				EDC7581F17D24EE196D1EA21 /* ProgressHealthRepository.swift */,
+				00B9F8B8C7AE409C9D8D82F0 /* DayChoice.swift */,
+				F1AD5B5167AD4A2AAC8B2912 /* ProgressSummary.swift */,
+				35ABE8B8BC524364939276A9 /* ProgressHistory.swift */,
+				D5932B5624094397BA49636F /* DayChoiceButton.swift */,
+				368EE330C63D41D1A746FEB6 /* ProgressMetrics.swift */,
+				C682D9D0C89F41D1A4BD0CCC /* ProgressDetails.swift */,
+			);
+			path = Progress;
+			sourceTree = "<group>";
+		};
+		303ADDFCD6C04BD7B17C469D /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				56206F2B493B44268EE3995C /* AppDatabase.swift */,
+				F7AAAEC24D7A492CA4F00B31 /* DatabaseGate.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
 		F50C04B06AD541A8B94EB373 /* Tab.Weight */ = {
 			isa = PBXGroup;
 			children = (
@@ -406,6 +461,7 @@
 		9A001C3029B6122500BB42B9 = {
 			isa = PBXGroup;
 			children = (
+				A3C000000000000000000002,
 				B7C001000000000000000003 /* AppIcon.icon */,
 				9A25A9272C1B7B29008AB1B4 /* Assets.xcassets */,
 				9A57F5382B66813D00B8DF6D /* Localizable.xcstrings */,
@@ -422,6 +478,7 @@
 		9A001C3A29B6122500BB42B9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				A3C000000000000000000003,
 				9A001C3929B6122500BB42B9 /* Count.kcal.app */,
 				9A0F2DC42AF6778D00780155 /* Count.kcal.widget.appex */,
 				9AC2E27F2C12742500B07EBE /* Count.kcal.watch.app */,
@@ -433,6 +490,8 @@
 		9A001C3B29B6122500BB42B9 /* Count.kcal */ = {
 			isa = PBXGroup;
 			children = (
+				5601119B8911426B91BFFC98 /* Progress */,
+				303ADDFCD6C04BD7B17C469D /* Persistence */,
 
 				9AE457DC2B169C72009FA321 /* Info.plist */,
 				9AEA55C42A5AD1F5000AB057 /* Count.kcal.entitlements */,
@@ -778,6 +837,7 @@
 			path = Toolbar;
 			sourceTree = "<group>";
 		};
+        A3C000000000000000000002 /* Count.kcalTests */ = {isa = PBXGroup; children = (A3C000000000000000000004,); path = Count.kcalTests; sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -798,7 +858,8 @@
 				9AC2E28B2C12742700B07EBE /* PBXTargetDependency */,
 			);
 			name = Count.kcal;
-			packageProductDependencies = (
+			packageProductDependencies = (A2C000000000000000000006, A2C00000000000000000000E, A2C00000000000000000000A,
+				A2C000000000000000000002 /* SQLiteData */,
 			);
 			productName = SwiftTest;
 			productReference = 9A001C3929B6122500BB42B9 /* Count.kcal.app */;
@@ -859,6 +920,18 @@
 			productReference = 9AC2E27F2C12742500B07EBE /* Count.kcal.watch.app */;
 			productType = "com.apple.product-type.application";
 		};
+        A3C000000000000000000001 /* Count.kcalTests */ = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = A3C000000000000000000009;
+            buildPhases = (A3C000000000000000000006, A3C000000000000000000007, A3C000000000000000000008,);
+            buildRules = ();
+            dependencies = (A3C00000000000000000000C,);
+            name = "Count.kcalTests";
+            packageProductDependencies = (A2C000000000000000000006, A2C00000000000000000000E, A2C00000000000000000000A,A2C000000000000000000002,);
+            productName = "Count.kcalTests";
+            productReference = A3C000000000000000000003;
+            productType = "com.apple.product-type.bundle.unit-test";
+        };
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -896,11 +969,16 @@
 			);
 			mainGroup = 9A001C3029B6122500BB42B9;
 			packageReferences = (
+                A2C00000000000000000000D /* GRDB.swift */,
+                A2C000000000000000000009 /* swift-structured-queries */,
+                A2C000000000000000000008 /* swift-dependencies */,
+				A2C000000000000000000003 /* sqlite-data */,
 			);
 			productRefGroup = 9A001C3A29B6122500BB42B9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				A3C000000000000000000001,
 				9A001C3829B6122500BB42B9 /* Count.kcal */,
 				9A0F2DC32AF6778C00780155 /* Count.kcal.widget */,
 				9AC2E27E2C12742500B07EBE /* Count.kcal.watch */,
@@ -910,9 +988,49 @@
 /* End PBXProject section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+        A2C000000000000000000003 /* sqlite-data */ = {
+            isa = XCRemoteSwiftPackageReference;
+            repositoryURL = "https://github.com/pointfreeco/sqlite-data";
+            requirement = { kind = exactVersion; version = 1.12.0; };
+        };
+        A2C000000000000000000008 /* swift-dependencies */ = {
+            isa = XCRemoteSwiftPackageReference;
+            repositoryURL = "https://github.com/pointfreeco/swift-dependencies";
+            requirement = { kind = upToNextMajorVersion; minimumVersion = 1.17.1; };
+        };
+        A2C000000000000000000009 /* swift-structured-queries */ = {
+            isa = XCRemoteSwiftPackageReference;
+            repositoryURL = "https://github.com/pointfreeco/swift-structured-queries";
+            requirement = { kind = upToNextMajorVersion; minimumVersion = 0.39.1; };
+        };
+        A2C00000000000000000000D /* GRDB.swift */ = {
+            isa = XCRemoteSwiftPackageReference;
+            repositoryURL = "https://github.com/groue/GRDB.swift";
+            requirement = { kind = upToNextMajorVersion; minimumVersion = 7.6.0; };
+        };
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+        A2C000000000000000000002 /* SQLiteData */ = {
+            isa = XCSwiftPackageProductDependency;
+            package = A2C000000000000000000003 /* sqlite-data */;
+            productName = SQLiteData;
+        };
+        A2C000000000000000000006 /* Dependencies */ = {
+            isa = XCSwiftPackageProductDependency;
+            package = A2C000000000000000000008;
+            productName = Dependencies;
+        };
+        A2C00000000000000000000A /* StructuredQueriesSQLite */ = {
+            isa = XCSwiftPackageProductDependency;
+            package = A2C000000000000000000009;
+            productName = StructuredQueriesSQLite;
+        };
+        A2C00000000000000000000E /* GRDB */ = {
+            isa = XCSwiftPackageProductDependency;
+            package = A2C00000000000000000000D;
+            productName = GRDB;
+        };
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -957,6 +1075,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+        A3C000000000000000000008 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -964,6 +1083,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				287E203B37D64B989EF7DF78 /* ProgressHealthRepository.swift in Sources */,
+				2CB1780BE440487389C68E2B /* DayChoice.swift in Sources */,
+				9823A97E9C574F1397BEE8EA /* ProgressSummary.swift in Sources */,
+				BD31BFA18863447D8BD8CDC0 /* ProgressHistory.swift in Sources */,
+				206860A43D894917907F5D18 /* AppDatabase.swift in Sources */,
+				BBBDF8DCD7C54C28B1CCDA6C /* DatabaseGate.swift in Sources */,
+				358D645EC04143EBAB48D635 /* DayChoiceButton.swift in Sources */,
+				F929F3EB33D943D3A537E637 /* ProgressMetrics.swift in Sources */,
+				6AB4983DAA32421CBD303058 /* ProgressDetails.swift in Sources */,
 
 				9A3F8EAA2B348C1F00B0DC74 /* CaloriesMidnightCard.swift in Sources */,
 				9A9BC9BE2A7E9C7300A4404A /* ReachableView.swift in Sources */,
@@ -1137,6 +1265,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+        A3C000000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A3C000000000000000000005,); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1155,6 +1284,7 @@
 			target = 9AC2E27E2C12742500B07EBE /* Count.kcal.watch */;
 			targetProxy = 9AC2E28A2C12742700B07EBE /* PBXContainerItemProxy */;
 		};
+        A3C00000000000000000000C = {isa = PBXTargetDependency; target = 9A001C3829B6122500BB42B9; targetProxy = A3C00000000000000000000D; };
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -1195,6 +1325,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 4DXABR577J;
+				"ENABLE_ONLY_ACTIVE_RESOURCES[sdk=iphone*]" = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1590,6 +1721,36 @@
 			};
 			name = Release;
 		};
+        A3C00000000000000000000A = {isa = XCBuildConfiguration; buildSettings = {
+                BUNDLE_LOADER = "$(TEST_HOST)";
+                CODE_SIGN_STYLE = Automatic;
+                DEVELOPMENT_TEAM = 4DXABR577J;
+                GENERATE_INFOPLIST_FILE = YES;
+                IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+                LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks",);
+                PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.tests;
+                PRODUCT_NAME = "$(TARGET_NAME)";
+                SDKROOT = iphoneos;
+                SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+                SWIFT_VERSION = 5.0;
+                TARGETED_DEVICE_FAMILY = "1,2";
+                TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Count.kcal.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Count.kcal";
+            }; name = Debug; };
+        A3C00000000000000000000B = {isa = XCBuildConfiguration; buildSettings = {
+                BUNDLE_LOADER = "$(TEST_HOST)";
+                CODE_SIGN_STYLE = Automatic;
+                DEVELOPMENT_TEAM = 4DXABR577J;
+                GENERATE_INFOPLIST_FILE = YES;
+                IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+                LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@loader_path/Frameworks",);
+                PRODUCT_BUNDLE_IDENTIFIER = com.count.kcal.tests;
+                PRODUCT_NAME = "$(TARGET_NAME)";
+                SDKROOT = iphoneos;
+                SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+                SWIFT_VERSION = 5.0;
+                TARGETED_DEVICE_FAMILY = "1,2";
+                TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Count.kcal.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Count.kcal";
+            }; name = Release; };
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1638,6 +1799,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+        A3C000000000000000000009 = {isa = XCConfigurationList; buildConfigurations = (A3C00000000000000000000A, A3C00000000000000000000B,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
 	};
 	rootObject = 9A001C3129B6122500BB42B9 /* Project object */;

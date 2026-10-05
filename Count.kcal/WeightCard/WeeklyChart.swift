@@ -8,10 +8,10 @@ struct WeeklyChart: View {
     @Environment(WeightHistory.self) private var weightHistory
 
     var body: some View {
-        if weightHistory.dataLoaded {
+        if let dateRange = weightHistory.chartDateRange(for: .weekly) {
             Chart {
                 // average line horizontal
-                RuleMark(y: .value("Value", weightHistory.weightAvg7))
+                RuleMark(y: .value("Value", weightHistory.average(for: .weekly)))
                     .foregroundStyle(trendColor.opacity(0.8))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [2, 3]))
                 
@@ -69,10 +69,6 @@ struct WeeklyChart: View {
             .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             .brightness(level: .primary)
             .saturation(Settings.baseSaturation)
-            .padding(.top, 22)
-            //.padding(.trailing, 15)
-            .padding(.horizontal, 13)
-
             .chartYScale(domain: weightHistory.getYRange(.weekly))
             .chartYAxis {
                 AxisMarks(values: weightHistory.createYRangeArray(.weekly)) {
@@ -84,10 +80,7 @@ struct WeeklyChart: View {
                 }
                 
             }
-            .chartXScale(
-                domain: weightHistory.weeklyAverages.first!.date ...
-                    weightHistory.weeklyAverages.last!.date.tomorrow
-            )
+            .chartXScale(domain: dateRange)
             .chartXAxis {
                 AxisMarks(values: .stride(by: .day)) { day in
                     if day.index != 0 && day.index != day.count - 1 {
@@ -117,14 +110,4 @@ extension WeeklyChart {
 
 }
 
-#Preview {
-    NavigationView {
-        ZStack {
-            Settings.shared.AppBackground.ignoresSafeArea(.all)
-            
-            Pager(lb: 6, tb: 1)
-                .environmentObject(Settings.shared)
-                .environment(WeightHistory())
-        }
-    }
-}
+#Preview { PreviewPager }

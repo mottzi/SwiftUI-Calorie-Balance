@@ -5,6 +5,7 @@ import WidgetKit
 struct Dashboard: View {
 
     @Binding var todayPageMode: PagerSelection
+
     var nutrientGoals: NutrientGoals? = nil
     
     var body: some View {
@@ -26,7 +27,11 @@ private struct DashboardCalories: View {
     @Binding var todayPageMode: PagerSelection
 
     var body: some View {
-        Card("Calories", secondaryTitle: subtitle, innerPadding: 0) {
+        Card(
+            "Calories",
+            secondaryTitle: subtitle,
+            innerPadding: 0
+        ) {
             VStack {
                 if day.isTodayPage {
                     CaloriesMidnightCard(todayPageMode: $todayPageMode)
@@ -38,7 +43,7 @@ private struct DashboardCalories: View {
         }
         .overlay(alignment: .top) {
             if day.isTodayPage && !dynamicType.isAccessibilitySize {
-                HStack {
+                HStack(spacing: 6) {
                     Circle()
                         .fill(Color("TextColor"))
                         .frame(width: 8)
@@ -52,12 +57,10 @@ private struct DashboardCalories: View {
                 .offset(y: dynamicType <= .xxLarge ? 5 : 10)
             }
         }
-        .contentShape(.rect)
-        .onTapGesture {
-            guard day.isTodayPage else { return }
-            withAnimation(.snappy) {
-                todayPageMode = todayPageMode == .first ? .second : .first
-            }
+        .overlay(alignment: .topTrailing) {
+            DayChoiceButton()
+                .padding(.trailing, 16)
+                .offset(y: -12)
         }
     }
 
@@ -104,15 +107,4 @@ private struct DashboardSteps: View {
 
 }
 
-#Preview {
-    NavigationView {
-        ZStack {
-            Settings.shared.AppBackground.ignoresSafeArea(.all)
-            
-            Pager(lb: 6, tb: 1)
-                .environmentObject(Settings.shared)
-                .environment(WeightHistory())
-                .environment(Streak())
-        }
-    }
-}
+#Preview { PreviewPager }

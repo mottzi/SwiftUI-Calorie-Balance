@@ -3,7 +3,7 @@ import SwiftUI
 // A self-contained Canvas fixture. It renders the app's real dashboard views
 // without querying HealthKit or changing the simulator's saved data.
 var PreviewPager: some View {
-    DashboardSamplePreview()
+    DatabaseGate { DashboardSamplePreview() }
 }
 
 #Preview("Balance bar") {

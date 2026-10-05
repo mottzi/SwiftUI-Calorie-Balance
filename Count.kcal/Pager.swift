@@ -55,7 +55,7 @@ struct Pager: View {
                                     refreshRevision: manualRefresh + calendarRefresh,
                                     selectDay: { selectDay($0) }
                                 )
-                                .padding(.bottom, 16)
+                                .padding(.bottom, 14)
                             }
 
                             DayPageStrip(
@@ -63,7 +63,7 @@ struct Pager: View {
                                 todayPageMode: $todayPageMode
                             )
 
-                            WeightCard()
+                            WeightCard(refreshRevision: manualRefresh + calendarRefresh)
                         } else {
                             ContentUnavailableView(
                                 "Calorie data incomplete",
@@ -125,21 +125,21 @@ struct Pager: View {
 
 extension Pager {
 
-    private var Toolbar: some ToolbarContent {
-        DashboardToolbar(
-            navigation: navigation,
-            todayPageMode: $todayPageMode,
-            showCalendar: $showCalendar,
-            showSettings: $showSettings,
-            currentMonth: $currentMonth,
-            calendarDays: $calendarDays,
-            controlsDisabled: AppSettings.showWelcome || !AppSettings.isSettingsInputValid,
-            streakColor: AppSettings.weightGoal == .lose ? AppSettings.burnedColor : AppSettings.consumedColor,
-            selectDay: { selectDay($0) }
-        )
+    /// Selects a day, optionally animating the dashboard scroll.
+    private func selectDay(_ date: Date, animated: Bool = true) {
+        let day = Calendar.current.startOfDay(for: date)
+        // prepare scroll targets without animating inserted pages
+        withTransaction(Transaction(animation: nil)) {
+            navigation.ensurePagesForSelection(day)
+        }
+        if animated {
+            withAnimation(.snappy) { navigation.selectDay(day, animated: true) }
+        } else {
+            var transaction = Transaction(animation: nil)
+            transaction.disablesAnimations = true
+            withTransaction(transaction) { navigation.selectDay(day) }
+        }
     }
-
-    private var selectedPage: HealthInterface? { navigation.page(for: navigation.selectedDay) }
 
     private var selectedRefreshKey: DayRefreshKey {
         DayRefreshKey(
@@ -147,22 +147,6 @@ extension Pager {
             active: scenePhase == .active,
             source: AppSettings.dataSource.rawValue,
             unit: AppSettings.energyUnit.rawValue,
-            activeGoal: AppSettings.customCalActive,
-            passiveGoal: AppSettings.customCalPassive,
-            revision: manualRefresh,
-            healthRevision: healthDataMode.revision
-        )
-    }
-
-    private var summaryRefreshKey: SummaryRefreshKey {
-        SummaryRefreshKey(
-            today: navigation.weekPages.last?.id ?? Calendar.current.startOfDay(for: .now),
-            active: scenePhase == .active,
-            source: AppSettings.dataSource.rawValue,
-            unit: AppSettings.energyUnit.rawValue,
-            weightUnit: AppSettings.weightUnit.rawValue,
-            weightGoal: AppSettings.weightGoal.rawValue,
-            balanceGoal: AppSettings.balanceGoal,
             activeGoal: AppSettings.customCalActive,
             passiveGoal: AppSettings.customCalPassive,
             revision: manualRefresh,
@@ -178,6 +162,24 @@ extension Pager {
         if selectedPage.id == Calendar.current.startOfDay(for: .now) {
             WidgetCenter.shared.reloadAllTimelines()
         }
+    }
+
+    private var selectedPage: HealthInterface? { navigation.page(for: navigation.selectedDay) }
+
+    private var summaryRefreshKey: SummaryRefreshKey {
+        SummaryRefreshKey(
+            today: navigation.weekPages.last?.id ?? Calendar.current.startOfDay(for: .now),
+            active: scenePhase == .active,
+            source: AppSettings.dataSource.rawValue,
+            unit: AppSettings.energyUnit.rawValue,
+            weightUnit: AppSettings.weightUnit.rawValue,
+            weightGoal: AppSettings.weightGoal.rawValue,
+            balanceGoal: AppSettings.balanceGoal,
+            activeGoal: AppSettings.customCalActive,
+            passiveGoal: AppSettings.customCalPassive,
+            revision: manualRefresh,
+            healthRevision: healthDataMode.revision
+        )
     }
 
     /// Refreshes Today summary data when its inputs change, independent of historical swipes.
@@ -199,20 +201,18 @@ extension Pager {
         _ = await (weightRefresh, streakRefresh)
     }
 
-    /// Selects a day, optionally animating the dashboard scroll.
-    private func selectDay(_ date: Date, animated: Bool = true) {
-        let day = Calendar.current.startOfDay(for: date)
-        // prepare scroll targets without animating inserted pages
-        withTransaction(Transaction(animation: nil)) {
-            navigation.ensurePagesForSelection(day)
-        }
-        if animated {
-            withAnimation(.snappy) { navigation.selectDay(day, animated: true) }
-        } else {
-            var transaction = Transaction(animation: nil)
-            transaction.disablesAnimations = true
-            withTransaction(transaction) { navigation.selectDay(day) }
-        }
+    private var Toolbar: some ToolbarContent {
+        DashboardToolbar(
+            navigation: navigation,
+            todayPageMode: $todayPageMode,
+            showCalendar: $showCalendar,
+            showSettings: $showSettings,
+            currentMonth: $currentMonth,
+            calendarDays: $calendarDays,
+            controlsDisabled: AppSettings.showWelcome || !AppSettings.isSettingsInputValid,
+            streakColor: AppSettings.weightGoal == .lose ? AppSettings.burnedColor : AppSettings.consumedColor,
+            selectDay: { selectDay($0) }
+        )
     }
 
     private var settingsDestination: some View {
@@ -240,6 +240,7 @@ extension Pager {
 /// Horizontal day targets that keep their calendar-day identity while browsing.
 private struct DayPageStrip: View {
     let navigation: DayPager
+
     @Binding var todayPageMode: PagerSelection
 
     var body: some View {
@@ -253,8 +254,8 @@ private struct DayPageStrip: View {
                 }
             }
             .scrollTargetLayout()
-            .padding(.bottom, 20)
         }
+        .padding(.bottom, 20)
         .scrollIndicators(.hidden)
         .calendarPaging(
             selection: navigation.selectedDay,

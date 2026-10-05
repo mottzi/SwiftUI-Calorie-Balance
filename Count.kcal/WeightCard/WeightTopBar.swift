@@ -89,8 +89,7 @@ struct WeightTopBar: View {
             }
             .buttonStyle(.plain)
             .animation(.snappy, value: pageSelection)
-            
-            
+
             HStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 2) {
@@ -130,22 +129,9 @@ struct WeightTopBar: View {
             .padding(.bottom, 2)
 
         }
-//        .padding(.leading, 13)
-//        .padding(.trailing, 13)
-//        .debug(.blue)
     }
     
 
 }
 
-#Preview {
-    NavigationView {
-        ZStack {
-            Settings.shared.AppBackground.ignoresSafeArea(.all)
-            
-            Pager(lb: 6, tb: 1)
-                .environmentObject(Settings.shared)
-                .environment(WeightHistory())
-        }
-    }
-}
+#Preview { PreviewPager }

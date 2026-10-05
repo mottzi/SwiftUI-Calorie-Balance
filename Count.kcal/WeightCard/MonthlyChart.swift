@@ -8,9 +8,9 @@ struct MonthlyChart: View {
     @Environment(WeightHistory.self) private var weightHistory
 
     var body: some View {
-        if weightHistory.dataLoaded {
+        if let dateRange = weightHistory.chartDateRange(for: .monthly) {
             Chart {
-                RuleMark(y: .value("Value", weightHistory.weightAvg30))
+                RuleMark(y: .value("Value", weightHistory.average(for: .monthly)))
                     .foregroundStyle(trendColor.opacity(0.8))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [2, 3]))
                 
@@ -55,16 +55,9 @@ struct MonthlyChart: View {
             .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             .brightness(level: .primary)
             .saturation(Settings.baseSaturation)
-            .padding(.top, 22)
-//            .padding(.trailing, 15)
-            .padding(.horizontal, 12)
-
             .chartYScale(domain: weightHistory.getYRange(.monthly))
             .chartYAxis { AxisMarks(position: .trailing, values: weightHistory.createYRangeArray(.monthly)) }
-            .chartXScale(
-                domain: weightHistory.dailyAverages.first!.date
-                    ... weightHistory.dailyAverages.last!.date.nextSunday.tomorrow
-            )
+            .chartXScale(domain: dateRange)
             .chartXAxis {
                 AxisMarks(values: .stride(by: .day, count: 7)) { date in
                     AxisGridLine()
