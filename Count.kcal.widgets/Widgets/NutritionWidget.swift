@@ -25,7 +25,7 @@ struct NutritionWidget: Widget {
 
 }
 
-/// Carbohydrate, fat, and protein progress for the selected widget size.
+/// Nutrient progress for small, medium, and combined large widgets.
 struct NutritionWidgetNow: View {
 
     @Environment(\.widgetFamily) var family: WidgetFamily
@@ -38,42 +38,50 @@ struct NutritionWidgetNow: View {
     var body: some View {
         switch family {
             case .systemSmall, .systemMedium:
-                VStack(spacing: 14) {
-                    ReachableView(
-                        family == .systemMedium ? "Carbs" : "C",
-                        context: .widget(family),
-                        consumedValue: entry.data.carbs,
-                        goalValue: AppSettings.carbsGoal,
-                        color: AppSettings.consumedColor,
-                        graphHeight: 10
-                    )
+                nutrientRows
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(family == .systemMedium ? 20 : 5)
+                    .padding(.leading, 8)
+                    .padding(.trailing, 8)
+                    .padding(.bottom, family == .systemMedium ? 2 : -2)
 
-                    ReachableView(
-                        family == .systemMedium ? "Fats" : "F",
-                        context: .widget(family),
-                        consumedValue: entry.data.fats,
-                        goalValue: AppSettings.fatsGoal,
-                        color: AppSettings.consumedColor,
-                        graphHeight: 10
-                    )
-
-                    ReachableView(
-                        family == .systemMedium ? "Protein" : "P",
-                        context: .widget(family),
-                        consumedValue: entry.data.protein,
-                        goalValue: AppSettings.proteinGoal,
-                        color: AppSettings.consumedColor,
-                        graphHeight: 10
-                    )
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(family == .systemMedium ? 20 : 5)
-                .padding(.leading, 8)
-                .padding(.trailing, 8)
-                .padding(.bottom, family == .systemMedium ? 2 : -2)
+            case .systemLarge:
+                nutrientRows
+                    .padding(.horizontal, 28)
             
             default:
                 Text(verbatim: "Widget size not supported")
+        }
+    }
+
+    private var nutrientRows: some View {
+        VStack(spacing: 14) {
+            ReachableView(
+                family == .systemSmall ? "C" : "Carbs",
+                context: .widget(family),
+                consumedValue: entry.data.carbs,
+                goalValue: AppSettings.carbsGoal,
+                color: AppSettings.consumedColor,
+                graphHeight: 10
+            )
+
+            ReachableView(
+                family == .systemSmall ? "F" : "Fats",
+                context: .widget(family),
+                consumedValue: entry.data.fats,
+                goalValue: AppSettings.fatsGoal,
+                color: AppSettings.consumedColor,
+                graphHeight: 10
+            )
+
+            ReachableView(
+                family == .systemSmall ? "P" : "Protein",
+                context: .widget(family),
+                consumedValue: entry.data.protein,
+                goalValue: AppSettings.proteinGoal,
+                color: AppSettings.consumedColor,
+                graphHeight: 10
+            )
         }
     }
     

@@ -1,7 +1,7 @@
 import WidgetKit
 import SwiftUI
 
-/// Calorie balance circle for small and medium widgets.
+/// Calorie balance circle with nutrition progress in the large widget.
 struct BalanceWidgetCircle: Widget {
 
     @StateObject private var AppSettings = Settings.shared
@@ -23,7 +23,7 @@ struct BalanceWidgetCircle: Widget {
         .contentMarginsDisabled()
         .configurationDisplayName("Calorie Dashboard")
         .description("Shows a circular graph of your calorie balance.")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 
 }
@@ -110,6 +110,9 @@ private struct BalanceWidgetCircleContent: View {
                     topGraph
                 }
 
+            case .systemLarge:
+                largeDashboard
+
             default:
                 if mode == .now {
                     Text("Widget size not supported")
@@ -122,6 +125,37 @@ private struct BalanceWidgetCircleContent: View {
 }
 
 extension BalanceWidgetCircleContent {
+
+    private var largeDashboard: some View {
+        ZStack(alignment: .top) {
+            HStack(alignment: .top, spacing: 0) {
+                Spacer()
+
+                modeLabel
+            }
+
+            VStack(spacing: 20) {
+                topGraphContent
+                    .frame(height: 130)
+                    .padding(.horizontal, 30)
+                    .accessibilityElement(children: .combine)
+
+                BarBalanceGraph(mode: mode, animateNumericValues: true)
+                    .environment(HealthInterface(entry.data))
+                    .frame(height: 44)
+                    .padding(.bottom, 4)
+                    .padding(.horizontal, 30)
+                    .accessibilityHidden(true)
+
+                NutritionWidgetNow(entry: entry)
+            }
+            .fontDesign(.rounded)
+            .padding(.top, 13)
+            .padding(.bottom, 20)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .dynamicTypeSize(...DynamicTypeSize.large)
+    }
 
     var modeLabel: some View {
         Button(
@@ -173,7 +207,11 @@ extension BalanceWidgetCircleContent {
                     .foregroundColor(Color("TextColor"))
                     .contentTransition(.numericText(value: Double(abs(balance))))
                 
-                Text(balance > 0 ? String(localized: "Deficit") : balance == 0 ? String("") : String(localized: "Surplus"))
+                Text(balance > 0
+                    ? String(localized: "Deficit")
+                    : balance == 0
+                        ? (family == .systemLarge ? String(localized: "Balance") : "")
+                        : String(localized: "Surplus"))
                     .font(.caption)
                     .fontWeight(.light)
                     .foregroundColor(Color("SecondaryTextColor"))
@@ -181,7 +219,7 @@ extension BalanceWidgetCircleContent {
             }
             .fontDesign(.rounded)
 
-            if !AppSettings.hideCalorieStatusIcons {
+            if !AppSettings.hideCalorieStatusIcons && (family != .systemLarge || energy.graphTotal > 0) {
                 Image(systemName: goalReached ? "checkmark" : "xmark")
                     .font(.system(size: 12))
                     .fontWeight(.semibold)
@@ -330,4 +368,13 @@ extension BalanceWidgetCircleContent {
 }
 timeline: {
     HealthDataEntry(date: .now, data: HealthData.example(for: .now))
+}
+
+#Preview(as: .systemLarge) {
+    BalanceWidgetCircle()
+}
+timeline: {
+    HealthDataEntry(date: .now, data: HealthData.example(for: .now))
+    HealthDataEntry(date: .now, data: HealthData.example(for: .now, balance: .surplus))
+    HealthDataEntry(date: .now, data: HealthData.empty(for: .now))
 }
