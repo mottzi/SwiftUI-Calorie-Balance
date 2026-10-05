@@ -4,16 +4,17 @@ import WidgetKit
 /// Watch dashboard with a shared daily snapshot and calorie display mode.
 struct ContentView: View {
 
-    @EnvironmentObject private var AppSettings: Settings
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
-    @StateObject private var Watch = Connectivity.shared
+    @State private var Watch = Connectivity.shared
     @State private var Interface: HealthInterface
+    @State private var weightHistory = WeightHistory()
 
     @State private var healthDataMode = HealthDataMode.shared
     @State private var refreshRevision = 0
     @State private var healthAccessRequested = false
-    @State private var tabSelection = 0
+    @State private var tabSelection: WatchTab = .calories
     @State private var modeSelection: GraphMode = .now
 
     init(Interface: HealthInterface) {
@@ -23,72 +24,49 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             TabView(selection: $tabSelection) {
-                CaloriesTab(mode: modeSelection, balance: calorieBalance, toggleMode: toggleMode)
+                CaloriesTab(mode: modeSelection, toggleMode: toggleMode)
                     .sensoryFeedback(.selection, trigger: modeSelection)
-                    .tag(0)
-                
-                VStack(spacing: 24) {
-                    ReachableView(
-                        "Carbs",
-                        consumedValue: Interface.sample.carbs,
-                        goalValue: AppSettings.carbsGoal,
-                        color: AppSettings.consumedColor,
-                        graphHeight: 10
-                    )
+                    .tag(WatchTab.calories)
 
-                    ReachableView(
-                        "Fats",
-                        consumedValue: Interface.sample.fats,
-                        goalValue: AppSettings.fatsGoal,
-                        color: AppSettings.consumedColor,
-                        graphHeight: 10
-                    )
-                    
-                    ReachableView(
-                        "Protein",
-                        consumedValue: Interface.sample.protein,
-                        goalValue: AppSettings.proteinGoal,
-                        color: AppSettings.consumedColor,
-                        graphHeight: 10
-                    )
-                }
-                .dynamicTypeSize(...DynamicTypeSize.large)
-                .padding(.top, 10)
-                .scenePadding()
-                .containerBackground(bgColor.brighten(-0.3).gradient, for: .tabView)
-                .tag(1)
+                MacrosTab(mode: modeSelection)
+                    .tag(WatchTab.macros)
+
+                WeightTab()
+                    .tag(WatchTab.weight)
             }
             .toolbar {
+                // Keep both placements present so watchOS retains the centered system clock.
                 ToolbarItem(placement: .topBarLeading) {
-                    CircleBalanceGraphWatch(mode: modeSelection)
-                        .environment(Interface)
-                        .offset(x: 2)
-                        .scaleEffect(tabSelection == 0 ? 0.3 : 1)
-                        .animation(.bouncy(extraBounce: 0.3), value: tabSelection)
-                        .opacity(tabSelection == 0 ? 0 : 1)
-                        .animation(.easeInOut, value: tabSelection)
+                    CircleBalanceGraphWatch(mode: modeSelection, context: .toolbar)
+                        .scaleEffect(reduceMotion ? 1 : tabSelection == .macros ? 1 : 0.3)
+                        .blur(radius: !reduceMotion && tabSelection != .macros ? 4 : 0)
+                        .opacity(tabSelection == .macros ? 1 : 0)
+                        .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: tabSelection)
+                        .accessibilityHidden(true)
                 }
-            
+
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        toggleMode()
-                    }
-                    label: {
-                        Image(systemName: modeSelection == .now ? "sun.min.fill" : "moon.stars.fill")
+                    if tabSelection == .calories {
+                        Button(action: toggleMode) {
+                            Label(
+                                modeSelection == .now ? "Midnight" : "Now",
+                                systemImage: modeSelection == .now ? "sun.min.fill" : "moon.stars.fill"
+                            )
+                            .labelStyle(.iconOnly)
                             .foregroundStyle(.white.opacity(0.9))
                             .contentTransition(.symbolEffect(.replace))
+                        }
+                    } else {
+                        Spacer(minLength: 0)
+                            .accessibilityHidden(true)
                     }
-                    .disabled(tabSelection != 0)
-                    .blur(radius: tabSelection == 0 ? 0 : 4)
-                    .opacity(tabSelection == 0 ? 1 : 0)
-                    .scaleEffect(tabSelection == 0 ? 1 : 0.5)
-                    .animation(.bouncy(extraBounce: 0.3), value: tabSelection)
                 }
-                
             }
             .tabViewStyle(.verticalPage)
+            .navigationTitle(tabSelection == .weight ? Text("Weight") : Text(""))
             .task(id: healthDataMode.usesSampleData) {
                 healthAccessRequested = false
+                weightHistory.reset()
                 // Sample reads bypass authorization; returning to HealthKit requests access.
                 _ = await HealthRepository.shared.requestPermission()
                 guard !Task.isCancelled else { return }
@@ -97,9 +75,20 @@ struct ContentView: View {
             }
             .task(id: refreshRevision) {
                 guard scenePhase == .active, healthAccessRequested else { return }
-                await Interface.updateMetrics()
+                async let metrics: Void = Interface.updateMetrics()
+                async let weight: Void = weightHistory.fetchData(
+                    supplement: healthDataMode.usesSampleData ? nil : Watch.receivedWeightHistory
+                )
+                _ = await (metrics, weight)
             }
-            .onChange(of: Watch.lastReceivedSettingsContext) { _, newValue in
+            .task(id: scenePhase == .active && healthAccessRequested && !healthDataMode.usesSampleData) {
+                guard scenePhase == .active, healthAccessRequested, !healthDataMode.usesSampleData else { return }
+                for await _ in HealthRepository.shared.weightChanges() {
+                    guard !Task.isCancelled else { return }
+                    refreshRevision += 1
+                }
+            }
+            .onChange(of: Watch.lastReceivedSettingsContext, initial: true) { _, newValue in
                 guard newValue != nil else { return }
                 refreshRevision += 1
             }
@@ -121,29 +110,18 @@ struct ContentView: View {
             }
         }
         .environment(Interface)
+        .environment(weightHistory)
     }
 
 }
 
 extension ContentView {
 
-    func toggleMode() {
-        withAnimation(.bouncy(duration: 0.6)) {
+    private func toggleMode() {
+        withAnimation(reduceMotion ? nil : .bouncy(duration: 0.6)) {
             modeSelection = modeSelection == .now ? .midnight : .now
         }
     }
-
-    var calorieBalance: Int {
-        modeSelection == .now ? Interface.sample.balanceNow : Interface.sample.balanceMidnight
-    }
-
-    var bgColor: Color {
-        calorieBalance >= 0 ? AppSettings.burnedColor : AppSettings.consumedColor
-    }
-
-}
-
-extension ContentView {
 
     /// Replaces the daily model after the calendar day changes.
     private func updateDay() {
@@ -152,6 +130,64 @@ extension ContentView {
         }
     }
 
+}
+
+/// Observes nutrition only inside the macro page, rather than the navigation container.
+private struct MacrosTab: View {
+
+    @EnvironmentObject private var settings: Settings
+
+    @Environment(HealthInterface.self) private var health
+
+    let mode: GraphMode
+
+    var body: some View {
+        VStack(spacing: 24) {
+            ReachableView(
+                "Carbs",
+                consumedValue: health.sample.carbs,
+                goalValue: settings.carbsGoal,
+                color: settings.consumedColor,
+                graphHeight: 10
+            )
+
+            ReachableView(
+                "Fats",
+                consumedValue: health.sample.fats,
+                goalValue: settings.fatsGoal,
+                color: settings.consumedColor,
+                graphHeight: 10
+            )
+
+            ReachableView(
+                "Protein",
+                consumedValue: health.sample.protein,
+                goalValue: settings.proteinGoal,
+                color: settings.consumedColor,
+                graphHeight: 10
+            )
+        }
+        .dynamicTypeSize(...DynamicTypeSize.large)
+        .padding(.top, 10)
+        .scenePadding()
+        .containerBackground(background.brighten(-0.3).gradient, for: .tabView)
+    }
+
+}
+
+extension MacrosTab {
+
+    private var background: Color {
+        let balance = mode == .now ? health.sample.balanceNow : health.sample.balanceMidnight
+        return balance >= 0 ? settings.burnedColor : settings.consumedColor
+    }
+
+}
+
+private enum WatchTab {
+    case calories
+    case macros
+    case weight
 }
 
 #Preview {

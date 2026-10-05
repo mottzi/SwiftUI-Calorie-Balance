@@ -4,7 +4,9 @@ import WidgetKit
 struct CircleBalanceGraphWatch: View {
 
     @Environment(\.colorScheme) private var scheme
+
     @EnvironmentObject var AppSettings: Settings
+
     @Environment(HealthInterface.self) var DataInterface
     
     var mode: GraphMode
@@ -95,6 +97,7 @@ extension CircleBalanceGraphWatch {
     func lineWidth(max: CGFloat) -> CGFloat {
         switch context {
             case .app: max * 0.08
+            case .toolbar: max * 0.13
             case .circle: 4
             case .circleFull: 8
             case .circleFuller: 10
@@ -104,7 +107,7 @@ extension CircleBalanceGraphWatch {
 
     func gapWidth(max: CGFloat) -> CGFloat {
         switch context {
-            case .app: lineWidth(max: max) * 0.5
+            case .app, .toolbar: lineWidth(max: max) * 0.5
             case .circle: 2
             case .circleFull, .circleFuller: 4
             case .circleThick: 5
@@ -122,6 +125,7 @@ extension CircleBalanceGraphWatch {
 
 enum GraphContext {
     case app
+    case toolbar
     case circle
     case circleThick
     case circleFull

@@ -8,27 +8,18 @@ final class HealthKitDataSource: HealthDataSource {
     init(store: HKHealthStore = HKHealthStore()) { self.store = store }
 
     func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async -> [Date: Double] {
-        guard HKHealthStore.isHealthDataAvailable(), !Task.isCancelled else { return [:] }
-        let predicate = HKSamplePredicate.quantitySample(
-            type: HKQuantityType(type),
-            predicate: HKQuery.predicateForSamples(withStart: start, end: end)
-        )
-        let query = HKStatisticsCollectionQueryDescriptor(
-            predicate: predicate,
-            options: .cumulativeSum,
-            anchorDate: start,
-            intervalComponents: DateComponents(day: 1)
-        )
-        guard let collection = try? await query.result(for: store) else { return [:] }
-        var sums: [Date: Double] = [:]
-        collection.enumerateStatistics(from: start, to: end) { statistics, _ in
-            sums[statistics.startDate] = statistics.sumQuantity()?.doubleValue(for: unit) ?? 0
-        }
-        return sums
+        (try? await energySums(type, from: start, to: end, unit: unit)) ?? [:]
     }
 
-    func weights(from start: Date, to end: Date, unit: HKUnit) async -> [WeightChartData] {
-        guard HKHealthStore.isHealthDataAvailable(), !Task.isCancelled else { return [] }
+    func energySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double] {
+        try await sums(type, from: start, to: end, unit: unit, interval: DateComponents(day: 1))
+    }
+
+
+
+    func weights(from start: Date, to end: Date, unit: HKUnit) async throws -> [WeightChartData] {
+        try Task.checkCancellation()
+        guard HKHealthStore.isHealthDataAvailable() else { throw HKError(.errorHealthDataUnavailable) }
         let predicate = HKSamplePredicate.quantitySample(
             type: HKQuantityType(.bodyMass),
             predicate: HKQuery.predicateForSamples(withStart: start, end: end)
@@ -39,7 +30,7 @@ final class HealthKitDataSource: HealthDataSource {
             anchorDate: start,
             intervalComponents: DateComponents(day: 1)
         )
-        guard let collection = try? await query.result(for: store) else { return [] }
+        let collection = try await query.result(for: store)
         var weights: [WeightChartData] = []
         collection.enumerateStatistics(from: start, to: end) { statistics, _ in
             weights.append(WeightChartData(
@@ -50,8 +41,9 @@ final class HealthKitDataSource: HealthDataSource {
         return weights
     }
 
-    func latestWeight(before end: Date, unit: HKUnit) async -> (Double?, Date?) {
-        guard HKHealthStore.isHealthDataAvailable(), !Task.isCancelled else { return (nil, nil) }
+    func latestWeight(before end: Date, unit: HKUnit) async throws -> (Double?, Date?) {
+        try Task.checkCancellation()
+        guard HKHealthStore.isHealthDataAvailable() else { throw HKError(.errorHealthDataUnavailable) }
         let predicate = HKSamplePredicate.quantitySample(
             type: HKQuantityType(.bodyMass),
             predicate: HKQuery.predicateForSamples(withStart: nil, end: end)
@@ -61,8 +53,30 @@ final class HealthKitDataSource: HealthDataSource {
             sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)],
             limit: 1
         )
-        guard let sample = try? await query.result(for: store).first else { return (nil, nil) }
+        guard let sample = try await query.result(for: store).first else { return (nil, nil) }
         return (sample.quantity.doubleValue(for: unit), sample.startDate)
+    }
+
+    var earliestWeightSampleDate: Date? {
+        #if os(watchOS)
+        store.earliestPermittedSampleDate()
+        #else
+        nil
+        #endif
+    }
+
+    /// Observe only while a foreground consumer is listening; no background delivery needed.
+    func weightChanges() -> AsyncStream<Void> {
+
+        let (stream, continuation) = AsyncStream<Void>.makeStream(bufferingPolicy: .bufferingNewest(1))
+        let query = HKObserverQuery(sampleType: HKQuantityType(.bodyMass), predicate: nil) { _, completion, _ in
+            continuation.yield(())
+            completion()
+        }
+        let store = store
+        continuation.onTermination = { _ in store.stop(query) }
+        store.execute(query)
+        return stream
     }
 
     func requestPermission() async -> Bool {
@@ -75,6 +89,38 @@ final class HealthKitDataSource: HealthDataSource {
             try await store.requestAuthorization(toShare: [], read: types)
             return true
         } catch { return false }
+    }
+
+}
+
+extension HealthKitDataSource {
+
+    private func sums(
+        _ type: HKQuantityTypeIdentifier,
+        from start: Date,
+        to end: Date,
+        unit: HKUnit,
+        interval: DateComponents
+    ) async throws -> [Date: Double] {
+
+        try Task.checkCancellation()
+        guard HKHealthStore.isHealthDataAvailable() else { throw HKError(.errorHealthDataUnavailable) }
+        let predicate = HKSamplePredicate.quantitySample(
+            type: HKQuantityType(type),
+            predicate: HKQuery.predicateForSamples(withStart: start, end: end)
+        )
+        let query = HKStatisticsCollectionQueryDescriptor(
+            predicate: predicate,
+            options: .cumulativeSum,
+            anchorDate: start,
+            intervalComponents: interval
+        )
+        let collection = try await query.result(for: store)
+        var sums: [Date: Double] = [:]
+        collection.enumerateStatistics(from: start, to: end) { statistics, _ in
+            sums[statistics.startDate] = statistics.sumQuantity()?.doubleValue(for: unit) ?? 0
+        }
+        return sums
     }
 
 }

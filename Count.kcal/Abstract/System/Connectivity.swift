@@ -1,12 +1,17 @@
 import SwiftUI
+import Observation
 import WatchConnectivity
 import WidgetKit
 
 /// Phone and watch settings transfer through the active connectivity session.
-final class Connectivity: NSObject, ObservableObject {
+@MainActor
+@Observable
+final class Connectivity: NSObject {
 
     // used to notify watch view when settings were changed on phone
-    @Published var lastReceivedSettingsContext: Date? = nil
+    private(set) var lastReceivedSettingsContext: Date? = nil
+    private(set) var receivedWeightHistory: WeightHistorySnapshot?
+    private var latestWeightHistory: WeightHistorySnapshot?
 
     private override init() {
         super.init()
@@ -26,24 +31,31 @@ final class Connectivity: NSObject, ObservableObject {
 #if os(iOS)
 extension Connectivity: WCSessionDelegate {
 
+    /// Sends weight history together with settings in the latest application context.
+    func sendWeightHistory(_ snapshot: WeightHistorySnapshot?) {
+        latestWeightHistory = snapshot
+        sendSettingsContext()
+    }
+
     @MainActor
     /// Sends the latest phone settings after a local change or session activation.
     func sendSettingsContext() {
         guard WCSession.default.activationState == .activated,
               WCSession.default.isWatchAppInstalled else { return }
-        guard let context = WatchSettingsSnapshot(settings: .shared).context else { return }
+        let snapshot = WatchSettingsSnapshot(settings: .shared, weightHistory: latestWeightHistory)
+        guard let context = snapshot.context else { return }
 
         try? WCSession.default.updateApplicationContext(context)
     }
     
-    func sessionDidBecomeInactive(_ session: WCSession) { session.activate() }
-    func sessionDidDeactivate(_ session: WCSession) { session.activate() }
+    nonisolated func sessionDidBecomeInactive(_ session: WCSession) { session.activate() }
+    nonisolated func sessionDidDeactivate(_ session: WCSession) { session.activate() }
 
-    func sessionWatchStateDidChange(_ session: WCSession) {
+    nonisolated func sessionWatchStateDidChange(_ session: WCSession) {
         Task { @MainActor in sendSettingsContext() }
     }
     
-    func session(
+    nonisolated func session(
         _ session: WCSession,
         activationDidCompleteWith activationState: WCSessionActivationState,
         error: Error?
@@ -59,19 +71,20 @@ extension Connectivity: WCSessionDelegate {
 #if os(watchOS)
 extension Connectivity: WCSessionDelegate {
 
-    func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+    nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
         guard let snapshot = WatchSettingsSnapshot(context: applicationContext) else { return }
 
         Task { @MainActor in
             withAnimation(.bouncy(duration: 0.6)) {
                 snapshot.apply(to: .shared)
+                self.receivedWeightHistory = snapshot.weightHistory
                 self.lastReceivedSettingsContext = .now
                 WidgetCenter.shared.reloadAllTimelines()
             }
         }
     }
     
-    func session(
+    nonisolated func session(
         _ session: WCSession,
         activationDidCompleteWith activationState: WCSessionActivationState,
         error: Error?
@@ -109,12 +122,21 @@ struct SettingsContextSync: ViewModifier {
     @AppStorage("burnedColor", store: settingsSyncDefaults) private var burnedColor = Color("ActiveDefault")
     @AppStorage("consumedColor", store: settingsSyncDefaults) private var consumedColor = Color("ConsumedDefault")
 
+    let weightHistory: WeightHistory
+
     func body(content: Content) -> some View {
         content
             .onAppear { Connectivity.shared.sendSettingsContext() }
             .onChange(of: currentSettings) { Connectivity.shared.sendSettingsContext() }
             .onChange(of: HealthDataMode.shared.revision) { Connectivity.shared.sendSettingsContext() }
+            .onChange(of: weightHistory.snapshot, initial: true) { _, snapshot in
+                Connectivity.shared.sendWeightHistory(snapshot)
+            }
     }
+
+}
+
+extension SettingsContextSync {
 
     private var currentSettings: WatchSettingsSnapshot {
         WatchSettingsSnapshot(
@@ -139,7 +161,7 @@ private let settingsSyncDefaults = UserDefaults(suiteName: "group.4DXABR577J.com
 #endif
 
 /// Settings values exchanged with the Watch through a property-list context.
-private struct WatchSettingsSnapshot: Codable, Equatable {
+private struct WatchSettingsSnapshot: Codable, Equatable, Sendable {
 
     let weightGoal: Int?
     let dataSource: Int?
@@ -154,12 +176,7 @@ private struct WatchSettingsSnapshot: Codable, Equatable {
     let burnedColor: String?
     let consumedColor: String?
     var usesSampleData: Bool? = nil
-
-    var context: [String: Any]? {
-        guard let data = try? PropertyListEncoder().encode(self) else { return nil }
-        guard let propertyList = try? PropertyListSerialization.propertyList(from: data, format: nil) else { return nil }
-        return propertyList as? [String: Any]
-    }
+    var weightHistory: WeightHistorySnapshot? = nil
 
 }
 
@@ -176,7 +193,7 @@ extension WatchSettingsSnapshot {
     }
 
     @MainActor
-    init(settings: Settings) {
+    init(settings: Settings, weightHistory: WeightHistorySnapshot?) {
 
         self.init(
             weightGoal: settings.weightGoal.rawValue,
@@ -191,18 +208,24 @@ extension WatchSettingsSnapshot {
             fatsGoal: settings.fatsGoal,
             burnedColor: settings.burnedColor.rawValue,
             consumedColor: settings.consumedColor.rawValue,
-            usesSampleData: Self.sampleModeForTransfer
+            usesSampleData: Self.sampleModeForTransfer,
+            weightHistory: weightHistory?.unit == settings.weightUnit.rawValue ? weightHistory : nil
         )
     }
 
-    @MainActor
-    private static var sampleModeForTransfer: Bool? {
-        #if DEBUG
-        HealthDataMode.isSampleDataEnabled
-        #else
-        nil
-        #endif
+}
+
+extension WatchSettingsSnapshot {
+
+    var context: [String: Any]? {
+        guard let data = try? PropertyListEncoder().encode(self) else { return nil }
+        guard let propertyList = try? PropertyListSerialization.propertyList(from: data, format: nil) else { return nil }
+        return propertyList as? [String: Any]
     }
+
+}
+
+extension WatchSettingsSnapshot {
 
     @MainActor
     func apply(to settings: Settings) {
@@ -234,6 +257,19 @@ extension WatchSettingsSnapshot {
         if let consumedColor, let color = Color(rawValue: consumedColor) {
             settings.consumedColor = color
         }
+    }
+
+}
+
+extension WatchSettingsSnapshot {
+
+    @MainActor
+    private static var sampleModeForTransfer: Bool? {
+        #if DEBUG
+        HealthDataMode.isSampleDataEnabled
+        #else
+        nil
+        #endif
     }
 
 }

@@ -5,7 +5,6 @@ import SwiftUI
 struct CountApp: App {
 
     @StateObject private var AppSettings = Settings.shared
-    @StateObject private var Watch = Connectivity.shared
 
     @State private var weightHistory = WeightHistory()
     @State private var StreakManager = Streak()
@@ -28,7 +27,7 @@ struct CountApp: App {
                 .task { await SimulatorHealthSeeder.runIfRequested() }
                 #endif
                 #if os(iOS)
-                .modifier(SettingsContextSync())
+                .modifier(SettingsContextSync(weightHistory: weightHistory))
                 #endif
             }
         }

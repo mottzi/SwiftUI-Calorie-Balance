@@ -79,6 +79,7 @@ final class HealthRepository {
 
 extension HealthRepository {
 
+
     var revision: String { HealthDataMode.currentRevision }
 
     /// Loads daily energy balances for a bounded streak count with fixed settings.
@@ -122,7 +123,7 @@ extension HealthRepository {
     }
 
     /// Loads daily weight averages for the chart period ending on the given date.
-    func fetchInitialAvgWeightData(for date: Date, weightUnit: Settings.WeightUnit) async -> [WeightChartData] {
+    func fetchInitialAvgWeightData(for date: Date, weightUnit: Settings.WeightUnit) async throws -> [WeightChartData] {
         let unit: HKUnit = weightUnit == .lbs ? .pound() : .gramUnit(with: .kilo)
         let dayStart = Calendar.current.date(
             byAdding: .day,
@@ -131,17 +132,21 @@ extension HealthRepository {
         )!.lastMonday
         let dayEnd = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: date)!
 
-        let values = await dataSource.weights(from: dayStart, to: dayEnd, unit: unit)
+        let values = try await dataSource.weights(from: dayStart, to: dayEnd, unit: unit)
         return values.map { WeightChartData(date: $0.date, weightAvg: $0.weightAvg.map { ($0 * 10).rounded() / 10 }) }
     }
 
     /// Returns the latest weight value and its sample date.
-    func fetchLatestWeightData(for date: Date, weightUnit: Settings.WeightUnit) async -> (Double?, Date?) {
+    func fetchLatestWeightData(for date: Date, weightUnit: Settings.WeightUnit) async throws -> (Double?, Date?) {
         let unit: HKUnit = weightUnit == .lbs ? .pound() : .gramUnit(with: .kilo)
         let dayEnd = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: date)!
-        let (weight, sampleDate) = await dataSource.latestWeight(before: dayEnd, unit: unit)
+        let (weight, sampleDate) = try await dataSource.latestWeight(before: dayEnd, unit: unit)
         return (weight.map { ($0 * 10).rounded() / 10 }, sampleDate)
     }
+
+    var earliestWeightSampleDate: Date? { dataSource.earliestWeightSampleDate }
+
+    func weightChanges() -> AsyncStream<Void> { dataSource.weightChanges() }
 
     /// Sample mode never requests HealthKit authorization.
     func requestPermission() async -> Bool { await dataSource.requestPermission() }
@@ -194,7 +199,7 @@ extension HealthRepository {
 
 extension HealthRepository {
 
-    private var dataSource: any HealthDataSource {
+    var dataSource: any HealthDataSource {
         if let injectedSource { return injectedSource }
         #if DEBUG && (os(iOS) || os(watchOS))
         if HealthDataMode.isSampleDataEnabled { return SampleHealthDataSource() }

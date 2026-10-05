@@ -4,8 +4,26 @@ import HealthKit
 protocol HealthDataSource: Sendable {
 
     func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async -> [Date: Double]
-    func weights(from start: Date, to end: Date, unit: HKUnit) async -> [WeightChartData]
-    func latestWeight(before end: Date, unit: HKUnit) async -> (Double?, Date?)
+    func energySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double]
+    func weights(from start: Date, to end: Date, unit: HKUnit) async throws -> [WeightChartData]
+    func latestWeight(before end: Date, unit: HKUnit) async throws -> (Double?, Date?)
+    var earliestWeightSampleDate: Date? { get }
+    func weightChanges() -> AsyncStream<Void>
     func requestPermission() async -> Bool
+
+}
+
+extension HealthDataSource {
+
+
+
+    func energySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double] {
+        try Task.checkCancellation()
+        return await dailySums(type, from: start, to: end, unit: unit)
+    }
+
+    // Sample fixtures have no platform retention limit or external updates.
+    var earliestWeightSampleDate: Date? { nil }
+    func weightChanges() -> AsyncStream<Void> { AsyncStream { $0.finish() } }
 
 }
