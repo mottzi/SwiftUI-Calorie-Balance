@@ -28,6 +28,38 @@ struct SampleHealthDataSource: HealthDataSource {
         }
     }
 
+    /// Distributes sample energy into meals and activity periods for the contour.
+    func energyIntervals(
+        _ type: HKQuantityTypeIdentifier,
+        from start: Date,
+        to end: Date,
+        unit: HKUnit
+    ) async -> [Date: Double] {
+
+        guard end > start else { return [:] }
+        guard let sample = SampleHealthDay(date: start, now: min(now, end), calendar: calendar),
+              let quantity = sample.quantity(type) else { return [:] }
+        let count = Int(ceil(min(now, end).timeIntervalSince(start) / 900))
+        guard count > 0 else { return [:] }
+        var weights = (0..<count).map { index in
+            let hour = (Double(index) + 0.5) / 4
+            if type == .activeEnergyBurned {
+                return 0.15 + exp(-pow((hour - 7.5) / 0.7, 2)) * 3 + exp(-pow((hour - 13) / 1.0, 2)) * 2
+            }
+            return 1.0
+        }
+        if type == .dietaryEnergyConsumed {
+            weights = Array(repeating: 0, count: count)
+            let meals = [(30, 0.26), (50, 0.35), (64, 0.12), (78, 0.23), (88, 0.04)]
+            for (index, weight) in meals where index < count { weights[index] = weight }
+            if weights.reduce(0, +) == 0 { weights[count - 1] = 1 }
+        }
+        let total = weights.reduce(0, +)
+        return Dictionary(uniqueKeysWithValues: weights.enumerated().map { index, weight in
+            (start.addingTimeInterval(Double(index) * 900), quantity.doubleValue(for: unit) * weight / total)
+        })
+    }
+
     func latestWeight(before end: Date, unit: HKUnit) async -> (Double?, Date?) {
         let date = min(end, now)
         guard let sample = SampleHealthDay(date: date, now: now, calendar: calendar) else { return (nil, nil) }

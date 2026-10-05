@@ -16,6 +16,7 @@ struct Bundle: WidgetBundle {
 struct GoalBundle: WidgetBundle {
 
     var body: some Widget {
+        EnergyContourComplication()
         CalorieRoomComplication()
         MacroGoalsComplication()
         StepGoalComplication()

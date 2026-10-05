@@ -202,6 +202,10 @@
         A2C00000000000000000000C /* StructuredQueriesSQLite in Frameworks */ = {isa = PBXBuildFile; productRef = A2C00000000000000000000A; };
         A2C00000000000000000000F /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = A2C00000000000000000000E; };
         A2C000000000000000000010 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = A2C00000000000000000000E; };
+		E495E016AA5345A2A5EBBF03 /* EnergyContour.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D16826790D448880232459 /* EnergyContour.swift */; };
+		FC3B2F4B964044E19E262D44 /* EnergyContourTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A66DF8DC163478A88AA8FAF /* EnergyContourTimelineProvider.swift */; };
+		ADED0EB65DD244A79A988FBE /* EnergyContourComplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED8078CC4F4489FB33FBAE8 /* EnergyContourComplication.swift */; };
+		85CE27CADD4746C69CBD2727 /* EnergyContourDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D69C69EF65464391E06FF1 /* EnergyContourDrawing.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -397,6 +401,10 @@
 		5C9ACA931D5C48A78D794374 /* CalorieRoomComplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieRoomComplication.swift; sourceTree = "<group>"; };
 		E9E141CCAE8448BEBA5706E9 /* MacroGoalsComplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacroGoalsComplication.swift; sourceTree = "<group>"; };
 		6798F805D28944D1A8378482 /* StepGoalComplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepGoalComplication.swift; sourceTree = "<group>"; };
+		A1D16826790D448880232459 /* EnergyContour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyContour.swift; sourceTree = "<group>"; };
+		4A66DF8DC163478A88AA8FAF /* EnergyContourTimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyContourTimelineProvider.swift; sourceTree = "<group>"; };
+		9ED8078CC4F4489FB33FBAE8 /* EnergyContourComplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyContourComplication.swift; sourceTree = "<group>"; };
+		F9D69C69EF65464391E06FF1 /* EnergyContourDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyContourDrawing.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -677,6 +685,10 @@
 				B8728A903B79450F8F39187A /* GoalComplicationDrawing.swift */,
 				3346C0941FC64BF88F47815C /* GoalTimelineProvider.swift */,
 				9DB0F98A6902490D964A1F4A /* GoalProgress.swift */,
+				A1D16826790D448880232459 /* EnergyContour.swift */,
+				4A66DF8DC163478A88AA8FAF /* EnergyContourTimelineProvider.swift */,
+				9ED8078CC4F4489FB33FBAE8 /* EnergyContourComplication.swift */,
+				F9D69C69EF65464391E06FF1 /* EnergyContourDrawing.swift */,
 				9AD5F5562C28269F003FE1C5 /* BalanceComplications */,
 				9AA413062C24D90E005B9D73 /* Info.plist */,
 			);
@@ -1257,6 +1269,10 @@
 				A6EBE056252C49D2AB8F807B /* GoalComplicationDrawing.swift in Sources */,
 				461CAAA75527422B9FC72B38 /* GoalTimelineProvider.swift in Sources */,
 				F1974CEBA6134063A1958F57 /* GoalProgress.swift in Sources */,
+				E495E016AA5345A2A5EBBF03 /* EnergyContour.swift in Sources */,
+				FC3B2F4B964044E19E262D44 /* EnergyContourTimelineProvider.swift in Sources */,
+				ADED0EB65DD244A79A988FBE /* EnergyContourComplication.swift in Sources */,
+				85CE27CADD4746C69CBD2727 /* EnergyContourDrawing.swift in Sources */,
 				9A3B87832C30C8DD002D02D1 /* BalanceCircleGauge.swift in Sources */,
 				9AB9ABF02C344CEF00DEE2D8 /* BalanceCircleThickGraph.swift in Sources */,
 			);

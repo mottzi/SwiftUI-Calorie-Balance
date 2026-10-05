@@ -5,6 +5,12 @@ protocol HealthDataSource: Sendable {
 
     func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async -> [Date: Double]
     func energySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double]
+    func energyIntervals(
+        _ type: HKQuantityTypeIdentifier,
+        from start: Date,
+        to end: Date,
+        unit: HKUnit
+    ) async throws -> [Date: Double]
     func weights(from start: Date, to end: Date, unit: HKUnit) async throws -> [WeightChartData]
     func latestWeight(before end: Date, unit: HKUnit) async throws -> (Double?, Date?)
     var earliestWeightSampleDate: Date? { get }
@@ -15,7 +21,13 @@ protocol HealthDataSource: Sendable {
 
 extension HealthDataSource {
 
-
+    /// Sources without time records do not supply a contour.
+    func energyIntervals(
+        _ type: HKQuantityTypeIdentifier,
+        from start: Date,
+        to end: Date,
+        unit: HKUnit
+    ) async throws -> [Date: Double] { [:] }
 
     func energySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double] {
         try Task.checkCancellation()

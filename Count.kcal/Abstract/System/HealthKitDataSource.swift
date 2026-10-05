@@ -15,7 +15,15 @@ final class HealthKitDataSource: HealthDataSource {
         try await sums(type, from: start, to: end, unit: unit, interval: DateComponents(day: 1))
     }
 
-
+    /// Returns measured energy in fifteen-minute intervals.
+    func energyIntervals(
+        _ type: HKQuantityTypeIdentifier,
+        from start: Date,
+        to end: Date,
+        unit: HKUnit
+    ) async throws -> [Date: Double] {
+        try await sums(type, from: start, to: end, unit: unit, interval: DateComponents(minute: 15))
+    }
 
     func weights(from start: Date, to end: Date, unit: HKUnit) async throws -> [WeightChartData] {
         try Task.checkCancellation()
