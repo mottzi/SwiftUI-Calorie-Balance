@@ -88,6 +88,7 @@
 		9A6DA88F2B361B3400585788 /* CaloriesCardTopRowCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA88E2B361B3400585788 /* CaloriesCardTopRowCenter.swift */; };
 		9A6DA8912B361D0700585788 /* BarBalanceGraphTopRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA8902B361D0700585788 /* BarBalanceGraphTopRow.swift */; };
 		9A6DA8932B361EC300585788 /* BarBalanceGraphBottomRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA8922B361EC300585788 /* BarBalanceGraphBottomRow.swift */; };
+		C64FA1A1B03E4087938EAA02 /* BarBalanceGraphEndLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64FA1A1B03E4087938EAA01 /* BarBalanceGraphEndLabel.swift */; };
 		9A6DBD582C28D2E3000920DA /* BalanceCircleGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DBD572C28D2E3000920DA /* BalanceCircleGraph.swift */; };
 		9A6DBD592C28D35A000920DA /* CircleBalanceGraphWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0B0CC42C1FA08D00D94FB4 /* CircleBalanceGraphWatch.swift */; };
 		9A6DBD5A2C28D42E000920DA /* CircleBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */; };
@@ -128,6 +129,7 @@
 		9ABFA7AE2C0A3BC700024D2F /* ReachableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9BC9BD2A7E9C7300A4404A /* ReachableView.swift */; };
 		9ABFA7B02C0A3C5A00024D2F /* BarBalanceGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA72DA72B02C33000E32650 /* BarBalanceGraph.swift */; };
 		9ABFA7B52C0A3C8300024D2F /* BarBalanceGraphBottomRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA8922B361EC300585788 /* BarBalanceGraphBottomRow.swift */; };
+		C64FA1A1B03E4087938EAA03 /* BarBalanceGraphEndLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64FA1A1B03E4087938EAA01 /* BarBalanceGraphEndLabel.swift */; };
 		9ABFA7B72C0A3CBA00024D2F /* BarBalanceGraphTopRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6DA8902B361D0700585788 /* BarBalanceGraphTopRow.swift */; };
 		9ABFA7BA2C0A411300024D2F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A59C1EB2B0A2E180058A502 /* Settings.swift */; };
 		9ABFA7BB2C0A412D00024D2F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A919DC22B233E380003C035 /* Extensions.swift */; };
@@ -331,6 +333,7 @@
 		9A6DA88E2B361B3400585788 /* CaloriesCardTopRowCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaloriesCardTopRowCenter.swift; sourceTree = "<group>"; };
 		9A6DA8902B361D0700585788 /* BarBalanceGraphTopRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphTopRow.swift; sourceTree = "<group>"; };
 		9A6DA8922B361EC300585788 /* BarBalanceGraphBottomRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphBottomRow.swift; sourceTree = "<group>"; };
+		C64FA1A1B03E4087938EAA01 /* BarBalanceGraphEndLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarBalanceGraphEndLabel.swift; sourceTree = "<group>"; };
 		9A6DBD572C28D2E3000920DA /* BalanceCircleGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceCircleGraph.swift; sourceTree = "<group>"; };
 		9A7CC5332C6A3F3E0061451D /* StepsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsCard.swift; sourceTree = "<group>"; };
 		9A8BA4052B4054ED0011D412 /* BackgroundColorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundColorSection.swift; sourceTree = "<group>"; };
@@ -802,6 +805,7 @@
 				9AA72DA72B02C33000E32650 /* BarBalanceGraph.swift */,
 				9A6DA8902B361D0700585788 /* BarBalanceGraphTopRow.swift */,
 				9A6DA8922B361EC300585788 /* BarBalanceGraphBottomRow.swift */,
+				C64FA1A1B03E4087938EAA01 /* BarBalanceGraphEndLabel.swift */,
 				9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */,
 				9AA785262B21CD9D007305F6 /* CircleProgressView.swift */,
 				9ABBD8FE2BE8213F003EC608 /* WeekBalanceGraph.swift */,
@@ -1156,6 +1160,7 @@
 				9ABFA7A22C0A3A6300024D2F /* CircleBalanceGraph.swift in Sources */,
 				9A59C1EC2B0A2E180058A502 /* Settings.swift in Sources */,
 				9A6DA8932B361EC300585788 /* BarBalanceGraphBottomRow.swift in Sources */,
+				C64FA1A1B03E4087938EAA02 /* BarBalanceGraphEndLabel.swift in Sources */,
 				9A8BA40F2B4057720011D412 /* CalorieColorSection.swift in Sources */,
 				9A206D7F2C5839170079DE3D /* WelcomeView.swift in Sources */,
 				9A92F16F2B06CF06009C4A2A /* NutrientsCard.swift in Sources */,
@@ -1222,6 +1227,7 @@
 				9A5828BD2C0A6683000AFE99 /* CircleProgressView.swift in Sources */,
 				9ABFA7C42C0A453B00024D2F /* CircleBalanceGraph.swift in Sources */,
 				9ABFA7B52C0A3C8300024D2F /* BarBalanceGraphBottomRow.swift in Sources */,
+				C64FA1A1B03E4087938EAA03 /* BarBalanceGraphEndLabel.swift in Sources */,
 				9AFAAA6F2B5FF9DC00034CA9 /* HealthDataTimelineProvider.swift in Sources */,
 				9ABFA7B02C0A3C5A00024D2F /* BarBalanceGraph.swift in Sources */,
 				9ABFA7C02C0A450500024D2F /* BalanceDataLabels.swift in Sources */,

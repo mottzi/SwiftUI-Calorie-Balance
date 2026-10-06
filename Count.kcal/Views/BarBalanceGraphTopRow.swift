@@ -123,14 +123,12 @@ struct BarBalanceGraphTopRow: View {
                     }
                     .clipShape(UnevenRoundedRectangle(topTrailingRadius: 6, style: .circular))
                     .overlay {
-                        if labels {
-                            ViewThatFits {
-                                Text("\(energy.restingRemaining)")
-                                    .graphLabelStyle(scheme)
-                                    .contentTransition(animateNumericValues ? .numericText(value: Double(energy.restingRemaining)) : .identity)
-
-                                Color.clear.frame(width: 0, height: 0)
-                            }
+                        if labels && energy.restingRemaining > 0 {
+                            BarBalanceGraphEndLabel(
+                                value: energy.restingRemaining,
+                                width: widthProjected,
+                                animateNumericValues: animateNumericValues
+                            )
                         }
                     }
                     .padding(.leading, widthActive + widthPassive)
@@ -139,21 +137,47 @@ struct BarBalanceGraphTopRow: View {
             let widthRest = geometry.size.width - widthActive - widthPassive - widthProjected
             
             if energy.burned < energy.graphTotal {
-                ZStack {
-                    Rectangle()
-                        .fill(Color.clear)
-                        .frame(width: widthRest)
-                        .padding(.leading, widthActive + widthPassive + widthProjected)
-                    
-                    if labels {
-                        Text("\(energy.graphTotal - energy.burned)")
-                            .graphLabelStyle(scheme)
-                            .contentTransition(animateNumericValues ? .numericText(value: Double(energy.graphTotal - energy.burned)) : .identity)
-                            .padding(.leading, widthActive + widthPassive + widthProjected - (widthRest <= 25 ? 18 : 0))
-                    }
+                if labels {
+                    BarBalanceGraphEndLabel(
+                        value: energy.graphTotal - energy.burned,
+                        width: widthRest,
+                        animateNumericValues: animateNumericValues
+                    )
+                    .padding(.leading, widthActive + widthPassive + widthProjected)
                 }
             }
         }
     }
 
+}
+
+#Preview("Trailing values") {
+    VStack(spacing: 20) {
+        ForEach([ColorScheme.dark, .light], id: \.self) { scheme in
+            VStack(spacing: 12) {
+                ForEach([
+                    EnergyBalance(active: 346, resting: 1_595, restingRemaining: 120, consumed: 1_769),
+                    EnergyBalance(active: 650, resting: 1_660, consumed: 2_490),
+                    EnergyBalance(active: 346, resting: 1_595, restingRemaining: 5, consumed: 1_769),
+                    EnergyBalance(active: 650, resting: 1_660, consumed: 2_315)
+                ].enumerated().map { $0 }, id: \.offset) { _, energy in
+                    VStack(spacing: 2) {
+                        GeometryReader { geometry in
+                            BarBalanceGraphTopRow(geometry: geometry, energy: energy, mode: .midnight, labels: true, animateNumericValues: false)
+                        }
+                        GeometryReader { geometry in
+                            BarBalanceGraphBottomRow(geometry: geometry, energy: energy, mode: .midnight, labels: true, animateNumericValues: false)
+                        }
+                    }
+                    .frame(height: 44)
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
+                }
+            }
+            .padding(16)
+            .background(scheme == .dark ? Color.black : Color.white)
+            .environment(\.colorScheme, scheme)
+        }
+    }
+    .environmentObject(Settings.shared)
+    .padding(16)
 }

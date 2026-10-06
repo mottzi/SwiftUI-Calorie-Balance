@@ -69,18 +69,13 @@ struct BarBalanceGraphBottomRow: View {
             if energy.consumed < energy.graphTotal {
                 let widthRest = geometry.size.width - widthConsumed
                 
-                ZStack {
-                    Rectangle()
-                        .fill(Color.clear)
-                        .frame(width: widthRest)
-                        .padding(.leading, widthConsumed)
-                    
-                    if labels {
-                        Text("\(energy.graphTotal - energy.consumed)")
-                            .graphLabelStyle(scheme)
-                            .contentTransition(animateNumericValues ? .numericText(value: Double(energy.graphTotal - energy.consumed)) : .identity)
-                            .padding(.leading, widthConsumed - (widthRest <= 25 ? 18 : 0))
-                    }
+                if labels {
+                    BarBalanceGraphEndLabel(
+                        value: energy.graphTotal - energy.consumed,
+                        width: widthRest,
+                        animateNumericValues: animateNumericValues
+                    )
+                    .padding(.leading, widthConsumed)
                 }
             }
         }
