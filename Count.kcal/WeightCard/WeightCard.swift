@@ -70,7 +70,8 @@ extension WeightCard {
                 // Reserve space for labels above the highest weekly point.
                 .padding(.top, 22)
                 .frame(height: 130)
-                .padding(.bottom, 20)
+                .padding(.top, 12)
+                .padding(.bottom, 2)
 
             ProgressMetrics(history: progress, period: period)
                 .padding(.bottom, 8)

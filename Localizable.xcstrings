@@ -235,16 +235,16 @@
     },
     "%@, %lld grams, goal %lld grams" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@, %2$lld grams, goal %3$lld grams"
-          }
-        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@, %2$lld Gramm, Ziel %3$lld Gramm"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$lld grams, goal %3$lld grams"
           }
         },
         "es" : {
@@ -326,16 +326,16 @@
     },
     "%lld steps today, goal %lld, %lld steps to go" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld steps today, goal %2$lld, %3$lld steps to go"
-          }
-        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Heute %1$lld Schritte, Ziel %2$lld, noch %3$lld Schritte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld steps today, goal %2$lld, %3$lld steps to go"
           }
         },
         "es" : {
@@ -1667,6 +1667,7 @@
       }
     },
     "Days with missing food or burned energy are left out automatically. Confirm fasting only if you had no calorie intake. Your choice stays saved until you change it." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2800,6 +2801,7 @@
       }
     },
     "Loading recorded data…" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3447,7 +3449,37 @@
         }
       }
     },
+    "Only affects your average deficit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Betrifft nur dein durchschnittliches Defizit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo afecta a tu déficit medio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifie uniquement votre déficit moyen"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅影响你的平均热量缺口"
+          }
+        }
+      }
+    },
     "Only your average deficit changes. Health data and weight measurements stay unchanged." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3618,16 +3650,16 @@
     },
     "Protein, %lld grams, goal %lld grams" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Protein, %1$lld grams, goal %2$lld grams"
-          }
-        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Eiweiß, %1$lld Gramm, Ziel %2$lld Gramm"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Protein, %1$lld grams, goal %2$lld grams"
           }
         },
         "es" : {

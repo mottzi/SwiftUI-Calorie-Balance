@@ -14,13 +14,15 @@ struct DayChoiceButton: View {
             let choice = AppDatabase.choices(records, sampleData: healthDay.sample.isSampleData)[DayKey.make(healthDay.id)]
                 ?? .automatic
             Menu {
-                if choice == .excluded {
-                    Button("Use recorded data", systemImage: "arrow.uturn.backward") {
-                        saveChoice(.automatic)
-                    }
-                } else {
-                    Button("Exclude this day", systemImage: "minus.circle", role: .destructive) {
-                        saveChoice(.excluded)
+                Section("Only affects your average deficit") {
+                    if choice == .excluded {
+                        Button("Use recorded data", systemImage: "arrow.uturn.backward") {
+                            saveChoice(.automatic)
+                        }
+                    } else {
+                        Button("Exclude this day", systemImage: "minus.circle", role: .destructive) {
+                            saveChoice(.excluded)
+                        }
                     }
                 }
             } label: {

@@ -36,13 +36,15 @@ struct ProgressDetails: View {
                     Section {
                         ForEach(summary.days.reversed(), id: \.day.id) { item in
                             Menu {
-                                if item.eligibility == .excluded {
-                                    Button("Use recorded data", systemImage: "arrow.uturn.backward") {
-                                        saveChoice(.automatic, for: item.day.date)
-                                    }
-                                } else {
-                                    Button("Exclude this day", systemImage: "minus.circle", role: .destructive) {
-                                        saveChoice(.excluded, for: item.day.date)
+                                Section("Only affects your average deficit") {
+                                    if item.eligibility == .excluded {
+                                        Button("Use recorded data", systemImage: "arrow.uturn.backward") {
+                                            saveChoice(.automatic, for: item.day.date)
+                                        }
+                                    } else {
+                                        Button("Exclude this day", systemImage: "minus.circle", role: .destructive) {
+                                            saveChoice(.excluded, for: item.day.date)
+                                        }
                                     }
                                 }
                             } label: {
