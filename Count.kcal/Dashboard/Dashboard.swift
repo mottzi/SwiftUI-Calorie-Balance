@@ -21,7 +21,6 @@ struct Dashboard: View {
 /// Daily calorie card and the Today mode control.
 private struct DashboardCalories: View {
 
-    @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(HealthInterface.self) private var day
 
     @Binding var todayPageMode: PagerSelection
@@ -29,32 +28,17 @@ private struct DashboardCalories: View {
     var body: some View {
         Card(
             "Calories",
+            level: .clear,
             secondaryTitle: subtitle,
             innerPadding: 0
         ) {
-            VStack {
-                if day.isTodayPage {
-                    CaloriesMidnightCard(todayPageMode: $todayPageMode)
-                } else {
-                    CaloriesCard(mode: .now)
-                        .padding(16)
-                }
-            }
-        }
-        .overlay(alignment: .top) {
-            if day.isTodayPage && !dynamicType.isAccessibilitySize {
-                HStack(spacing: 6) {
-                    Circle()
-                        .fill(Color("TextColor"))
-                        .frame(width: 8)
-                        .opacity(todayPageMode == .first ? 0.8 : 0.2)
-
-                    Circle()
-                        .fill(Color("TextColor"))
-                        .frame(width: 8)
-                        .opacity(todayPageMode == .second ? 0.8 : 0.2)
-                }
-                .offset(y: dynamicType <= .xxLarge ? 5 : 10)
+            if day.isTodayPage {
+                CaloriesMidnightCard(todayPageMode: $todayPageMode)
+            } else {
+                CaloriesCard(mode: .now)
+                    // Reserve the same depth without changing the face height on other days.
+                    .padding(.bottom, CaloriesMidnightCard.rimDepth)
+                    .padding(.trailing, CaloriesMidnightCard.rimSideDepth)
             }
         }
         .overlay(alignment: .topTrailing) {

@@ -4,8 +4,10 @@ import SwiftUI
 struct CaloriesCard: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
+    @EnvironmentObject private var settings: Settings
 
     let mode: GraphMode
+    var animateNumericValues = false
 
     let sizeMapping: [DynamicTypeSize: CGFloat] = 
     [
@@ -24,17 +26,25 @@ struct CaloriesCard: View {
     ]
     
     var body: some View {
-        VStack(spacing: mode == .now && dynamicType > .xxxLarge ? 8 : 0) {
+        VStack(spacing: dynamicType.isAccessibilitySize ? 8 : 0) {
             CaloriesCardTopRow(mode: mode)
                 .padding(.top, 2)
 
-            BarBalanceGraph(mode: mode, labels: !dynamicType.isAccessibilitySize)
+            BarBalanceGraph(
+                mode: mode,
+                labels: !dynamicType.isAccessibilitySize,
+                animateNumericValues: animateNumericValues
+            )
                 .frame(height: sizeMapping[dynamicType, default: 44])
                 .padding(.top, 6)
                 .padding(.bottom, 2)
                 .padding(.horizontal, 13)
                 .dynamicTypeSize(...DynamicTypeSize.xxLarge)
         }
+        .frame(maxWidth: .infinity)
+        .padding(16)
+        .background(settings.CardBackground)
+        .clipShape(.rect(cornerRadius: 10))
     }
 
 }

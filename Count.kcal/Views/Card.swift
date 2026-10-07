@@ -60,9 +60,10 @@ private struct CardHeader: View {
 
             if let secondaryTitle {
                 if !dynamicType.isAccessibilitySize { Spacer() }
-                Text(secondaryTitle)
+                Text(secondaryTitle.isEmpty ? " " : secondaryTitle)
                     .foregroundStyle(Color("SecondaryTextColor"))
                     .transaction { $0.animation = nil }
+                    .accessibilityHidden(secondaryTitle.isEmpty)
             }
         }
         .font(.subheadline.weight(.medium))

@@ -56,7 +56,7 @@ struct CaloriesCardTopRow: View {
                                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                             
                             Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
-                                .font(mode == .now ? .caption : .system(size: 13))
+                                .font(.caption)
                                 .foregroundStyle(Color("SecondaryTextColor"))
                                 .fontWeight(.medium)
                                 .transaction { $0.animation = .none }
@@ -111,7 +111,7 @@ struct CaloriesCardTopRow: View {
                                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
 
                             Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
-                                .font(mode == .now ? .caption : .system(size: 13))
+                                .font(.caption)
                                 .foregroundStyle(Color("SecondaryTextColor"))
                                 .fontWeight(.medium)
                                 .transaction { $0.animation = .none }

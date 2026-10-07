@@ -16,6 +16,10 @@ var PreviewPager: some View {
         .fontDesign(.rounded)
 }
 
+#Preview("Midnight balance") {
+    DatabaseGate { DashboardSamplePreview(todayPageMode: .second) }
+}
+
 private struct DashboardSamplePreview: View {
 
     @State private var pages: [HealthInterface]
@@ -24,7 +28,7 @@ private struct DashboardSamplePreview: View {
     @State private var weightModel: WeightHistory
     @State private var streak: Streak
 
-    init() {
+    init(todayPageMode: PagerSelection = .first) {
         let today = Calendar.current.startOfDay(for: .now)
         let samplePages = (0...6).reversed().map { daysAgo in
             let date = today.subtractDays(daysAgo)
@@ -33,7 +37,8 @@ private struct DashboardSamplePreview: View {
             data.burnedPassive = daysAgo == 0 ? 1_231 : 1_680 + daysAgo * 19
             data.burnedActive7 = 490
             data.burnedPassive7 = 1_730
-            data.consumed = daysAgo == 0 ? 1_339 : 1_940 + daysAgo * 37
+            // Today's intake falls between Now and Midnight burn to exercise a sign change.
+            data.consumed = daysAgo == 0 ? 1_660 : 1_940 + daysAgo * 37
             data.carbs = daysAgo == 0 ? 141 : 210
             data.fats = daysAgo == 0 ? 55 : 72
             data.protein = daysAgo == 0 ? 91 : 118
@@ -42,6 +47,7 @@ private struct DashboardSamplePreview: View {
         }
         _pages = State(initialValue: samplePages)
         _selectedPage = State(initialValue: samplePages.last)
+        _todayPageMode = State(initialValue: todayPageMode)
 
         let weights = WeightHistory()
         weights.dailyAverages = (0..<37).reversed().map { daysAgo in

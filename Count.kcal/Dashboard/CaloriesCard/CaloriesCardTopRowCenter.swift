@@ -3,6 +3,8 @@ import SwiftUI
 /// Balance amount and goal status inside the selected circular graph.
 struct CaloriesCardTopRowCenter: View {
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(HealthInterface.self) private var DataViewModel
@@ -25,6 +27,7 @@ struct CaloriesCardTopRowCenter: View {
                     .font(.caption)
                     .fontWeight(.light)
                     .foregroundColor(Color("SecondaryTextColor"))
+                    .contentTransition(.opacity)
                     .offset(y: -2)
                     .dynamicTypeSize(...DynamicTypeSize.xLarge)
             }
@@ -36,7 +39,7 @@ struct CaloriesCardTopRowCenter: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(Color("SecondaryTextColor"))
                     .offset(y: 40)
-                    .transaction { $0.animation = .none }
+                    .contentTransition(reduceMotion ? .identity : .symbolEffect(.replace))
             }
         }
     }

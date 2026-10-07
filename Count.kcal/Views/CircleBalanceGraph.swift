@@ -26,16 +26,14 @@ struct CircleBalanceGraph: View {
                     .brightness(level: .primary, to: .bargraph)
                     .opacity(accentedWidget ? 0.25 : 1)
 
-                if mode == .midnight {
-                    // passive future
-                    CircleProgressView(
-                        progress: energy.ratio(of: energy.burned),
-                        color: AppSettings.burnedColor,
-                        lineWidth: lineWidth
-                    )
-                    .brightness(level: .tertiary, to: .circlegraphMidnight)
-                    .opacity(accentedWidget ? 0.45 : 1)
-                }
+                // Keep the projection's identity so its arc animates with the recorded rings.
+                CircleProgressView(
+                    progress: energy.ratio(of: energy.burned),
+                    color: AppSettings.burnedColor,
+                    lineWidth: lineWidth
+                )
+                .brightness(level: .tertiary, to: .circlegraphMidnight)
+                .opacity(mode == .now ? 0 : accentedWidget ? 0.45 : 1)
 
                 // passive
                 CircleProgressView(

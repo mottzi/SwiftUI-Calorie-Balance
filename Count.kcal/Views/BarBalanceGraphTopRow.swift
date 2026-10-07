@@ -18,7 +18,7 @@ struct BarBalanceGraphTopRow: View {
 
     var body: some View {
         if animateNumericValues {
-            rowContent
+            rowContent.compositingGroup()
         } else {
             rowContent.drawingGroup()
         }
@@ -107,32 +107,31 @@ struct BarBalanceGraphTopRow: View {
                 ? CGFloat(energy.ratio(of: energy.restingRemaining)) * geometry.size.width
                 : 0
 
-            if mode == .midnight {
-                // show resting energy expected before midnight
-                Rectangle()
-                    .fill(AppSettings.burnedColor)
-                    .frame(width: widthProjected)
-                    .brightness(level: .tertiary)
-                    .overlay {
-                        LinearGradient(
-                            colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor],
-                            startPoint: scheme == .dark ? .bottom : .top,
-                            endPoint: scheme == .dark ? .top : .bottom
+            // Keep the projection in the row so its width can animate from and to zero.
+            Rectangle()
+                .fill(AppSettings.burnedColor)
+                .frame(width: widthProjected)
+                .brightness(level: .tertiary)
+                .overlay {
+                    LinearGradient(
+                        colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor],
+                        startPoint: scheme == .dark ? .bottom : .top,
+                        endPoint: scheme == .dark ? .top : .bottom
+                    )
+                        .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
+                }
+                .clipShape(UnevenRoundedRectangle(topTrailingRadius: 6, style: .circular))
+                .overlay {
+                    if labels && energy.restingRemaining > 0 {
+                        BarBalanceGraphEndLabel(
+                            value: energy.restingRemaining,
+                            width: widthProjected,
+                            animateNumericValues: animateNumericValues
                         )
-                            .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                     }
-                    .clipShape(UnevenRoundedRectangle(topTrailingRadius: 6, style: .circular))
-                    .overlay {
-                        if labels && energy.restingRemaining > 0 {
-                            BarBalanceGraphEndLabel(
-                                value: energy.restingRemaining,
-                                width: widthProjected,
-                                animateNumericValues: animateNumericValues
-                            )
-                        }
-                    }
-                    .padding(.leading, widthActive + widthPassive)
-            }
+                }
+                .padding(.leading, widthActive + widthPassive)
+                .opacity(mode == .midnight ? 1 : 0)
 
             let widthRest = geometry.size.width - widthActive - widthPassive - widthProjected
             

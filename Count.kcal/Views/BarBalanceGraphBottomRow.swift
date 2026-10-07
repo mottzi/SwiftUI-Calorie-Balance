@@ -15,7 +15,7 @@ struct BarBalanceGraphBottomRow: View {
     
     var body: some View {
         if animateNumericValues {
-            rowContent
+            rowContent.compositingGroup()
         } else {
             rowContent.drawingGroup()
         }
