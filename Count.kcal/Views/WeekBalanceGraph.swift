@@ -226,7 +226,6 @@ private struct WeekRefreshKey: Hashable {
 /// One compact seven-day balance page; also used by self-contained previews.
 struct WeekBalanceChart: View {
 
-    @Environment(\.dynamicTypeSize) private var dynamicType
     @EnvironmentObject private var settings: Settings
     @Environment(\.layoutDirection) private var layoutDirection
 
@@ -244,30 +243,10 @@ struct WeekBalanceChart: View {
                     selectDay(point.id)
                 } label: {
                     VStack(spacing: 6) {
-                        HStack(spacing: 2) {
-                            ZStack {
-                                Image(systemName: "circle.fill")
-                                    .foregroundStyle(Color("TextColor"))
-                                    .font(.system(size: 18))
-                                    .opacity(isDaySelected(barDay: point.id) ? 1 : 0)
-
-                                Text("\(point.id.workday)")
-                                    .font(dynamicType.isAccessibilitySize ? .caption2 : .system(size: 12))
-                                    .fontDesign(.rounded)
-                                    .fontWeight(.bold)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.7)
-                                    .foregroundStyle(
-                                        isDaySelected(barDay: point.id) ? Color("ContrastColor") : Color("TextColor")
-                                    )
-                                    .dynamicTypeSize(...DynamicTypeSize.xxLarge)
-                            }
-                            .animation(nil, value: isDaySelected(barDay: point.id))
-                            Text(point.id, format: .dateTime.day())
-                                .font(.system(size: 10, weight: .medium, design: .rounded))
-                                .foregroundStyle(Color("SecondaryTextColor"))
-                                .lineLimit(1)
-                        }
+                        WeekDayLabel(
+                            date: point.id,
+                            isSelected: isDaySelected(barDay: point.id)
+                        )
                         .dynamicTypeSize(...DynamicTypeSize.xxLarge)
                     
                         VBarBalanceGraph(
@@ -333,6 +312,39 @@ struct WeekBalanceChart: View {
         }
         // Data changes animate within the chart, independently of pager layout.
         .transaction(value: energyBalances) { $0.animation = .snappy }
+    }
+
+}
+
+private struct WeekDayLabel: View {
+
+    @ScaledMetric(relativeTo: .footnote) private var dateDiameter: CGFloat = 24
+
+    let date: Date
+    let isSelected: Bool
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Text(date, format: .dateTime.weekday(.abbreviated))
+                .textCase(.uppercase)
+                .font(.caption2.weight(.medium))
+                .foregroundStyle(isSelected ? Color("TextColor") : Color("SecondaryTextColor"))
+
+            Text(date, format: .dateTime.day())
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(isSelected ? Color("BackGroundColor") : Color("TextColor"))
+                .frame(maxWidth: .infinity)
+                .frame(height: dateDiameter)
+                .background {
+                    Circle()
+                        .fill(Color("TextColor"))
+                        .frame(maxWidth: dateDiameter)
+                        .opacity(isSelected ? 1 : 0)
+                }
+        }
+        .lineLimit(1)
+        .minimumScaleFactor(0.7)
+        .animation(nil, value: isSelected)
     }
 
 }
