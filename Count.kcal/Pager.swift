@@ -7,6 +7,7 @@ struct Pager: View {
 
     @State private var navigation: DayPager
     @State private var todayPageMode: PagerSelection = .first
+    @State private var calorieCardPressTrigger = 0
     
     @State private var showCalendar: Bool = false
     @State private var showSettings: Bool = false
@@ -60,7 +61,8 @@ struct Pager: View {
 
                             DayPageStrip(
                                 navigation: navigation,
-                                todayPageMode: $todayPageMode
+                                todayPageMode: $todayPageMode,
+                                calorieCardPressTrigger: calorieCardPressTrigger
                             )
 
                             WeightCard(refreshRevision: manualRefresh + calendarRefresh)
@@ -211,7 +213,8 @@ extension Pager {
             calendarDays: $calendarDays,
             controlsDisabled: AppSettings.showWelcome || !AppSettings.isSettingsInputValid,
             streakColor: AppSettings.weightGoal == .lose ? AppSettings.burnedColor : AppSettings.consumedColor,
-            selectDay: { selectDay($0) }
+            selectDay: { selectDay($0) },
+            onToggleTodayMode: { calorieCardPressTrigger &+= 1 }
         )
     }
 
@@ -242,12 +245,16 @@ private struct DayPageStrip: View {
     let navigation: DayPager
 
     @Binding var todayPageMode: PagerSelection
+    let calorieCardPressTrigger: Int
 
     var body: some View {
         ScrollView(.horizontal) {
             LazyHStack(alignment: .top, spacing: 0) {
                 ForEach(navigation.pages) { page in
-                    Dashboard(todayPageMode: $todayPageMode)
+                    Dashboard(
+                        todayPageMode: $todayPageMode,
+                        calorieCardPressTrigger: calorieCardPressTrigger
+                    )
                         .containerRelativeFrame(.horizontal)
                         .environment(page)
                         .id(page.id)

@@ -5,12 +5,16 @@ import WidgetKit
 struct Dashboard: View {
 
     @Binding var todayPageMode: PagerSelection
+    var calorieCardPressTrigger: Int = 0
 
     var nutrientGoals: NutrientGoals? = nil
     
     var body: some View {
         VStack(spacing: 20) {
-            DashboardCalories(todayPageMode: $todayPageMode)
+            DashboardCalories(
+                todayPageMode: $todayPageMode,
+                calorieCardPressTrigger: calorieCardPressTrigger
+            )
             MacroCard(goals: nutrientGoals)
             DashboardSteps()
         }
@@ -24,6 +28,7 @@ private struct DashboardCalories: View {
     @Environment(HealthInterface.self) private var day
 
     @Binding var todayPageMode: PagerSelection
+    let calorieCardPressTrigger: Int
 
     var body: some View {
         Card(
@@ -33,12 +38,14 @@ private struct DashboardCalories: View {
             innerPadding: 0
         ) {
             if day.isTodayPage {
-                CaloriesMidnightCard(todayPageMode: $todayPageMode)
+                CaloriesMidnightCard(
+                    todayPageMode: $todayPageMode,
+                    pressTrigger: calorieCardPressTrigger
+                )
             } else {
                 CaloriesCard(mode: .now)
                     // Reserve the same depth without changing the face height on other days.
                     .padding(.bottom, CaloriesMidnightCard.rimDepth)
-                    .padding(.trailing, CaloriesMidnightCard.rimSideDepth)
             }
         }
         .overlay(alignment: .topTrailing) {

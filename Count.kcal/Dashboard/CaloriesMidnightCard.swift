@@ -3,8 +3,7 @@ import SwiftUI
 /// Switches today's calorie graphs in place while retaining the selected mode.
 struct CaloriesMidnightCard: View {
 
-    nonisolated static let rimDepth: CGFloat = 3
-    nonisolated static let rimSideDepth: CGFloat = rimDepth
+    nonisolated static let rimDepth: CGFloat = 4
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(HealthInterface.self) private var day
@@ -12,6 +11,7 @@ struct CaloriesMidnightCard: View {
     @EnvironmentObject private var settings: Settings
 
     @Binding var todayPageMode: PagerSelection
+    var pressTrigger: Int = 0
 
     var body: some View {
         Button(action: toggleMode) {
@@ -19,7 +19,11 @@ struct CaloriesMidnightCard: View {
                 .animation(reduceMotion ? nil : .snappy, value: todayPageMode)
                 .contentShape(.rect(cornerRadius: 10))
         }
-        .buttonStyle(PressStyle(reduceMotion: reduceMotion, background: settings.CardBackground))
+        .buttonStyle(PressStyle(
+            pressTrigger: pressTrigger,
+            reduceMotion: reduceMotion,
+            background: settings.CardBackground
+        ))
         .accessibilityLabel("Calories")
         .accessibilityValue(accessibilityValue)
         .accessibilityHint(mode == .now ? "Show the midnight estimate" : "Show the current balance")
@@ -49,6 +53,7 @@ extension CaloriesMidnightCard {
     }
 
     private struct PressStyle: ButtonStyle {
+        let pressTrigger: Int
         let reduceMotion: Bool
         let background: Color
 
@@ -56,6 +61,7 @@ extension CaloriesMidnightCard {
             PressedCard(
                 label: configuration.label,
                 isPressed: configuration.isPressed,
+                pressTrigger: pressTrigger,
                 reduceMotion: reduceMotion,
                 background: background
             )
@@ -63,50 +69,68 @@ extension CaloriesMidnightCard {
     }
 
     private struct PressedCard: View {
-        @Environment(\.layoutDirection) private var layoutDirection
         @State private var depth: CGFloat = 0
         @State private var releaseDeadline: ContinuousClock.Instant?
+        @State private var pressGeneration = 0
 
         let label: ButtonStyleConfiguration.Label
         let isPressed: Bool
+        let pressTrigger: Int
         let reduceMotion: Bool
         let background: Color
 
-        private var horizontalDepth: CGFloat {
-            layoutDirection == .leftToRight ? rimSideDepth : -rimSideDepth
-        }
-
         var body: some View {
             label
-                .modifier(PressOffset(depth: depth, horizontalDepth: horizontalDepth, reduceMotion: reduceMotion))
+                .modifier(PressOffset(depth: depth, reduceMotion: reduceMotion))
                 .background {
                     let shape = RoundedRectangle(cornerRadius: 10)
                     shape.fill(background)
                         .overlay {
                             shape.fill(Color("TextColor").opacity(0.28))
                         }
-                        .offset(x: horizontalDepth, y: rimDepth)
+                        .offset(y: rimDepth)
                         .allowsHitTesting(false)
                         .accessibilityHidden(true)
                 }
                 .padding(.bottom, rimDepth)
-                .padding(.trailing, rimSideDepth)
                 .contentShape(.rect(cornerRadius: 10))
                 .onChange(of: isPressed) { _, pressed in
                     guard pressed else { return }
                     // Native press changes are synchronous, including very short taps.
-                    releaseDeadline = ContinuousClock.now.advanced(by: .milliseconds(130))
-                    withAnimation(.easeOut(duration: 0.08)) {
-                        depth = rimDepth
-                    }
+                    press()
                 }
-                .task(id: isPressed) {
+                .onChange(of: pressTrigger) { _, _ in
+                    press()
+                }
+                // Holds cancel release; repeated requests replace it rather than queue it.
+                .task(id: isPressed ? nil : releaseDeadline) {
                     await releaseIfNeeded()
                 }
                 .onDisappear {
+                    pressGeneration &+= 1
                     depth = 0
                     releaseDeadline = nil
                 }
+        }
+
+        private func press() {
+            // Preserve the existing descent and release when already targeting the base.
+            if depth == rimDepth { return }
+            pressGeneration &+= 1
+            let generation = pressGeneration
+            let minimumDeadline = ContinuousClock.now.advanced(by: .milliseconds(130))
+            // Cancel release until the face has actually reached the base.
+            releaseDeadline = nil
+            withAnimation(.easeOut(duration: 0.08), completionCriteria: .logicallyComplete) {
+                depth = rimDepth
+            } completion: {
+                // Interrupted presses and disappearing cards cannot schedule a stale release.
+                guard pressGeneration == generation else { return }
+                releaseDeadline = max(
+                    minimumDeadline,
+                    ContinuousClock.now.advanced(by: .milliseconds(50))
+                )
+            }
         }
 
         private func releaseIfNeeded() async {
@@ -124,10 +148,9 @@ extension CaloriesMidnightCard {
         }
     }
 
-    /// One interpolated position drives both edges, bounded by the physical base.
+    /// Press depth stays within the physical base throughout interpolation.
     private struct PressOffset: ViewModifier, Animatable {
         var depth: CGFloat
-        let horizontalDepth: CGFloat
         let reduceMotion: Bool
 
         var animatableData: CGFloat {
@@ -137,7 +160,7 @@ extension CaloriesMidnightCard {
 
         func body(content: Content) -> some View {
             content
-                .offset(x: reduceMotion ? 0 : depth / rimDepth * horizontalDepth, y: reduceMotion ? 0 : depth)
+                .offset(y: reduceMotion ? 0 : depth)
                 .opacity(reduceMotion ? 1 - 0.15 * depth / rimDepth : 1)
                 // This modifier interpolates depth; its offset must not animate again.
                 .transaction { $0.animation = nil }

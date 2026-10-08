@@ -12,6 +12,7 @@ struct TodayToolbarButton: View {
 
     let controlsDisabled: Bool
     let selectDay: (Date) -> Void
+    let onToggleTodayMode: () -> Void
 
     var body: some View {
         Button(action: selectToday) {
@@ -43,6 +44,7 @@ extension TodayToolbarButton {
             }
         } else {
             withAnimation(reduceMotion ? nil : .snappy) { todayPageMode.toggle() }
+            onToggleTodayMode()
         }
     }
 
