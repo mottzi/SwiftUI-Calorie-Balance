@@ -45,7 +45,7 @@ private struct DashboardCalories: View {
             } else {
                 CaloriesCard(mode: .now)
                     // Reserve the same depth without changing the face height on other days.
-                    .padding(.bottom, CaloriesMidnightCard.rimDepth)
+                    .padding(.bottom, CaloriesMidnightCard.rimPadding)
             }
         }
         .overlay(alignment: .topTrailing) {

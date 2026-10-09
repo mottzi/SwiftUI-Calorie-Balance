@@ -4,6 +4,10 @@ import SwiftUI
 struct CaloriesMidnightCard: View {
 
     nonisolated static let rimDepth: CGFloat = 4
+    nonisolated private static let topRimWidth: CGFloat = 2
+    nonisolated static let rimPadding = rimDepth + topRimWidth
+    nonisolated private static let sideRimWidth: CGFloat = 2
+    nonisolated private static let rimOpacity: Double = 0.10
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(HealthInterface.self) private var day
@@ -81,18 +85,8 @@ extension CaloriesMidnightCard {
 
         var body: some View {
             label
-                .modifier(PressOffset(depth: depth, reduceMotion: reduceMotion))
-                .background {
-                    let shape = RoundedRectangle(cornerRadius: 10)
-                    shape.fill(background)
-                        .overlay {
-                            shape.fill(Color("TextColor").opacity(0.28))
-                        }
-                        .offset(y: rimDepth)
-                        .allowsHitTesting(false)
-                        .accessibilityHidden(true)
-                }
-                .padding(.bottom, rimDepth)
+                .modifier(PressOffset(depth: depth, reduceMotion: reduceMotion, background: background))
+                .padding(.bottom, rimPadding)
                 .contentShape(.rect(cornerRadius: 10))
                 .onChange(of: isPressed) { _, pressed in
                     guard pressed else { return }
@@ -152,6 +146,7 @@ extension CaloriesMidnightCard {
     private struct PressOffset: ViewModifier, Animatable {
         var depth: CGFloat
         let reduceMotion: Bool
+        let background: Color
 
         var animatableData: CGFloat {
             get { depth }
@@ -159,9 +154,31 @@ extension CaloriesMidnightCard {
         }
 
         func body(content: Content) -> some View {
+            let pressFraction = reduceMotion ? 0 : depth / rimDepth
+            let sideInset = sideRimWidth * (1 - pressFraction)
+            let verticalOffset = topRimWidth + (reduceMotion ? 0 : depth)
+            let baseTopInset = rimPadding * pressFraction
+
             content
-                .offset(y: reduceMotion ? 0 : depth)
+                .visualEffect { face, geometry in
+                    // Cover the base at the sides and bottom when pressed.
+                    face
+                        .scaleEffect(x: 1 - 2 * sideInset / max(geometry.size.width, 1), y: 1)
+                        .offset(y: verticalOffset)
+                }
                 .opacity(reduceMotion ? 1 - 0.15 * depth / rimDepth : 1)
+                .background {
+                    let shape = RoundedRectangle(cornerRadius: 10)
+                    shape.fill(background)
+                        .overlay {
+                            shape.fill(Color("TextColor").opacity(rimOpacity))
+                        }
+                        // Follow the face at the top; keep the base's bottom fixed.
+                        .padding(.top, baseTopInset)
+                        .padding(.bottom, -rimPadding)
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+                }
                 // This modifier interpolates depth; its offset must not animate again.
                 .transaction { $0.animation = nil }
         }
