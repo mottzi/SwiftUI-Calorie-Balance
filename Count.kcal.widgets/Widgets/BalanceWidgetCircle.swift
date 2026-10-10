@@ -126,35 +126,43 @@ private struct BalanceWidgetCircleContent: View {
 
 extension BalanceWidgetCircleContent {
 
+    private var summaryTopInset: CGFloat { 24 }
+    private var summaryHeight: CGFloat { 130 }
+
     private var largeDashboard: some View {
-        ZStack(alignment: .top) {
-            HStack(alignment: .top, spacing: 0) {
-                Spacer()
+        ViewThatFits(in: .vertical) {
+            largeDashboardContent(sectionSpacing: 24)
+                .padding(.bottom, 20)
 
-                modeLabel
-            }
+            largeDashboardContent(sectionSpacing: 12)
+                .padding(.bottom, 12)
+        }
+        .padding(.top, summaryTopInset)
+        .padding(.horizontal, 30)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .overlay(alignment: .topTrailing) {
+            modeLabel
+        }
+        .dynamicTypeSize(...DynamicTypeSize.large)
+    }
 
-            VStack(spacing: 20) {
+    private func largeDashboardContent(sectionSpacing: CGFloat) -> some View {
+        VStack(spacing: sectionSpacing) {
+            // Match the app's calorie card before separating the nutrient section.
+            VStack(spacing: 6) {
                 topGraphContent
-                    .frame(height: 130)
-                    .padding(.horizontal, 30)
+                    .frame(height: summaryHeight)
                     .accessibilityElement(children: .combine)
 
                 BarBalanceGraph(mode: mode, animateNumericValues: true)
                     .environment(HealthInterface(entry.data))
                     .frame(height: 44)
-                    .padding(.bottom, 4)
-                    .padding(.horizontal, 30)
                     .accessibilityHidden(true)
-
-                NutritionWidgetNow(entry: entry)
             }
-            .fontDesign(.rounded)
-            .padding(.top, 13)
-            .padding(.bottom, 20)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            NutritionWidgetNow(entry: entry)
         }
-        .dynamicTypeSize(...DynamicTypeSize.large)
+        .fontDesign(.rounded)
     }
 
     var modeLabel: some View {
@@ -232,9 +240,10 @@ extension BalanceWidgetCircleContent {
 
     var topGraph: some View {
         topGraphContent
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(.top, 13)
+            .frame(height: summaryHeight)
+            .padding(.top, summaryTopInset)
             .padding(.horizontal, 30)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 
     var topGraphContent: some View {

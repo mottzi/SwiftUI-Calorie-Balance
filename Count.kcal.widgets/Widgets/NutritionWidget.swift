@@ -46,8 +46,8 @@ struct NutritionWidgetNow: View {
                     .padding(.bottom, family == .systemMedium ? 2 : -2)
 
             case .systemLarge:
+                // The combined dashboard owns the common inset for all its bars.
                 nutrientRows
-                    .padding(.horizontal, 28)
             
             default:
                 Text(verbatim: "Widget size not supported")
