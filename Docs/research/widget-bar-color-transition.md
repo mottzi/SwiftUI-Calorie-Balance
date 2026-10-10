@@ -35,6 +35,18 @@ This narrows the problem to the color-effect ordering in the affected view
 compositions. It does not establish the exact behavior of Apple's internal
 animation renderer or prove that brightness is broken in every widget.
 
+## Ring segment boundaries
+
+The shared circle graph now has two-point transparent gaps at its burned
+segment boundaries. The gap also separates a colored arc from the gray
+remainder: on the inner eaten ring for a deficit, or on the outer burned ring
+for a surplus. A mask cuts through the complete ring after its color effects,
+so the gaps show the actual card background.
+
+The mask animates the same energy ratios as the arcs. It narrows gaps beside
+very small segments and skips boundaries without neighboring segments.
+The bars retain their original rounded caps without gaps.
+
 ## Verification
 
 - The app and widget extension build for the simulator and physical iPhone.
@@ -50,10 +62,13 @@ animation renderer or prove that brightness is broken in every widget.
 - Unit rendering tests do not exercise WidgetKit's system animation renderer.
   The widget recording checks that behavior; physical iPhone testing remains
   necessary for the final palette change.
+- A geometry probe of the ring mask passes for deficit and surplus remainder
+  gaps, isolation of the inner and outer rings, and an empty graph.
 
 ## Physical check
 
-The updated device build is installed and launched on the user's iPhone 16 Pro.
+The updated device build is installed on the user's iPhone 16 Pro. The phone
+was locked during the final launch attempt; unlock it and open the app to test.
 Compare the bar and circle palettes inside the app, then toggle Today/Midnight
 in the widget and check the bar colors during the animation. The earlier bar
 and icon flicker fixes were confirmed by the user. The current palette change
