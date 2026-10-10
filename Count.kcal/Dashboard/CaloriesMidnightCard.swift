@@ -153,7 +153,7 @@ extension CaloriesMidnightCard {
 
         func body(content: Content) -> some View {
             let pressFraction = reduceMotion ? 0 : depth / rimDepth
-            let sideInset = rimInset * pressFraction
+            let sideInset = rimInset * 0.5 * pressFraction
 
             content
                 .overlay {
@@ -175,8 +175,8 @@ extension CaloriesMidnightCard {
                 .background {
                     GeometryReader { geometry in
                         let pressedScale = max(0, 1 - 2 * rimInset / max(geometry.size.width, 1))
-                        // The rim is the bottom slice of the fully pressed face's footprint.
-                        // Matching its scaled corners lets the face cover both end caps.
+                        // Keep the rim fixed while the face shrinks halfway toward its width.
+                        // Its inset corners stay beneath the wider pressed face.
                         let shape = RoundedRectangle(cornerRadius: 10 * pressedScale)
                         Rectangle().fill(background)
                             .overlay {
