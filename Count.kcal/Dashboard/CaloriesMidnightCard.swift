@@ -3,7 +3,8 @@ import SwiftUI
 /// Switches today's calorie graphs in place while retaining the selected mode.
 struct CaloriesMidnightCard: View {
 
-    nonisolated static let rimDepth: CGFloat = 6
+    nonisolated static let rimDepth: CGFloat = 4
+    nonisolated private static let rimInset: CGFloat = 10
     nonisolated private static let rimOpacity: Double = 0.15
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -112,7 +113,7 @@ extension CaloriesMidnightCard {
             let minimumDeadline = ContinuousClock.now.advanced(by: .milliseconds(130))
             // Cancel release until the face has actually reached the base.
             releaseDeadline = nil
-            withAnimation(.easeOut(duration: 0.08), completionCriteria: .logicallyComplete) {
+            withAnimation(.easeOut(duration: 0.15), completionCriteria: .logicallyComplete) {
                 depth = rimDepth
             } completion: {
                 // Interrupted presses and disappearing cards cannot schedule a stale release.
@@ -133,7 +134,7 @@ extension CaloriesMidnightCard {
             } catch {
                 return
             }
-            withAnimation(.spring(duration: 0.28, bounce: 0)) {
+            withAnimation(.spring(duration: 0.24, bounce: 0)) {
                 depth = 0
             }
         }
@@ -151,6 +152,9 @@ extension CaloriesMidnightCard {
         }
 
         func body(content: Content) -> some View {
+            let pressFraction = reduceMotion ? 0 : depth / rimDepth
+            let sideInset = rimInset * pressFraction
+
             content
                 .overlay {
                     RoundedRectangle(cornerRadius: 10)
@@ -162,23 +166,35 @@ extension CaloriesMidnightCard {
                         .allowsHitTesting(false)
                         .accessibilityHidden(true)
                 }
-                .offset(y: reduceMotion ? 0 : depth)
+                .visualEffect { face, geometry in
+                    face
+                        .scaleEffect(max(0, 1 - 2 * sideInset / max(geometry.size.width, 1)), anchor: .bottom)
+                        .offset(y: reduceMotion ? 0 : depth)
+                }
                 .opacity(reduceMotion ? 1 - 0.15 * depth / rimDepth : 1)
                 .background {
-                    let shape = RoundedRectangle(cornerRadius: 10)
-                    shape.fill(background)
-                        .overlay {
-                            shape.fill(Color("TextColor").opacity(rimOpacity))
-                        }
-                        .overlay(alignment: .bottom) {
-                            LinearGradient(colors: [.clear, .black.opacity(0.18)], startPoint: .bottom, endPoint: .top)
-                                .frame(height: rimDepth)
-                        }
-                        .clipShape(shape)
-                        // A matching base below the face exposes only its lower edge.
-                        .offset(y: rimDepth)
-                        .allowsHitTesting(false)
-                        .accessibilityHidden(true)
+                    GeometryReader { geometry in
+                        let pressedScale = max(0, 1 - 2 * rimInset / max(geometry.size.width, 1))
+                        // The rim is the bottom slice of the fully pressed face's footprint.
+                        // Matching its scaled corners lets the face cover both end caps.
+                        let shape = RoundedRectangle(cornerRadius: 10 * pressedScale)
+                        Rectangle().fill(background)
+                            .overlay {
+                                Color("TextColor").opacity(rimOpacity)
+                            }
+                            .overlay(alignment: .bottom) {
+                                LinearGradient(colors: [.clear, .black.opacity(0.18)], startPoint: .bottom, endPoint: .top)
+                                    .frame(height: rimDepth)
+                            }
+                            .frame(height: geometry.size.height + rimDepth)
+                            .clipShape(shape)
+                            .mask(alignment: .bottom) {
+                                Rectangle().frame(height: rimDepth)
+                            }
+                            .padding(.horizontal, rimInset)
+                    }
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
                 }
                 // This modifier interpolates depth; its offset must not animate again.
                 .transaction { $0.animation = nil }
