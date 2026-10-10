@@ -3,11 +3,8 @@ import SwiftUI
 /// Switches today's calorie graphs in place while retaining the selected mode.
 struct CaloriesMidnightCard: View {
 
-    nonisolated static let rimDepth: CGFloat = 4
-    nonisolated private static let topRimWidth: CGFloat = 2
-    nonisolated static let rimPadding = rimDepth + topRimWidth
-    nonisolated private static let sideRimWidth: CGFloat = 2
-    nonisolated private static let rimOpacity: Double = 0.10
+    nonisolated static let rimDepth: CGFloat = 6
+    nonisolated private static let rimOpacity: Double = 0.15
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(HealthInterface.self) private var day
@@ -86,7 +83,7 @@ extension CaloriesMidnightCard {
         var body: some View {
             label
                 .modifier(PressOffset(depth: depth, reduceMotion: reduceMotion, background: background))
-                .padding(.bottom, rimPadding)
+                .padding(.bottom, rimDepth)
                 .contentShape(.rect(cornerRadius: 10))
                 .onChange(of: isPressed) { _, pressed in
                     guard pressed else { return }
@@ -154,18 +151,18 @@ extension CaloriesMidnightCard {
         }
 
         func body(content: Content) -> some View {
-            let pressFraction = reduceMotion ? 0 : depth / rimDepth
-            let sideInset = sideRimWidth * (1 - pressFraction)
-            let verticalOffset = topRimWidth + (reduceMotion ? 0 : depth)
-            let baseTopInset = rimPadding * pressFraction
-
             content
-                .visualEffect { face, geometry in
-                    // Cover the base at the sides and bottom when pressed.
-                    face
-                        .scaleEffect(x: 1 - 2 * sideInset / max(geometry.size.width, 1), y: 1)
-                        .offset(y: verticalOffset)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(Color("TextColor").opacity(0.06), lineWidth: 2)
+                        .mask(alignment: .top) {
+                            LinearGradient(colors: [.white, .clear], startPoint: .top, endPoint: .bottom)
+                                .frame(height: 10)
+                        }
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
                 }
+                .offset(y: reduceMotion ? 0 : depth)
                 .opacity(reduceMotion ? 1 - 0.15 * depth / rimDepth : 1)
                 .background {
                     let shape = RoundedRectangle(cornerRadius: 10)
@@ -173,9 +170,13 @@ extension CaloriesMidnightCard {
                         .overlay {
                             shape.fill(Color("TextColor").opacity(rimOpacity))
                         }
-                        // Follow the face at the top; keep the base's bottom fixed.
-                        .padding(.top, baseTopInset)
-                        .padding(.bottom, -rimPadding)
+                        .overlay(alignment: .bottom) {
+                            LinearGradient(colors: [.clear, .black.opacity(0.18)], startPoint: .bottom, endPoint: .top)
+                                .frame(height: rimDepth)
+                        }
+                        .clipShape(shape)
+                        // A matching base below the face exposes only its lower edge.
+                        .offset(y: rimDepth)
                         .allowsHitTesting(false)
                         .accessibilityHidden(true)
                 }
