@@ -1,9 +1,8 @@
-/// Keeps the selected mode and successful activations in one parent-owned value.
+/// Keeps the selected mode and toolbar feedback in one parent-owned value.
 struct TodayPageMode: Equatable {
     enum Control { case card, toolbar }
 
     private(set) var selection: PagerSelection
-    private(set) var cardActivations = 0
     private(set) var toolbarActivations = 0
 
     init(selection: PagerSelection = .first) {
@@ -13,7 +12,7 @@ struct TodayPageMode: Equatable {
     mutating func toggle(from control: Control) {
         selection.toggle()
         switch control {
-        case .card: cardActivations += 1
+        case .card: break
         case .toolbar: toolbarActivations += 1
         }
     }

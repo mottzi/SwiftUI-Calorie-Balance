@@ -1,12 +1,11 @@
 /// Owns press feedback sequencing; SwiftUI owns interpolation and completion.
-struct RecessedPress {
+struct RecessedPress: Equatable {
     struct Input: Equatable {
         var isHeld = false
-        var activation = 0
         var pulse = 0
     }
 
-    enum Phase { case resting, pressing, pressed, releasing }
+    enum Phase: Equatable { case resting, pressing, pressed, releasing }
     enum Motion: Equatable { case press(Int), release(Int) }
 
     private(set) var phase: Phase = .resting
@@ -31,14 +30,17 @@ struct RecessedPress {
         guard let previous = input else { return nil }
         input = next
         let touchDown = next.isHeld && !previous.isHeld
-        let activated = next.activation != previous.activation
-        // Touch-up and the Button action are read in one snapshot. The action
-        // acknowledges a rendered physical press instead of replaying it.
-        let acknowledgesTouch = activated && (previous.isHeld || next.isHeld)
-        if touchDown || next.pulse != previous.pulse || (activated && !acknowledgesTouch) {
+        if touchDown || next.pulse != previous.pulse {
             return press() ?? releaseIfReady()
         }
         return releaseIfReady()
+    }
+
+    /// Called directly by the native Button action, independently of mode rendering.
+    /// An existing descent or held stroke already supplies that feedback.
+    mutating func activate() -> Motion? {
+        guard input != nil else { return nil }
+        return press() ?? releaseIfReady()
     }
 
     mutating func complete(_ motion: Motion) -> Motion? {

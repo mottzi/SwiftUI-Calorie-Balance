@@ -210,6 +210,7 @@
 		ADED0EB65DD244A79A988FBE /* EnergyContourComplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED8078CC4F4489FB33FBAE8 /* EnergyContourComplication.swift */; };
 		85CE27CADD4746C69CBD2727 /* EnergyContourDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D69C69EF65464391E06FF1 /* EnergyContourDrawing.swift */; };
 		A6CA10000000000000000002 /* TodayPageMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CA10000000000000000001; };
+		A6CA10000000000000000008 /* RecessedCardFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CA10000000000000000007; };
 		A6CA10000000000000000004 /* RecessedPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CA10000000000000000003; };
 		A6CA10000000000000000006 /* RecessedPressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CA10000000000000000005; };
 /* End PBXBuildFile section */
@@ -414,6 +415,7 @@
 		9ED8078CC4F4489FB33FBAE8 /* EnergyContourComplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyContourComplication.swift; sourceTree = "<group>"; };
 		F9D69C69EF65464391E06FF1 /* EnergyContourDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyContourDrawing.swift; sourceTree = "<group>"; };
 		A6CA10000000000000000001 /* TodayPageMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TodayPageMode.swift; path = Count.kcal/Dashboard/TodayPageMode.swift; sourceTree = SOURCE_ROOT; };
+		A6CA10000000000000000007 /* RecessedCardFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecessedCardFeedback.swift; path = Count.kcal/Dashboard/RecessedCardFeedback.swift; sourceTree = SOURCE_ROOT; };
 		A6CA10000000000000000003 /* RecessedPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecessedPress.swift; path = Count.kcal/Dashboard/RecessedPress.swift; sourceTree = SOURCE_ROOT; };
 		A6CA10000000000000000005 /* RecessedPressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecessedPressTests.swift; path = Count.kcalTests/RecessedPressTests.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -624,6 +626,7 @@
 				9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */,
 				D419EC4A82544CCFB66103F5 /* RecessedCardStyle.swift */,
 				A6CA10000000000000000003 /* RecessedPress.swift */,
+				A6CA10000000000000000007 /* RecessedCardFeedback.swift */,
 				A6CA10000000000000000001 /* TodayPageMode.swift */,
 				9A6DA88B2B361A7D00585788 /* CaloriesCard */,
 				9AAF6E512B3F1E9E00B9363E /* NutritionCard */,
@@ -1144,6 +1147,7 @@
 				9A3F8EAA2B348C1F00B0DC74 /* CaloriesMidnightCard.swift in Sources */,
 				289AE5A61255430F997770B1 /* RecessedCardStyle.swift in Sources */,
 				A6CA10000000000000000004 /* RecessedPress.swift in Sources */,
+				A6CA10000000000000000008 /* RecessedCardFeedback.swift in Sources */,
 				A6CA10000000000000000002 /* TodayPageMode.swift in Sources */,
 				9A9BC9BE2A7E9C7300A4404A /* ReachableView.swift in Sources */,
 				9A0D04FE2C165E6B00AF7247 /* Connectivity.swift in Sources */,

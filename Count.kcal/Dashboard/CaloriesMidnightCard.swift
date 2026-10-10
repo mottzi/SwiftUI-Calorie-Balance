@@ -11,6 +11,7 @@ struct CaloriesMidnightCard: View {
     @EnvironmentObject private var settings: Settings
 
     @Binding var todayPageMode: TodayPageMode
+    @State private var feedback = RecessedCardFeedback()
 
     var body: some View {
         Button(action: toggleMode) {
@@ -20,7 +21,7 @@ struct CaloriesMidnightCard: View {
         }
         .buttonStyle(RecessedCardStyle(
             background: settings.CardBackground,
-            activation: todayPageMode.cardActivations,
+            feedback: feedback,
             pulse: todayPageMode.toolbarActivations
         ))
         .accessibilityLabel("Calories")
@@ -34,6 +35,7 @@ struct CaloriesMidnightCard: View {
 extension CaloriesMidnightCard {
 
     private func toggleMode() {
+        feedback.activate()
         todayPageMode.toggle(from: .card)
     }
 

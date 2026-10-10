@@ -4,14 +4,14 @@ import SwiftUI
 struct RecessedCardStyle: ButtonStyle {
     nonisolated static var rimDepth: CGFloat { 4 }
     let background: Color
-    let activation: Int
+    let feedback: RecessedCardFeedback
     let pulse: Int
 
     func makeBody(configuration: Configuration) -> some View {
         RecessedCardFace(
             face: configuration.label,
             background: background,
-            activation: activation,
+            feedback: feedback,
             pulse: pulse,
             isHeld: configuration.isPressed
         )
@@ -20,11 +20,10 @@ struct RecessedCardStyle: ButtonStyle {
 
 private struct RecessedCardFace<Face: View>: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var press = RecessedPress()
 
     let face: Face
     let background: Color
-    let activation: Int
+    let feedback: RecessedCardFeedback
     let pulse: Int
     let isHeld: Bool
 
@@ -32,7 +31,7 @@ private struct RecessedCardFace<Face: View>: View {
     private var rimInset: CGFloat { 10 }
 
     var body: some View {
-        let pressed = press.isDepressed
+        let pressed = feedback.isDepressed
         let depth = pressed && !reduceMotion ? rimDepth : 0
         let sideInset = pressed && !reduceMotion ? rimInset * 0.5 : 0
 
@@ -77,35 +76,14 @@ private struct RecessedCardFace<Face: View>: View {
             }
             .padding(.bottom, rimDepth)
             .contentShape(.rect(cornerRadius: 10))
-            .onAppear { update { $0.appear(input) } }
+            .onAppear { feedback.appear(input) }
             .onChange(of: input) { _, input in
-                update { $0.update(input) }
+                feedback.updateInput(input)
             }
-            .onDisappear {
-                var transaction = Transaction()
-                transaction.disablesAnimations = true
-                withTransaction(transaction) { press.disappear() }
-            }
+            .onDisappear { feedback.disappear() }
     }
 
     private var input: RecessedPress.Input {
-        .init(isHeld: isHeld, activation: activation, pulse: pulse)
-    }
-
-    private func update(_ change: (inout RecessedPress) -> RecessedPress.Motion?) {
-        var next = press
-        guard let motion = change(&next) else {
-            press = next
-            return
-        }
-        let animation: Animation = switch motion {
-        case .press: .easeOut(duration: 0.15)
-        case .release: .smooth(duration: 0.24)
-        }
-        withAnimation(animation, completionCriteria: .removed) {
-            press = next
-        } completion: {
-            update { $0.complete(motion) }
-        }
+        .init(isHeld: isHeld, pulse: pulse)
     }
 }
