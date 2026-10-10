@@ -99,7 +99,7 @@ private struct RecessedCardFace<Face: View>: View {
             return
         }
         let animation: Animation = switch motion {
-        case .press: .smooth(duration: 0.15)
+        case .press: .easeOut(duration: 0.15)
         case .release: .smooth(duration: 0.24)
         }
         withAnimation(animation, completionCriteria: .removed) {
