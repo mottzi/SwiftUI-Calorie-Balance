@@ -67,8 +67,7 @@ private struct BalanceWidgetCircleContent: View {
                                     .scaledToFit()
                                     .bold()
                                     .frame(width: 10, height: 10)
-                                    .foregroundStyle(AppSettings.burnedColor)
-                                    .brightness(level: .secondary)
+                                    .foregroundStyle(GraphColorStyle(color: AppSettings.burnedColor, level: .secondary))
                             }
                             .fontDesign(.rounded)
                             .font(.caption)
@@ -81,8 +80,7 @@ private struct BalanceWidgetCircleContent: View {
                                     .scaledToFit()
                                     .bold()
                                     .frame(width: 10, height: 10)
-                                    .foregroundStyle(AppSettings.consumedColor)
-                                    .brightness(level: .secondary)
+                                    .foregroundStyle(GraphColorStyle(color: AppSettings.consumedColor, level: .secondary))
 
                                 Text("\(entry.data.consumed)")
                                     .contentTransition(.numericText(value: Double(entry.data.consumed)))
@@ -254,8 +252,9 @@ extension BalanceWidgetCircleContent {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 23, height: 23)
-                        .foregroundStyle(AppSettings.burnedColor.gradient)
-                        .brightness(scheme == .dark ? 0.15 : 0)
+                        .foregroundStyle(
+                            GraphColorStyle(color: AppSettings.burnedColor, brightness: scheme == .dark ? 0.15 : 0).gradient
+                        )
                         .background {
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(
@@ -302,8 +301,9 @@ extension BalanceWidgetCircleContent {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 23, height: 23)
-                        .foregroundStyle(AppSettings.consumedColor.gradient)
-                        .brightness(scheme == .dark ? 0.15 : 0)
+                        .foregroundStyle(
+                            GraphColorStyle(color: AppSettings.consumedColor, brightness: scheme == .dark ? 0.15 : 0).gradient
+                        )
                         .background {
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(

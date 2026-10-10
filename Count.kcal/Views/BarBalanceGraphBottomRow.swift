@@ -26,29 +26,14 @@ struct BarBalanceGraphBottomRow: View {
             Rectangle()
                 .fill(AppSettings.getGraphEmptyColor(scheme).opacity(scheme == .light ? 0.4 : 1))
                 .frame(width: geometry.size.width)
-                .overlay {
-                    LinearGradient(
-                        colors: [scheme == .dark ? .black : .white, AppSettings.getGraphEmptyColor(scheme)],
-                        startPoint: scheme == .dark ? .bottom : .top,
-                        endPoint: scheme == .dark ? .top : .bottom
-                    )
-                        .opacity(0.25)
-                }
             
             let widthConsumed = CGFloat(energy.ratio(of: energy.consumed)) * geometry.size.width
             
             Rectangle()
-                .fill(AppSettings.consumedColor)
+                .fill(AppSettings.consumedColor.gradient)
+                .brightness(level: .primary, to: .bargraph)
+                .graphColorAppearance()
                 .frame(width: widthConsumed)
-                .brightness(level: .primary)
-                .overlay {
-                    LinearGradient(
-                        colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor],
-                        startPoint: scheme == .dark ? .bottom : .top,
-                        endPoint: scheme == .dark ? .top : .bottom
-                    )
-                        .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
-                }
                 .clipShape(UnevenRoundedRectangle(bottomTrailingRadius: 6, style: .circular))
                 .overlay {
                     if labels {

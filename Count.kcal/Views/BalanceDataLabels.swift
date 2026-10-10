@@ -15,8 +15,7 @@ struct BalanceDataLabelSimple: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 23, height: 23)
-                .foregroundStyle(color.gradient)
-                .brightness(scheme == .dark ? 0.15 : 0)
+                .foregroundStyle(GraphColorStyle(color: color, brightness: scheme == .dark ? 0.15 : 0).gradient)
                 .padding(.bottom, 4)
             
             Text("\(data)")
@@ -54,8 +53,7 @@ struct BalanceDataLabelExtra: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 23, height: 23)
-                    .foregroundStyle(color.gradient)
-                    .brightness(scheme == .dark ? 0.15 : 0)
+                    .foregroundStyle(GraphColorStyle(color: color, brightness: scheme == .dark ? 0.15 : 0).gradient)
                     .padding(.bottom, 4)
             }
             .offset(x: 3)

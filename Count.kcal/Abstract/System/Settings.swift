@@ -396,37 +396,73 @@ extension Date: @retroactive RawRepresentable {
 
 extension View {
 
+    func graphColorAppearance() -> some View {
+        modifier(GraphColorAppearance())
+    }
+
     @ViewBuilder
     func brightness(level: BrightnessLevel, to: BrightnessContext = .bargraph) -> some View {
-        switch to {
-            case .bargraph:
-                do {
-                    switch level {
-                        case .primary: self.brightness(0.1)
-                        case .secondary: self.brightness(0.2)
-                        case .tertiary: self.brightness(0.3)
-                        case .none: self
-                    }
-                }
-            case .circlegraphNow:
-                do {
-                    switch level {
-                        case .primary: self.brightness(0.0)
-                        case .secondary: self.brightness(0.2)
-                        case .tertiary: self.brightness(0.3)
-                        case .none: self
-                    }
-                }
-            case .circlegraphMidnight:
-                do {
-                    switch level {
-                        case .primary: self.brightness(0.0)
-                        case .secondary: self.brightness(0.15)
-                        case .tertiary: self.brightness(0.35)
-                        case .none: self
-                    }
-                }
+        if level == .none {
+            self
+        } else {
+            self.brightness(level.amount(in: to))
         }
+    }
+
+}
+
+/// Finishes graph colors before a bar's clipping or compositing can limit their channels.
+private struct GraphColorAppearance: ViewModifier {
+
+    @Environment(\.colorScheme) private var scheme
+
+    func body(content: Content) -> some View {
+        content
+            .saturation(Settings.baseSaturation)
+            .brightness(scheme == .dark ? -0.1 : 0)
+    }
+
+}
+
+/// Resolves calorie icon colors before drawing to avoid WidgetKit's animated brightness filter.
+struct GraphColorStyle: ShapeStyle {
+
+    let color: Color
+    let brightness: Double
+
+    init(color: Color, level: BrightnessLevel, context: BrightnessContext = .bargraph) {
+        self.init(color: color, brightness: level.amount(in: context))
+    }
+
+    init(color: Color, brightness: Double) {
+        self.color = color
+        self.brightness = brightness
+    }
+
+    func resolve(in environment: EnvironmentValues) -> Color {
+
+        guard brightness != 0 else { return color }
+        let resolved = color.resolve(in: environment)
+        // Keep bright and Display P3 colors in range for WidgetKit's color rendering.
+        return Color(
+            .sRGB,
+            red: min(max(Double(resolved.red) + brightness, 0), 1),
+            green: min(max(Double(resolved.green) + brightness, 0), 1),
+            blue: min(max(Double(resolved.blue) + brightness, 0), 1),
+            opacity: Double(resolved.opacity)
+        )
+    }
+
+    var gradient: some ShapeStyle { GradientStyle(color: self) }
+
+    private struct GradientStyle: ShapeStyle {
+
+        let color: GraphColorStyle
+
+        func resolve(in environment: EnvironmentValues) -> AnyGradient {
+            color.resolve(in: environment).gradient
+        }
+
     }
 
 }
@@ -466,6 +502,18 @@ enum BrightnessLevel {
     case primary
     case secondary
     case tertiary
+
+    func amount(in context: BrightnessContext) -> Double {
+        switch (context, self) {
+            case (_, .none): 0
+            case (.bargraph, .primary): 0.1
+            case (.circlegraphNow, .primary), (.circlegraphMidnight, .primary): 0
+            case (.bargraph, .secondary), (.circlegraphNow, .secondary): 0.2
+            case (.circlegraphMidnight, .secondary): 0.15
+            case (.bargraph, .tertiary), (.circlegraphNow, .tertiary): 0.3
+            case (.circlegraphMidnight, .tertiary): 0.25
+        }
+    }
 
 }
 

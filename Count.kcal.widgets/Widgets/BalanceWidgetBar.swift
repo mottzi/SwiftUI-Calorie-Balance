@@ -157,8 +157,9 @@ extension BalanceWidgetBarContent {
                 VStack {
                     Image(systemName: "bolt.fill")
                         .font(.subheadline)
-                        .foregroundColor(AppSettings.burnedColor)
-                        .brightness(scheme == .dark ? 0.15 : 0)
+                        .foregroundStyle(
+                            GraphColorStyle(color: AppSettings.burnedColor, brightness: scheme == .dark ? 0.15 : 0)
+                        )
                     
                     Text("\(burnedTotal)")
                         .contentTransition(.numericText(value: Double(burnedTotal)))
@@ -178,8 +179,9 @@ extension BalanceWidgetBarContent {
                 VStack {
                     Image(systemName: "fork.knife")
                         .font(.subheadline)
-                        .foregroundColor(AppSettings.consumedColor)
-                        .brightness(scheme == .dark ? 0.15 : 0)
+                        .foregroundStyle(
+                            GraphColorStyle(color: AppSettings.consumedColor, brightness: scheme == .dark ? 0.15 : 0)
+                        )
 
                     Text("\(entry.data.consumed)")
                         .contentTransition(.numericText(value: Double(entry.data.consumed)))

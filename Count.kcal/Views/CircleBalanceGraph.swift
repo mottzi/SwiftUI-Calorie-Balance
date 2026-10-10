@@ -69,8 +69,7 @@ struct CircleBalanceGraph: View {
                 .opacity(accentedWidget ? 0.6 : 1)
             }
 
-            .saturation(Settings.baseSaturation)
-            .brightness(scheme == .dark ? -0.1 : 0.0)
+            .graphColorAppearance()
         }
         .padding(lineWidth / 2)
     }

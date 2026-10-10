@@ -45,7 +45,6 @@ struct BarBalanceGraph: View {
                     style: .continuous
                 ))
             }
-            .saturation(Settings.baseSaturation)
         }
     }
 

@@ -194,6 +194,7 @@
 		EB2955F8EE7F49BF86B22DA0 /* SampleHealthDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */; };
 		F48E98FC1F5348DE95541597 /* HealthDataMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */; };
         A3C000000000000000000005 /* ProgressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C000000000000000000004; };
+        BAF100000000000000000002 /* BarGraphFillTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF100000000000000000001; };
         A3C00000000000000000000E /* SQLiteData in Frameworks */ = {isa = PBXBuildFile; productRef = A2C000000000000000000002; };
 		F1974CEBA6134063A1958F57 /* GoalProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB0F98A6902490D964A1F4A /* GoalProgress.swift */; };
 		461CAAA75527422B9FC72B38 /* GoalTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3346C0941FC64BF88F47815C /* GoalTimelineProvider.swift */; };
@@ -403,6 +404,7 @@
 		D7A8097F63844ED785702A10 /* DayPager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPager.swift; sourceTree = "<group>"; };
 		F87B951148234A488A029FAF /* HealthDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataSource.swift; sourceTree = "<group>"; };
         A3C000000000000000000004 /* ProgressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTests.swift; sourceTree = "<group>"; };
+        BAF100000000000000000001 /* BarGraphFillTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarGraphFillTests.swift; sourceTree = "<group>"; };
         A3C000000000000000000003 /* Count.kcalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = Count.kcalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DB0F98A6902490D964A1F4A /* GoalProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalProgress.swift; sourceTree = "<group>"; };
 		3346C0941FC64BF88F47815C /* GoalTimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalTimelineProvider.swift; sourceTree = "<group>"; };
@@ -888,7 +890,7 @@
 			path = Toolbar;
 			sourceTree = "<group>";
 		};
-        A3C000000000000000000002 /* Count.kcalTests */ = {isa = PBXGroup; children = (A3C000000000000000000004, A6CA10000000000000000005,); path = Count.kcalTests; sourceTree = "<group>"; };
+        A3C000000000000000000002 /* Count.kcalTests */ = {isa = PBXGroup; children = (A3C000000000000000000004, A6CA10000000000000000005, BAF100000000000000000001,); path = Count.kcalTests; sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1333,7 +1335,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-        A3C000000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A3C000000000000000000005, A6CA10000000000000000006,); runOnlyForDeploymentPostprocessing = 0; };
+        A3C000000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A3C000000000000000000005, A6CA10000000000000000006, BAF100000000000000000002,); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */

@@ -29,30 +29,15 @@ struct BarBalanceGraphTopRow: View {
             Rectangle()
                 .fill(AppSettings.getGraphEmptyColor(scheme).opacity(scheme == .light ? 0.4 : 1))
                 .frame(width: geometry.size.width)
-                .overlay {
-                    LinearGradient(
-                        colors: [scheme == .dark ? .black : .white, AppSettings.getGraphEmptyColor(scheme)],
-                        startPoint: scheme == .dark ? .bottom : .top,
-                        endPoint: scheme == .dark ? .top : .bottom
-                    )
-                        .opacity(0.25)
-                }
             
             let widthActive = CGFloat(energy.ratio(of: energy.active)) * geometry.size.width
             
             // active burned
             Rectangle()
-                .fill(AppSettings.burnedColor)
+                .fill(AppSettings.burnedColor.gradient)
+                .brightness(level: .primary, to: .circlegraphMidnight)
+                .graphColorAppearance()
                 .frame(width: widthActive)
-                .brightness(level: .primary)
-                .overlay {
-                    LinearGradient(
-                        colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor],
-                        startPoint: scheme == .dark ? .bottom : .top,
-                        endPoint: scheme == .dark ? .top : .bottom
-                    )
-                        .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
-                }
                 .overlay {
                     if labels {
                         ViewThatFits {
@@ -73,17 +58,10 @@ struct BarBalanceGraphTopRow: View {
             
             // passive burned
             Rectangle()
-                .fill(AppSettings.burnedColor)
+                .fill(AppSettings.burnedColor.gradient)
+                .brightness(level: .secondary, to: .circlegraphMidnight)
+                .graphColorAppearance()
                 .frame(width: widthPassive)
-                .brightness(level: .secondary)
-                .overlay {
-                    LinearGradient(
-                        colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor],
-                        startPoint: scheme == .dark ? .bottom : .top,
-                        endPoint: scheme == .dark ? .top : .bottom
-                    )
-                        .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
-                }
                 .clipShape(UnevenRoundedRectangle(topTrailingRadius: mode == .now ? 6 : 0, style: .circular))
                 .overlay {
                     if labels {
@@ -109,17 +87,10 @@ struct BarBalanceGraphTopRow: View {
 
             // Keep the projection in the row so its width can animate from and to zero.
             Rectangle()
-                .fill(AppSettings.burnedColor)
+                .fill(AppSettings.burnedColor.gradient)
+                .brightness(level: .tertiary, to: .circlegraphMidnight)
+                .graphColorAppearance()
                 .frame(width: widthProjected)
-                .brightness(level: .tertiary)
-                .overlay {
-                    LinearGradient(
-                        colors: [scheme == .dark ? .black : .white, AppSettings.burnedColor],
-                        startPoint: scheme == .dark ? .bottom : .top,
-                        endPoint: scheme == .dark ? .top : .bottom
-                    )
-                        .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
-                }
                 .clipShape(UnevenRoundedRectangle(topTrailingRadius: 6, style: .circular))
                 .overlay {
                     if labels && energy.restingRemaining > 0 {

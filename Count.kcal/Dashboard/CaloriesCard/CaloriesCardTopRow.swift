@@ -23,8 +23,10 @@ struct CaloriesCardTopRow: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 23, height: 23)
-                            .foregroundStyle((energy.isEmpty ? Color("SecondaryTextColor") : AppSettings.burnedColor).gradient)
-                            .brightness(!energy.isEmpty && scheme == .dark ? 0.15 : 0)
+                            .foregroundStyle(GraphColorStyle(
+                                color: energy.isEmpty ? Color("SecondaryTextColor") : AppSettings.burnedColor,
+                                brightness: !energy.isEmpty && scheme == .dark ? 0.15 : 0
+                            ).gradient)
                             .background {
                                 if dynamicType <= .xxLarge {
                                     RoundedRectangle(cornerRadius: 10)
@@ -78,8 +80,10 @@ struct CaloriesCardTopRow: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 23, height: 23)
-                            .foregroundStyle((energy.isEmpty ? Color("SecondaryTextColor") : AppSettings.consumedColor).gradient)
-                            .brightness(!energy.isEmpty && scheme == .dark ? 0.15 : 0)
+                            .foregroundStyle(GraphColorStyle(
+                                color: energy.isEmpty ? Color("SecondaryTextColor") : AppSettings.consumedColor,
+                                brightness: !energy.isEmpty && scheme == .dark ? 0.15 : 0
+                            ).gradient)
                             .background {
                                 if dynamicType <= .xxLarge {
                                     RoundedRectangle(cornerRadius: 10)
