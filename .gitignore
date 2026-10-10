@@ -14,3 +14,6 @@ DerivedData/
 .build/
 build/
 *.xcresult/
+
+# Generated design previews and simulator captures
+/output/
