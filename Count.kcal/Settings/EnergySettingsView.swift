@@ -4,8 +4,6 @@ import SwiftUI
 struct EnergySettingsView: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
-    @Environment(\.colorScheme) private var scheme: ColorScheme
-
     @EnvironmentObject private var AppSettings: Settings
 
     @State private var healthDataMode = HealthDataMode.shared
@@ -105,201 +103,155 @@ struct EnergySettingsView: View {
             }
             .padding(.horizontal, dynamicType.isAccessibilitySize ? 16 : 0)
 
-            VStack(spacing: 12) {
-                BurnedEnergyInputRow(.resting, focusedField: $focusedField, usesCustomEnergy: AppSettings.usesCustomEnergy)
-                    .frame(height: dynamicType.isAccessibilitySize ? nil : 20)
-                    .padding(.top, 6)
-                    .padding(.horizontal, 15)
-                    .padding(.bottom, 8)
+            VStack(spacing: 0) {
+                VStack(spacing: 12) {
+                    BurnedEnergyInputRow(.resting, focusedField: $focusedField, usesCustomEnergy: AppSettings.usesCustomEnergy)
+                        .frame(minHeight: 20)
 
-                BurnedEnergyInputRow(.active, focusedField: $focusedField, usesCustomEnergy: AppSettings.usesCustomEnergy)
-                    .frame(height: dynamicType.isAccessibilitySize ? nil : 20)
-                    .padding(.horizontal, 15)
+                    BurnedEnergyInputRow(.active, focusedField: $focusedField, usesCustomEnergy: AppSettings.usesCustomEnergy)
+                        .frame(minHeight: 20)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
 
-                (dynamicType.isAccessibilitySize
-                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
-                    : AnyLayout(HStackLayout(alignment: .lastTextBaseline))) {
-                    HStack(spacing: 8) {
-                        Text("Total Burned")
-                            .foregroundStyle(Color("TextColor"))
+                VStack(spacing: 0) {
+                    EnergySettingsCalculationRule()
 
-                        if !AppSettings.isBurnedValid {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(Color.red.gradient)
-                                .offset(y: -1)
-                        }
-                    }
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .fixedSize(horizontal: !dynamicType.isAccessibilitySize, vertical: true)
+                    VStack(spacing: 12) {
+                        (dynamicType.isAccessibilitySize
+                            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+                            : AnyLayout(HStackLayout(alignment: .lastTextBaseline))) {
+                            HStack(spacing: 12) {
+                                Image(systemName: "bolt.fill")
+                                    .foregroundStyle(AppSettings.burnedColor)
+                                    .frame(width: 16)
+                                    .accessibilityHidden(true)
 
-                    if !dynamicType.isAccessibilitySize { Spacer() }
+                                Text("Total Burned")
+                                    .foregroundStyle(Color("TextColor"))
 
-                    HStack(alignment: .lastTextBaseline) {
-                        Text(
-                            """
-                            \(AppSettings.usesCustomEnergy
-                                ? (AppSettings.customCalActive + AppSettings.customCalPassive)
-                                : (AppSettings.showActive + AppSettings.showResting))
-                            """
-                        )
-                            .lineLimit(1)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .offset(x: 3)
+                                if !AppSettings.isBurnedValid {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .foregroundStyle(Color.red.gradient)
+                                        .offset(y: -1)
+                                }
+                            }
                             .font(.subheadline)
-                            .fontWeight(.semibold)
+                            .fixedSize(horizontal: !dynamicType.isAccessibilitySize, vertical: true)
+
+                            if !dynamicType.isAccessibilitySize { Spacer() }
+
+                            HStack(alignment: .lastTextBaseline) {
+                                Text(
+                                    """
+                                    \(AppSettings.usesCustomEnergy
+                                        ? (AppSettings.customCalActive + AppSettings.customCalPassive)
+                                        : (AppSettings.showActive + AppSettings.showResting))
+                                    """
+                                )
+                                    .lineLimit(1)
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                                    .offset(x: 3)
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color("TextColor"))
+
+                                EnergyUnitLabel()
+                            }
+                        }
+                        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+                        .frame(minHeight: 20)
+
+                        (dynamicType.isAccessibilitySize
+                            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+                            : AnyLayout(HStackLayout(alignment: .lastTextBaseline))) {
+                            HStack(spacing: 12) {
+                                Image(systemName: AppSettings.weightGoal == .lose ? "minus" : "plus")
+                                    .foregroundStyle(Color("SecondaryTextColor"))
+                                    .frame(width: 16)
+                                    .accessibilityHidden(true)
+
+                                Text(AppSettings.weightGoal == .lose ? "Calorie Deficit" : "Calorie Surplus")
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.8)
+                                    .animation(.default, value: AppSettings.weightGoal)
+                                    .fixedSize(horizontal: !dynamicType.isAccessibilitySize, vertical: true)
+                            }
+                            .font(.subheadline)
                             .foregroundStyle(Color("TextColor"))
 
-                        EnergyUnitLabel()
+                            if !dynamicType.isAccessibilitySize { Spacer() }
+
+                            HStack(alignment: .lastTextBaseline) {
+                                TextField(String("0"), value: $AppSettings.balanceGoal, format: .number)
+                                    .focused($focusedField, equals: .balance)
+                                    .keyboardType(.numberPad)
+                                    .autocorrectionDisabled(true)
+                                    .textInputAutocapitalization(.never)
+                                    .multilineTextAlignment(.trailing)
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color("TextColor"))
+                                    .offset(x: 3)
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                                    .underline()
+                                    .onChange(of: AppSettings.balanceGoal) {
+                                        AppSettings.balanceGoal = abs(AppSettings.balanceGoal)
+                                    }
+
+                                EnergyUnitLabel()
+                            }
+                        }
+                        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+                        .frame(minHeight: 20)
                     }
-                }
-                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
-                .frame(height: dynamicType.isAccessibilitySize ? nil : 20)
-                .background {
-                    RoundedRectangle(cornerRadius: 40)
-                        .fill(AppSettings.AppBackground)
-                        .stroke(Color("SecondaryTextColor").opacity(0.05), style: StrokeStyle(lineWidth: 0.5))
-                        .padding(-10)
-                        .padding(.horizontal, -5)
-                        .shadow(
-                            color: Color(white: scheme == .light ? 0.8 : 0.2).opacity(scheme == .dark ? 0 : 0.1),
-                            radius: 4,
-                            x: 0,
-                            y: 4
-                        )
-                }
-                .padding(10)
-                .padding(.horizontal, 5)
-                .offset(y: 2)
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 20)
-            .modifier(EnergySettingsCardStyle())
-            .overlay(alignment: .topLeading) {
-                ZStack {
-                    Circle()
-                        .fill(Color(white: scheme == .dark ? 0.2 : 1).gradient)
-                        .shadow(color: .init(white: 0.1).opacity(0.2), radius: 1, x: 2, y: 2)
-                        .frame(width: 30)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
 
-                    Image(systemName: "bolt.fill")
-                        .font(.system(size: 15))
-                        .fontWeight(.bold)
-                        .foregroundStyle(AppSettings.burnedColor)
-                        .brightness(level: scheme == .dark ? .secondary : .none)
-                }
-                .offset(x: -4, y: -4)
-            }
-            .padding(.horizontal, 40)
-            .padding(.top, 10)
-            .animation(.snappy, value: AppSettings.dataSource)
+                    EnergySettingsCalculationRule()
 
-            VStack(spacing: 12) {
-                (dynamicType.isAccessibilitySize
-                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
-                    : AnyLayout(HStackLayout(alignment: .lastTextBaseline))) {
-                    Text(AppSettings.weightGoal == .lose ? "Calorie Deficit" : "Calorie Surplus")
+                    (dynamicType.isAccessibilitySize
+                        ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+                        : AnyLayout(HStackLayout(alignment: .lastTextBaseline))) {
+                        HStack(alignment: .center, spacing: 12) {
+                            Image(systemName: "fork.knife")
+                                .foregroundStyle(AppSettings.consumedColor)
+                                .frame(width: 16)
+                                .accessibilityHidden(true)
+
+                            Text("Eating goal")
+                                .foregroundStyle(Color("TextColor"))
+                                .fixedSize(horizontal: false, vertical: true)
+
+                            if AppSettings.maxEatingEnergy() <= 0 {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundStyle(Color.red.gradient)
+                                    .offset(y: -1)
+                            }
+                        }
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
-                        .animation(.default, value: AppSettings.weightGoal)
-                        .fixedSize(horizontal: !dynamicType.isAccessibilitySize, vertical: true)
 
-                    if !dynamicType.isAccessibilitySize { Spacer() }
+                        if !dynamicType.isAccessibilitySize { Spacer() }
 
-                    HStack(alignment: .lastTextBaseline) {
-                        TextField(String("0"), value: $AppSettings.balanceGoal, format: .number)
-                            .focused($focusedField, equals: .balance)
-                            .keyboardType(.numberPad)
-                            .autocorrectionDisabled(true)
-                            .textInputAutocapitalization(.never)
-                            .multilineTextAlignment(.trailing)
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(Color("TextColor"))
-                            .offset(x: 3)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .underline()
-                            .onChange(of: AppSettings.balanceGoal) {
-                                AppSettings.balanceGoal = abs(AppSettings.balanceGoal)
-                            }
+                        HStack(alignment: .lastTextBaseline) {
+                            Text("\(AppSettings.maxEatingEnergy())")
+                                .lineLimit(1)
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Color("TextColor"))
+                                .offset(x: 3)
 
-                        EnergyUnitLabel()
-                    }
-                }
-                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
-                .padding(.horizontal, 15)
-
-
-                (dynamicType.isAccessibilitySize
-                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
-                    : AnyLayout(HStackLayout(alignment: .lastTextBaseline))) {
-                    HStack(alignment: .center, spacing: 8) {
-                        Text("Eating goal")
-                            .foregroundStyle(Color("TextColor"))
-                            .fixedSize(horizontal: false, vertical: true)
-
-                        if AppSettings.maxEatingEnergy() <= 0 {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(Color.red.gradient)
-                                .offset(y: -1)
+                            EnergyUnitLabel()
                         }
                     }
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-
-                    if !dynamicType.isAccessibilitySize { Spacer() }
-
-                    HStack(alignment: .lastTextBaseline) {
-                        Text("\(AppSettings.maxEatingEnergy())")
-                            .lineLimit(1)
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(Color("TextColor"))
-                            .offset(x: 3)
-
-                        EnergyUnitLabel()
-                    }
+                    .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+                    .modifier(EnergySettingsRowStyle())
                 }
-                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
-                .frame(minHeight: 20)
-                .background {
-                    RoundedRectangle(cornerRadius: 40)
-                        .fill(AppSettings.AppBackground)
-                        .stroke(Color("SecondaryTextColor").opacity(0.05), style: StrokeStyle(lineWidth: 0.5))
-                        .padding(-10)
-                        .padding(.horizontal, -5)
-                        .shadow(
-                            color: Color(white: scheme == .light ? 0.8 : 0.2).opacity(scheme == .dark ? 0 : 0.1),
-                            radius: 4,
-                            x: 0,
-                            y: 4
-                        )
-                }
-                .padding(10)
-                .padding(.horizontal, 5)
-                .offset(y: 2)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 20)
-            .modifier(EnergySettingsCardStyle())
-            .overlay(alignment: .topLeading) {
-                ZStack {
-                    Circle()
-                        .fill(Color(white: scheme == .dark ? 0.2 : 1).gradient)
-                        .shadow(color: .init(white: 0.1).opacity(0.2), radius: 1, x: 2, y: 2)
-                        .frame(width: 30)
-
-                    Image(systemName: "fork.knife")
-                        .font(.system(size: 13))
-                        .fontWeight(.bold)
-                        .foregroundStyle(AppSettings.consumedColor)
-                        .brightness(level: scheme == .dark ? .secondary : .none)
-                }
-                .offset(x: -4, y: -4)
-            }
+            .fontWeight(.semibold)
+            .background(AppSettings.CardBackground, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .overlay(EnergySettingsCardEdges().allowsHitTesting(false))
             .padding(.horizontal, 40)
+            .padding(.top, 10)
             .animation(.snappy, value: AppSettings.dataSource)
         }
         .task(id: EstimateKey(
@@ -334,9 +286,13 @@ private struct BurnedEnergyInputRow: View {
         (dynamicType.isAccessibilitySize
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
             : AnyLayout(HStackLayout(alignment: .lastTextBaseline))) {
-            HStack(spacing: 8) {
+            HStack(spacing: 12) {
+                Image(systemName: kind == .resting ? "bolt.fill" : "plus")
+                    .foregroundStyle(kind == .resting ? settings.burnedColor : Color("SecondaryTextColor"))
+                    .frame(width: 16)
+                    .accessibilityHidden(true)
+
                 Text(title)
-                    .foregroundStyle(Color("TextColor"))
 
                 if !isValid {
                     Image(systemName: "exclamationmark.triangle.fill")
@@ -345,7 +301,6 @@ private struct BurnedEnergyInputRow: View {
                 }
             }
             .font(.subheadline)
-            .fontWeight(.semibold)
             .fixedSize(horizontal: !dynamicType.isAccessibilitySize, vertical: true)
 
             if !dynamicType.isAccessibilitySize { Spacer() }
@@ -360,7 +315,6 @@ private struct BurnedEnergyInputRow: View {
                         .multilineTextAlignment(dynamicType.isAccessibilitySize ? .leading : .trailing)
                         .frame(maxWidth: .infinity, alignment: dynamicType.isAccessibilitySize ? .leading : .trailing)
                         .font(.subheadline)
-                        .fontWeight(.semibold)
                         .foregroundStyle(Color("TextColor"))
                         .offset(x: 3)
                         .underline()
@@ -374,15 +328,14 @@ private struct BurnedEnergyInputRow: View {
                             alignment: dynamicType.isAccessibilitySize ? .leading : .trailing
                         )
                         .font(.subheadline)
-                        .fontWeight(.semibold)
                         .foregroundStyle(Color("TextColor"))
                         .offset(x: 3)
-                        .opacity(0.6)
                 }
 
                 EnergyUnitLabel()
             }
         }
+        .foregroundStyle(Color("TextColor"))
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
     }
 
@@ -434,6 +387,59 @@ private struct EnergyUnitLabel: View {
             .padding(.leading, 4)
     }
 
+}
+
+/// Equal row insets keep the arithmetic aligned across the card's groups.
+private struct EnergySettingsRowStyle: ViewModifier {
+
+    func body(content: Content) -> some View {
+        content
+            .frame(minHeight: 20)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+    }
+
+}
+
+/// A solid rule keeps both calculation boundaries equally visible.
+private struct EnergySettingsCalculationRule: View {
+
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        Rectangle()
+            .fill(Color(white: scheme == .dark ? 0.35 : 0.7))
+            .frame(height: 1)
+            .accessibilityHidden(true)
+    }
+}
+
+/// Renders inset edge shading above the calculation's separate backgrounds.
+private struct EnergySettingsCardEdges: View {
+
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 20, style: .continuous)
+            .fill(
+                (scheme == .dark ? Color.black : Color.white)
+                    .shadow(.inner(
+                        color: scheme == .dark
+                            ? Color(white: 0.5).opacity(0.2)
+                            : Color(red: 197/255, green: 197/255, blue: 197/255).opacity(0.5),
+                        radius: 2,
+                        x: 2,
+                        y: 2
+                    ))
+                    .shadow(.inner(
+                        color: scheme == .dark ? Color(white: 0.2).opacity(0.2) : Color.white,
+                        radius: 2,
+                        x: -2,
+                        y: -2
+                    ))
+            )
+            .blendMode(scheme == .dark ? .screen : .multiply)
+    }
 }
 
 /// Inset appearance shared by the energy settings cards.
