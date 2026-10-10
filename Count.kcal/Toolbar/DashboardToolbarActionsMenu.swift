@@ -9,11 +9,15 @@ struct DashboardToolbarActionsMenu: View {
     var body: some View {
         Menu {
             Button(action: toggleCalendar) {
-                Label("Calendar", systemImage: "calendar")
+                Label {
+                    Text("Calendar")
+                } icon: {
+                    Image(.customCalendarFill)
+                }
             }
 
             Button(action: openSettings) {
-                Label("Settings", systemImage: "gear")
+                Label("Settings", systemImage: "gearshape.fill")
             }
         } label: {
             Image(systemName: "ellipsis.circle")

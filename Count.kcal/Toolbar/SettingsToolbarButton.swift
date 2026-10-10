@@ -6,7 +6,7 @@ struct SettingsToolbarButton: View {
 
     var body: some View {
         Button(action: openSettings) {
-            Image(systemName: "gear")
+            Image(systemName: "gearshape.fill")
                 .foregroundStyle(Color("TextColor"))
                 .fontWeight(.medium)
         }

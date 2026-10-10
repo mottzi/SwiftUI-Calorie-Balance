@@ -9,7 +9,7 @@ struct CalendarToolbarButton: View {
 
     var body: some View {
         Button(action: toggleCalendar) {
-            Image(showCalendar ? .customCalendarSlash : .customCalendar)
+            Image(showCalendar ? .customCalendarSlashFill : .customCalendarFill)
                 .symbolRenderingMode(.palette)
                 .foregroundStyle(Color("TextColor"))
                 .fontWeight(.medium)
