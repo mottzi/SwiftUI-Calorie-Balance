@@ -4,17 +4,13 @@ import WidgetKit
 /// Daily energy, nutrient, and step summary.
 struct Dashboard: View {
 
-    @Binding var todayPageMode: PagerSelection
-    var calorieCardPressTrigger: Int = 0
+    @Binding var todayPageMode: TodayPageMode
 
     var nutrientGoals: NutrientGoals? = nil
     
     var body: some View {
         VStack(spacing: 20) {
-            DashboardCalories(
-                todayPageMode: $todayPageMode,
-                calorieCardPressTrigger: calorieCardPressTrigger
-            )
+            DashboardCalories(todayPageMode: $todayPageMode)
             MacroCard(goals: nutrientGoals)
             DashboardSteps()
         }
@@ -27,8 +23,7 @@ private struct DashboardCalories: View {
 
     @Environment(HealthInterface.self) private var day
 
-    @Binding var todayPageMode: PagerSelection
-    let calorieCardPressTrigger: Int
+    @Binding var todayPageMode: TodayPageMode
 
     var body: some View {
         Card(
@@ -38,10 +33,7 @@ private struct DashboardCalories: View {
             innerPadding: 0
         ) {
             if day.isTodayPage {
-                CaloriesMidnightCard(
-                    todayPageMode: $todayPageMode,
-                    pressTrigger: calorieCardPressTrigger
-                )
+                CaloriesMidnightCard(todayPageMode: $todayPageMode)
             } else {
                 CaloriesCard(mode: .now)
                     // Reserve the same depth without changing the face height on other days.
@@ -61,7 +53,7 @@ extension DashboardCalories {
 
     private var subtitle: String {
         if day.isTodayPage {
-            if todayPageMode == .second {
+            if todayPageMode.selection == .second {
                 return String(localized: "Midnight")
             } else {
                 return String(localized: "Now, \((day.sample.lastDataSync ?? .now).shortTime)")

@@ -4,7 +4,7 @@ import SwiftUI
 struct DashboardToolbar: ToolbarContent {
 
     let navigation: DayPager
-    @Binding var todayPageMode: PagerSelection
+    @Binding var todayPageMode: TodayPageMode
     @Binding var showCalendar: Bool
     @Binding var showSettings: Bool
     @Binding var currentMonth: Date
@@ -12,7 +12,6 @@ struct DashboardToolbar: ToolbarContent {
     let controlsDisabled: Bool
     let streakColor: Color
     let selectDay: (Date) -> Void
-    let onToggleTodayMode: () -> Void
 
     @Environment(\.dynamicTypeSize) private var dynamicType
 
@@ -23,8 +22,7 @@ struct DashboardToolbar: ToolbarContent {
                 todayPageMode: $todayPageMode,
                 currentMonth: $currentMonth,
                 controlsDisabled: controlsDisabled,
-                selectDay: selectDay,
-                onToggleTodayMode: onToggleTodayMode
+                selectDay: selectDay
             )
         }
 

@@ -7,19 +7,18 @@ struct TodayToolbarButton: View {
 
     let navigation: DayPager
 
-    @Binding var todayPageMode: PagerSelection
+    @Binding var todayPageMode: TodayPageMode
     @Binding var currentMonth: Date
 
     let controlsDisabled: Bool
     let selectDay: (Date) -> Void
-    let onToggleTodayMode: () -> Void
 
     var body: some View {
         Button(action: selectToday) {
             Image(
                 systemName: !isTodaySelected
                     ? "arrow.turn.down.left"
-                    : todayPageMode == .first ? "sun.min.fill" : "moon.stars.fill"
+                    : todayPageMode.selection == .first ? "sun.min.fill" : "moon.stars.fill"
             )
             .foregroundStyle(Color("TextColor"))
             .contentTransition(.symbolEffect(.replace))
@@ -43,8 +42,7 @@ extension TodayToolbarButton {
                 withAnimation(reduceMotion ? nil : .snappy) { currentMonth = now }
             }
         } else {
-            withAnimation(reduceMotion ? nil : .snappy) { todayPageMode.toggle() }
-            onToggleTodayMode()
+            withAnimation(reduceMotion ? nil : .snappy) { todayPageMode.toggle(from: .toolbar) }
         }
     }
 
@@ -61,7 +59,7 @@ extension TodayToolbarButton {
     }
 
     private var actionLabel: LocalizedStringKey {
-        !isTodaySelected ? "Today" : todayPageMode == .first ? "Midnight" : "Now"
+        !isTodaySelected ? "Today" : todayPageMode.selection == .first ? "Midnight" : "Now"
     }
 
 }

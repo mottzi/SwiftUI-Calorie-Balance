@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		289AE5A61255430F997770B1 /* RecessedCardStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D419EC4A82544CCFB66103F5 /* RecessedCardStyle.swift */; };
 		C8F4A0010000000000000001 /* OtherSettingsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F4A0010000000000000002 /* OtherSettingsCard.swift */; };
         A2C000000000000000000005 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = A2C000000000000000000006; };
         A2C000000000000000000007 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = A2C000000000000000000006; };
@@ -208,6 +209,9 @@
 		FC3B2F4B964044E19E262D44 /* EnergyContourTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A66DF8DC163478A88AA8FAF /* EnergyContourTimelineProvider.swift */; };
 		ADED0EB65DD244A79A988FBE /* EnergyContourComplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED8078CC4F4489FB33FBAE8 /* EnergyContourComplication.swift */; };
 		85CE27CADD4746C69CBD2727 /* EnergyContourDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D69C69EF65464391E06FF1 /* EnergyContourDrawing.swift */; };
+		A6CA10000000000000000002 /* TodayPageMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CA10000000000000000001; };
+		A6CA10000000000000000004 /* RecessedPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CA10000000000000000003; };
+		A6CA10000000000000000006 /* RecessedPressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CA10000000000000000005; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -272,6 +276,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D419EC4A82544CCFB66103F5 /* RecessedCardStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecessedCardStyle.swift; path = Count.kcal/Dashboard/RecessedCardStyle.swift; sourceTree = SOURCE_ROOT; };
 		C8F4A0010000000000000002 /* OtherSettingsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherSettingsCard.swift; sourceTree = "<group>"; };
 		EDC7581F17D24EE196D1EA21 /* ProgressHealthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressHealthRepository.swift; sourceTree = "<group>"; };
 		00B9F8B8C7AE409C9D8D82F0 /* DayChoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayChoice.swift; sourceTree = "<group>"; };
@@ -408,6 +413,9 @@
 		4A66DF8DC163478A88AA8FAF /* EnergyContourTimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyContourTimelineProvider.swift; sourceTree = "<group>"; };
 		9ED8078CC4F4489FB33FBAE8 /* EnergyContourComplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyContourComplication.swift; sourceTree = "<group>"; };
 		F9D69C69EF65464391E06FF1 /* EnergyContourDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyContourDrawing.swift; sourceTree = "<group>"; };
+		A6CA10000000000000000001 /* TodayPageMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TodayPageMode.swift; path = Count.kcal/Dashboard/TodayPageMode.swift; sourceTree = SOURCE_ROOT; };
+		A6CA10000000000000000003 /* RecessedPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecessedPress.swift; path = Count.kcal/Dashboard/RecessedPress.swift; sourceTree = SOURCE_ROOT; };
+		A6CA10000000000000000005 /* RecessedPressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecessedPressTests.swift; path = Count.kcalTests/RecessedPressTests.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -614,6 +622,9 @@
 			children = (
 				9A001C3E29B6122500BB42B9 /* Dashboard.swift */,
 				9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */,
+				D419EC4A82544CCFB66103F5 /* RecessedCardStyle.swift */,
+				A6CA10000000000000000003 /* RecessedPress.swift */,
+				A6CA10000000000000000001 /* TodayPageMode.swift */,
 				9A6DA88B2B361A7D00585788 /* CaloriesCard */,
 				9AAF6E512B3F1E9E00B9363E /* NutritionCard */,
 			);
@@ -874,7 +885,7 @@
 			path = Toolbar;
 			sourceTree = "<group>";
 		};
-        A3C000000000000000000002 /* Count.kcalTests */ = {isa = PBXGroup; children = (A3C000000000000000000004,); path = Count.kcalTests; sourceTree = "<group>"; };
+        A3C000000000000000000002 /* Count.kcalTests */ = {isa = PBXGroup; children = (A3C000000000000000000004, A6CA10000000000000000005,); path = Count.kcalTests; sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1131,6 +1142,9 @@
 				6AB4983DAA32421CBD303058 /* ProgressDetails.swift in Sources */,
 
 				9A3F8EAA2B348C1F00B0DC74 /* CaloriesMidnightCard.swift in Sources */,
+				289AE5A61255430F997770B1 /* RecessedCardStyle.swift in Sources */,
+				A6CA10000000000000000004 /* RecessedPress.swift in Sources */,
+				A6CA10000000000000000002 /* TodayPageMode.swift in Sources */,
 				9A9BC9BE2A7E9C7300A4404A /* ReachableView.swift in Sources */,
 				9A0D04FE2C165E6B00AF7247 /* Connectivity.swift in Sources */,
 				9A7CC5342C6A3F3E0061451D /* StepsCard.swift in Sources */,
@@ -1315,7 +1329,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-        A3C000000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A3C000000000000000000005,); runOnlyForDeploymentPostprocessing = 0; };
+        A3C000000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A3C000000000000000000005, A6CA10000000000000000006,); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
