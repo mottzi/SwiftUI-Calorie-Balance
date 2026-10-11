@@ -87,7 +87,11 @@ extension CalorieBarRowLayout {
             let desiredCenter: CGFloat
             let maximumCenter: CGFloat
 
-            if permitsOverflow {
+            if start == 0 {
+                minimumCenter = inset + halfWidth
+                maximumCenter = width - inset - halfWidth
+                desiredCenter = centered
+            } else if permitsOverflow {
                 minimumCenter = inset + halfWidth
                 maximumCenter = min(end - inset - halfWidth, width - inset - halfWidth)
                 desiredCenter = glyphWidth + 2 * inset <= end - start ? centered : maximumCenter
