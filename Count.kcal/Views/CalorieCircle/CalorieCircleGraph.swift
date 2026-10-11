@@ -22,7 +22,7 @@ struct CalorieCircleGraph: View {
             }
         }
         .animation(
-            reduceMotion ? nil : .easeInOut(duration: min(max(configuration.animationDuration, 0), 2)),
+            reduceMotion ? nil : .bouncy(duration: min(max(configuration.animationDuration, 0), 2)),
             value: values
         )
         .graphColorAppearance()

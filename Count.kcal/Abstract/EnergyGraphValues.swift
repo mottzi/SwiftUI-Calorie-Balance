@@ -23,9 +23,12 @@ struct EnergyGraphValues: Equatable {
 
     /// Active, recorded resting, projected resting, and unused shares of the common scale.
     var burnedSegments: [Segment] {
-        let activeEnd = ratio(of: active)
-        let restingEnd = ratio(of: active + resting)
-        let burnedEnd = ratio(of: burned)
+        // Springs may overshoot zero; keep the drawn partition ordered without changing animation data.
+        let activeEnergy = max(0, active)
+        let recordedEnergy = activeEnergy + max(0, resting)
+        let activeEnd = ratio(of: activeEnergy)
+        let restingEnd = ratio(of: recordedEnergy)
+        let burnedEnd = ratio(of: recordedEnergy + max(0, restingRemaining))
         return [
             Segment(id: .active, range: 0...activeEnd),
             Segment(id: .resting, range: activeEnd...restingEnd),
@@ -47,10 +50,8 @@ struct EnergyGraphValues: Equatable {
 
 extension EnergyGraphValues {
 
-    private var burned: Double { active + resting + restingRemaining }
-
     private func ratio(of amount: Double) -> Double {
-        return graphScale > 0 ? min(max(amount / graphScale, 0), 1) * presence : 0
+        return graphScale > 0 ? min(max(amount / graphScale, 0), 1) * min(max(presence, 0), 1) : 0
     }
 
     struct Segment: Identifiable {
