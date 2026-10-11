@@ -16,7 +16,7 @@ struct CircleBalanceGraphWatch: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let diameter = min(geometry.size.width, geometry.size.height)
+            let diameter = context == .app ? geometry.size.width : min(geometry.size.width, geometry.size.height)
 
             CalorieCircleGraph(
                 energy: mode == .now ? day.sample.now : day.sample.midnight,
@@ -29,7 +29,8 @@ struct CircleBalanceGraphWatch: View {
                 palette: palette,
                 rendering: context == .app || context == .toolbar ? .live : .widget
             )
-            .frame(maxWidth: .infinity)
+            .frame(width: diameter, height: diameter)
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
     }
 
