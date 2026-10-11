@@ -29,11 +29,15 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
       <Testables>
-         <TestableReference skipped = "NO">
-            <BuildableReference BuildableIdentifier = "primary"
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "A3C000000000000000000001"
-               BuildableName = "Count.kcalTests.xctest" BlueprintName = "Count.kcalTests"
-               ReferencedContainer = "container:Count.kcal.xcodeproj" />
+               BuildableName = "Count.kcalTests.xctest"
+               BlueprintName = "Count.kcalTests"
+               ReferencedContainer = "container:Count.kcal.xcodeproj">
+            </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>
