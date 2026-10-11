@@ -1,6 +1,6 @@
 # Circle balance graph animation
 
-Researched on 2026-10-11 against Apple documentation, WWDC sessions, and the installed Xcode 27.0 SDK interface. No implementation or tests were changed.
+Researched on 2026-10-11 against Apple documentation, WWDC sessions, and the installed Xcode 27.0 SDK interface.
 
 ## Architecture decision
 
@@ -33,6 +33,14 @@ The following is a mathematical inference, not a separate Apple rendering guaran
 Attach a single `.animation(_:value:)` using the complete energy input. In live apps this animates the raw-value driver, whose descendant transaction disables additional interpolation. Each frame then uses one normalized partition for every endpoint and gap. In widgets the driver and its descendant transaction override are absent, allowing the native trim endpoints to receive the system animation. Apple explains that transactions carry animation context and built-in animatable attributes interpolate their presentation values without calling application view code. [Explore SwiftUI animation, WWDC23](https://developer.apple.com/videos/play/wwdc2023/10156/).
 
 The graph uses `.bouncy` with its default duration of 0.5 seconds, adjustable through configuration. Reduce Motion disables animation. Live drawing clamps energy components to zero and presence to `0...1`, keeping segment ranges valid during spring overshoot. Stored animation data remains unchanged so these bounds do not alter the spring's motion.
+
+## Widget view identity
+
+The ring's `ForEach` uses the stable string raw value of `EnergyGraphValues.Part` as its identity. Using the enum value directly preserved identity in the app but caused Home Screen widget arcs to jump between snapshots in this composition. Replacing the collection with fixed structural children restored interpolation. Keeping the collection and changing only its identities to strings also restored interpolation, without changing calculations, the native circle trims, or the animation trigger.
+
+This was reproduced on an iOS 27 Simulator with Reduce Motion off. A recording of the original Now/Midnight toggle loop contained 105 frames and zero intermediate consumed-arc endpoint positions. The same loop with string identities contained 101 frames, including 53 intermediate frames with 14 distinct intermediate angles. Small and medium widgets shared the update. The test sampled the colored arc rather than the animated numbers or widget dimming.
+
+This is an observed archive-matching behavior, not an Apple-documented restriction on enum identities. `ForEach` requires a `Hashable` identity, and `.animation(_:value:)` requires an `Equatable` trigger. The complete `EnergyGraphValues` trigger remains unchanged. A unit test of the partition math cannot exercise this WidgetKit archive behavior; the regression check must run in a real widget host. [ForEach](https://developer.apple.com/documentation/swiftui/foreach), [Widget animation guidance](https://developer.apple.com/documentation/widgetkit/animating-data-updates-in-widgets-and-live-activities).
 
 ## Energy interpolation versus endpoint interpolation
 

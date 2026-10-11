@@ -17,7 +17,8 @@ struct CalorieCircleRing: View {
             gapWidth: configuration.segmentGap
         )
         ZStack {
-            ForEach(Array(zip(segments, ring.ranges)), id: \.0.id) { segment, range in
+            // String IDs preserve arc matching between WidgetKit's archived snapshots.
+            ForEach(Array(zip(segments, ring.ranges)), id: \.0.id.rawValue) { segment, range in
                 CalorieCircleArc(
                     range: range,
                     fill: palette.fill(for: segment.id),

@@ -59,7 +59,7 @@ extension EnergyGraphValues {
         let range: ClosedRange<Double>
     }
 
-    enum Part: Hashable {
+    enum Part: String, Hashable {
         case active
         case resting
         case prediction
