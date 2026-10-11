@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Shows recorded or projected energy in two horizontal bars.
+/// Recorded or projected energy in two horizontal bars.
 struct BarBalanceGraph: View {
 
     @Environment(\.colorScheme) private var scheme: ColorScheme

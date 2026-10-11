@@ -1,4 +1,4 @@
-/// Selects live interpolation or native geometry for WidgetKit archives.
+/// Live energy interpolation or native geometry animation in WidgetKit archives.
 enum CalorieGraphRendering {
     case live
     case widget

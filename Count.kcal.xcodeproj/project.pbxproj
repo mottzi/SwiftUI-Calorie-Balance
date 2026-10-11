@@ -211,40 +211,28 @@
 		EE142DF73F30489389C8F144 /* EnergyGraphValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45640165714DB38B1CBB11 /* EnergyGraphValues.swift */; };
 		B9B5F8B50FC64D56B3500C7D /* GraphMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D7796099864343922AE591 /* GraphMode.swift */; };
 		4E015F66A1034D988F0DE47A /* CalorieCircleGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = B521FF9AAD6B465985641C0E /* CalorieCircleGraph.swift */; };
-		FDC96A2290BD416882A009F4 /* CalorieCircleDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548A7C0355CA4465A52DF3AA /* CalorieCircleDrawing.swift */; };
-		AD97A08C19154EC8B444577A /* AnimatedCalorieGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0645D5F5417C44B2879DFA0C /* AnimatedCalorieGraph.swift */; };
-		E097796FBEC2438EA98D7176 /* CalorieCircleRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604E0F633C984A26881EA698 /* CalorieCircleRing.swift */; };
-		CC109DC7629642EF8E06AAF5 /* CalorieCircleArc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C437787DE8424ADEBFC7084D /* CalorieCircleArc.swift */; };
+		AD97A08C19154EC8B444577A /* CalorieGraphDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0645D5F5417C44B2879DFA0C /* CalorieGraphDrawing.swift */; };
 		D998DBB737E944CFA963A5D1 /* CalorieCircleConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8918DDE3C54BC7B2CD67A9 /* CalorieCircleConfiguration.swift */; };
 		DB301A043DF04F1E9FD53263 /* CalorieGraphPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A496372CD0407F880F1B24 /* CalorieGraphPalette.swift */; };
 		903A52FF55EB4808A79B7CF7 /* CircleRingSegments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C395FCB380440B9FE36D25 /* CircleRingSegments.swift */; };
 		49746949C4E349F39D34E496 /* EnergyGraphValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45640165714DB38B1CBB11 /* EnergyGraphValues.swift */; };
 		27937A1DA0BE47238FC49CAB /* GraphMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D7796099864343922AE591 /* GraphMode.swift */; };
 		389DE66E0C5C4D4BB94117DF /* CalorieCircleGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = B521FF9AAD6B465985641C0E /* CalorieCircleGraph.swift */; };
-		4E2A6526E42E45F69F388CFF /* CalorieCircleDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548A7C0355CA4465A52DF3AA /* CalorieCircleDrawing.swift */; };
-		73E6F7B46C2748558A7DFC00 /* AnimatedCalorieGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0645D5F5417C44B2879DFA0C /* AnimatedCalorieGraph.swift */; };
-		8DE3513F3B39463FA0451D18 /* CalorieCircleRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604E0F633C984A26881EA698 /* CalorieCircleRing.swift */; };
-		AB29D21FCACE4B2FACAE9DAE /* CalorieCircleArc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C437787DE8424ADEBFC7084D /* CalorieCircleArc.swift */; };
+		73E6F7B46C2748558A7DFC00 /* CalorieGraphDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0645D5F5417C44B2879DFA0C /* CalorieGraphDrawing.swift */; };
 		CC8C8254FA604B8BB810D036 /* CalorieCircleConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8918DDE3C54BC7B2CD67A9 /* CalorieCircleConfiguration.swift */; };
 		35991796C1E048E5AED83FB2 /* CalorieGraphPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A496372CD0407F880F1B24 /* CalorieGraphPalette.swift */; };
 		E46751F26FC940F9AA74E19E /* CircleRingSegments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C395FCB380440B9FE36D25 /* CircleRingSegments.swift */; };
 		D8E13A41634B441F87CD1B9D /* EnergyGraphValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45640165714DB38B1CBB11 /* EnergyGraphValues.swift */; };
 		3723F7723C6742DABD7FBA17 /* GraphMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D7796099864343922AE591 /* GraphMode.swift */; };
 		9AF0D31DFAC940BBAA3C4E64 /* CalorieCircleGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = B521FF9AAD6B465985641C0E /* CalorieCircleGraph.swift */; };
-		952528ABDB4A43CF8D693792 /* CalorieCircleDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548A7C0355CA4465A52DF3AA /* CalorieCircleDrawing.swift */; };
-		F555F004AAE64C8DA082890F /* AnimatedCalorieGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0645D5F5417C44B2879DFA0C /* AnimatedCalorieGraph.swift */; };
-		9DA76A635CED41F7BA0C6D2F /* CalorieCircleRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604E0F633C984A26881EA698 /* CalorieCircleRing.swift */; };
-		8E511B4247E747E7973C1F64 /* CalorieCircleArc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C437787DE8424ADEBFC7084D /* CalorieCircleArc.swift */; };
+		F555F004AAE64C8DA082890F /* CalorieGraphDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0645D5F5417C44B2879DFA0C /* CalorieGraphDrawing.swift */; };
 		05F571E820194E6AA476B44A /* CalorieCircleConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8918DDE3C54BC7B2CD67A9 /* CalorieCircleConfiguration.swift */; };
 		DCC9F532F2324F1199A26DC8 /* CalorieGraphPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A496372CD0407F880F1B24 /* CalorieGraphPalette.swift */; };
 		7CEC765C75D14474A1CEBFD0 /* CircleRingSegments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C395FCB380440B9FE36D25 /* CircleRingSegments.swift */; };
 		EA1FF0C0F000498B98C04910 /* EnergyGraphValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45640165714DB38B1CBB11 /* EnergyGraphValues.swift */; };
 		978EFE38DC7B4AD994B26653 /* GraphMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64D7796099864343922AE591 /* GraphMode.swift */; };
 		02A918CDBC744804AD96689E /* CalorieCircleGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = B521FF9AAD6B465985641C0E /* CalorieCircleGraph.swift */; };
-		8E240D69127845889B9B47A5 /* CalorieCircleDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548A7C0355CA4465A52DF3AA /* CalorieCircleDrawing.swift */; };
-		D7F7073B2ED04966BB5B3A46 /* AnimatedCalorieGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0645D5F5417C44B2879DFA0C /* AnimatedCalorieGraph.swift */; };
-		FFABFD4075164A4E8EF24893 /* CalorieCircleRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604E0F633C984A26881EA698 /* CalorieCircleRing.swift */; };
-		E503A3E1664A45AFA4DD5837 /* CalorieCircleArc.swift in Sources */ = {isa = PBXBuildFile; fileRef = C437787DE8424ADEBFC7084D /* CalorieCircleArc.swift */; };
+		D7F7073B2ED04966BB5B3A46 /* CalorieGraphDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0645D5F5417C44B2879DFA0C /* CalorieGraphDrawing.swift */; };
 		B3A241AE58B7400C8EC75AEA /* CalorieCircleConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8918DDE3C54BC7B2CD67A9 /* CalorieCircleConfiguration.swift */; };
 		FA374DE9CAAB4834A801CF9D /* CalorieGraphPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A496372CD0407F880F1B24 /* CalorieGraphPalette.swift */; };
 		BC4FCFA9C7CC48B9982A4608 /* CircleRingSegments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C395FCB380440B9FE36D25 /* CircleRingSegments.swift */; };
@@ -254,8 +242,6 @@
 		C34610991F72455AAAFCC5DD /* CalorieGraphAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6431EAA3DE14B1FBF925FC5 /* CalorieGraphAnimation.swift */; };
 		803EEA5CE57845C5B58A875E /* CalorieBarConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D237BB051524252BD4A38C1 /* CalorieBarConfiguration.swift */; };
 		D5BF134C0E3E42F7B033600D /* CalorieBarConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D237BB051524252BD4A38C1 /* CalorieBarConfiguration.swift */; };
-		53348E7EA82148068B159B9B /* CalorieBarFill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF5602730744B7FA2D28390 /* CalorieBarFill.swift */; };
-		0365F426488A447EB86474EE /* CalorieBarFill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF5602730744B7FA2D28390 /* CalorieBarFill.swift */; };
 		0CBD16EF40434509AF03A88F /* CalorieBarGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5291882B33A042CAAEB3F2AF /* CalorieBarGraph.swift */; };
 		C272A1B9BD56492DBEB00C6B /* CalorieBarGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5291882B33A042CAAEB3F2AF /* CalorieBarGraph.swift */; };
 		92297C55B0614268BEA29EC0 /* CalorieBarLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA8D2BEE0304E268EF7BCC0 /* CalorieBarLabel.swift */; };
@@ -268,8 +254,6 @@
 		D003C466753B4570BEAB52ED /* CalorieGraphRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C22D79D56BF4652B8B520AE /* CalorieGraphRendering.swift */; };
 		00802B3EF27B4087ADA9BA43 /* CalorieGraphRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C22D79D56BF4652B8B520AE /* CalorieGraphRendering.swift */; };
 		79DA7A94C1494E6FA15A80AD /* CalorieGraphRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C22D79D56BF4652B8B520AE /* CalorieGraphRendering.swift */; };
-		09D9294B8FF64234A05BD002 /* CalorieBarFillDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469BE7C6C8ED416CA2DC8394 /* CalorieBarFillDrawing.swift */; };
-		48ACD55E6B5241969B6C8108 /* CalorieBarFillDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469BE7C6C8ED416CA2DC8394 /* CalorieBarFillDrawing.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -476,22 +460,17 @@
 		FA45640165714DB38B1CBB11 /* EnergyGraphValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyGraphValues.swift; sourceTree = "<group>"; };
 		64D7796099864343922AE591 /* GraphMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphMode.swift; sourceTree = "<group>"; };
 		B521FF9AAD6B465985641C0E /* CalorieCircleGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieCircleGraph.swift; sourceTree = "<group>"; };
-		548A7C0355CA4465A52DF3AA /* CalorieCircleDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieCircleDrawing.swift; sourceTree = "<group>"; };
-		0645D5F5417C44B2879DFA0C /* AnimatedCalorieGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedCalorieGraph.swift; sourceTree = "<group>"; };
-		604E0F633C984A26881EA698 /* CalorieCircleRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieCircleRing.swift; sourceTree = "<group>"; };
-		C437787DE8424ADEBFC7084D /* CalorieCircleArc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieCircleArc.swift; sourceTree = "<group>"; };
+		0645D5F5417C44B2879DFA0C /* CalorieGraphDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieGraphDrawing.swift; sourceTree = "<group>"; };
 		6C8918DDE3C54BC7B2CD67A9 /* CalorieCircleConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieCircleConfiguration.swift; sourceTree = "<group>"; };
 		D0A496372CD0407F880F1B24 /* CalorieGraphPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieGraphPalette.swift; sourceTree = "<group>"; };
 		87C395FCB380440B9FE36D25 /* CircleRingSegments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleRingSegments.swift; sourceTree = "<group>"; };
 		D6431EAA3DE14B1FBF925FC5 /* CalorieGraphAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieGraphAnimation.swift; sourceTree = "<group>"; };
 		3D237BB051524252BD4A38C1 /* CalorieBarConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieBarConfiguration.swift; sourceTree = "<group>"; };
-		6BF5602730744B7FA2D28390 /* CalorieBarFill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieBarFill.swift; sourceTree = "<group>"; };
 		5291882B33A042CAAEB3F2AF /* CalorieBarGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieBarGraph.swift; sourceTree = "<group>"; };
 		0FA8D2BEE0304E268EF7BCC0 /* CalorieBarLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieBarLabel.swift; sourceTree = "<group>"; };
 		48543904A61A44158900D848 /* CalorieBarRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieBarRow.swift; sourceTree = "<group>"; };
 		766FCB1869F74BE582C4AA85 /* CalorieBarRowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieBarRowLayout.swift; sourceTree = "<group>"; };
 		6C22D79D56BF4652B8B520AE /* CalorieGraphRendering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieGraphRendering.swift; sourceTree = "<group>"; };
-		469BE7C6C8ED416CA2DC8394 /* CalorieBarFillDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieBarFillDrawing.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -893,8 +872,6 @@
 				9AA72DA72B02C33000E32650 /* BarBalanceGraph.swift */,
 				9ABFA7A12C0A3A6200024D2F /* CircleBalanceGraph.swift */,
 				F8B624ACFA054284816E9769 /* CalorieGraph */,
-				166C7DA781AB44B5844FC784 /* CalorieBar */,
-				5A0A272E9AFE42C6AA0B9C9C /* CalorieCircle */,
 				9AA785262B21CD9D007305F6 /* CircleProgressView.swift */,
 				9ABBD8FE2BE8213F003EC608 /* WeekBalanceGraph.swift */,
 				9AE3D3A42B7970EC00483339 /* CDatePicker.swift */,
@@ -928,7 +905,6 @@
 			children = (
 				9AF39CBB2B3E2E7A0037628F /* HealthData.swift */,
 				9A3B60142C1E77E0006000B4 /* EnergyBalance.swift */,
-				FA45640165714DB38B1CBB11 /* EnergyGraphValues.swift */,
 				64D7796099864343922AE591 /* GraphMode.swift */,
 				9AD25EBD2A656A5E00C6E6E1 /* HealthInterface.swift */,
 				D7A8097F63844ED785702A10 /* DayPager.swift */,
@@ -965,17 +941,14 @@
 			sourceTree = "<group>";
 		};
         A3C000000000000000000002 /* Count.kcalTests */ = {isa = PBXGroup; children = (A3C000000000000000000004, A6CA10000000000000000005, BAF100000000000000000001,); path = Count.kcalTests; sourceTree = "<group>"; };
-		5A0A272E9AFE42C6AA0B9C9C /* CalorieCircle */ = {
+		5A0A272E9AFE42C6AA0B9C9C /* Circle */ = {
 			isa = PBXGroup;
 			children = (
 				B521FF9AAD6B465985641C0E /* CalorieCircleGraph.swift */,
-				548A7C0355CA4465A52DF3AA /* CalorieCircleDrawing.swift */,
-				604E0F633C984A26881EA698 /* CalorieCircleRing.swift */,
-				C437787DE8424ADEBFC7084D /* CalorieCircleArc.swift */,
 				6C8918DDE3C54BC7B2CD67A9 /* CalorieCircleConfiguration.swift */,
 				87C395FCB380440B9FE36D25 /* CircleRingSegments.swift */,
 			);
-			path = CalorieCircle;
+			path = Circle;
 			sourceTree = "<group>";
 		};
 		F8B624ACFA054284816E9769 /* CalorieGraph */ = {
@@ -984,23 +957,24 @@
 				D6431EAA3DE14B1FBF925FC5 /* CalorieGraphAnimation.swift */,
 				D0A496372CD0407F880F1B24 /* CalorieGraphPalette.swift */,
 				6C22D79D56BF4652B8B520AE /* CalorieGraphRendering.swift */,
-				0645D5F5417C44B2879DFA0C /* AnimatedCalorieGraph.swift */,
+				0645D5F5417C44B2879DFA0C /* CalorieGraphDrawing.swift */,
+				FA45640165714DB38B1CBB11 /* EnergyGraphValues.swift */,
+				166C7DA781AB44B5844FC784 /* Bar */,
+				5A0A272E9AFE42C6AA0B9C9C /* Circle */,
 			);
 			path = CalorieGraph;
 			sourceTree = "<group>";
 		};
-		166C7DA781AB44B5844FC784 /* CalorieBar */ = {
+		166C7DA781AB44B5844FC784 /* Bar */ = {
 			isa = PBXGroup;
 			children = (
 				3D237BB051524252BD4A38C1 /* CalorieBarConfiguration.swift */,
-				6BF5602730744B7FA2D28390 /* CalorieBarFill.swift */,
-				469BE7C6C8ED416CA2DC8394 /* CalorieBarFillDrawing.swift */,
 				5291882B33A042CAAEB3F2AF /* CalorieBarGraph.swift */,
 				0FA8D2BEE0304E268EF7BCC0 /* CalorieBarLabel.swift */,
 				48543904A61A44158900D848 /* CalorieBarRow.swift */,
 				766FCB1869F74BE582C4AA85 /* CalorieBarRowLayout.swift */,
 			);
-			path = CalorieBar;
+			path = Bar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1248,11 +1222,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				09D9294B8FF64234A05BD002 /* CalorieBarFillDrawing.swift in Sources */,
 				3D29542B8C95410D9D4C1817 /* CalorieGraphRendering.swift in Sources */,
 				261684F3FDDA451CAFB1F944 /* CalorieGraphAnimation.swift in Sources */,
 				803EEA5CE57845C5B58A875E /* CalorieBarConfiguration.swift in Sources */,
-				53348E7EA82148068B159B9B /* CalorieBarFill.swift in Sources */,
 				0CBD16EF40434509AF03A88F /* CalorieBarGraph.swift in Sources */,
 				92297C55B0614268BEA29EC0 /* CalorieBarLabel.swift in Sources */,
 				E69F7C4C41F74644B6842092 /* CalorieBarRow.swift in Sources */,
@@ -1260,10 +1232,7 @@
 				EE142DF73F30489389C8F144 /* EnergyGraphValues.swift in Sources */,
 				B9B5F8B50FC64D56B3500C7D /* GraphMode.swift in Sources */,
 				4E015F66A1034D988F0DE47A /* CalorieCircleGraph.swift in Sources */,
-				FDC96A2290BD416882A009F4 /* CalorieCircleDrawing.swift in Sources */,
-				AD97A08C19154EC8B444577A /* AnimatedCalorieGraph.swift in Sources */,
-				E097796FBEC2438EA98D7176 /* CalorieCircleRing.swift in Sources */,
-				CC109DC7629642EF8E06AAF5 /* CalorieCircleArc.swift in Sources */,
+				AD97A08C19154EC8B444577A /* CalorieGraphDrawing.swift in Sources */,
 				D998DBB737E944CFA963A5D1 /* CalorieCircleConfiguration.swift in Sources */,
 				DB301A043DF04F1E9FD53263 /* CalorieGraphPalette.swift in Sources */,
 				903A52FF55EB4808A79B7CF7 /* CircleRingSegments.swift in Sources */,
@@ -1355,11 +1324,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48ACD55E6B5241969B6C8108 /* CalorieBarFillDrawing.swift in Sources */,
 				D003C466753B4570BEAB52ED /* CalorieGraphRendering.swift in Sources */,
 				F7AAE01990054A5A9EE01A2D /* CalorieGraphAnimation.swift in Sources */,
 				D5BF134C0E3E42F7B033600D /* CalorieBarConfiguration.swift in Sources */,
-				0365F426488A447EB86474EE /* CalorieBarFill.swift in Sources */,
 				C272A1B9BD56492DBEB00C6B /* CalorieBarGraph.swift in Sources */,
 				CEC8FC2F0DEA403FAE95A768 /* CalorieBarLabel.swift in Sources */,
 				C31708DD86F64A809AC0005C /* CalorieBarRow.swift in Sources */,
@@ -1367,10 +1334,7 @@
 				49746949C4E349F39D34E496 /* EnergyGraphValues.swift in Sources */,
 				27937A1DA0BE47238FC49CAB /* GraphMode.swift in Sources */,
 				389DE66E0C5C4D4BB94117DF /* CalorieCircleGraph.swift in Sources */,
-				4E2A6526E42E45F69F388CFF /* CalorieCircleDrawing.swift in Sources */,
-				73E6F7B46C2748558A7DFC00 /* AnimatedCalorieGraph.swift in Sources */,
-				8DE3513F3B39463FA0451D18 /* CalorieCircleRing.swift in Sources */,
-				AB29D21FCACE4B2FACAE9DAE /* CalorieCircleArc.swift in Sources */,
+				73E6F7B46C2748558A7DFC00 /* CalorieGraphDrawing.swift in Sources */,
 				CC8C8254FA604B8BB810D036 /* CalorieCircleConfiguration.swift in Sources */,
 				35991796C1E048E5AED83FB2 /* CalorieGraphPalette.swift in Sources */,
 				E46751F26FC940F9AA74E19E /* CircleRingSegments.swift in Sources */,
@@ -1411,10 +1375,7 @@
 				D8E13A41634B441F87CD1B9D /* EnergyGraphValues.swift in Sources */,
 				3723F7723C6742DABD7FBA17 /* GraphMode.swift in Sources */,
 				9AF0D31DFAC940BBAA3C4E64 /* CalorieCircleGraph.swift in Sources */,
-				952528ABDB4A43CF8D693792 /* CalorieCircleDrawing.swift in Sources */,
-				F555F004AAE64C8DA082890F /* AnimatedCalorieGraph.swift in Sources */,
-				9DA76A635CED41F7BA0C6D2F /* CalorieCircleRing.swift in Sources */,
-				8E511B4247E747E7973C1F64 /* CalorieCircleArc.swift in Sources */,
+				F555F004AAE64C8DA082890F /* CalorieGraphDrawing.swift in Sources */,
 				05F571E820194E6AA476B44A /* CalorieCircleConfiguration.swift in Sources */,
 				DCC9F532F2324F1199A26DC8 /* CalorieGraphPalette.swift in Sources */,
 				7CEC765C75D14474A1CEBFD0 /* CircleRingSegments.swift in Sources */,
@@ -1469,10 +1430,7 @@
 				EA1FF0C0F000498B98C04910 /* EnergyGraphValues.swift in Sources */,
 				978EFE38DC7B4AD994B26653 /* GraphMode.swift in Sources */,
 				02A918CDBC744804AD96689E /* CalorieCircleGraph.swift in Sources */,
-				8E240D69127845889B9B47A5 /* CalorieCircleDrawing.swift in Sources */,
-				D7F7073B2ED04966BB5B3A46 /* AnimatedCalorieGraph.swift in Sources */,
-				FFABFD4075164A4E8EF24893 /* CalorieCircleRing.swift in Sources */,
-				E503A3E1664A45AFA4DD5837 /* CalorieCircleArc.swift in Sources */,
+				D7F7073B2ED04966BB5B3A46 /* CalorieGraphDrawing.swift in Sources */,
 				B3A241AE58B7400C8EC75AEA /* CalorieCircleConfiguration.swift in Sources */,
 				FA374DE9CAAB4834A801CF9D /* CalorieGraphPalette.swift in Sources */,
 				BC4FCFA9C7CC48B9982A4608 /* CircleRingSegments.swift in Sources */,

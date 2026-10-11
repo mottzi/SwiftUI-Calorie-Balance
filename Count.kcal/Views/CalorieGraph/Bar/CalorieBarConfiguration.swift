@@ -9,6 +9,6 @@ struct CalorieBarConfiguration {
     var animatesNumericValues = false
     var labelSpacing: CGFloat = 4
     var labelInset: CGFloat = 4
-    var animationDuration: TimeInterval = 0.5
+    var animationDuration: TimeInterval = CalorieGraphAnimation.defaultDuration
 
 }

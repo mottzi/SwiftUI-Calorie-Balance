@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Color and opacity for each energy part and the unused graph area.
+/// Color, brightness, and opacity for each energy part and the unused graph area.
 struct CalorieGraphPalette {
 
     var active: Fill
@@ -28,6 +28,7 @@ struct CalorieGraphPalette {
         }
     }
 
+    /// The color, brightness adjustment, and opacity of one segment.
     struct Fill {
         var color: Color
         var brightness: Double

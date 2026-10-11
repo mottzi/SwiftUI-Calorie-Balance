@@ -4,8 +4,9 @@ import SwiftUI
 struct CircleBalanceGraph: View {
 
     @Environment(\.colorScheme) private var scheme
-    @EnvironmentObject private var settings: Settings
     @Environment(HealthInterface.self) private var day
+
+    @EnvironmentObject private var settings: Settings
 
     var lineWidth: CGFloat = 8
     let mode: GraphMode

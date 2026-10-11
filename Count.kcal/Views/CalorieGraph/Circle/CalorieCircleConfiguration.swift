@@ -7,7 +7,7 @@ struct CalorieCircleConfiguration {
     var ringSpacing: CGFloat = 2
     var openAngle: Angle = .degrees(90)
     var segmentGap: CGFloat = 2
-    var animationDuration: TimeInterval = 0.5
+    var animationDuration: TimeInterval = CalorieGraphAnimation.defaultDuration
 
     /// Fits both strokes inside the available square without negative ring dimensions.
     func fitted(to diameter: CGFloat) -> CalorieCircleConfiguration {

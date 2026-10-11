@@ -6,7 +6,7 @@ struct CalorieGraphAnimation: ViewModifier {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     let values: EnergyGraphValues
-    var duration: TimeInterval = 0.5
+    let duration: TimeInterval
 
     func body(content: Content) -> some View {
         content.animation(
@@ -14,5 +14,11 @@ struct CalorieGraphAnimation: ViewModifier {
             value: values
         )
     }
+
+}
+
+extension CalorieGraphAnimation {
+
+    static let defaultDuration: TimeInterval = 0.5
 
 }

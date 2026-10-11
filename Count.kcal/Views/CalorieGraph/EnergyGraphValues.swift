@@ -67,17 +67,24 @@ extension EnergyGraphValues {
         return graphScale > 0 ? min(max(amount / graphScale, 0), 1) * min(max(presence, 0), 1) : 0
     }
 
+}
+
+extension EnergyGraphValues {
+
+    /// One stable energy part, its calorie value, and its share of the graph scale.
     struct Segment: Identifiable {
         let id: Part
         let value: Double
         let range: ClosedRange<Double>
     }
 
+    /// Burned or consumed energy on the common graph scale.
     enum Side {
         case burned
         case consumed
     }
 
+    /// Stable segment identities, including projected resting energy and unused space.
     enum Part: String, Hashable {
         case active
         case resting

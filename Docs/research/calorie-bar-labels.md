@@ -31,7 +31,7 @@ Each label supplies its target visibility to the layout with `LayoutValueKey`. C
 
 ## Fill animation
 
-`CalorieBarFill` uses `AnimatedCalorieGraph` for the live app. That adapter recomputes native rectangle frames and offsets from interpolated energy values, and disables further descendant interpolation within the fill drawing. Numeric labels remain outside that suppression. The widget path bypasses the adapter and supplies complete target geometry to the same native drawing.
+`CalorieGraphDrawing` shares the rendering policy with the circle graph. Its live adapter recomputes native rectangle frames and offsets from interpolated energy values, and disables further descendant interpolation within the fill drawing. Numeric labels remain outside that suppression. The widget path bypasses the adapter and supplies complete target geometry to the same native drawing.
 
 The former custom fill layout produced a jumping blue boundary in the widget host. Replacing it with native `.frame` and `.offset` drawing restored intermediate boundary positions in the local widget comparison. This is observed behavior in this composition, not proof that all custom layouts fail to animate in WidgetKit.
 

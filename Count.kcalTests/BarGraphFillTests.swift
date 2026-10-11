@@ -90,11 +90,15 @@ struct BarGraphFillTests {
         ]
         for (color, level, context, x, bar) in shades {
             // Reproduce the existing circle's effect order, including its final dark adjustment.
-            let circle = try pixels(of: Rectangle().fill(color.gradient)
-                .brightness(level: level, to: context)
-                .saturation(Settings.baseSaturation)
-                .brightness(scheme == .dark ? -0.1 : 0)
-                .environment(\.colorScheme, scheme), width: 64, height: 16)
+            let circle = try pixels(
+                of: Rectangle().fill(color.gradient)
+                    .brightness(level: level, to: context)
+                    .saturation(Settings.baseSaturation)
+                    .brightness(scheme == .dark ? -0.1 : 0)
+                    .environment(\.colorScheme, scheme),
+                width: 64,
+                height: 16
+            )
             for y in [2, 8, 13] {
                 for channel in 0..<3 {
                     let index = (y * 64 + x) * 4 + channel
@@ -103,6 +107,42 @@ struct BarGraphFillTests {
             }
         }
     }
+
+    @Test(arguments: [ColorScheme.light, .dark])
+    func nativeCircleSegmentsRetainTheOriginalGradient(scheme: ColorScheme) throws {
+        let color = Color(.displayP3, red: 0.1, green: 0.45, blue: 0.95)
+        let segment = CircleProgressView(progress: 0.8, color: color)
+            .brightness(level: .secondary, to: .circlegraphMidnight)
+            .graphColorAppearance().environment(\.colorScheme, scheme)
+        // The previous arc geometry, without its gap mask, is the palette reference.
+        let reference = Path { path in
+            path.addArc(
+                center: CGPoint(x: 32, y: 32),
+                radius: 32,
+                startAngle: .degrees(135),
+                endAngle: .degrees(135 + 270 * 0.8),
+                clockwise: false
+            )
+        }
+        .stroke(color.gradient, lineWidth: 8)
+        .brightness(level: .secondary, to: .circlegraphMidnight)
+        .graphColorAppearance().environment(\.colorScheme, scheme)
+        let actual = try pixels(of: segment, width: 64, height: 64)
+        let expected = try pixels(of: reference, width: 64, height: 64)
+        for progress in [0.1, 0.25, 0.45, 0.6, 0.75] {
+            let angle = (135 + progress * 270) * Double.pi / 180
+            let x = Int(32 + 30 * cos(angle))
+            let y = Int(32 + 30 * sin(angle))
+            for channel in 0..<3 {
+                let offset = (y * 64 + x) * 4 + channel
+                #expect(abs(Int(actual[offset]) - Int(expected[offset])) <= 2)
+            }
+        }
+    }
+
+}
+
+extension BarGraphFillTests {
 
     private func pixels<V: View>(of view: V, width: Int = 8, height: Int = 8) throws -> [UInt8] {
 
@@ -123,33 +163,6 @@ struct BarGraphFillTests {
             context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
         }
         return pixels
-    }
-
-    @Test(arguments: [ColorScheme.light, .dark])
-    func nativeCircleSegmentsRetainTheOriginalGradient(scheme: ColorScheme) throws {
-        let color = Color(.displayP3, red: 0.1, green: 0.45, blue: 0.95)
-        let segment = CircleProgressView(progress: 0.8, color: color)
-            .brightness(level: .secondary, to: .circlegraphMidnight)
-            .graphColorAppearance().environment(\.colorScheme, scheme)
-        // The previous arc geometry, without its gap mask, is the palette reference.
-        let reference = Path { path in
-            path.addArc(center: CGPoint(x: 32, y: 32), radius: 32,
-                        startAngle: .degrees(135), endAngle: .degrees(135 + 270 * 0.8), clockwise: false)
-        }
-        .stroke(color.gradient, lineWidth: 8)
-        .brightness(level: .secondary, to: .circlegraphMidnight)
-        .graphColorAppearance().environment(\.colorScheme, scheme)
-        let actual = try pixels(of: segment, width: 64, height: 64)
-        let expected = try pixels(of: reference, width: 64, height: 64)
-        for progress in [0.1, 0.25, 0.45, 0.6, 0.75] {
-            let angle = (135 + progress * 270) * Double.pi / 180
-            let x = Int(32 + 30 * cos(angle))
-            let y = Int(32 + 30 * sin(angle))
-            for channel in 0..<3 {
-                let offset = (y * 64 + x) * 4 + channel
-                #expect(abs(Int(actual[offset]) - Int(expected[offset])) <= 2)
-            }
-        }
     }
 
 }
@@ -205,8 +218,12 @@ struct CircleRingTests {
         var pixels = [UInt8](repeating: 0, count: size * size * 4)
         try pixels.withUnsafeMutableBytes { bytes in
             let context = try #require(CGContext(
-                data: bytes.baseAddress, width: size, height: size, bitsPerComponent: 8,
-                bytesPerRow: size * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
+                data: bytes.baseAddress,
+                width: size,
+                height: size,
+                bitsPerComponent: 8,
+                bytesPerRow: size * 4,
+                space: CGColorSpace(name: CGColorSpace.sRGB)!,
                 bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
             ))
             context.draw(image, in: CGRect(x: 0, y: 0, width: size, height: size))

@@ -1,13 +1,13 @@
 import SwiftUI
 import WidgetKit
 
+/// Burned and consumed energy rings sized for the watch app or its complications.
 struct CircleBalanceGraphWatch: View {
 
     @Environment(\.colorScheme) private var scheme
+    @Environment(HealthInterface.self) private var day
 
-    @EnvironmentObject var AppSettings: Settings
-
-    @Environment(HealthInterface.self) var DataInterface
+    @EnvironmentObject private var settings: Settings
     
     var mode: GraphMode
     var rendering: WidgetRenderingMode = .fullColor
@@ -15,14 +15,14 @@ struct CircleBalanceGraphWatch: View {
     var cutout = 0.28
 
     var body: some View {
-        GeometryReader { geo in
-            let width = min(geo.size.width, geo.size.height)
+        GeometryReader { geometry in
+            let diameter = min(geometry.size.width, geometry.size.height)
 
             CalorieCircleGraph(
-                energy: mode == .now ? now : midnight,
+                energy: mode == .now ? day.sample.now : day.sample.midnight,
                 configuration: CalorieCircleConfiguration(
-                    lineWidth: lineWidth(max: width),
-                    ringSpacing: gapWidth(max: width) / 2,
+                    lineWidth: lineWidth(for: diameter),
+                    ringSpacing: ringSpacing(for: diameter),
                     openAngle: .degrees(cutout * 360),
                     segmentGap: 0
                 ),
@@ -37,10 +37,10 @@ struct CircleBalanceGraphWatch: View {
 
 extension CircleBalanceGraphWatch {
 
-    private func lineWidth(max: CGFloat) -> CGFloat {
+    private func lineWidth(for diameter: CGFloat) -> CGFloat {
         switch context {
-            case .app: max * 0.08
-            case .toolbar: max * 0.13
+            case .app: diameter * 0.08
+            case .toolbar: diameter * 0.13
             case .circle: 4
             case .circleFull: 8
             case .circleFuller: 10
@@ -48,12 +48,12 @@ extension CircleBalanceGraphWatch {
         }
     }
 
-    private func gapWidth(max: CGFloat) -> CGFloat {
+    private func ringSpacing(for diameter: CGFloat) -> CGFloat {
         switch context {
-            case .app, .toolbar: lineWidth(max: max) * 0.5
-            case .circle: 2
-            case .circleFull, .circleFuller: 4
-            case .circleThick: 5
+            case .app, .toolbar: lineWidth(for: diameter) * 0.25
+            case .circle: 1
+            case .circleFull, .circleFuller: 2
+            case .circleThick: 2.5
         }
     }
 
@@ -64,9 +64,9 @@ extension CircleBalanceGraphWatch {
     private var palette: CalorieGraphPalette {
 
         var palette = CalorieGraphPalette(
-            burned: AppSettings.burnedColor,
-            consumed: AppSettings.consumedColor,
-            empty: AppSettings.getGraphEmptyColor(scheme)
+            burned: settings.burnedColor,
+            consumed: settings.consumedColor,
+            empty: settings.getGraphEmptyColor(scheme)
         )
 
         if rendering != .fullColor {
@@ -79,11 +79,9 @@ extension CircleBalanceGraphWatch {
         return palette
     }
 
-    private var now: EnergyBalance { DataInterface.sample.now }
-    private var midnight: EnergyBalance { DataInterface.sample.midnight }
-
 }
 
+/// Watch graph positions and complication sizes.
 enum GraphContext {
     case app
     case toolbar

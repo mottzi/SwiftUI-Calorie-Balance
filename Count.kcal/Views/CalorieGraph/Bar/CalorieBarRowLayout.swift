@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Places the occupied fill and resolves all label collisions in the same layout pass.
+/// Bar fill placement and label spacing with room reserved for neighboring values.
 struct CalorieBarRowLayout: Layout {
 
     typealias Cache = Void
@@ -10,15 +10,7 @@ struct CalorieBarRowLayout: Layout {
     var labelSpacing: CGFloat = 4
     var labelInset: CGFloat = 4
 
-    var animatableData: EnergyGraphValues.AnimatableData {
-        get { values.animatableData }
-        set { values.animatableData = newValue }
-    }
-
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout Void) -> CGSize {
-        CGSize(width: finiteDimension(proposal.width), height: finiteDimension(proposal.height))
-    }
-
+    /// Places the fill and keeps complete target labels apart as segment widths change.
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout Void) {
 
         guard let fill = subviews.first else { return }
@@ -58,6 +50,17 @@ struct CalorieBarRowLayout: Layout {
                 )
             )
         }
+    }
+
+    /// Interpolates label positions with the same values and scale as the bar fill.
+    var animatableData: EnergyGraphValues.AnimatableData {
+        get { values.animatableData }
+        set { values.animatableData = newValue }
+    }
+
+    /// Uses the proposed row dimensions, with zero for missing or invalid dimensions.
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout Void) -> CGSize {
+        CGSize(width: finiteDimension(proposal.width), height: finiteDimension(proposal.height))
     }
 
 }
@@ -139,6 +142,7 @@ extension CalorieBarRowLayout {
         return max(0, dimension)
     }
 
+    /// Allowed label centers and the space reserved by preceding labels.
     private struct LabelSlot {
         let halfWidth: CGFloat
         let minimumCenter: CGFloat
@@ -147,6 +151,7 @@ extension CalorieBarRowLayout {
         let maximumCenter: CGFloat
     }
 
+    /// Final label center and visibility for one layout pass.
     private struct Placement {
         var center: CGFloat = 0
         var visible = false
