@@ -1,13 +1,14 @@
 import SwiftUI
 
 @Animatable
-/// Continuous energy values with one scale for burned and consumed energy.
+/// Continuous energy values with an animated scale for burned and consumed energy.
 struct EnergyGraphValues: Equatable {
 
     var active: Double
     var resting: Double
     var restingRemaining: Double
     var consumed: Double
+    private var graphScale: Double
     private var presence: Double
 
     init(_ energy: EnergyBalance) {
@@ -15,7 +16,9 @@ struct EnergyGraphValues: Equatable {
         resting = Double(max(0, energy.resting))
         restingRemaining = Double(max(0, energy.restingRemaining))
         consumed = Double(max(0, energy.consumed))
-        presence = max(active + resting + restingRemaining, consumed) > 0 ? 1 : 0
+        // animate the scale with the totals so ring endpoints do not stop at the balance crossover
+        graphScale = max(active + resting + restingRemaining, consumed)
+        presence = graphScale > 0 ? 1 : 0
     }
 
     /// Active, recorded resting, projected resting, and unused shares of the common scale.
@@ -47,8 +50,7 @@ extension EnergyGraphValues {
     private var burned: Double { active + resting + restingRemaining }
 
     private func ratio(of amount: Double) -> Double {
-        let total = max(burned, consumed)
-        return total > 0 ? min(max(amount / total, 0), 1) * presence : 0
+        return graphScale > 0 ? min(max(amount / graphScale, 0), 1) * presence : 0
     }
 
     struct Segment: Identifiable {
