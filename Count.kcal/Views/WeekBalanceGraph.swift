@@ -1,5 +1,8 @@
 import SwiftUI
 
+private let gradientOpacityLight: Double = 0.10
+private let gradientOpacityDark: Double = 0.20
+
 /// Week paging and day selection share the dashboard's calendar navigation.
 struct WeekBalanceGraph: View {
 

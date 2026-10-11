@@ -232,7 +232,7 @@ extension BalanceWidgetBarContent {
 extension BalanceWidgetBarContent {
 
     private func barGraph(for family: WidgetFamily) -> some View {
-        BarBalanceGraph(mode: mode, animateNumericValues: true)
+        BarBalanceGraph(mode: mode, animateNumericValues: true, rendering: .widget)
             .environment(HealthInterface(entry.data))
             .frame(height: 44)
             .padding(.bottom, 4)

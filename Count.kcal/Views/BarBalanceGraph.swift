@@ -6,46 +6,53 @@ struct BarBalanceGraph: View {
     @Environment(\.colorScheme) private var scheme: ColorScheme
     @Environment(HealthInterface.self) private var day
 
+    @EnvironmentObject private var settings: Settings
+
     let mode: GraphMode
     let labels: Bool
     let animateNumericValues: Bool
+    var rendering: CalorieGraphRendering = .live
 
-    init(mode: GraphMode, labels: Bool = true, animateNumericValues: Bool = false) {
+    init(
+        mode: GraphMode,
+        labels: Bool = true,
+        animateNumericValues: Bool = false,
+        rendering: CalorieGraphRendering = .live
+    ) {
         self.mode = mode
         self.labels = labels
         self.animateNumericValues = animateNumericValues
+        self.rendering = rendering
     }
     
     var body: some View {
         let energy = mode == .now ? day.sample.now : day.sample.midnight
 
-        GeometryReader { container in
-            VStack(spacing: scheme == .light ? 1 : 2) {
-                GeometryReader { geometry in
-                    BarBalanceGraphTopRow(geometry: geometry, energy: energy, mode: mode, labels: labels, animateNumericValues: animateNumericValues)
-                }
-                .frame(height: container.size.height / 2 - 1)
-                .clipShape(UnevenRoundedRectangle(
-                    topLeadingRadius: 6,
-                    bottomLeadingRadius: 0,
-                    bottomTrailingRadius: 0,
-                    topTrailingRadius: 6,
-                    style: .continuous
-                ))
-                
-                GeometryReader { geometry in
-                    BarBalanceGraphBottomRow(geometry: geometry, energy: energy, mode: mode, labels: labels, animateNumericValues: animateNumericValues)
-                }
-                .frame(height: container.size.height / 2 - 1)
-                .clipShape(UnevenRoundedRectangle(
-                    topLeadingRadius: 0,
-                    bottomLeadingRadius: 6,
-                    bottomTrailingRadius: 6,
-                    topTrailingRadius: 0,
-                    style: .continuous
-                ))
-            }
-        }
+        CalorieBarGraph(
+            energy: energy,
+            configuration: CalorieBarConfiguration(
+                rowSpacing: scheme == .light ? 1 : 2,
+                showsLabels: labels,
+                animatesNumericValues: animateNumericValues
+            ),
+            palette: palette,
+            rendering: rendering
+        )
+        .padding(.bottom, scheme == .light ? 1 : 0)
+    }
+
+}
+
+extension BarBalanceGraph {
+
+    private var palette: CalorieGraphPalette {
+        var palette = CalorieGraphPalette(
+            burned: settings.burnedColor,
+            consumed: settings.consumedColor,
+            empty: settings.getGraphEmptyColor(scheme)
+        )
+        palette.empty.opacity = scheme == .light ? 0.4 : 1
+        return palette
     }
 
 }

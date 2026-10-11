@@ -10,7 +10,7 @@ struct CircleBalanceGraph: View {
     var lineWidth: CGFloat = 8
     let mode: GraphMode
     var accentedWidget = false
-    var rendering: CalorieCircleGraph.Rendering = .live
+    var rendering: CalorieGraphRendering = .live
     var openAngle: Angle = .degrees(90)
     var segmentGap: CGFloat = 2
     var ringSpacing: CGFloat? = nil
@@ -33,8 +33,8 @@ struct CircleBalanceGraph: View {
 
 extension CircleBalanceGraph {
 
-    private var palette: CalorieCirclePalette {
-        var palette = CalorieCirclePalette(
+    private var palette: CalorieGraphPalette {
+        var palette = CalorieGraphPalette(
             burned: settings.burnedColor,
             consumed: settings.consumedColor,
             empty: settings.getGraphEmptyColor(scheme)

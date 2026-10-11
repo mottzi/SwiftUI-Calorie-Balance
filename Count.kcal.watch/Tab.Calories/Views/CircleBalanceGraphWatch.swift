@@ -61,9 +61,9 @@ extension CircleBalanceGraphWatch {
 
 extension CircleBalanceGraphWatch {
 
-    private var palette: CalorieCirclePalette {
+    private var palette: CalorieGraphPalette {
 
-        var palette = CalorieCirclePalette(
+        var palette = CalorieGraphPalette(
             burned: AppSettings.burnedColor,
             consumed: AppSettings.consumedColor,
             empty: AppSettings.getGraphEmptyColor(scheme)

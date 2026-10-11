@@ -6,7 +6,7 @@ struct CalorieCircleRing: View {
     let segments: [EnergyGraphValues.Segment]
     let diameter: CGFloat
     let configuration: CalorieCircleConfiguration
-    let palette: CalorieCirclePalette
+    let palette: CalorieGraphPalette
 
     var body: some View {
         let cutout = configuration.openAngle.degrees / 360

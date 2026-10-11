@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Color and opacity for each energy part and the unused ring.
-struct CalorieCirclePalette {
+/// Color and opacity for each energy part and the unused graph area.
+struct CalorieGraphPalette {
 
     var active: Fill
     var resting: Fill

@@ -5,7 +5,7 @@ struct CalorieCircleDrawing: View {
 
     let values: EnergyGraphValues
     let configuration: CalorieCircleConfiguration
-    let palette: CalorieCirclePalette
+    let palette: CalorieGraphPalette
 
     var body: some View {
         GeometryReader { geometry in

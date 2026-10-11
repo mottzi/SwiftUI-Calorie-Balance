@@ -56,16 +56,32 @@ struct BarGraphFillTests {
 
         let settings = Settings.shared
         let energy = EnergyBalance(active: 25, resting: 50, restingRemaining: 25, consumed: 100)
-        let top = try pixels(of: GeometryReader { geometry in
-            BarBalanceGraphTopRow(
-                geometry: geometry, energy: energy, mode: .midnight, labels: false, animateNumericValues: true
-            )
-        }.environmentObject(settings).environment(\.colorScheme, scheme), width: 64, height: 16)
-        let bottom = try pixels(of: GeometryReader { geometry in
-            BarBalanceGraphBottomRow(
-                geometry: geometry, energy: energy, mode: .midnight, labels: false, animateNumericValues: true
-            )
-        }.environmentObject(settings).environment(\.colorScheme, scheme), width: 64, height: 16)
+        let palette = CalorieGraphPalette(
+            burned: settings.burnedColor,
+            consumed: settings.consumedColor,
+            empty: settings.getGraphEmptyColor(scheme)
+        )
+        let configuration = CalorieBarConfiguration(showsLabels: false, animatesNumericValues: true)
+        let top = try pixels(
+            of: CalorieBarRow(
+                values: EnergyGraphValues(energy),
+                side: .burned,
+                configuration: configuration,
+                palette: palette
+            ).environment(\.colorScheme, scheme),
+            width: 64,
+            height: 16
+        )
+        let bottom = try pixels(
+            of: CalorieBarRow(
+                values: EnergyGraphValues(energy),
+                side: .consumed,
+                configuration: configuration,
+                palette: palette
+            ).environment(\.colorScheme, scheme),
+            width: 64,
+            height: 16
+        )
         let shades: [(Color, BrightnessLevel, BrightnessContext, Int, [UInt8])] = [
             (settings.burnedColor, .primary, .circlegraphMidnight, 8, top),
             (settings.burnedColor, .secondary, .circlegraphMidnight, 32, top),

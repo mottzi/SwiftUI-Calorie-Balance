@@ -1,20 +1,6 @@
 import Foundation
 import SwiftUI
 
-extension Text {
-
-    func graphLabelStyle(_ schema: ColorScheme) -> some View {
-        self
-            .foregroundColor(Color("GraphTextColor"))
-            .font(.caption)
-            .fontDesign(.rounded)
-            .fontWeight(.semibold)
-            .shadow(color: .black.opacity(schema == .dark ? 0.8 : 0.5), radius: 4)
-            .contrast(schema == .dark ? 1.5 : 2)
-    }
-
-}
-
 extension CGFloat {
 
     // Function to clamp the value within the provided range

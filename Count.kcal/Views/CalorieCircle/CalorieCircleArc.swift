@@ -4,8 +4,8 @@ import SwiftUI
 struct CalorieCircleArc: View {
 
     let range: ClosedRange<Double>
-    let fill: CalorieCirclePalette.Fill
-    let background: CalorieCirclePalette.Fill
+    let fill: CalorieGraphPalette.Fill
+    let background: CalorieGraphPalette.Fill
     let hasBackground: Bool
     let cutout: Double
     let lineWidth: CGFloat

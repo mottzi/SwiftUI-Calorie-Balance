@@ -1,14 +1,13 @@
 import SwiftUI
 
-/// Recalculates both rings and their gaps from the current animated energy values.
-struct AnimatedCalorieCircle: View, Animatable {
+/// Recalculates graph geometry from one set of interpolated energy values.
+struct AnimatedCalorieGraph<Drawing: View>: View, Animatable {
 
     var values: EnergyGraphValues
-    let configuration: CalorieCircleConfiguration
-    let palette: CalorieCirclePalette
+    @ViewBuilder let drawing: (EnergyGraphValues) -> Drawing
 
     var body: some View {
-        CalorieCircleDrawing(values: values, configuration: configuration, palette: palette)
+        drawing(values)
             .transaction {
                 $0.animation = nil
                 $0.disablesAnimations = true
