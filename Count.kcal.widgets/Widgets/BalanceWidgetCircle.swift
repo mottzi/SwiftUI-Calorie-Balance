@@ -201,7 +201,8 @@ extension BalanceWidgetCircleContent {
         ZStack {
             CircleBalanceGraph(
                 mode: mode,
-                accentedWidget: renderingMode == .accented
+                accentedWidget: renderingMode == .accented,
+                rendering: .widget
             )
                 .frame(width: 130, height: 130)
                 .environment(HealthInterface(entry.data))

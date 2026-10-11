@@ -16,77 +16,20 @@ struct CircleBalanceGraphWatch: View {
 
     var body: some View {
         GeometryReader { geo in
-            ZStack {
-                // base
-                CircleProgressView(
-                    progress: 1,
-                    color: AppSettings.getGraphEmptyColor(scheme),
-                    cutout: cutout,
-                    lineWidth: lineWidth(max: geo.size.width)
-                )
-                    .brightness(level: .primary)
-                    .frame(width: geo.size.width - lineWidth(max: geo.size.width))
-                    .opacity(rendering == .fullColor ? 1 : 0.2)
+            let width = min(geo.size.width, geo.size.height)
 
-                // passive future
-                CircleProgressView(
-                    progress: mode == .now ? now.ratio(of: now.burned) : midnight.ratio(of: midnight.burned),
-                    color: rendering == .fullColor ? AppSettings.burnedColor : Color.white.opacity(mode == .now ? 0 : 0.74),
-                    cutout: cutout,
-                    lineWidth: lineWidth(max: geo.size.width)
-                )
-                    .brightness(level: .tertiary, to: .circlegraphMidnight)
-                    .frame(width: geo.size.width - lineWidth(max: geo.size.width))
-                    .opacity(rendering == .fullColor ? 1 : 0.4)
-                    .opacity(mode == .now ? 0 : 1)
-                
-                // passive
-                CircleProgressView(
-                    progress: mode == .now
-                        ? now.ratio(of: now.burned)
-                        : midnight.ratio(of: midnight.active + midnight.resting),
-                    color: AppSettings.burnedColor,
-                    cutout: cutout,
-                    lineWidth: lineWidth(max: geo.size.width)
-                )
-                    .brightness(level: .secondary, to: .circlegraphMidnight)
-                    .frame(width: geo.size.width - lineWidth(max: geo.size.width))
-                    .opacity(rendering == .fullColor ? 1 : 0.7)
-                                    
-                // active
-                CircleProgressView(
-                    progress: mode == .now ? now.ratio(of: now.active) : midnight.ratio(of: midnight.active),
-                    color: AppSettings.burnedColor,
-                    cutout: cutout,
-                    lineWidth: lineWidth(max: geo.size.width)
-                )
-                    .brightness(level: .primary, to: .circlegraphMidnight)
-                    .frame(width: geo.size.width - lineWidth(max: geo.size.width))
-
-                // base
-                CircleProgressView(
-                    progress: 1,
-                    color: AppSettings.getGraphEmptyColor(scheme),
-                    cutout: cutout,
-                    lineWidth: lineWidth(max: geo.size.width)
-                )
-                    .frame(width: geo.size.width - (3 * lineWidth(max: geo.size.width)) - gapWidth(max: geo.size.width))
-                    .brightness(level: .primary)
-                    .opacity(rendering == .fullColor ? 1 : 0.2)
-                
-                // consumed
-                CircleProgressView(
-                    progress: mode == .now ? now.ratio(of: now.consumed) : midnight.ratio(of: midnight.consumed),
-                    color: AppSettings.consumedColor,
-                    cutout: cutout,
-                    lineWidth: lineWidth(max: geo.size.width)
-                )
-                    .frame(width: geo.size.width - (3 * lineWidth(max: geo.size.width)) - gapWidth(max: geo.size.width))
-                    .brightness(level: .primary)
-            }
+            CalorieCircleGraph(
+                energy: mode == .now ? now : midnight,
+                configuration: CalorieCircleConfiguration(
+                    lineWidth: lineWidth(max: width),
+                    ringSpacing: gapWidth(max: width) / 2,
+                    openAngle: .degrees(cutout * 360),
+                    segmentGap: 0
+                ),
+                palette: palette,
+                rendering: context == .app || context == .toolbar ? .live : .widget
+            )
             .frame(maxWidth: .infinity)
-            .saturation(Settings.baseSaturation)
-            .brightness(scheme == .dark ? -0.1 : 0.0)
         }
     }
 
@@ -94,7 +37,7 @@ struct CircleBalanceGraphWatch: View {
 
 extension CircleBalanceGraphWatch {
 
-    func lineWidth(max: CGFloat) -> CGFloat {
+    private func lineWidth(max: CGFloat) -> CGFloat {
         switch context {
             case .app: max * 0.08
             case .toolbar: max * 0.13
@@ -105,7 +48,7 @@ extension CircleBalanceGraphWatch {
         }
     }
 
-    func gapWidth(max: CGFloat) -> CGFloat {
+    private func gapWidth(max: CGFloat) -> CGFloat {
         switch context {
             case .app, .toolbar: lineWidth(max: max) * 0.5
             case .circle: 2
@@ -117,6 +60,24 @@ extension CircleBalanceGraphWatch {
 }
 
 extension CircleBalanceGraphWatch {
+
+    private var palette: CalorieCirclePalette {
+
+        var palette = CalorieCirclePalette(
+            burned: AppSettings.burnedColor,
+            consumed: AppSettings.consumedColor,
+            empty: AppSettings.getGraphEmptyColor(scheme)
+        )
+
+        if rendering != .fullColor {
+            palette.resting.opacity = 0.7
+            palette.prediction.color = .white.opacity(0.74)
+            palette.prediction.opacity = 0.4
+            palette.empty.opacity = 0.2
+        }
+
+        return palette
+    }
 
     private var now: EnergyBalance { DataInterface.sample.now }
     private var midnight: EnergyBalance { DataInterface.sample.midnight }
