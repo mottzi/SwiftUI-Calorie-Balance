@@ -40,7 +40,14 @@ struct CalorieBarRowLayout: Layout {
             let measured = subview.sizeThatFits(.unspecified)
             return CGSize(width: finiteDimension(measured.width), height: finiteDimension(measured.height))
         }
-        let placements = labelPlacements(segments: segments, sizes: sizes, width: width, height: height)
+        let presence = labels.map { $0[CalorieBarLabel.PresenceKey.self] }
+        let placements = labelPlacements(
+            segments: segments,
+            sizes: sizes,
+            presence: presence,
+            width: width,
+            height: height
+        )
         for index in labels.indices {
             let placement = placements[index]
             labels[index].place(
@@ -61,6 +68,7 @@ extension CalorieBarRowLayout {
     private func labelPlacements(
         segments: [EnergyGraphValues.Segment],
         sizes: [CGSize],
+        presence: [Bool],
         width: CGFloat,
         height: CGFloat
     ) -> [Placement] {
@@ -79,7 +87,7 @@ extension CalorieBarRowLayout {
             let halfWidth = glyphWidth / 2
             let centered = (start + end) / 2
             placements[index].center = centered
-            guard width > 0, height > 0, segment.value > 0, end > start, glyphWidth > 0 else { continue }
+            guard presence[index], width > 0, height > 0, segment.value > 0, end > start, glyphWidth > 0 else { continue }
             guard sizes[index].height <= height else { continue }
 
             let permitsOverflow = segment.id == .prediction || segment.id == .empty

@@ -28,6 +28,12 @@ struct CalorieBarLabel: View {
             .contrast(scheme == .dark ? 1.5 : 2)
             .opacity(value > 0 ? 1 : 0)
             .accessibilityHidden(value == 0)
+            .layoutValue(key: PresenceKey.self, value: value > 0)
+    }
+
+    /// Hidden target values must not reserve space as spring geometry crosses zero.
+    struct PresenceKey: LayoutValueKey {
+        static let defaultValue = false
     }
 
 }
