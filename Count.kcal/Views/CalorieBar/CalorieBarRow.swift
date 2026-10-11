@@ -3,8 +3,6 @@ import SwiftUI
 /// One bar with an occupied end cap and values placed across the whole row.
 struct CalorieBarRow: View {
 
-    @Environment(\.layoutDirection) private var layoutDirection
-
     let values: EnergyGraphValues
     let side: EnergyGraphValues.Side
     let configuration: CalorieBarConfiguration
@@ -17,7 +15,6 @@ struct CalorieBarRow: View {
         let row = CalorieBarRowLayout(
             values: values,
             side: side,
-            layoutDirection: layoutDirection,
             labelSpacing: configuration.labelSpacing,
             labelInset: configuration.labelInset
         ) {

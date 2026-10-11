@@ -7,7 +7,6 @@ struct CalorieBarRowLayout: Layout {
 
     var values: EnergyGraphValues
     let side: EnergyGraphValues.Side
-    var layoutDirection: LayoutDirection = .leftToRight
     var labelSpacing: CGFloat = 4
     var labelInset: CGFloat = 4
 
@@ -30,7 +29,7 @@ struct CalorieBarRowLayout: Layout {
         let occupiedWidth = width * CGFloat(min(max(occupiedEnd, 0), 1))
 
         fill.place(
-            at: CGPoint(x: physicalX(occupiedWidth / 2, in: bounds), y: bounds.midY),
+            at: CGPoint(x: bounds.minX + occupiedWidth / 2, y: bounds.midY),
             anchor: .center,
             proposal: ProposedViewSize(width: occupiedWidth, height: height)
         )
@@ -51,8 +50,8 @@ struct CalorieBarRowLayout: Layout {
         for index in labels.indices {
             let placement = placements[index]
             labels[index].place(
-                at: CGPoint(x: physicalX(0, in: bounds), y: bounds.midY),
-                anchor: layoutDirection == .rightToLeft ? .trailing : .leading,
+                at: CGPoint(x: bounds.minX, y: bounds.midY),
+                anchor: .leading,
                 proposal: ProposedViewSize(
                     width: placement.center + sizes[index].width / 2,
                     height: placement.visible ? sizes[index].height : 0
@@ -74,11 +73,13 @@ extension CalorieBarRowLayout {
     ) -> [Placement] {
 
         var placements = Array(repeating: Placement(), count: sizes.count)
-        var nextLeadingEdge: CGFloat?
+        var slots = Array<LabelSlot?>(repeating: nil, count: sizes.count)
+        var earliestTrailingEdge: CGFloat?
         let spacing = finiteDimension(labelSpacing)
         let inset = finiteDimension(labelInset)
 
-        for index in sizes.indices.reversed() {
+        // Reserve enough space for leading labels before choosing any preferred centers.
+        for index in sizes.indices {
             guard segments.indices.contains(index) else { continue }
             let segment = segments[index]
             let start = width * CGFloat(segment.range.lowerBound)
@@ -90,42 +91,60 @@ extension CalorieBarRowLayout {
             guard presence[index], width > 0, height > 0, segment.value > 0, end > start, glyphWidth > 0 else { continue }
             guard sizes[index].height <= height else { continue }
 
-            let permitsOverflow = segment.id == .prediction || segment.id == .empty
             let minimumCenter: CGFloat
             let desiredCenter: CGFloat
             let maximumCenter: CGFloat
 
-            if start == 0 {
-                minimumCenter = inset + halfWidth
-                maximumCenter = width - inset - halfWidth
-                desiredCenter = centered
-            } else if permitsOverflow {
+            if segment.id == .prediction || segment.id == .empty {
                 minimumCenter = inset + halfWidth
                 maximumCenter = min(end - inset - halfWidth, width - inset - halfWidth)
                 desiredCenter = glyphWidth + 2 * inset <= end - start ? centered : maximumCenter
             } else {
-                minimumCenter = start + halfWidth
-                maximumCenter = end - halfWidth
+                // Primary values can borrow trailing space while keeping their leading segment boundary.
+                minimumCenter = start == 0 ? inset + halfWidth : start + halfWidth
+                maximumCenter = width - inset - halfWidth
                 desiredCenter = centered
             }
+            guard minimumCenter <= maximumCenter else { continue }
 
-            let collisionLimit = nextLeadingEdge.map { $0 - spacing - halfWidth } ?? width - halfWidth
-            let availableMaximum = min(maximumCenter, collisionLimit)
-            guard minimumCenter <= availableMaximum else { continue }
-            let center = min(max(desiredCenter, minimumCenter), availableMaximum)
+            let leadingLimit = earliestTrailingEdge.map { $0 + spacing + halfWidth } ?? minimumCenter
+            let earliestCenter = max(minimumCenter, leadingLimit)
+            slots[index] = LabelSlot(
+                halfWidth: halfWidth,
+                minimumCenter: minimumCenter,
+                earliestCenter: earliestCenter,
+                desiredCenter: desiredCenter,
+                maximumCenter: maximumCenter
+            )
+            earliestTrailingEdge = earliestCenter + halfWidth
+        }
+
+        var nextLeadingEdge: CGFloat?
+        for index in slots.indices.reversed() {
+            guard let slot = slots[index] else { continue }
+            let trailingLimit = nextLeadingEdge.map { $0 - spacing - slot.halfWidth } ?? slot.maximumCenter
+            let maximumCenter = min(slot.maximumCenter, trailingLimit)
+            // Preserve trailing priority only when the entire leading group cannot fit.
+            let minimumCenter = slot.earliestCenter <= maximumCenter ? slot.earliestCenter : slot.minimumCenter
+            guard minimumCenter <= maximumCenter else { continue }
+            let center = min(max(slot.desiredCenter, minimumCenter), maximumCenter)
             placements[index] = Placement(center: center, visible: true)
-            nextLeadingEdge = center - halfWidth
+            nextLeadingEdge = center - slot.halfWidth
         }
         return placements
-    }
-
-    private func physicalX(_ leadingDistance: CGFloat, in bounds: CGRect) -> CGFloat {
-        layoutDirection == .rightToLeft ? bounds.maxX - leadingDistance : bounds.minX + leadingDistance
     }
 
     private func finiteDimension(_ dimension: CGFloat?) -> CGFloat {
         guard let dimension, dimension.isFinite else { return 0 }
         return max(0, dimension)
+    }
+
+    private struct LabelSlot {
+        let halfWidth: CGFloat
+        let minimumCenter: CGFloat
+        let earliestCenter: CGFloat
+        let desiredCenter: CGFloat
+        let maximumCenter: CGFloat
     }
 
     private struct Placement {
