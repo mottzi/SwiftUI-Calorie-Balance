@@ -19,6 +19,7 @@ struct StreakToolbarButton: View {
                     .fontWeight(.bold)
 
                 Text("\(streak.streaks)")
+                    .redacted(reason: streak.hasLoadedCount ? [] : .placeholder)
                     .font(.callout)
                     .fontDesign(.rounded)
                     .fontWeight(.bold)
@@ -26,6 +27,8 @@ struct StreakToolbarButton: View {
             }
         }
         .disabled(controlsDisabled)
+        .accessibilityLabel("Streak")
+        .accessibilityValue(streak.hasLoadedCount ? Text("\(streak.streaks) days") : Text("Loading streak"))
     }
 
 }

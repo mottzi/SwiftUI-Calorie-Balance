@@ -38,6 +38,10 @@ struct MacroCard: View {
             }
             .padding(.horizontal, 11)
             .padding(.bottom, 2)
+            .modifier(HealthLoadingPlaceholder(
+                isLoading: !DataViewModel.hasLoadedSnapshot || (goals == nil && AppSettings.calorieDataState == .loading),
+                label: "Loading nutrient data"
+            ))
         }
     }
 

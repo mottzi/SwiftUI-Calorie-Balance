@@ -228,6 +228,7 @@ struct WeekBalanceChart: View {
 
     @EnvironmentObject private var settings: Settings
     @Environment(\.layoutDirection) private var layoutDirection
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let graphHeight: CGFloat = 60
 
@@ -235,6 +236,8 @@ struct WeekBalanceChart: View {
 
     let selectedDay: Date
     let selectDay: (Date) -> Void
+
+    private var hasLoadedWeek: Bool { dataPoints.allSatisfy(\.hasLoadedSnapshot) }
     
     var body: some View {
         HStack(spacing: 0) {
@@ -253,16 +256,30 @@ struct WeekBalanceChart: View {
                             energy: point.isTodayPage ? point.sample.midnight : point.sample.now,
                             maxEnergy: maxEnergy,
                             date: point.id,
-                            isSelected: isDaySelected(barDay: point.id)
+                            isSelected: isDaySelected(barDay: point.id),
+                            showsValue: hasLoadedWeek
                         )
                         .frame(height: graphHeight)
+                        .opacity(hasLoadedWeek ? 1 : 0)
+                        .accessibilityHidden(!hasLoadedWeek)
+                        .overlay {
+                            if !hasLoadedWeek {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(.quaternary)
+                                    .frame(width: 12, height: graphHeight / 2)
+                                    .accessibilityHidden(true)
+                            }
+                        }
                     }
                     .frame(maxWidth: .infinity)
                     .contentShape(.rect)
                 }
                 .buttonStyle(.plain)
+                .accessibilityElement(children: .ignore)
                 .accessibilityLabel(Text(point.id, format: .dateTime.weekday(.wide).month().day()))
-                .accessibilityValue(Text("\(abs((point.isTodayPage ? point.sample.midnight : point.sample.now).balance))"))
+                .accessibilityValue(hasLoadedWeek
+                    ? Text("\(abs((point.isTodayPage ? point.sample.midnight : point.sample.now).balance))")
+                    : Text("Loading calorie data"))
                 .accessibilityAddTraits(isDaySelected(barDay: point.id) ? .isSelected : [])
             }
         }
@@ -309,9 +326,17 @@ struct WeekBalanceChart: View {
             }
             .allowsHitTesting(false)
             .accessibilityHidden(true)
+            .opacity(hasLoadedWeek ? 1 : 0)
         }
         // Data changes animate within the chart, independently of pager layout.
-        .transaction(value: energyBalances) { $0.animation = .snappy }
+        .transaction(value: energyBalances) { transaction in
+            // Initial loads explicitly disable animation; do not override their intent.
+            if reduceMotion {
+                transaction.animation = nil
+            } else if !transaction.disablesAnimations {
+                transaction.animation = .snappy
+            }
+        }
     }
 
 }
@@ -381,6 +406,7 @@ extension WeekBalanceChart {
         let maxEnergy: Int
         let date: Date
         var isSelected: Bool = false
+        var showsValue = true
 
         static let baselineGap: CGFloat = 1
 
@@ -424,7 +450,7 @@ extension WeekBalanceChart {
                 }
                 .frame(width: geo.size.width, height: geo.size.height)
                 .overlay {
-                    if !dynamicType.isAccessibilitySize {
+                    if showsValue && !dynamicType.isAccessibilitySize {
                         Text("\(abs(energy.balance))")
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)

@@ -12,6 +12,9 @@ final class HealthInterface: Identifiable, Hashable {
     /// The last complete health snapshot published for this day.
     private(set) var sample: HealthData
 
+    /// An empty query result is loaded data; the initial zero snapshot is not.
+    var hasLoadedSnapshot: Bool { sample.lastDataSync != nil }
+
     @ObservationIgnored private let repository: HealthRepository
     @ObservationIgnored private let settings: Settings
     @ObservationIgnored private var requestID = 0
@@ -118,6 +121,7 @@ extension HealthInterface {
         updated.carbs = Int.random(in: 180...300)
         updated.fats = Int.random(in: 50...80)
         updated.steps = Int.random(in: 0...30000)
+        updated.lastDataSync = .now
         sample = updated
     }
 

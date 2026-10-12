@@ -7,6 +7,7 @@ import Observation
 final class Streak {
 
     var streaks: Int = 0
+    private(set) var hasLoadedCount = false
     var showStreaksView: Bool = true
 
     @ObservationIgnored private let repository: HealthRepository
@@ -22,6 +23,7 @@ final class Streak {
     func reset() {
         requestID += 1
         streaks = 0
+        hasLoadedCount = false
     }
 
     /// Recounts goal days from yesterday until a day fails or the limit is reached.
@@ -54,6 +56,7 @@ final class Streak {
         }
 
         streaks = streak
+        hasLoadedCount = true
     }
 
 }

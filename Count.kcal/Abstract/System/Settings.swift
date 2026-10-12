@@ -4,16 +4,10 @@ import SwiftUI
 /// Shared goals, units, data source, and appearance preferences.
 final class Settings: ObservableObject {
 
-    @Published var showResting: Int = 0 {
-        didSet {
-            if showResting != oldValue { updateNutrientGoals() }
-        }
-    }
-    @Published var showActive: Int = 0 {
-        didSet {
-            if showActive != oldValue { updateNutrientGoals() }
-        }
-    }
+    @Published private var energyEstimates: EnergyEstimates?
+
+    var showResting: Int { currentEnergyEstimates?.resting ?? 0 }
+    var showActive: Int { currentEnergyEstimates?.active ?? 0 }
 
     @AppStorage("showWelcome", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     public var showWelcome: Bool = true
@@ -135,9 +129,23 @@ final class Settings: ObservableObject {
         // Discard estimates if the user changed units or health mode during the queries.
         guard !Task.isCancelled,
               energyUnit == unit, repository.revision == revision else { return }
-        showResting = estimates.0
-        showActive = estimates.1
+        // Publish the complete pair together, including a confirmed empty result.
+        energyEstimates = EnergyEstimates(resting: estimates.0, active: estimates.1, unit: unit, revision: revision)
         updateNutrientGoals()
+    }
+
+    private var currentEnergyEstimates: EnergyEstimates? {
+        guard let energyEstimates,
+              energyEstimates.unit == energyUnit,
+              energyEstimates.revision == HealthDataMode.currentRevision else { return nil }
+        return energyEstimates
+    }
+
+    private struct EnergyEstimates {
+        let resting: Int
+        let active: Int
+        let unit: EnergyUnit
+        let revision: String
     }
 
 }
@@ -187,11 +195,18 @@ extension Settings {
 extension Settings {
 
     var isSettingsInputValid: Bool {
-        if self.balanceGoal < 0 { return false }
-        if usesCustomEnergy && (self.customCalActive + self.customCalPassive <= 0) { return false }
-        if self.maxEatingEnergy() <= 0 { return false }
-        
-        return true
+        calorieDataState == .ready
+    }
+
+    /// Custom budgets resolve immediately; measured budgets wait for their first query.
+    var calorieDataState: CalorieDataState {
+        CalorieDataState(
+            energy: usesCustomEnergy
+                ? customCalActive + customCalPassive
+                : currentEnergyEstimates.map { $0.resting + $0.active },
+            balanceGoal: balanceGoal,
+            isLoss: weightGoal == .lose
+        )
     }
     
     var isPassiveValid: Bool {

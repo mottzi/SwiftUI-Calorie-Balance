@@ -37,7 +37,7 @@ struct Pager: View {
             } else {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
-                        if AppSettings.isSettingsInputValid {
+                        if AppSettings.calorieDataState != .incomplete {
                             if showCalendar {
                                 CDatePicker(
                                     currentMonth: $currentMonth,
@@ -75,7 +75,7 @@ struct Pager: View {
                     }
                 }
                 .softTopScrollEdge()
-                .scrollDisabled(AppSettings.showWelcome || !AppSettings.isSettingsInputValid)
+                .scrollDisabled(AppSettings.showWelcome || AppSettings.calorieDataState == .incomplete)
                 .frame(maxHeight: .infinity)
                 .onChange(of: scenePhase) { _, newPhase in
                     if newPhase == .active {
@@ -185,9 +185,9 @@ extension Pager {
     /// Refreshes Today summary data when its inputs change, independent of historical swipes.
     private func refreshSummary(force: Bool = false) async {
         guard scenePhase == .active else { return }
-        await AppSettings.updateShow()
-        guard !Task.isCancelled else { return }
         let weekPages = navigation.weekPages.filter { $0.id != navigation.selectedDay }
+        // Start independent summaries together so estimates cannot delay the visible cards.
+        async let estimatesRefresh: Void = AppSettings.updateShow()
         async let weightRefresh: Void = weightHistory.fetchData()
         async let streakRefresh: Void = streak.updateStreaks()
         await withTaskGroup(of: Void.self) { group in
@@ -198,7 +198,7 @@ extension Pager {
                 }
             }
         }
-        _ = await (weightRefresh, streakRefresh)
+        _ = await (estimatesRefresh, weightRefresh, streakRefresh)
     }
 
     private var Toolbar: some ToolbarContent {
@@ -209,7 +209,7 @@ extension Pager {
             showSettings: $showSettings,
             currentMonth: $currentMonth,
             calendarDays: $calendarDays,
-            controlsDisabled: AppSettings.showWelcome || !AppSettings.isSettingsInputValid,
+            controlsDisabled: AppSettings.showWelcome || AppSettings.calorieDataState == .incomplete,
             streakColor: AppSettings.weightGoal == .lose ? AppSettings.burnedColor : AppSettings.consumedColor,
             selectDay: { selectDay($0) }
         )

@@ -254,6 +254,12 @@
 		D003C466753B4570BEAB52ED /* CalorieGraphRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C22D79D56BF4652B8B520AE /* CalorieGraphRendering.swift */; };
 		00802B3EF27B4087ADA9BA43 /* CalorieGraphRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C22D79D56BF4652B8B520AE /* CalorieGraphRendering.swift */; };
 		79DA7A94C1494E6FA15A80AD /* CalorieGraphRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C22D79D56BF4652B8B520AE /* CalorieGraphRendering.swift */; };
+		3D75C43EC0CF4DB386A06449 /* CalorieDataState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8E936F873F43B48DDEAD5D /* CalorieDataState.swift */; };
+		ACC22EEF16E24E28A2A130A9 /* CalorieDataState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8E936F873F43B48DDEAD5D /* CalorieDataState.swift */; };
+		C0BDD2111A03435F8F3D46CE /* CalorieDataState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8E936F873F43B48DDEAD5D /* CalorieDataState.swift */; };
+		2DD8C287938E4E83867F739F /* CalorieDataState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8E936F873F43B48DDEAD5D /* CalorieDataState.swift */; };
+		BC37446210184C76AFC53245 /* HealthLoadingPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CDEABBC2E643F792B68506 /* HealthLoadingPlaceholder.swift */; };
+		0AE4D8A4F543447D9F2E4C15 /* HealthLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2285FAD8E9417A8D8E0724; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -471,6 +477,9 @@
 		48543904A61A44158900D848 /* CalorieBarRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieBarRow.swift; sourceTree = "<group>"; };
 		766FCB1869F74BE582C4AA85 /* CalorieBarRowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieBarRowLayout.swift; sourceTree = "<group>"; };
 		6C22D79D56BF4652B8B520AE /* CalorieGraphRendering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieGraphRendering.swift; sourceTree = "<group>"; };
+		0A8E936F873F43B48DDEAD5D /* CalorieDataState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieDataState.swift; sourceTree = "<group>"; };
+		B4CDEABBC2E643F792B68506 /* HealthLoadingPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthLoadingPlaceholder.swift; sourceTree = "<group>"; };
+		2C2285FAD8E9417A8D8E0724 /* HealthLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthLoadingTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -675,6 +684,7 @@
 		9A6DA88A2B36194800585788 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				B4CDEABBC2E643F792B68506 /* HealthLoadingPlaceholder.swift */,
 				9A001C3E29B6122500BB42B9 /* Dashboard.swift */,
 				9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */,
 				D419EC4A82544CCFB66103F5 /* RecessedCardStyle.swift */,
@@ -849,6 +859,7 @@
 		9AD8FA0A2AF819B40064D501 /* System */ = {
 			isa = PBXGroup;
 			children = (
+				0A8E936F873F43B48DDEAD5D /* CalorieDataState.swift */,
 				9A59C1EB2B0A2E180058A502 /* Settings.swift */,
 				9AEA55C92A5B0081000AB057 /* HealthRepository.swift */,
 				BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */,
@@ -940,7 +951,7 @@
 			path = Toolbar;
 			sourceTree = "<group>";
 		};
-        A3C000000000000000000002 /* Count.kcalTests */ = {isa = PBXGroup; children = (A3C000000000000000000004, A6CA10000000000000000005, BAF100000000000000000001,); path = Count.kcalTests; sourceTree = "<group>"; };
+        A3C000000000000000000002 /* Count.kcalTests */ = {isa = PBXGroup; children = (2C2285FAD8E9417A8D8E0724, A3C000000000000000000004, A6CA10000000000000000005, BAF100000000000000000001,); path = Count.kcalTests; sourceTree = "<group>"; };
 		5A0A272E9AFE42C6AA0B9C9C /* Circle */ = {
 			isa = PBXGroup;
 			children = (
@@ -1277,6 +1288,7 @@
 				9A480F6A2B19315600D79FAE /* ToggleViewModeIntent.swift in Sources */,
 				9A8BA4092B4055B70011D412 /* ColorsCard.swift in Sources */,
 				9ABFA7A22C0A3A6300024D2F /* CircleBalanceGraph.swift in Sources */,
+				ACC22EEF16E24E28A2A130A9 /* CalorieDataState.swift in Sources */,
 				9A59C1EC2B0A2E180058A502 /* Settings.swift in Sources */,
 				9A8BA40F2B4057720011D412 /* CalorieColorSection.swift in Sources */,
 				9A206D7F2C5839170079DE3D /* WelcomeView.swift in Sources */,
@@ -1287,6 +1299,7 @@
 				9A54D74A2C4FE79C0000A107 /* Onboarding.swift in Sources */,
 				9A616F492A642D3C00B713C4 /* CaloriesCard.swift in Sources */,
 				9A206D842C583B560079DE3D /* Welcome.swift in Sources */,
+				BC37446210184C76AFC53245 /* HealthLoadingPlaceholder.swift in Sources */,
 				9A001C3F29B6122500BB42B9 /* Dashboard.swift in Sources */,
 				9AEA55CA2A5B0081000AB057 /* HealthRepository.swift in Sources */,
 				CD70499262B84E06B2FF7BFB /* SampleHealthDataSource.swift in Sources */,
@@ -1350,6 +1363,7 @@
 				B000EE657E13458EB316F6F8 /* HealthDataMode.swift in Sources */,
 				4BD4A383E51E42F1A23DB146 /* HealthKitDataSource.swift in Sources */,
 				C58530D9E0E349C59E0D5B72 /* HealthDataSource.swift in Sources */,
+				C0BDD2111A03435F8F3D46CE /* CalorieDataState.swift in Sources */,
 				9ABFA7BA2C0A411300024D2F /* Settings.swift in Sources */,
 				9ABFA7BB2C0A412D00024D2F /* Extensions.swift in Sources */,
 				9AF39CBD2B3E2E980037628F /* HealthData.swift in Sources */,
@@ -1390,6 +1404,7 @@
 				9A16C8DC2C38A34400ED3B7E /* RectangleBalanceBar.swift in Sources */,
 				9A6DBD5A2C28D42E000920DA /* CircleBalanceGraph.swift in Sources */,
 				9AE1804E2C35FCDA00C37AA9 /* RectangleBalance.swift in Sources */,
+				2DD8C287938E4E83867F739F /* CalorieDataState.swift in Sources */,
 				9AD5F5512C277C43003FE1C5 /* Settings.swift in Sources */,
 				9AD5F5532C277D14003FE1C5 /* WeightHistory.swift in Sources */,
 				9AA413032C24D90D005B9D73 /* BalanceCornerGauge.swift in Sources */,
@@ -1444,6 +1459,7 @@
 				9773BF21F714487189E63B20 /* HealthDataSource.swift in Sources */,
 				9A0BAC082C244D0E00622F9F /* CircleBalanceGraphOverlay.swift in Sources */,
 				9A0B0CC52C1FA08D00D94FB4 /* CircleBalanceGraphWatch.swift in Sources */,
+				3D75C43EC0CF4DB386A06449 /* CalorieDataState.swift in Sources */,
 				9A4B72902C13B64B004853F0 /* Settings.swift in Sources */,
 				9A4B72932C13B886004853F0 /* CircleBalanceGraph.swift in Sources */,
 				9AC2E2842C12742500B07EBE /* ContentView.swift in Sources */,
@@ -1461,7 +1477,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-        A3C000000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A3C000000000000000000005, A6CA10000000000000000006, BAF100000000000000000002,); runOnlyForDeploymentPostprocessing = 0; };
+        A3C000000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (0AE4D8A4F543447D9F2E4C15, A3C000000000000000000005, A6CA10000000000000000006, BAF100000000000000000002,); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */

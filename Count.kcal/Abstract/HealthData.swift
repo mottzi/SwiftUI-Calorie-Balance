@@ -57,6 +57,7 @@ extension HealthData {
     static func example(for date: Date, balance: BalanceOption = .deficit, random: Bool = false) -> HealthData {
         if random {
             var data = HealthData.empty(for: date)
+            data.lastDataSync = .now
             
             data.burnedActive = Int.random(in: 100...1000)
             data.burnedPassive = Int.random(in: 200...2300)
@@ -74,7 +75,7 @@ extension HealthData {
         if balance == .deficit {
             return HealthData(
                 date: date,
-                lastDataSync: nil,
+                lastDataSync: .now,
                 burnedActive: 1500,
                 burnedActive7: 0,
                 burnedPassive: 2130,
@@ -88,7 +89,7 @@ extension HealthData {
         } else {
             return HealthData(
                 date: date,
-                lastDataSync: nil,
+                lastDataSync: .now,
                 burnedActive: 400,
                 burnedActive7: 0,
                 burnedPassive: 1850,

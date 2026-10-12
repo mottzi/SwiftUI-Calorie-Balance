@@ -23,6 +23,8 @@ private struct DashboardCalories: View {
 
     @Environment(HealthInterface.self) private var day
 
+    @EnvironmentObject private var settings: Settings
+
     @Binding var todayPageMode: TodayPageMode
 
     var body: some View {
@@ -32,16 +34,24 @@ private struct DashboardCalories: View {
             secondaryTitle: subtitle,
             innerPadding: 0
         ) {
-            if day.isTodayPage {
-                CaloriesMidnightCard(todayPageMode: $todayPageMode)
-            } else {
-                CaloriesCard(mode: .now)
-                    // Reserve the same depth without changing the face height on other days.
-                    .padding(.bottom, CaloriesMidnightCard.rimDepth)
+            Group {
+                if day.isTodayPage {
+                    CaloriesMidnightCard(todayPageMode: $todayPageMode)
+                } else {
+                    CaloriesCard(mode: .now)
+                        // Reserve the same depth without changing the face height on other days.
+                        .padding(.bottom, CaloriesMidnightCard.rimDepth)
+                }
             }
+            .modifier(HealthLoadingPlaceholder(
+                isLoading: !day.hasLoadedSnapshot || settings.calorieDataState == .loading,
+                label: "Loading calorie data",
+                showsProgressIndicator: true
+            ))
         }
         .overlay(alignment: .topTrailing) {
             DayChoiceButton()
+                .disabled(!day.hasLoadedSnapshot)
                 .padding(.trailing, 16)
                 .offset(y: -12)
         }
@@ -52,6 +62,7 @@ private struct DashboardCalories: View {
 extension DashboardCalories {
 
     private var subtitle: String {
+        guard day.hasLoadedSnapshot else { return "" }
         if day.isTodayPage {
             if todayPageMode.selection == .second {
                 return String(localized: "Midnight")
@@ -85,6 +96,7 @@ private struct DashboardSteps: View {
             )
             .padding(.horizontal, 11)
             .padding(.bottom, 6)
+            .modifier(HealthLoadingPlaceholder(isLoading: !day.hasLoadedSnapshot, label: "Loading step data"))
         }
     }
 

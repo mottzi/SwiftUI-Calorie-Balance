@@ -13,6 +13,7 @@ struct SampleHealthDataSource: HealthDataSource {
     }
 
     func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async -> [Date: Double] {
+        await waitForLaunchFixture()
         var sums: [Date: Double] = [:]
         for day in days(from: start, to: end) {
             let sample = SampleHealthDay(date: day, now: now, calendar: calendar)
@@ -22,7 +23,8 @@ struct SampleHealthDataSource: HealthDataSource {
     }
 
     func weights(from start: Date, to end: Date, unit: HKUnit) async -> [WeightChartData] {
-        days(from: start, to: end).map { date in
+        await waitForLaunchFixture()
+        return days(from: start, to: end).map { date in
             let sample = SampleHealthDay(date: date, now: now, calendar: calendar)
             return WeightChartData(date: date, weightAvg: sample?.quantity(.bodyMass)?.doubleValue(for: unit))
         }
@@ -61,6 +63,7 @@ struct SampleHealthDataSource: HealthDataSource {
     }
 
     func latestWeight(before end: Date, unit: HKUnit) async -> (Double?, Date?) {
+        await waitForLaunchFixture()
         let date = min(end, now)
         guard let sample = SampleHealthDay(date: date, now: now, calendar: calendar) else { return (nil, nil) }
         // A historical query before its weighing time must use the previous day.
@@ -77,6 +80,15 @@ struct SampleHealthDataSource: HealthDataSource {
 }
 
 extension SampleHealthDataSource {
+
+    /// Simulator QA can hold queries open to inspect the first-load presentation.
+    private func waitForLaunchFixture() async {
+        #if targetEnvironment(simulator)
+        guard let value = ProcessInfo.processInfo.environment["COUNT_SAMPLE_QUERY_DELAY"],
+              let seconds = Double(value), seconds.isFinite, seconds > 0 else { return }
+        try? await Task.sleep(for: .seconds(min(seconds, 10)))
+        #endif
+    }
 
     private func days(from start: Date, to end: Date) -> [Date] {
         var result: [Date] = []

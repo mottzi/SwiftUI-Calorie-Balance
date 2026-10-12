@@ -107,7 +107,7 @@ private struct ProgressWeightChart: View {
 
     var body: some View {
         if weights.validData(page).isEmpty {
-            if weights.isLoading {
+            if weights.isLoading || (weights.updatedAt == nil && !weights.refreshFailed) {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
