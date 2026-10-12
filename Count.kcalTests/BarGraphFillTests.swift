@@ -1,10 +1,71 @@
 import SwiftUI
 import Testing
 import UIKit
+import WidgetKit
 @testable import Count_kcal
 
 @MainActor
 struct BarGraphFillTests {
+
+    @Test(arguments: [GraphMode.now, .midnight], [ColorScheme.light, .dark])
+    func tintedBarsKeepSegmentsAndRemaindersDistinct(mode: GraphMode, scheme: ColorScheme) throws {
+
+        for consumed in [500, 1_200] {
+            var data = HealthData.empty(for: Date(timeIntervalSince1970: 0))
+            data.burnedActive = 200
+            data.burnedPassive = 400
+            data.burnedPassive7 = 800
+            data.consumed = consumed
+            let values = EnergyGraphValues(mode == .now ? data.now : data.midnight)
+            let graph = BarBalanceGraph(
+                mode: mode,
+                labels: false,
+                animateNumericValues: true,
+                rendering: .widget
+            )
+                .environment(HealthInterface(data))
+                .environmentObject(Settings.shared)
+                .environment(\.colorScheme, scheme)
+                .environment(\.widgetRenderingMode, .accented)
+            // tinted content keeps its alpha while all colors become white
+            let rendered = try pixels(of: Color.white.mask(graph), width: 240, height: 44)
+            for (side, y) in [(EnergyGraphValues.Side.burned, 10), (.consumed, 33)] {
+                let shades = values.segments(for: side)
+                    .filter { $0.range.upperBound > $0.range.lowerBound }
+                    .map { segment in
+                        let x = Int((segment.range.lowerBound + segment.range.upperBound) / 2 * 240)
+                        return Int(rendered[(y * 240 + x) * 4])
+                    }
+                #expect(shades.allSatisfy { $0 < 150 })
+                for (leading, trailing) in zip(shades, shades.dropFirst()) {
+                    #expect(leading - trailing > 15)
+                }
+            }
+        }
+    }
+
+    @Test(arguments: [GraphMode.now, .midnight])
+    func tintedBarLabelsRemainBrighterThanTheirFills(mode: GraphMode) throws {
+
+        var data = HealthData.empty(for: Date(timeIntervalSince1970: 0))
+        data.burnedActive = 200
+        data.burnedPassive = 400
+        data.burnedPassive7 = 800
+        data.consumed = 1_200
+        let graph = BarBalanceGraph(mode: mode, animateNumericValues: true, rendering: .widget)
+            .environment(HealthInterface(data))
+            .environmentObject(Settings.shared)
+            .environment(\.colorScheme, .dark)
+            .environment(\.widgetRenderingMode, .accented)
+        let rendered = try pixels(of: Color.white.mask(graph), width: 240, height: 44)
+        for yRange in [0..<21, 23..<44] {
+            let brightPixelCount = yRange.reduce(0) { count, y in
+                count + (0..<240).filter { rendered[(y * 240 + $0) * 4] > 230 }.count
+            }
+            #expect(brightPixelCount > 0)
+            #expect(brightPixelCount < 1_000)
+        }
+    }
 
     @Test(arguments: [ColorScheme.light, .dark])
     func shadesMatchTheBrightnessEffectWithinTheRGBRange(scheme: ColorScheme) throws {

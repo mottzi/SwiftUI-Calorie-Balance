@@ -1,9 +1,11 @@
 import SwiftUI
+import WidgetKit
 
 /// Recorded or projected energy in two horizontal bars.
 struct BarBalanceGraph: View {
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
+    @Environment(\.widgetRenderingMode) private var renderingMode
     @Environment(HealthInterface.self) private var day
 
     @EnvironmentObject private var settings: Settings
@@ -51,7 +53,16 @@ extension BarBalanceGraph {
             consumed: settings.consumedColor,
             empty: settings.getGraphEmptyColor(scheme)
         )
-        palette.empty.opacity = scheme == .light ? 0.4 : 1
+        if renderingMode == .accented {
+            // keep white labels brighter than the tinted fills and their background
+            palette.active.opacity = 0.35
+            palette.resting.opacity = 0.22
+            palette.prediction.opacity = 0.12
+            palette.consumed.opacity = 0.35
+            palette.empty.opacity = 0.06
+        } else {
+            palette.empty.opacity = scheme == .light ? 0.4 : 1
+        }
         return palette
     }
 

@@ -33,6 +33,7 @@ private struct BalanceWidgetBarContent: View {
 
     @Environment(\.colorScheme) private var scheme
     @Environment(\.widgetFamily) var family: WidgetFamily
+    @Environment(\.widgetRenderingMode) private var renderingMode
     
     @EnvironmentObject private var AppSettings: Settings
 
@@ -60,6 +61,9 @@ private struct BalanceWidgetBarContent: View {
                     .padding(.top, 5)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
+                // replace tinted mode snapshots together so labels and bar geometry stay in sync
+                .id(renderingMode == .accented ? mode : nil)
+                .transition(.identity)
                 
             case .systemMedium:
                 ZStack(alignment: mode == .now ? .topLeading : .top) {
@@ -79,6 +83,8 @@ private struct BalanceWidgetBarContent: View {
                 
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
+                .id(renderingMode == .accented ? mode : nil)
+                .transition(.identity)
             
             default:
                 Text(verbatim: "Widget size not supported")
