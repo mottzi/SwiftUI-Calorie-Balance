@@ -1729,35 +1729,6 @@
         }
       }
     },
-    "Days with missing food or burned energy are left out automatically. Confirm fasting only if you had no calorie intake. Your choice stays saved until you change it." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tage mit fehlenden Essensdaten oder fehlendem Energieverbrauch werden automatisch ausgelassen. Bestätige Fasten nur, wenn du keine Kalorien aufgenommen hast. Deine Auswahl bleibt gespeichert, bis du sie änderst."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Los días sin datos de comida o energía quemada se excluyen automáticamente. Confirma el ayuno solo si no consumiste calorías. Tu elección se guarda hasta que la cambies."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les jours sans données alimentaires ou sans dépense énergétique sont exclus automatiquement. Confirmez le jeûne uniquement si vous n’avez consommé aucune calorie. Votre choix reste enregistré jusqu’à ce que vous le changiez."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "缺少饮食或热量消耗数据的日期会自动排除。仅在没有摄入任何热量时确认禁食。你的选择会一直保存，直到你更改它。"
-          }
-        }
-      }
-    },
     "Days without recorded food or resting energy are left out automatically. Confirm fasting only if you had no calorie intake. Your choice stays saved until you change it." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2863,35 +2834,6 @@
         }
       }
     },
-    "Loading recorded data…" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aufgezeichnete Daten werden geladen…"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cargando datos registrados…"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Chargement des données enregistrées…"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在加载已记录的数据…"
-          }
-        }
-      }
-    },
     "Lose Weight" : {
       "localizations" : {
         "de" : {
@@ -3537,35 +3479,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "仅影响你的平均热量缺口"
-          }
-        }
-      }
-    },
-    "Only your average deficit changes. Health data and weight measurements stay unchanged." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nur dein durchschnittliches Defizit ändert sich. Gesundheitsdaten und Gewichtsmessungen bleiben unverändert."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Solo cambia tu déficit medio. Los datos de Salud y las mediciones de peso no cambian."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seul votre déficit moyen change. Les données de Santé et les mesures de poids restent inchangées."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "仅平均热量缺口会改变。健康数据和体重测量记录保持不变。"
           }
         }
       }
