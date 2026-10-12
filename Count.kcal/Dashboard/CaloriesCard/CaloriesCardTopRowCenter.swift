@@ -10,20 +10,22 @@ struct CaloriesCardTopRowCenter: View {
     @Environment(HealthInterface.self) private var DataViewModel
 
     let mode: GraphMode
+    var isLoading = false
     
     var body: some View {
         ZStack {
             CircleBalanceGraph(mode: mode)
                 .frame(width: 130, height: 130)
+                .opacity(isLoading ? 0.2 : 1)
 
             VStack(spacing: 0) {
-                Text("\(abs(balance))")
+                Text(verbatim: isLoading ? "—" : abs(balance).formatted(.number))
                     .font(.system(size: 26))
                     .fontWeight(.semibold)
                     .foregroundStyle(Color(energy.isEmpty ? "SecondaryTextColor" : "TextColor"))
                     .contentTransition(.numericText(value: Double(abs(balance))))
                 
-                Text(balanceLabel)
+                Text(isLoading ? "Balance" : balanceLabel)
                     .font(.caption)
                     .fontWeight(.light)
                     .foregroundColor(Color("SecondaryTextColor"))
@@ -33,7 +35,7 @@ struct CaloriesCardTopRowCenter: View {
             }
             .fontDesign(.rounded)
         
-            if !AppSettings.hideCalorieStatusIcons && !energy.isEmpty {
+            if !isLoading && !AppSettings.hideCalorieStatusIcons && !energy.isEmpty {
                 Image(systemName: goalReached ? "checkmark" : "xmark")
                     .font(.system(size: 12))
                     .fontWeight(.semibold)

@@ -42,6 +42,7 @@ extension CaloriesMidnightCard {
     private var mode: GraphMode { todayPageMode.selection == .first ? .now : .midnight }
 
     private var accessibilityValue: Text {
+        guard day.hasLoadedSnapshot else { return Text("Loading calorie data") }
         let energy = mode == .now ? day.sample.now : day.sample.midnight
         let unit = settings.energyUnit == .kJ ? "kJ" : "kcal"
         let modeTitle: LocalizedStringKey = mode == .now ? "Now" : "Midnight"

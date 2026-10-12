@@ -264,9 +264,9 @@ struct WeekBalanceChart: View {
                         .accessibilityHidden(!hasLoadedWeek)
                         .overlay {
                             if !hasLoadedWeek {
-                                RoundedRectangle(cornerRadius: 4)
+                                Capsule()
                                     .fill(.quaternary)
-                                    .frame(width: 12, height: graphHeight / 2)
+                                    .frame(height: 2)
                                     .accessibilityHidden(true)
                             }
                         }

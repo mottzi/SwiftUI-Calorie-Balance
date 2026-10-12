@@ -23,8 +23,6 @@ private struct DashboardCalories: View {
 
     @Environment(HealthInterface.self) private var day
 
-    @EnvironmentObject private var settings: Settings
-
     @Binding var todayPageMode: TodayPageMode
 
     var body: some View {
@@ -44,7 +42,7 @@ private struct DashboardCalories: View {
                 }
             }
             .modifier(HealthLoadingPlaceholder(
-                isLoading: !day.hasLoadedSnapshot || settings.calorieDataState == .loading,
+                isLoading: !day.hasLoadedSnapshot,
                 label: "Loading calorie data",
                 showsProgressIndicator: true
             ))
@@ -92,7 +90,8 @@ private struct DashboardSteps: View {
                 goalValue: settings.stepsGoal,
                 unit: "",
                 color: settings.burnedColor,
-                graphHeight: 10
+                graphHeight: 10,
+                isLoading: !day.hasLoadedSnapshot
             )
             .padding(.horizontal, 11)
             .padding(.bottom, 6)

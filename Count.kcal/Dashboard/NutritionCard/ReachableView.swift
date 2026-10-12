@@ -15,6 +15,7 @@ struct ReachableView: View {
     private let unit: String
     private let color: Color
     private let graphHeight: CGFloat
+    private let isLoading: Bool
 
     init(
         _ key: LocalizedStringKey,
@@ -23,7 +24,8 @@ struct ReachableView: View {
         goalValue: Int,
         unit: String = "g",
         color: Color = Color("SecondaryTextColor"),
-        graphHeight: CGFloat = 18
+        graphHeight: CGFloat = 18,
+        isLoading: Bool = false
     ) {
         self.key = key
         self.context = context
@@ -32,6 +34,7 @@ struct ReachableView: View {
         self.unit = unit
         self.color = color
         self.graphHeight = graphHeight
+        self.isLoading = isLoading
     }
 
     var body: some View {
@@ -41,15 +44,18 @@ struct ReachableView: View {
                 consumedValue: consumedValue,
                 goalValue: goalValue,
                 unit: unit,
-                animatesValues: context != .app
+                animatesValues: context != .app,
+                isLoading: isLoading
             )
 
             ReachableBar(
-                progress: goalValue > 0 ? Double(consumedValue) / Double(goalValue) : 0,
+                progress: !isLoading && goalValue > 0 ? Double(consumedValue) / Double(goalValue) : 0,
                 color: color,
                 emptyColor: settings.getGraphEmptyColor(scheme),
                 height: graphHeight
             )
+            .opacity(isLoading ? 0.3 : 1)
+            .scaleEffect(x: 1, y: isLoading ? 0.25 : 1)
         }
         .accessibilityElement(children: .combine)
     }
@@ -66,6 +72,7 @@ private struct ReachableHeader: View {
     let goalValue: Int
     let unit: String
     let animatesValues: Bool
+    let isLoading: Bool
 
     var body: some View {
         let stacked = dynamicType.isAccessibilitySize
@@ -93,7 +100,14 @@ private struct ReachableHeader: View {
 
     @ViewBuilder
     private var values: some View {
-        if goalValue > 0 {
+        if isLoading {
+            Text(
+                verbatim: goalValue > 0
+                    ? "— / \(goalValue.formatted(.number.grouping(.never))) \(unit)"
+                    : "— \(unit)"
+            )
+                .foregroundStyle(Color("SecondaryTextColor"))
+        } else if goalValue > 0 {
             Text(
                 """
                 \(consumedValue, format: .number.grouping(.never)) / \

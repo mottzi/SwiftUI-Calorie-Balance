@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Keeps card geometry while withholding unresolved measurements and their actions.
+/// Gives unresolved card content loading semantics without changing its appearance.
 struct HealthLoadingPlaceholder: ViewModifier {
 
     @State private var showsProgress = false
@@ -11,21 +11,23 @@ struct HealthLoadingPlaceholder: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .redacted(reason: isLoading ? .placeholder : [])
             .disabled(isLoading)
             .accessibilityHidden(isLoading)
-            .overlay {
+            .overlay(alignment: .topTrailing) {
                 if isLoading {
-                    Color.clear
-                        .accessibilityElement()
-                        .accessibilityLabel(Text(label))
-                        .allowsHitTesting(false)
+                    ZStack(alignment: .topTrailing) {
+                        Color.clear
+                            .accessibilityElement()
+                            .accessibilityLabel(Text(label))
 
-                    if showsProgress {
-                        ProgressView()
-                            .accessibilityHidden(true)
-                            .allowsHitTesting(false)
+                        if showsProgress {
+                            ProgressView()
+                                .controlSize(.small)
+                                .padding(12)
+                                .accessibilityHidden(true)
+                        }
                     }
+                    .allowsHitTesting(false)
                 }
             }
             .task(id: isLoading && showsProgressIndicator) {

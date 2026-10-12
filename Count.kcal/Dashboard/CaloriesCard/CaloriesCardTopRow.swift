@@ -11,6 +11,7 @@ struct CaloriesCardTopRow: View {
     @Environment(HealthInterface.self) private var DataViewModel
 
     let mode: GraphMode
+    var isLoading = false
 
     var body: some View {
         (dynamicType.isAccessibilitySize
@@ -50,7 +51,7 @@ struct CaloriesCardTopRow: View {
                     
                     VStack(alignment: .leading, spacing: 0) {
                         HStack(alignment: .lastTextBaseline, spacing: 2) {
-                            Text("\(energy.burned)")
+                            Text(verbatim: isLoading ? "—" : energy.burned.formatted(.number))
                                 .contentTransition(.numericText(value: Double(energy.burned)))
                                 .font(.title3)
                                 .fontWeight(.semibold)
@@ -107,7 +108,11 @@ struct CaloriesCardTopRow: View {
 
                     VStack(alignment: .leading, spacing: 0) {
                         HStack(alignment: .lastTextBaseline, spacing: 2) {
-                            Text("\(DataViewModel.sample.consumed)")
+                            Text(
+                                verbatim: isLoading
+                                    ? "—"
+                                    : DataViewModel.sample.consumed.formatted(.number)
+                            )
                                 .contentTransition(.numericText(value: Double(DataViewModel.sample.consumed)))
                                 .font(.title3)
                                 .fontWeight(.semibold)
@@ -141,7 +146,7 @@ struct CaloriesCardTopRow: View {
                 Spacer()
             }
             
-            CaloriesCardTopRowCenter(mode: mode)
+            CaloriesCardTopRowCenter(mode: mode, isLoading: isLoading)
                 .padding(.trailing, dynamicType.isAccessibilitySize ? 0 : 19)
         }
     }

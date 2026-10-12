@@ -4,6 +4,8 @@ import SwiftUI
 struct CaloriesCard: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
+    @Environment(HealthInterface.self) private var day
+
     @EnvironmentObject private var settings: Settings
 
     let mode: GraphMode
@@ -27,12 +29,12 @@ struct CaloriesCard: View {
     
     var body: some View {
         VStack(spacing: dynamicType.isAccessibilitySize ? 8 : 0) {
-            CaloriesCardTopRow(mode: mode)
+            CaloriesCardTopRow(mode: mode, isLoading: !day.hasLoadedSnapshot)
                 .padding(.top, 2)
 
             BarBalanceGraph(
                 mode: mode,
-                labels: !dynamicType.isAccessibilitySize,
+                labels: !dynamicType.isAccessibilitySize && day.hasLoadedSnapshot,
                 animateNumericValues: animateNumericValues
             )
                 .frame(height: sizeMapping[dynamicType, default: 44])
@@ -40,6 +42,17 @@ struct CaloriesCard: View {
                 .padding(.bottom, 2)
                 .padding(.horizontal, 13)
                 .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+                .opacity(day.hasLoadedSnapshot ? 1 : 0)
+                .overlay {
+                    if !day.hasLoadedSnapshot {
+                        VStack(spacing: 20) {
+                            Capsule().fill(.quaternary).frame(height: 2)
+                            Capsule().fill(.quaternary).frame(height: 2)
+                        }
+                        .padding(.horizontal, 13)
+                        .accessibilityHidden(true)
+                    }
+                }
         }
         .frame(maxWidth: .infinity)
         .padding(16)

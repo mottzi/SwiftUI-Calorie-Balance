@@ -18,8 +18,7 @@ struct StreakToolbarButton: View {
                     .foregroundStyle(color.brighten(-0.1).gradient)
                     .fontWeight(.bold)
 
-                Text("\(streak.streaks)")
-                    .redacted(reason: streak.hasLoadedCount ? [] : .placeholder)
+                Text(verbatim: streak.hasLoadedCount ? streak.streaks.formatted(.number) : "—")
                     .font(.callout)
                     .fontDesign(.rounded)
                     .fontWeight(.bold)

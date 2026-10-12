@@ -16,7 +16,8 @@ struct MacroCard: View {
                     consumedValue: DataViewModel.sample.carbs,
                     goalValue: goals?.carbs ?? AppSettings.carbsGoal,
                     color: AppSettings.consumedColor,
-                    graphHeight: 10
+                    graphHeight: 10,
+                    isLoading: isLoading
                 )
                 
                 ReachableView(
@@ -24,7 +25,8 @@ struct MacroCard: View {
                     consumedValue: DataViewModel.sample.fats,
                     goalValue: goals?.fats ?? AppSettings.fatsGoal,
                     color: AppSettings.consumedColor,
-                    graphHeight: 10
+                    graphHeight: 10,
+                    isLoading: isLoading
                 )
                 
                 ReachableView(
@@ -32,17 +34,22 @@ struct MacroCard: View {
                     consumedValue: DataViewModel.sample.protein,
                     goalValue: goals?.protein ?? AppSettings.proteinGoal,
                     color: AppSettings.consumedColor,
-                    graphHeight: 10
+                    graphHeight: 10,
+                    isLoading: isLoading
                 )
                     .padding(.bottom, 6)
             }
             .padding(.horizontal, 11)
             .padding(.bottom, 2)
             .modifier(HealthLoadingPlaceholder(
-                isLoading: !DataViewModel.hasLoadedSnapshot || (goals == nil && AppSettings.calorieDataState == .loading),
+                isLoading: isLoading,
                 label: "Loading nutrient data"
             ))
         }
+    }
+
+    private var isLoading: Bool {
+        !DataViewModel.hasLoadedSnapshot || (goals == nil && AppSettings.calorieDataState == .loading)
     }
 
 }
