@@ -1,9 +1,11 @@
 import SwiftUI
+import WidgetKit
 
 /// A complete calorie value with the existing bar label appearance.
 struct CalorieBarLabel: View {
 
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.widgetRenderingMode) private var renderingMode
 
     let value: Int
     let animatesNumericValues: Bool
@@ -24,7 +26,7 @@ struct CalorieBarLabel: View {
                 alignment: .trailing
             )
             .clipped()
-            .shadow(color: .black.opacity(scheme == .dark ? 0.8 : 0.5), radius: 4)
+            .shadow(color: renderingMode == .accented ? .clear : .black.opacity(scheme == .dark ? 0.8 : 0.5), radius: 4)
             .contrast(scheme == .dark ? 1.5 : 2)
             .opacity(value > 0 ? 1 : 0)
             .accessibilityHidden(value == 0)

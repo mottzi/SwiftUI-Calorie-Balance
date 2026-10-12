@@ -54,12 +54,8 @@ extension BarBalanceGraph {
             empty: settings.getGraphEmptyColor(scheme)
         )
         if renderingMode == .accented {
-            // keep white labels brighter than the tinted fills and their background
-            palette.active.opacity = 0.35
-            palette.resting.opacity = 0.22
-            palette.prediction.opacity = 0.12
-            palette.consumed.opacity = 0.35
-            palette.empty.opacity = 0.06
+            palette.applyAccentedAppearance()
+            palette.prediction.opacity = 0.7
         } else {
             palette.empty.opacity = scheme == .light ? 0.4 : 1
         }

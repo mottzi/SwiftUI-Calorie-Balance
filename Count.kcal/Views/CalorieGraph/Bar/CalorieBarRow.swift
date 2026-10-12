@@ -1,7 +1,10 @@
 import SwiftUI
+import WidgetKit
 
 /// One bar with an occupied end cap and values placed across the whole row.
 struct CalorieBarRow: View {
+
+    @Environment(\.widgetRenderingMode) private var renderingMode
 
     let values: EnergyGraphValues
     let side: EnergyGraphValues.Side
@@ -47,7 +50,9 @@ struct CalorieBarRow: View {
             style: .continuous
         ))
 
-        if configuration.animatesNumericValues {
+        if renderingMode == .accented && configuration.showsLabels {
+            row.mask(labelMask)
+        } else if configuration.animatesNumericValues {
             row
         } else {
             row.drawingGroup()
@@ -57,6 +62,29 @@ struct CalorieBarRow: View {
 }
 
 extension CalorieBarRow {
+
+    private var labelMask: some View {
+        CalorieBarRowLayout(
+            values: values,
+            side: side,
+            labelSpacing: configuration.labelSpacing,
+            labelInset: configuration.labelInset
+        ) {
+            Color.clear
+            ForEach(values.segments(for: side), id: \.id.rawValue) { segment in
+                CalorieBarLabel(
+                    value: Int(segment.value.rounded()),
+                    animatesNumericValues: configuration.animatesNumericValues
+                )
+                .colorMultiply(.black)
+                .opacity(segment.id == .empty ? 0 : 1)
+                .geometryGroup()
+            }
+        }
+        .background(.white)
+        .compositingGroup()
+        .luminanceToAlpha()
+    }
 
     /// Active, resting, or consumed segments within the occupied part of a bar.
     private struct CalorieBarFillDrawing: View {

@@ -17,6 +17,16 @@ struct CalorieGraphPalette {
         self.empty = Fill(color: empty, brightness: BrightnessLevel.primary.amount(in: .bargraph))
     }
 
+    /// Applies the shared energy shades for tinted graphs and nutrient progress.
+    mutating func applyAccentedAppearance() {
+
+        active.opacity = 1
+        resting.opacity = 0.85
+        prediction.opacity = 0.45
+        consumed.opacity = 0.6
+        empty.opacity = 0.25
+    }
+
     /// Selects the appearance of a stable energy part.
     func fill(for part: EnergyGraphValues.Part) -> Fill {
         switch part {

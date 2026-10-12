@@ -41,10 +41,7 @@ extension CircleBalanceGraph {
             empty: settings.getGraphEmptyColor(scheme)
         )
         if accentedWidget {
-            palette.resting.opacity = 0.85
-            palette.prediction.opacity = 0.45
-            palette.consumed.opacity = 0.6
-            palette.empty.opacity = 0.25
+            palette.applyAccentedAppearance()
         }
         return palette
     }

@@ -8,7 +8,7 @@ import WidgetKit
 struct BarGraphFillTests {
 
     @Test(arguments: [GraphMode.now, .midnight], [ColorScheme.light, .dark])
-    func tintedBarsKeepSegmentsAndRemaindersDistinct(mode: GraphMode, scheme: ColorScheme) throws {
+    func tintedBarsKeepSharedShadesAndSoftenPrediction(mode: GraphMode, scheme: ColorScheme) throws {
 
         for consumed in [500, 1_200] {
             var data = HealthData.empty(for: Date(timeIntervalSince1970: 0))
@@ -29,41 +29,59 @@ struct BarGraphFillTests {
                 .environment(\.widgetRenderingMode, .accented)
             // tinted content keeps its alpha while all colors become white
             let rendered = try pixels(of: Color.white.mask(graph), width: 240, height: 44)
-            for (side, y) in [(EnergyGraphValues.Side.burned, 10), (.consumed, 33)] {
-                let shades = values.segments(for: side)
-                    .filter { $0.range.upperBound > $0.range.lowerBound }
-                    .map { segment in
-                        let x = Int((segment.range.lowerBound + segment.range.upperBound) / 2 * 240)
-                        return Int(rendered[(y * 240 + x) * 4])
+            let circle = CircleBalanceGraph(mode: mode, accentedWidget: true, rendering: .widget)
+                .environment(HealthInterface(data))
+                .environmentObject(Settings.shared)
+                .environment(\.colorScheme, scheme)
+            let reference = try pixels(of: Color.white.mask(circle), width: 130, height: 130)
+            for (side, y, radius) in [(EnergyGraphValues.Side.burned, 10, 61.0), (.consumed, 33, 51.0)] {
+                for segment in values.segments(for: side) where segment.range.upperBound > segment.range.lowerBound {
+                    let progress = (segment.range.lowerBound + segment.range.upperBound) / 2
+                    let angle = (135 + progress * 270) * Double.pi / 180
+                    let circleX = Int(65 + radius * cos(angle))
+                    let circleY = Int(65 + radius * sin(angle))
+                    let x = Int(progress * 240)
+                    let shade = Int(rendered[(y * 240 + x) * 4])
+                    let circleShade = Int(reference[(circleY * 130 + circleX) * 4])
+                    if segment.id == .prediction {
+                        #expect((35...55).contains(shade - circleShade))
+                    } else {
+                        #expect(abs(shade - circleShade) <= 2)
                     }
-                #expect(shades.allSatisfy { $0 < 150 })
-                for (leading, trailing) in zip(shades, shades.dropFirst()) {
-                    #expect(leading - trailing > 15)
                 }
             }
         }
     }
 
     @Test(arguments: [GraphMode.now, .midnight])
-    func tintedBarLabelsRemainBrighterThanTheirFills(mode: GraphMode) throws {
+    func tintedBarLabelsCutThroughBrightSegments(mode: GraphMode) throws {
 
         var data = HealthData.empty(for: Date(timeIntervalSince1970: 0))
-        data.burnedActive = 200
-        data.burnedPassive = 400
-        data.burnedPassive7 = 800
-        data.consumed = 1_200
-        let graph = BarBalanceGraph(mode: mode, animateNumericValues: true, rendering: .widget)
-            .environment(HealthInterface(data))
-            .environmentObject(Settings.shared)
-            .environment(\.colorScheme, .dark)
-            .environment(\.widgetRenderingMode, .accented)
-        let rendered = try pixels(of: Color.white.mask(graph), width: 240, height: 44)
+        data.burnedActive = 301
+        data.burnedPassive = 1_412
+        data.burnedPassive7 = 2_000
+        data.consumed = 1_593
+        var rows: [[UInt8]] = []
+        for labels in [false, true] {
+            let graph = BarBalanceGraph(
+                mode: mode,
+                labels: labels,
+                animateNumericValues: true,
+                rendering: .widget
+            )
+                .environment(HealthInterface(data))
+                .environmentObject(Settings.shared)
+                .environment(\.colorScheme, .dark)
+                .environment(\.widgetRenderingMode, .accented)
+            rows.append(try pixels(of: Color.white.mask(graph), width: 240, height: 44))
+        }
         for yRange in [0..<21, 23..<44] {
-            let brightPixelCount = yRange.reduce(0) { count, y in
-                count + (0..<240).filter { rendered[(y * 240 + $0) * 4] > 230 }.count
+            let cutoutPixelCount = yRange.reduce(0) { count, y in
+                count + (0..<240).filter {
+                    Int(rows[0][(y * 240 + $0) * 4]) - Int(rows[1][(y * 240 + $0) * 4]) > 100
+                }.count
             }
-            #expect(brightPixelCount > 0)
-            #expect(brightPixelCount < 1_000)
+            #expect(cutoutPixelCount > 10)
         }
     }
 
