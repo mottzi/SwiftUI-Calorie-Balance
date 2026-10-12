@@ -86,6 +86,28 @@ struct BarGraphFillTests {
     }
 
     @Test(arguments: [ColorScheme.light, .dark])
+    func tintedNutrientBarsShowFilledAndRemainingProgress(scheme: ColorScheme) throws {
+
+        let graph = ReachableView(
+            "Carbs",
+            context: .widget(.systemLarge),
+            consumedValue: 60,
+            goalValue: 100,
+            graphHeight: 12
+        )
+            .environmentObject(Settings.shared)
+            .environment(\.colorScheme, scheme)
+            .environment(\.widgetRenderingMode, .accented)
+        let rendered = try pixels(of: Color.white.mask(graph), width: 240, height: 48)
+        let progressRows = (24..<48).filter { y in
+            let filled = Int(rendered[(y * 240 + 60) * 4])
+            let remaining = Int(rendered[(y * 240 + 210) * 4])
+            return abs(filled - 179) <= 2 && abs(remaining - 64) <= 2
+        }
+        #expect(progressRows.count >= 6)
+    }
+
+    @Test(arguments: [ColorScheme.light, .dark])
     func shadesMatchTheBrightnessEffectWithinTheRGBRange(scheme: ColorScheme) throws {
 
         let colors = [

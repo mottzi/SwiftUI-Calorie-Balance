@@ -111,6 +111,7 @@ private struct ReachableHeader: View {
 private struct ReachableBar: View {
 
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.widgetRenderingMode) private var renderingMode
 
     let progress: Double
     let color: Color
@@ -122,6 +123,7 @@ private struct ReachableBar: View {
             ZStack(alignment: .leading) {
                 Capsule()
                     .fill(emptyColor.brighten(scheme == .light ? 0.15 : -0.05))
+                    .opacity(palette.empty.opacity)
 
                 Capsule()
                     .fill(color.brighten(0.1))
@@ -136,11 +138,21 @@ private struct ReachableBar: View {
                         .opacity(scheme == .dark ? 0.20 : 0.10)
                         .clipShape(Capsule())
                     }
+                    .compositingGroup()
+                    .opacity(palette.consumed.opacity)
             }
             .clipShape(Capsule())
         }
         .frame(height: height)
         .accessibilityHidden(true)
+    }
+
+    private var palette: CalorieGraphPalette {
+        var palette = CalorieGraphPalette(burned: color, consumed: color, empty: emptyColor)
+        if renderingMode == .accented {
+            palette.applyAccentedAppearance()
+        }
+        return palette
     }
 
 }
