@@ -19,7 +19,14 @@
           ],
           "glass" : true,
           "image-name" : "02 Consumed.svg",
-          "name" : "02 Energy consumed"
+          "name" : "02 Energy consumed",
+          "position" : {
+            "scale" : 1.05,
+            "translation-in-points" : [
+              0.013876420782594323,
+              29.24866740392042
+            ]
+          }
         },
         {
           "fill-specializations" : [
@@ -30,7 +37,14 @@
           ],
           "glass" : true,
           "image-name" : "01 Burned.svg",
-          "name" : "01 Energy burned"
+          "name" : "01 Energy burned",
+          "position" : {
+            "scale" : 1.05,
+            "translation-in-points" : [
+              0.013876420782594323,
+              29.24866740392042
+            ]
+          }
         }
       ],
       "lighting" : "individual",
