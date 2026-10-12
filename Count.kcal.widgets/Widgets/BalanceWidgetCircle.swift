@@ -155,6 +155,7 @@ extension BalanceWidgetCircleContent {
                 BarBalanceGraph(mode: mode, animateNumericValues: true, rendering: .widget)
                     .environment(HealthInterface(entry.data))
                     .frame(height: 44)
+                    .offset(y: 2)
                     .accessibilityHidden(true)
             }
 
