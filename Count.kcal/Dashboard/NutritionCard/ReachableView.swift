@@ -54,8 +54,7 @@ struct ReachableView: View {
                 emptyColor: settings.getGraphEmptyColor(scheme),
                 height: graphHeight
             )
-            .opacity(isLoading ? 0.3 : 1)
-            .scaleEffect(x: 1, y: isLoading ? 0.25 : 1)
+            .opacity(isLoading ? 0.6 : 1)
         }
         .accessibilityElement(children: .combine)
     }
@@ -103,10 +102,11 @@ private struct ReachableHeader: View {
         if isLoading {
             Text(
                 verbatim: goalValue > 0
-                    ? "— / \(goalValue.formatted(.number.grouping(.never))) \(unit)"
-                    : "— \(unit)"
+                    ? "100 / \(goalValue.formatted(.number.grouping(.never))) \(unit)"
+                    : "100 \(unit)"
             )
                 .foregroundStyle(Color("SecondaryTextColor"))
+                .redacted(reason: .placeholder)
         } else if goalValue > 0 {
             Text(
                 """

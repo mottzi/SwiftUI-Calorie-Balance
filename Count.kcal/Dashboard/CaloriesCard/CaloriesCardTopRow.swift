@@ -51,7 +51,8 @@ struct CaloriesCardTopRow: View {
                     
                     VStack(alignment: .leading, spacing: 0) {
                         HStack(alignment: .lastTextBaseline, spacing: 2) {
-                            Text(verbatim: isLoading ? "—" : energy.burned.formatted(.number))
+                            Text(verbatim: isLoading ? "2,000" : energy.burned.formatted(.number))
+                                .redacted(reason: isLoading ? .placeholder : [])
                                 .contentTransition(.numericText(value: Double(energy.burned)))
                                 .font(.title3)
                                 .fontWeight(.semibold)
@@ -110,9 +111,10 @@ struct CaloriesCardTopRow: View {
                         HStack(alignment: .lastTextBaseline, spacing: 2) {
                             Text(
                                 verbatim: isLoading
-                                    ? "—"
+                                    ? "1,500"
                                     : DataViewModel.sample.consumed.formatted(.number)
                             )
+                                .redacted(reason: isLoading ? .placeholder : [])
                                 .contentTransition(.numericText(value: Double(DataViewModel.sample.consumed)))
                                 .font(.title3)
                                 .fontWeight(.semibold)

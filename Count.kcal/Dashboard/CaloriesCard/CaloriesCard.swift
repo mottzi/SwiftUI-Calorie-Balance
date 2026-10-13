@@ -4,6 +4,7 @@ import SwiftUI
 struct CaloriesCard: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
+    @Environment(\.colorScheme) private var scheme
     @Environment(HealthInterface.self) private var day
 
     @EnvironmentObject private var settings: Settings
@@ -37,22 +38,22 @@ struct CaloriesCard: View {
                 labels: !dynamicType.isAccessibilitySize && day.hasLoadedSnapshot,
                 animateNumericValues: animateNumericValues
             )
+                .opacity(day.hasLoadedSnapshot ? 1 : 0)
+                .overlay {
+                    if !day.hasLoadedSnapshot {
+                        VStack(spacing: scheme == .light ? 1 : 2) {
+                            RoundedRectangle(cornerRadius: 6).fill(.quaternary)
+                            RoundedRectangle(cornerRadius: 6).fill(.quaternary)
+                        }
+                        .padding(.bottom, scheme == .light ? 1 : 0)
+                        .accessibilityHidden(true)
+                    }
+                }
                 .frame(height: sizeMapping[dynamicType, default: 44])
                 .padding(.top, 6)
                 .padding(.bottom, 2)
                 .padding(.horizontal, 13)
                 .dynamicTypeSize(...DynamicTypeSize.xxLarge)
-                .opacity(day.hasLoadedSnapshot ? 1 : 0)
-                .overlay {
-                    if !day.hasLoadedSnapshot {
-                        VStack(spacing: 20) {
-                            Capsule().fill(.quaternary).frame(height: 2)
-                            Capsule().fill(.quaternary).frame(height: 2)
-                        }
-                        .padding(.horizontal, 13)
-                        .accessibilityHidden(true)
-                    }
-                }
         }
         .frame(maxWidth: .infinity)
         .padding(16)

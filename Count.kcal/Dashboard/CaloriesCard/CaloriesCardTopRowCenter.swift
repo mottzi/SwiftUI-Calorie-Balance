@@ -19,7 +19,8 @@ struct CaloriesCardTopRowCenter: View {
                 .opacity(isLoading ? 0.2 : 1)
 
             VStack(spacing: 0) {
-                Text(verbatim: isLoading ? "—" : abs(balance).formatted(.number))
+                Text(verbatim: isLoading ? "500" : abs(balance).formatted(.number))
+                    .redacted(reason: isLoading ? .placeholder : [])
                     .font(.system(size: 26))
                     .fontWeight(.semibold)
                     .foregroundStyle(Color(energy.isEmpty ? "SecondaryTextColor" : "TextColor"))
