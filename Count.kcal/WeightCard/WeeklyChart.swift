@@ -7,6 +7,9 @@ struct WeeklyChart: View {
 
     @Environment(WeightHistory.self) private var weightHistory
 
+    @State private var plotHeight: CGFloat = 0
+    @State private var labelHeight: CGFloat = 0
+
     var body: some View {
         if let dateRange = weightHistory.chartDateRange(for: .weekly) {
             Chart {
@@ -31,18 +34,6 @@ struct WeeklyChart: View {
                 let validData = weightHistory.validData(.weekly)
 
                 ForEach(Array(validData.enumerated()), id: \.element.id) { (index, item) in
-                    // data point label
-                    BarMark(
-                        x: .value("Date", item.date, unit: .weekday),
-                        y: .value("Value", item.weightAvg!)
-                    )
-                    .foregroundStyle(Color.clear)
-                    .annotation(spacing: 8) {
-                        Text(verbatim: String(format: "%.1f", item.weightAvg!))
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundColor(Color("SecondaryTextColor1").opacity((index == validData.count - 1) ? 1 : 0.6))
-                    }
-                    
                     LineMark(
                         x: .value("Date", item.date, unit: .weekday),
                         y: .value("Value", item.weightAvg!)
@@ -57,6 +48,17 @@ struct WeeklyChart: View {
                     )
                     .foregroundStyle(Color(index == validData.count - 1 ? "SecondaryTextColor1" : "SecondaryTextColor"))
                     .symbolSize(index == validData.count - 1 ? 113 : 50)
+                    .annotation(position: labelPosition(for: item.weightAvg!), spacing: 8) {
+                        Text(verbatim: String(format: "%.1f", item.weightAvg!))
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundColor(Color("SecondaryTextColor1").opacity((index == validData.count - 1) ? 1 : 0.6))
+                            .fixedSize()
+                            .onGeometryChange(for: CGFloat.self) { geometry in
+                                geometry.size.height
+                            } action: { height in
+                                labelHeight = height
+                            }
+                    }
 
                     PointMark(
                         x: .value("Date", item.date, unit: .weekday),
@@ -70,6 +72,13 @@ struct WeeklyChart: View {
             .brightness(level: .primary)
             .saturation(Settings.baseSaturation)
             .chartYScale(domain: weightHistory.getYRange(.weekly))
+            .chartPlotStyle { plot in
+                plot.onGeometryChange(for: CGFloat.self) { geometry in
+                    geometry.size.height
+                } action: { height in
+                    plotHeight = height
+                }
+            }
             .chartYAxis {
                 AxisMarks(values: weightHistory.createYRangeArray(.weekly)) {
                     AxisValueLabel()
@@ -98,6 +107,15 @@ struct WeeklyChart: View {
 }
 
 extension WeeklyChart {
+
+    private func labelPosition(for weight: Double) -> AnnotationPosition {
+        guard plotHeight > 0, labelHeight > 0 else { return .top }
+        let range = weightHistory.getYRange(.weekly)
+        let spaceAbove = CGFloat((Double(range.upperBound) - weight) / Double(range.upperBound - range.lowerBound)) * plotHeight
+        // Include the 8-point annotation gap and the largest dot's 6-point radius.
+        let requiredSpace = labelHeight + 8 + 6
+        return spaceAbove < requiredSpace && plotHeight - spaceAbove >= requiredSpace ? .bottom : .top
+    }
 
     /// Uses the period trend to select the existing chart color.
     private var trendColor: Color {
