@@ -127,6 +127,15 @@ extension View {
                                           onSelect: onSelect, onActivity: onActivity))
         }
     }
+
+    @ViewBuilder
+    fileprivate func calendarScrollTargetBehavior(offset: CGFloat, origin: CGFloat?, isScrolling: Bool) -> some View {
+        if #available(iOS 18.4, *) {
+            scrollTargetBehavior(CalendarPagingBehavior(offset: offset, origin: origin, isScrolling: isScrolling))
+        } else {
+            scrollTargetBehavior(.paging)
+        }
+    }
 }
 
 @available(iOS 18, *)
@@ -138,6 +147,8 @@ private struct CalendarPaging: ViewModifier {
     @State private var position: ScrollPosition
     @State private var phase: ScrollPhase = .idle
     @State private var visibleID: Date?
+    @State private var offset: CGFloat = 0
+    @State private var dragOrigin: CGFloat?
 
     init(selection: Date, animated: Bool,
          onSelect: @escaping (Date) -> Void, onActivity: @escaping (Bool) -> Void) {
@@ -151,9 +162,18 @@ private struct CalendarPaging: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .scrollTargetBehavior(.paging)
+            .calendarScrollTargetBehavior(
+                offset: offset,
+                origin: dragOrigin,
+                isScrolling: phase == .interacting || phase == .decelerating
+            )
             .scrollPosition($position, anchor: .center)
             .animation(animated ? .snappy : nil, value: position)
+            .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                geometry.contentOffset.x
+            } action: { _, offset in
+                self.offset = offset
+            }
             .onScrollTargetVisibilityChange(idType: Date.self, threshold: 0.5) { ids in
                 guard ids.count == 1, let id = ids.first else { return }
                 visibleID = id
@@ -165,7 +185,12 @@ private struct CalendarPaging: ViewModifier {
                 guard visibleID != day else { return }
                 position.scrollTo(id: day, anchor: .center)
             }
-            .onScrollPhaseChange { _, phase in
+            .onScrollPhaseChange { _, phase, context in
+                if phase == .tracking || (phase == .interacting && dragOrigin == nil) {
+                    dragOrigin = context.geometry.contentOffset.x
+                } else if phase == .idle {
+                    dragOrigin = nil
+                }
                 self.phase = phase
                 onActivity(phase != .idle)
             }

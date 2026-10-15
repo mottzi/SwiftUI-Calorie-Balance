@@ -260,6 +260,8 @@
 		2DD8C287938E4E83867F739F /* CalorieDataState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8E936F873F43B48DDEAD5D /* CalorieDataState.swift */; };
 		BC37446210184C76AFC53245 /* HealthLoadingPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CDEABBC2E643F792B68506 /* HealthLoadingPlaceholder.swift */; };
 		0AE4D8A4F543447D9F2E4C15 /* HealthLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2285FAD8E9417A8D8E0724; };
+		A81F00000000000000000002 /* CalendarPagingBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81F00000000000000000001; };
+		A81F00000000000000000004 /* CalendarPagingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81F00000000000000000003; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -480,6 +482,8 @@
 		0A8E936F873F43B48DDEAD5D /* CalorieDataState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieDataState.swift; sourceTree = "<group>"; };
 		B4CDEABBC2E643F792B68506 /* HealthLoadingPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthLoadingPlaceholder.swift; sourceTree = "<group>"; };
 		2C2285FAD8E9417A8D8E0724 /* HealthLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthLoadingTests.swift; sourceTree = "<group>"; };
+		A81F00000000000000000001 /* CalendarPagingBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPagingBehavior.swift; sourceTree = "<group>"; };
+		A81F00000000000000000003 /* CalendarPagingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPagingTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -885,6 +889,7 @@
 				F8B624ACFA054284816E9769 /* CalorieGraph */,
 				9AA785262B21CD9D007305F6 /* CircleProgressView.swift */,
 				9ABBD8FE2BE8213F003EC608 /* WeekBalanceGraph.swift */,
+				A81F00000000000000000001 /* CalendarPagingBehavior.swift */,
 				9AE3D3A42B7970EC00483339 /* CDatePicker.swift */,
 				9AF4DC912BF2C4B5000EF0A5 /* MacroSlider.swift */,
 			);
@@ -951,7 +956,7 @@
 			path = Toolbar;
 			sourceTree = "<group>";
 		};
-        A3C000000000000000000002 /* Count.kcalTests */ = {isa = PBXGroup; children = (2C2285FAD8E9417A8D8E0724, A3C000000000000000000004, A6CA10000000000000000005, BAF100000000000000000001,); path = Count.kcalTests; sourceTree = "<group>"; };
+        A3C000000000000000000002 /* Count.kcalTests */ = {isa = PBXGroup; children = (2C2285FAD8E9417A8D8E0724, A3C000000000000000000004, A6CA10000000000000000005, BAF100000000000000000001, A81F00000000000000000003,); path = Count.kcalTests; sourceTree = "<group>"; };
 		5A0A272E9AFE42C6AA0B9C9C /* Circle */ = {
 			isa = PBXGroup;
 			children = (
@@ -1270,6 +1275,7 @@
 				9A206D7D2C5838E50079DE3D /* AppleHealthView.swift in Sources */,
 				9A6DA88F2B361B3400585788 /* CaloriesCardTopRowCenter.swift in Sources */,
 				9ABBD8FF2BE8213F003EC608 /* WeekBalanceGraph.swift in Sources */,
+				A81F00000000000000000002 /* CalendarPagingBehavior.swift in Sources */,
 				9A206D7B2C5838C40079DE3D /* MainGoalVew.swift in Sources */,
 				9A8BA4122B40591D0011D412 /* ThemesSection.swift in Sources */,
 				9A5AF20830681E0B008CC950 /* DashboardSamplePreview.swift in Sources */,
@@ -1477,7 +1483,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-        A3C000000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (0AE4D8A4F543447D9F2E4C15, A3C000000000000000000005, A6CA10000000000000000006, BAF100000000000000000002,); runOnlyForDeploymentPostprocessing = 0; };
+        A3C000000000000000000006 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (0AE4D8A4F543447D9F2E4C15, A3C000000000000000000005, A6CA10000000000000000006, BAF100000000000000000002, A81F00000000000000000004,); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
