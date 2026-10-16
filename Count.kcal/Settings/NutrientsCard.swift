@@ -9,6 +9,13 @@ struct NutrientsCard: View {
     var body: some View {
         Card("Nutrients") {
             VStack(spacing: 12) {
+                Text("Drag bars to adjust values")
+                    .font(.caption)
+                    .foregroundStyle(Color("SecondaryTextColor"))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 8)
+
                 MacroSlider()
                     .padding(.vertical, 2)
                     .padding(.horizontal, 8)

@@ -1986,6 +1986,40 @@
         }
       }
     },
+    "Drag bars to adjust values" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Balken ziehen, um Werte anzupassen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drag bars to adjust values"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrastra las barras para ajustar los valores"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faites glisser les barres pour ajuster les valeurs"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拖动条形以调整数值"
+          }
+        }
+      }
+    },
     "Eaten" : {
       "localizations" : {
         "de" : {
