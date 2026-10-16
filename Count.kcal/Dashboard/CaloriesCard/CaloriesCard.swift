@@ -11,6 +11,7 @@ struct CaloriesCard: View {
 
     let mode: GraphMode
     var animateNumericValues = false
+    var showsDetails = true
 
     let sizeMapping: [DynamicTypeSize: CGFloat] = 
     [
@@ -30,12 +31,12 @@ struct CaloriesCard: View {
     
     var body: some View {
         VStack(spacing: dynamicType.isAccessibilitySize ? 8 : 0) {
-            CaloriesCardTopRow(mode: mode, isLoading: !day.hasLoadedSnapshot)
+            CaloriesCardTopRow(mode: mode, isLoading: !day.hasLoadedSnapshot, showsDetails: showsDetails)
                 .padding(.top, 2)
 
             BarBalanceGraph(
                 mode: mode,
-                labels: !dynamicType.isAccessibilitySize && day.hasLoadedSnapshot,
+                labels: showsDetails && !dynamicType.isAccessibilitySize && day.hasLoadedSnapshot,
                 animateNumericValues: animateNumericValues
             )
                 .opacity(day.hasLoadedSnapshot ? 1 : 0)

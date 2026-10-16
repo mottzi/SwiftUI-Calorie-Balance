@@ -35,15 +35,15 @@ struct Card<Content: View>: View {
                 .frame(maxWidth: .infinity)
                 .padding(innerPadding)
                 .background(level == .clear ? .clear : settings.CardBackground)
-                .clipShape(.rect(cornerRadius: 10))
+                .clipShape(.rect(cornerRadius: CardMetrics.cornerRadius))
         }
-        .padding(.horizontal)
+        .padding(.horizontal, CardMetrics.horizontalInset)
     }
 
 }
 
 /// Adapts the card's heading without observing content or settings changes.
-private struct CardHeader: View {
+struct CardHeader: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
 
@@ -82,6 +82,11 @@ enum CardLevel {
     case clear
     case primary
 
+}
+
+enum CardMetrics {
+    static let cornerRadius: CGFloat = 10
+    static let horizontalInset: CGFloat = 16
 }
 
 #Preview { PreviewPager }

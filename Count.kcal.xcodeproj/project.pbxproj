@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DACD00000000000000000305 /* DashboardCustomizationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD0000000000000000000A; };
+		DACD00000000000000000304 /* SettingsReorderRowBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000009; };
+		DACD00000000000000000302 /* SettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000007; };
+		DACD00000000000000000303 /* SettingsCardRowBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000008; };
+		DACD00000000000000000301 /* SettingsReorderRows.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000006; };
+		DACD00000000000000000202 /* MacroNutrient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000005; };
+		DACD00000000000000000201 /* MacroNutrient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000005; };
+		DACD00000000000000000104 /* DashboardSettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000004; };
+		DACD00000000000000000103 /* ProgressPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000003; };
+		DACD00000000000000000102 /* DashboardSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000002; };
+		DACD00000000000000000101 /* DailyDashboardCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000001; };
 		289AE5A61255430F997770B1 /* RecessedCardStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D419EC4A82544CCFB66103F5 /* RecessedCardStyle.swift */; };
 		C8F4A0010000000000000001 /* OtherSettingsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F4A0010000000000000002 /* OtherSettingsCard.swift */; };
         A2C000000000000000000005 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = A2C000000000000000000006; };
@@ -262,6 +273,10 @@
 		0AE4D8A4F543447D9F2E4C15 /* HealthLoadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2285FAD8E9417A8D8E0724; };
 		A81F00000000000000000002 /* CalendarPagingBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81F00000000000000000001; };
 		A81F00000000000000000004 /* CalendarPagingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81F00000000000000000003; };
+		DACE00000000000000000101 /* DashboardOrderingControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACE00000000000000000001; };
+		DACE00000000000000000102 /* DashboardLayoutPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACE00000000000000000002; };
+		DACE00000000000000000103 /* DashboardPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACE00000000000000000003; };
+		DACE00000000000000000104 /* DashboardPreviewProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACE00000000000000000004; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -326,6 +341,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DACD0000000000000000000A /* DashboardCustomizationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardCustomizationCard.swift; path = Count.kcal/Settings/DashboardCustomizationCard.swift; sourceTree = SOURCE_ROOT; };
+		DACD00000000000000000009 /* SettingsReorderRowBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsReorderRowBackground.swift; path = Count.kcal/Settings/SettingsReorderRowBackground.swift; sourceTree = SOURCE_ROOT; };
+		DACD00000000000000000007 /* SettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsSection.swift; path = Count.kcal/Settings/SettingsSection.swift; sourceTree = SOURCE_ROOT; };
+		DACD00000000000000000008 /* SettingsCardRowBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsCardRowBackground.swift; path = Count.kcal/Settings/SettingsCardRowBackground.swift; sourceTree = SOURCE_ROOT; };
+		DACD00000000000000000006 /* SettingsReorderRows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsReorderRows.swift; path = Count.kcal/Settings/SettingsReorderRows.swift; sourceTree = SOURCE_ROOT; };
+		DACD00000000000000000005 /* MacroNutrient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MacroNutrient.swift; path = Count.kcal/Abstract/MacroNutrient.swift; sourceTree = SOURCE_ROOT; };
+		DACD00000000000000000004 /* DashboardSettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardSettingsPage.swift; path = Count.kcal/Settings/DashboardSettingsPage.swift; sourceTree = SOURCE_ROOT; };
+		DACD00000000000000000003 /* ProgressPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProgressPosition.swift; path = Count.kcal/Dashboard/ProgressPosition.swift; sourceTree = SOURCE_ROOT; };
+		DACD00000000000000000002 /* DashboardSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardSection.swift; path = Count.kcal/Dashboard/DashboardSection.swift; sourceTree = SOURCE_ROOT; };
+		DACD00000000000000000001 /* DailyDashboardCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DailyDashboardCard.swift; path = Count.kcal/Dashboard/DailyDashboardCard.swift; sourceTree = SOURCE_ROOT; };
 		D419EC4A82544CCFB66103F5 /* RecessedCardStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecessedCardStyle.swift; path = Count.kcal/Dashboard/RecessedCardStyle.swift; sourceTree = SOURCE_ROOT; };
 		C8F4A0010000000000000002 /* OtherSettingsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherSettingsCard.swift; sourceTree = "<group>"; };
 		EDC7581F17D24EE196D1EA21 /* ProgressHealthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressHealthRepository.swift; sourceTree = "<group>"; };
@@ -484,6 +509,10 @@
 		2C2285FAD8E9417A8D8E0724 /* HealthLoadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthLoadingTests.swift; sourceTree = "<group>"; };
 		A81F00000000000000000001 /* CalendarPagingBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPagingBehavior.swift; sourceTree = "<group>"; };
 		A81F00000000000000000003 /* CalendarPagingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPagingTests.swift; sourceTree = "<group>"; };
+		DACE00000000000000000001 /* DashboardOrderingControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardOrderingControls.swift; path = Count.kcal/Settings/DashboardOrderingControls.swift; sourceTree = SOURCE_ROOT; };
+		DACE00000000000000000002 /* DashboardLayoutPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardLayoutPreview.swift; path = Count.kcal/Settings/DashboardLayoutPreview.swift; sourceTree = SOURCE_ROOT; };
+		DACE00000000000000000003 /* DashboardPreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardPreviewCard.swift; path = Count.kcal/Settings/DashboardPreviewCard.swift; sourceTree = SOURCE_ROOT; };
+		DACE00000000000000000004 /* DashboardPreviewProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardPreviewProgress.swift; path = Count.kcal/Settings/DashboardPreviewProgress.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -690,6 +719,9 @@
 			children = (
 				B4CDEABBC2E643F792B68506 /* HealthLoadingPlaceholder.swift */,
 				9A001C3E29B6122500BB42B9 /* Dashboard.swift */,
+				DACD00000000000000000003 /* ProgressPosition.swift */,
+				DACD00000000000000000002 /* DashboardSection.swift */,
+				DACD00000000000000000001 /* DailyDashboardCard.swift */,
 				9A3F8EA92B348C1F00B0DC74 /* CaloriesMidnightCard.swift */,
 				D419EC4A82544CCFB66103F5 /* RecessedCardStyle.swift */,
 				A6CA10000000000000000003 /* RecessedPress.swift */,
@@ -747,6 +779,16 @@
 			isa = PBXGroup;
 			children = (
 				9A92F1652B052023009C4A2A /* SettingsPage.swift */,
+				DACD0000000000000000000A /* DashboardCustomizationCard.swift */,
+				DACD00000000000000000009 /* SettingsReorderRowBackground.swift */,
+				DACD00000000000000000007 /* SettingsSection.swift */,
+				DACD00000000000000000008 /* SettingsCardRowBackground.swift */,
+				DACD00000000000000000006 /* SettingsReorderRows.swift */,
+				DACD00000000000000000004 /* DashboardSettingsPage.swift */,
+				DACE00000000000000000004 /* DashboardPreviewProgress.swift */,
+				DACE00000000000000000003 /* DashboardPreviewCard.swift */,
+				DACE00000000000000000002 /* DashboardLayoutPreview.swift */,
+				DACE00000000000000000001 /* DashboardOrderingControls.swift */,
 				9A92F16C2B06CE1D009C4A2A /* EnergySettingsView.swift */,
 				9A92F16E2B06CF06009C4A2A /* NutrientsCard.swift */,
 				9A7CC5332C6A3F3E0061451D /* StepsCard.swift */,
@@ -865,6 +907,7 @@
 			children = (
 				0A8E936F873F43B48DDEAD5D /* CalorieDataState.swift */,
 				9A59C1EB2B0A2E180058A502 /* Settings.swift */,
+				DACD00000000000000000005 /* MacroNutrient.swift */,
 				9AEA55C92A5B0081000AB057 /* HealthRepository.swift */,
 				BC9BD7B2FC924D8ABAE67862 /* HealthDataMode.swift */,
 				1DCAE384FE9D4F5DA573DDB5 /* HealthKitDataSource.swift */,
@@ -1296,6 +1339,7 @@
 				9ABFA7A22C0A3A6300024D2F /* CircleBalanceGraph.swift in Sources */,
 				ACC22EEF16E24E28A2A130A9 /* CalorieDataState.swift in Sources */,
 				9A59C1EC2B0A2E180058A502 /* Settings.swift in Sources */,
+				DACD00000000000000000201 /* MacroNutrient.swift in Sources */,
 				9A8BA40F2B4057720011D412 /* CalorieColorSection.swift in Sources */,
 				9A206D7F2C5839170079DE3D /* WelcomeView.swift in Sources */,
 				9A92F16F2B06CF06009C4A2A /* NutrientsCard.swift in Sources */,
@@ -1307,6 +1351,14 @@
 				9A206D842C583B560079DE3D /* Welcome.swift in Sources */,
 				BC37446210184C76AFC53245 /* HealthLoadingPlaceholder.swift in Sources */,
 				9A001C3F29B6122500BB42B9 /* Dashboard.swift in Sources */,
+				DACD00000000000000000104 /* DashboardSettingsPage.swift in Sources */,
+				DACE00000000000000000104 /* DashboardPreviewProgress.swift in Sources */,
+				DACE00000000000000000103 /* DashboardPreviewCard.swift in Sources */,
+				DACE00000000000000000102 /* DashboardLayoutPreview.swift in Sources */,
+				DACE00000000000000000101 /* DashboardOrderingControls.swift in Sources */,
+				DACD00000000000000000103 /* ProgressPosition.swift in Sources */,
+				DACD00000000000000000102 /* DashboardSection.swift in Sources */,
+				DACD00000000000000000101 /* DailyDashboardCard.swift in Sources */,
 				9AEA55CA2A5B0081000AB057 /* HealthRepository.swift in Sources */,
 				CD70499262B84E06B2FF7BFB /* SampleHealthDataSource.swift in Sources */,
 				EB2955F8EE7F49BF86B22DA0 /* SampleHealthDay.swift in Sources */,
@@ -1333,6 +1385,11 @@
 				9A6DA88D2B361ABF00585788 /* CaloriesCardTopRow.swift in Sources */,
 				9A8BA4062B4054ED0011D412 /* BackgroundColorSection.swift in Sources */,
 				9A92F1662B052023009C4A2A /* SettingsPage.swift in Sources */,
+				DACD00000000000000000305 /* DashboardCustomizationCard.swift in Sources */,
+				DACD00000000000000000304 /* SettingsReorderRowBackground.swift in Sources */,
+				DACD00000000000000000302 /* SettingsSection.swift in Sources */,
+				DACD00000000000000000303 /* SettingsCardRowBackground.swift in Sources */,
+				DACD00000000000000000301 /* SettingsReorderRows.swift in Sources */,
 				9AF39CBC2B3E2E7A0037628F /* HealthData.swift in Sources */,
 				9A92F16D2B06CE1D009C4A2A /* EnergySettingsView.swift in Sources */,
 				9A58E8E72C012F8A002C16D6 /* Streak.swift in Sources */,
@@ -1371,6 +1428,7 @@
 				C58530D9E0E349C59E0D5B72 /* HealthDataSource.swift in Sources */,
 				C0BDD2111A03435F8F3D46CE /* CalorieDataState.swift in Sources */,
 				9ABFA7BA2C0A411300024D2F /* Settings.swift in Sources */,
+				DACD00000000000000000202 /* MacroNutrient.swift in Sources */,
 				9ABFA7BB2C0A412D00024D2F /* Extensions.swift in Sources */,
 				9AF39CBD2B3E2E980037628F /* HealthData.swift in Sources */,
 				9A34AD4A2C2A1F4900A0C5A6 /* Connectivity.swift in Sources */,

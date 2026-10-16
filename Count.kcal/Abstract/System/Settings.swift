@@ -17,6 +17,15 @@ final class Settings: ObservableObject {
     @AppStorage("hideCalorieStatusIcons", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     public var hideCalorieStatusIcons: Bool = false
 
+    @AppStorage("dailyCardOrder", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
+    var dailyCardOrder: String = "calories,nutrients,steps"
+
+    @AppStorage("macroOrder", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
+    var macroOrder: String = "carbs,fats,protein"
+
+    @AppStorage("progressPosition", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
+    var progressPosition: String = "below"
+
     @AppStorage("weightGoal", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     public var weightGoal: WeightGoals = .lose {
         didSet {

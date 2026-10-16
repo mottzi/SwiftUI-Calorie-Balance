@@ -56,32 +56,16 @@ struct NutritionWidgetNow: View {
 
     private var nutrientRows: some View {
         VStack(spacing: 14) {
-            ReachableView(
-                family == .systemSmall ? "C" : "Carbs",
-                context: .widget(family),
-                consumedValue: entry.data.carbs,
-                goalValue: AppSettings.carbsGoal,
-                color: AppSettings.consumedColor,
-                graphHeight: 10
-            )
-
-            ReachableView(
-                family == .systemSmall ? "F" : "Fats",
-                context: .widget(family),
-                consumedValue: entry.data.fats,
-                goalValue: AppSettings.fatsGoal,
-                color: AppSettings.consumedColor,
-                graphHeight: 10
-            )
-
-            ReachableView(
-                family == .systemSmall ? "P" : "Protein",
-                context: .widget(family),
-                consumedValue: entry.data.protein,
-                goalValue: AppSettings.proteinGoal,
-                color: AppSettings.consumedColor,
-                graphHeight: 10
-            )
+            ForEach(AppSettings.macros) { macro in
+                ReachableView(
+                    family == .systemSmall ? macro.shortTitle : macro.title,
+                    context: .widget(family),
+                    consumedValue: macro.consumed(in: entry.data),
+                    goalValue: macro.goal(in: AppSettings),
+                    color: AppSettings.consumedColor,
+                    graphHeight: 10
+                )
+            }
         }
     }
     

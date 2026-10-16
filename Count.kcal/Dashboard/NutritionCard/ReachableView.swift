@@ -16,6 +16,7 @@ struct ReachableView: View {
     private let color: Color
     private let graphHeight: CGFloat
     private let isLoading: Bool
+    private let showsHeader: Bool
 
     init(
         _ key: LocalizedStringKey,
@@ -25,7 +26,8 @@ struct ReachableView: View {
         unit: String = "g",
         color: Color = Color("SecondaryTextColor"),
         graphHeight: CGFloat = 18,
-        isLoading: Bool = false
+        isLoading: Bool = false,
+        showsHeader: Bool = true
     ) {
         self.key = key
         self.context = context
@@ -35,6 +37,7 @@ struct ReachableView: View {
         self.color = color
         self.graphHeight = graphHeight
         self.isLoading = isLoading
+        self.showsHeader = showsHeader
     }
 
     var body: some View {
@@ -47,6 +50,7 @@ struct ReachableView: View {
                 animatesValues: context != .app,
                 isLoading: isLoading
             )
+            .opacity(showsHeader ? 1 : 0)
 
             ReachableBar(
                 progress: !isLoading && goalValue > 0 ? Double(consumedValue) / Double(goalValue) : 0,

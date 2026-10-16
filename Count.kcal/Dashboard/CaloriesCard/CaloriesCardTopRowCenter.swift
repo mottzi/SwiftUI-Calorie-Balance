@@ -11,6 +11,7 @@ struct CaloriesCardTopRowCenter: View {
 
     let mode: GraphMode
     var isLoading = false
+    var showsDetails = true
     
     var body: some View {
         ZStack {
@@ -35,8 +36,9 @@ struct CaloriesCardTopRowCenter: View {
                     .dynamicTypeSize(...DynamicTypeSize.xLarge)
             }
             .fontDesign(.rounded)
+            .opacity(showsDetails ? 1 : 0)
         
-            if !isLoading && !AppSettings.hideCalorieStatusIcons && !energy.isEmpty {
+            if showsDetails && !isLoading && !AppSettings.hideCalorieStatusIcons && !energy.isEmpty {
                 Image(systemName: goalReached ? "checkmark" : "xmark")
                     .font(.system(size: 12))
                     .fontWeight(.semibold)

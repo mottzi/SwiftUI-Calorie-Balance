@@ -11,40 +11,32 @@ struct MacroCard: View {
     var body: some View {
         Card("Nutrients") {
             VStack(spacing: 16) {
-                ReachableView(
-                    "Carbs",
-                    consumedValue: DataViewModel.sample.carbs,
-                    goalValue: goals?.carbs ?? AppSettings.carbsGoal,
-                    color: AppSettings.consumedColor,
-                    graphHeight: 10,
-                    isLoading: isLoading
-                )
-                
-                ReachableView(
-                    "Fats",
-                    consumedValue: DataViewModel.sample.fats,
-                    goalValue: goals?.fats ?? AppSettings.fatsGoal,
-                    color: AppSettings.consumedColor,
-                    graphHeight: 10,
-                    isLoading: isLoading
-                )
-                
-                ReachableView(
-                    "Protein",
-                    consumedValue: DataViewModel.sample.protein,
-                    goalValue: goals?.protein ?? AppSettings.proteinGoal,
-                    color: AppSettings.consumedColor,
-                    graphHeight: 10,
-                    isLoading: isLoading
-                )
-                    .padding(.bottom, 6)
+                ForEach(AppSettings.macros) { macro in
+                    ReachableView(
+                        macro.title,
+                        consumedValue: macro.consumed(in: DataViewModel.sample),
+                        goalValue: goal(for: macro),
+                        color: AppSettings.consumedColor,
+                        graphHeight: 10,
+                        isLoading: isLoading
+                    )
+                }
             }
             .padding(.horizontal, 11)
-            .padding(.bottom, 2)
+            .padding(.bottom, 8)
             .modifier(HealthLoadingPlaceholder(
                 isLoading: isLoading,
                 label: "Loading nutrient data"
             ))
+        }
+    }
+
+    private func goal(for macro: MacroNutrient) -> Int {
+        guard let goals else { return macro.goal(in: AppSettings) }
+        switch macro {
+        case .carbs: return goals.carbs
+        case .fats: return goals.fats
+        case .protein: return goals.protein
         }
     }
 

@@ -58,12 +58,18 @@ struct Pager: View {
                                 .padding(.bottom, 14)
                             }
 
-                            DayPageStrip(
-                                navigation: navigation,
-                                todayPageMode: $todayPageMode
-                            )
-
-                            WeightCard(refreshRevision: manualRefresh + calendarRefresh)
+                            ForEach(AppSettings.dashboardProgressPosition.sections) { section in
+                                switch section {
+                                case .daily:
+                                    DayPageStrip(
+                                        navigation: navigation,
+                                        todayPageMode: $todayPageMode
+                                    )
+                                case .progress:
+                                    WeightCard(refreshRevision: manualRefresh + calendarRefresh)
+                                        .padding(.bottom, AppSettings.dashboardProgressPosition == .above ? 20 : 0)
+                                }
+                            }
                         } else {
                             ContentUnavailableView(
                                 "Calorie data incomplete",

@@ -4,15 +4,24 @@ import WidgetKit
 /// Daily energy, nutrient, and step summary.
 struct Dashboard: View {
 
+    @EnvironmentObject private var settings: Settings
+
     @Binding var todayPageMode: TodayPageMode
 
     var nutrientGoals: NutrientGoals? = nil
     
     var body: some View {
         VStack(spacing: 20) {
-            DashboardCalories(todayPageMode: $todayPageMode)
-            MacroCard(goals: nutrientGoals)
-            DashboardSteps()
+            ForEach(settings.dailyCards) { card in
+                switch card {
+                case .calories:
+                    DashboardCalories(todayPageMode: $todayPageMode)
+                case .nutrients:
+                    MacroCard(goals: nutrientGoals)
+                case .steps:
+                    DashboardSteps()
+                }
+            }
         }
     }
 

@@ -13,9 +13,11 @@ struct CaloriesMidnightCard: View {
     @Binding var todayPageMode: TodayPageMode
     @State private var feedback = RecessedCardFeedback()
 
+    var showsDetails = true
+
     var body: some View {
         Button(action: toggleMode) {
-            CaloriesCard(mode: mode, animateNumericValues: true)
+            CaloriesCard(mode: mode, animateNumericValues: true, showsDetails: showsDetails)
                 .animation(reduceMotion ? nil : .snappy, value: todayPageMode.selection)
                 .contentShape(.rect(cornerRadius: 10))
         }
