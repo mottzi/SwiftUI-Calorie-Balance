@@ -1,0 +1,622 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project /tmp/count-watch-capture-project/Count.kcal.xcodeproj -scheme Count.kcal.watch -configuration Debug -destination "platform=watchOS Simulator,id=E5D91884-2515-4277-8528-F26E8269B328" -derivedDataPath /tmp/count-marketing-watch -disableAutomaticPackageResolution build
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  swift-custom-dump: https://github.com/pointfreeco/swift-custom-dump @ 1.7.3
+  swift-concurrency-extras: https://github.com/pointfreeco/swift-concurrency-extras @ 1.4.1
+  swift-perception: https://github.com/pointfreeco/swift-perception @ 2.0.12
+  swift-structured-queries: https://github.com/pointfreeco/swift-structured-queries @ 0.39.2
+  swift-identified-collections: https://github.com/pointfreeco/swift-identified-collections @ 1.1.1
+  sqlite-data: https://github.com/pointfreeco/sqlite-data @ 1.12.0
+  swift-clocks: https://github.com/pointfreeco/swift-clocks @ 1.1.1
+  swift-sharing: https://github.com/pointfreeco/swift-sharing @ 2.10.1
+  swift-dependencies: https://github.com/pointfreeco/swift-dependencies @ 1.17.1
+  GRDB: https://github.com/groue/GRDB.swift @ 7.11.1
+  combine-schedulers: https://github.com/pointfreeco/combine-schedulers @ 1.2.2
+  swift-collections: https://github.com/apple/swift-collections @ 1.7.1
+  swift-issue-reporting: https://github.com/pointfreeco/swift-issue-reporting @ 2.1.1
+  swift-snapshot-testing: https://github.com/pointfreeco/swift-snapshot-testing @ 1.19.6
+  swift-syntax: https://github.com/swiftlang/swift-syntax @ 604.0.0
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (66 targets)
+    Target 'Count.kcal' in project 'Count.kcal'
+        ➜ Explicit dependency on target 'Count.kcal.widget' in project 'Count.kcal'
+        ➜ Explicit dependency on target 'Count.kcal.watch' in project 'Count.kcal'
+        ➜ Explicit dependency on target 'Dependencies-product' in project 'swift-dependencies'
+        ➜ Explicit dependency on target 'GRDB-product' in project 'GRDB'
+        ➜ Explicit dependency on target 'StructuredQueriesSQLite-product' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'SQLiteData-product' in project 'sqlite-data'
+    Target 'SQLiteData-product' in project 'sqlite-data'
+        ➜ Explicit dependency on target 'SQLiteData' in project 'sqlite-data'
+        ➜ Explicit dependency on target 'ConcurrencyExtras-product' in project 'swift-concurrency-extras'
+        ➜ Explicit dependency on target 'Dependencies-product' in project 'swift-dependencies'
+        ➜ Explicit dependency on target 'GRDB-product' in project 'GRDB'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+        ➜ Explicit dependency on target 'OrderedCollections-product' in project 'swift-collections'
+        ➜ Explicit dependency on target 'Perception-product' in project 'swift-perception'
+        ➜ Explicit dependency on target 'Sharing-product' in project 'swift-sharing'
+        ➜ Explicit dependency on target 'StructuredQueriesSQLite-product' in project 'swift-structured-queries'
+    Target 'SQLiteData' in project 'sqlite-data'
+        ➜ Explicit dependency on target 'ConcurrencyExtras-product' in project 'swift-concurrency-extras'
+        ➜ Explicit dependency on target 'Dependencies-product' in project 'swift-dependencies'
+        ➜ Explicit dependency on target 'GRDB-product' in project 'GRDB'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+        ➜ Explicit dependency on target 'OrderedCollections-product' in project 'swift-collections'
+        ➜ Explicit dependency on target 'Perception-product' in project 'swift-perception'
+        ➜ Explicit dependency on target 'Sharing-product' in project 'swift-sharing'
+        ➜ Explicit dependency on target 'StructuredQueriesSQLite-product' in project 'swift-structured-queries'
+    Target 'Sharing-product' in project 'swift-sharing'
+        ➜ Explicit dependency on target 'Sharing' in project 'swift-sharing'
+        ➜ Explicit dependency on target 'swift-sharing_Sharing' in project 'swift-sharing'
+        ➜ Explicit dependency on target 'Sharing1' in project 'swift-sharing'
+        ➜ Explicit dependency on target 'Sharing2' in project 'swift-sharing'
+        ➜ Explicit dependency on target 'ConcurrencyExtras-product' in project 'swift-concurrency-extras'
+        ➜ Explicit dependency on target 'CustomDump-product' in project 'swift-custom-dump'
+        ➜ Explicit dependency on target 'Dependencies-product' in project 'swift-dependencies'
+        ➜ Explicit dependency on target 'IdentifiedCollections-product' in project 'swift-identified-collections'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+        ➜ Explicit dependency on target 'PerceptionCore-product' in project 'swift-perception'
+    Target 'Sharing' in project 'swift-sharing'
+        ➜ Explicit dependency on target 'swift-sharing_Sharing' in project 'swift-sharing'
+        ➜ Explicit dependency on target 'Sharing1' in project 'swift-sharing'
+        ➜ Explicit dependency on target 'Sharing2' in project 'swift-sharing'
+        ➜ Explicit dependency on target 'ConcurrencyExtras-product' in project 'swift-concurrency-extras'
+        ➜ Explicit dependency on target 'CustomDump-product' in project 'swift-custom-dump'
+        ➜ Explicit dependency on target 'Dependencies-product' in project 'swift-dependencies'
+        ➜ Explicit dependency on target 'IdentifiedCollections-product' in project 'swift-identified-collections'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+        ➜ Explicit dependency on target 'PerceptionCore-product' in project 'swift-perception'
+    Target 'PerceptionCore-product' in project 'swift-perception'
+        ➜ Explicit dependency on target 'PerceptionCore' in project 'swift-perception'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'IdentifiedCollections-product' in project 'swift-identified-collections'
+        ➜ Explicit dependency on target 'IdentifiedCollections' in project 'swift-identified-collections'
+        ➜ Explicit dependency on target 'OrderedCollections-product' in project 'swift-collections'
+    Target 'IdentifiedCollections' in project 'swift-identified-collections'
+        ➜ Explicit dependency on target 'OrderedCollections-product' in project 'swift-collections'
+    Target 'CustomDump-product' in project 'swift-custom-dump'
+        ➜ Explicit dependency on target 'CustomDump' in project 'swift-custom-dump'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'CustomDump' in project 'swift-custom-dump'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'Sharing2' in project 'swift-sharing' (no dependencies)
+    Target 'Sharing1' in project 'swift-sharing' (no dependencies)
+    Target 'swift-sharing_Sharing' in project 'swift-sharing' (no dependencies)
+    Target 'Perception-product' in project 'swift-perception'
+        ➜ Explicit dependency on target 'Perception' in project 'swift-perception'
+        ➜ Explicit dependency on target 'PerceptionCore' in project 'swift-perception'
+        ➜ Explicit dependency on target 'PerceptionMacros' in project 'swift-perception'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'Perception' in project 'swift-perception'
+        ➜ Explicit dependency on target 'PerceptionCore' in project 'swift-perception'
+        ➜ Explicit dependency on target 'PerceptionMacros' in project 'swift-perception'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'PerceptionMacros' in project 'swift-perception'
+        ➜ Explicit dependency on target 'SwiftSyntaxMacros-product' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftCompilerPlugin-product' in project 'swift-syntax'
+    Target 'PerceptionCore' in project 'swift-perception'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'OrderedCollections-product' in project 'swift-collections'
+        ➜ Explicit dependency on target 'OrderedCollections' in project 'swift-collections'
+        ➜ Explicit dependency on target 'InternalCollectionsUtilities' in project 'swift-collections'
+    Target 'OrderedCollections' in project 'swift-collections'
+        ➜ Explicit dependency on target 'InternalCollectionsUtilities' in project 'swift-collections'
+    Target 'InternalCollectionsUtilities' in project 'swift-collections' (no dependencies)
+    Target 'StructuredQueriesSQLite-product' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueriesSQLite' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueriesCore' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueriesMacros' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueries' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueriesSQLiteCore' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueriesSQLiteMacros' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'StructuredQueriesSQLite' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueriesCore' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueriesMacros' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueries' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueriesSQLiteCore' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueriesSQLiteMacros' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'StructuredQueriesSQLiteMacros' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'SwiftCompilerPlugin-product' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxMacros-product' in project 'swift-syntax'
+    Target 'StructuredQueriesSQLiteCore' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueriesCore' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'StructuredQueries' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueriesCore' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'StructuredQueriesMacros' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'StructuredQueriesMacros' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'SwiftCompilerPlugin-product' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxMacros-product' in project 'swift-syntax'
+    Target 'SwiftSyntaxMacros-product' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxMacros' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftBasicFormat' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParser' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParserDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxBuilder' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftOperators' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftIfConfig' in project 'swift-syntax'
+    Target 'SwiftCompilerPlugin-product' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftCompilerPlugin' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParser' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftOperators' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftBasicFormat' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParserDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxBuilder' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftIfConfig' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxMacros' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxMacroExpansion' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftCompilerPluginMessageHandling' in project 'swift-syntax'
+    Target 'SwiftCompilerPlugin' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParser' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftOperators' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftBasicFormat' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParserDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxBuilder' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftIfConfig' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxMacros' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxMacroExpansion' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftCompilerPluginMessageHandling' in project 'swift-syntax'
+    Target 'SwiftCompilerPluginMessageHandling' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParser' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftOperators' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftBasicFormat' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParserDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxBuilder' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftIfConfig' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxMacros' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxMacroExpansion' in project 'swift-syntax'
+    Target 'SwiftSyntaxMacroExpansion' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftBasicFormat' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParser' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParserDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxBuilder' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftOperators' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftIfConfig' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxMacros' in project 'swift-syntax'
+    Target 'SwiftSyntaxMacros' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftBasicFormat' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParser' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParserDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxBuilder' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftOperators' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftIfConfig' in project 'swift-syntax'
+    Target 'SwiftIfConfig' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftBasicFormat' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParser' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParserDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntaxBuilder' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftOperators' in project 'swift-syntax'
+    Target 'SwiftSyntaxBuilder' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftBasicFormat' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParser' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParserDiagnostics' in project 'swift-syntax'
+    Target 'SwiftParserDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftBasicFormat' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParser' in project 'swift-syntax'
+    Target 'SwiftBasicFormat' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+    Target 'SwiftOperators' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftParser' in project 'swift-syntax'
+    Target 'SwiftParser' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+    Target 'SwiftDiagnostics' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax' in project 'swift-syntax'
+    Target 'SwiftSyntax' in project 'swift-syntax'
+        ➜ Explicit dependency on target '_SwiftSyntaxCShims' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax509' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax510' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax600' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax601' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax602' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax603' in project 'swift-syntax'
+        ➜ Explicit dependency on target 'SwiftSyntax604' in project 'swift-syntax'
+    Target 'SwiftSyntax604' in project 'swift-syntax' (no dependencies)
+    Target 'SwiftSyntax603' in project 'swift-syntax' (no dependencies)
+    Target 'SwiftSyntax602' in project 'swift-syntax' (no dependencies)
+    Target 'SwiftSyntax601' in project 'swift-syntax' (no dependencies)
+    Target 'SwiftSyntax600' in project 'swift-syntax' (no dependencies)
+    Target 'SwiftSyntax510' in project 'swift-syntax' (no dependencies)
+    Target 'SwiftSyntax509' in project 'swift-syntax' (no dependencies)
+    Target '_SwiftSyntaxCShims' in project 'swift-syntax' (no dependencies)
+    Target 'StructuredQueriesCore' in project 'swift-structured-queries'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'GRDB-product' in project 'GRDB'
+        ➜ Explicit dependency on target 'GRDB' in project 'GRDB'
+        ➜ Explicit dependency on target 'GRDB_GRDB' in project 'GRDB'
+    Target 'GRDB' in project 'GRDB'
+        ➜ Explicit dependency on target 'GRDB_GRDB' in project 'GRDB'
+        ➜ Explicit dependency on target 'GRDBSQLite' in project 'GRDB'
+    Target 'GRDBSQLite' in project 'GRDB' (no dependencies)
+    Target 'GRDB_GRDB' in project 'GRDB' (no dependencies)
+    Target 'Dependencies-product' in project 'swift-dependencies'
+        ➜ Explicit dependency on target 'Dependencies' in project 'swift-dependencies'
+        ➜ Explicit dependency on target 'Clocks-product' in project 'swift-clocks'
+        ➜ Explicit dependency on target 'CombineSchedulers-product' in project 'combine-schedulers'
+        ➜ Explicit dependency on target 'ConcurrencyExtras-product' in project 'swift-concurrency-extras'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'Dependencies' in project 'swift-dependencies'
+        ➜ Explicit dependency on target 'Clocks-product' in project 'swift-clocks'
+        ➜ Explicit dependency on target 'CombineSchedulers-product' in project 'combine-schedulers'
+        ➜ Explicit dependency on target 'ConcurrencyExtras-product' in project 'swift-concurrency-extras'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'CombineSchedulers-product' in project 'combine-schedulers'
+        ➜ Explicit dependency on target 'CombineSchedulers' in project 'combine-schedulers'
+        ➜ Explicit dependency on target 'ConcurrencyExtras-product' in project 'swift-concurrency-extras'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'CombineSchedulers' in project 'combine-schedulers'
+        ➜ Explicit dependency on target 'ConcurrencyExtras-product' in project 'swift-concurrency-extras'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'Clocks-product' in project 'swift-clocks'
+        ➜ Explicit dependency on target 'Clocks' in project 'swift-clocks'
+        ➜ Explicit dependency on target 'ConcurrencyExtras-product' in project 'swift-concurrency-extras'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'Clocks' in project 'swift-clocks'
+        ➜ Explicit dependency on target 'ConcurrencyExtras-product' in project 'swift-concurrency-extras'
+        ➜ Explicit dependency on target 'IssueReporting-product' in project 'swift-issue-reporting'
+    Target 'IssueReporting-product' in project 'swift-issue-reporting'
+        ➜ Explicit dependency on target 'IssueReporting' in project 'swift-issue-reporting'
+    Target 'IssueReporting' in project 'swift-issue-reporting' (no dependencies)
+    Target 'ConcurrencyExtras-product' in project 'swift-concurrency-extras'
+        ➜ Explicit dependency on target 'ConcurrencyExtras' in project 'swift-concurrency-extras'
+    Target 'ConcurrencyExtras' in project 'swift-concurrency-extras' (no dependencies)
+    Target 'Count.kcal.widget' in project 'Count.kcal' (no dependencies)
+    Target 'Count.kcal.watch' in project 'Count.kcal'
+        ➜ Explicit dependency on target 'Count.kcal.complications' in project 'Count.kcal'
+    Target 'Count.kcal.complications' in project 'Count.kcal' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.0.sdk /tmp/count-marketing-watch/SDKStatCaches.noindex/iphonesimulator27.0-24A430-8dc58220667be655e1bcc261a7455254.sdkstatcache
+    cd /tmp/count-watch-capture-project/Count.kcal.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator27.0.sdk -o /tmp/count-marketing-watch/SDKStatCaches.noindex/iphonesimulator27.0-24A430-8dc58220667be655e1bcc261a7455254.sdkstatcache
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk /tmp/count-marketing-watch/SDKStatCaches.noindex/watchsimulator27.0-24R360-c50668d93734557a32a78b937f5ceaf1.sdkstatcache
+    cd /tmp/count-watch-capture-project/Count.kcal.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk -o /tmp/count-marketing-watch/SDKStatCaches.noindex/watchsimulator27.0-24R360-c50668d93734557a32a78b937f5ceaf1.sdkstatcache
+
+SwiftDriver Count.kcal.watch normal arm64 com.apple.xcode.tools.swift.compiler (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Count_kcal_watch -Onone @/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch.SwiftFileList -DDEBUG -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk -target arm64-apple-watchos10.5-simulator -g -module-cache-path /tmp/count-marketing-watch/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /tmp/count-marketing-watch/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -F /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -emit-localized-strings -emit-localized-strings-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/count-marketing-watch/SDKStatCaches.noindex/watchsimulator27.0-24R360-c50668d93734557a32a78b937f5ceaf1.sdkstatcache -output-file-map /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/count-marketing-watch/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/count-marketing-watch/ModuleCache.noindex -sdk-module-cache-path /tmp/count-marketing-watch/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /tmp/count-marketing-watch/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-generated-files.hmap -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-own-target-headers.hmap -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal-7504ab1bd09e02c098e7920a821b2636-VFS-watchsimulator/all-product-headers.yaml -Xcc -iquote -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-project-headers.hmap -Xcc -I/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/include -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources-normal/arm64 -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources/arm64 -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch-Swift.h -working-directory /tmp/count-watch-capture-project -experimental-emit-module-separately -disable-cmo
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ Count_kcal_watch (in target 'Count.kcal.watch' from project 'Count.kcal')
+
+SwiftCompile normal arm64 (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for Count_kcal_watch (in target 'Count.kcal.watch' from project 'Count.kcal')
+
+SwiftDriver\ Compilation\ Requirements Count.kcal.watch normal arm64 com.apple.xcode.tools.swift.compiler (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Count_kcal_watch -Onone @/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch.SwiftFileList -DDEBUG -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk -target arm64-apple-watchos10.5-simulator -g -module-cache-path /tmp/count-marketing-watch/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /tmp/count-marketing-watch/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -F /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -emit-localized-strings -emit-localized-strings-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/count-marketing-watch/SDKStatCaches.noindex/watchsimulator27.0-24R360-c50668d93734557a32a78b937f5ceaf1.sdkstatcache -output-file-map /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/count-marketing-watch/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/count-marketing-watch/ModuleCache.noindex -sdk-module-cache-path /tmp/count-marketing-watch/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /tmp/count-marketing-watch/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-generated-files.hmap -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-own-target-headers.hmap -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal-7504ab1bd09e02c098e7920a821b2636-VFS-watchsimulator/all-product-headers.yaml -Xcc -iquote -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-project-headers.hmap -Xcc -I/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/include -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources-normal/arm64 -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources/arm64 -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch-Swift.h -working-directory /tmp/count-watch-capture-project -experimental-emit-module-separately -disable-cmo
+
+Copy /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count_kcal_watch.swiftmodule/Project/arm64-apple-watchos-simulator.swiftsourceinfo /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch.swiftsourceinfo (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch.swiftsourceinfo /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count_kcal_watch.swiftmodule/Project/arm64-apple-watchos-simulator.swiftsourceinfo
+
+SwiftDriver Count.kcal.watch normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Count_kcal_watch -Onone @/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch.SwiftFileList -DDEBUG -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk -target x86_64-apple-watchos10.5-simulator -g -module-cache-path /tmp/count-marketing-watch/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /tmp/count-marketing-watch/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -F /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -emit-localized-strings -emit-localized-strings-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/count-marketing-watch/SDKStatCaches.noindex/watchsimulator27.0-24R360-c50668d93734557a32a78b937f5ceaf1.sdkstatcache -output-file-map /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/count-marketing-watch/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/count-marketing-watch/ModuleCache.noindex -sdk-module-cache-path /tmp/count-marketing-watch/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /tmp/count-marketing-watch/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-generated-files.hmap -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-own-target-headers.hmap -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal-7504ab1bd09e02c098e7920a821b2636-VFS-watchsimulator/all-product-headers.yaml -Xcc -iquote -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-project-headers.hmap -Xcc -I/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/include -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources-normal/x86_64 -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources/x86_64 -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch-Swift.h -working-directory /tmp/count-watch-capture-project -experimental-emit-module-separately -disable-cmo
+
+Copy /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count_kcal_watch.swiftmodule/arm64-apple-watchos-simulator.swiftmodule /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch.swiftmodule (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch.swiftmodule /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count_kcal_watch.swiftmodule/arm64-apple-watchos-simulator.swiftmodule
+
+Copy /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count_kcal_watch.swiftmodule/arm64-apple-watchos-simulator.abi.json /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch.abi.json (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch.abi.json /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count_kcal_watch.swiftmodule/arm64-apple-watchos-simulator.abi.json
+
+SwiftEmitModule normal x86_64 Emitting\ module\ for\ Count_kcal_watch (in target 'Count.kcal.watch' from project 'Count.kcal')
+
+SwiftCompile normal x86_64 (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    
+
+SwiftDriverJobDiscovery normal x86_64 Emitting module for Count_kcal_watch (in target 'Count.kcal.watch' from project 'Count.kcal')
+
+SwiftDriver\ Compilation\ Requirements Count.kcal.watch normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Count_kcal_watch -Onone @/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch.SwiftFileList -DDEBUG -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk -target x86_64-apple-watchos10.5-simulator -g -module-cache-path /tmp/count-marketing-watch/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /tmp/count-marketing-watch/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -F /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -emit-localized-strings -emit-localized-strings-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/count-marketing-watch/SDKStatCaches.noindex/watchsimulator27.0-24R360-c50668d93734557a32a78b937f5ceaf1.sdkstatcache -output-file-map /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/count-marketing-watch/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/count-marketing-watch/ModuleCache.noindex -sdk-module-cache-path /tmp/count-marketing-watch/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /tmp/count-marketing-watch/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-generated-files.hmap -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-own-target-headers.hmap -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal-7504ab1bd09e02c098e7920a821b2636-VFS-watchsimulator/all-product-headers.yaml -Xcc -iquote -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-project-headers.hmap -Xcc -I/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/include -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources-normal/x86_64 -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources/x86_64 -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch-Swift.h -working-directory /tmp/count-watch-capture-project -experimental-emit-module-separately -disable-cmo
+
+Copy /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count_kcal_watch.swiftmodule/x86_64-apple-watchos-simulator.swiftmodule /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch.swiftmodule (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch.swiftmodule /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count_kcal_watch.swiftmodule/x86_64-apple-watchos-simulator.swiftmodule
+
+Copy /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count_kcal_watch.swiftmodule/x86_64-apple-watchos-simulator.abi.json /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch.abi.json (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch.abi.json /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count_kcal_watch.swiftmodule/x86_64-apple-watchos-simulator.abi.json
+
+Copy /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count_kcal_watch.swiftmodule/Project/x86_64-apple-watchos-simulator.swiftsourceinfo /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch.swiftsourceinfo (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch.swiftsourceinfo /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count_kcal_watch.swiftmodule/Project/x86_64-apple-watchos-simulator.swiftsourceinfo
+
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk /tmp/count-marketing-watch/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache
+    cd /tmp/count-watch-capture-project/Count.kcal.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk -o /tmp/count-marketing-watch/SDKStatCaches.noindex/macosx27.0-26A425-7231f6df4def33e022ae2eb8f782df1a.sdkstatcache
+
+SwiftCompile normal arm64 Compiling\ ContentView.swift /tmp/count-watch-capture-project/Count.kcal.watch/ContentView.swift (in target 'Count.kcal.watch' from project 'Count.kcal')
+
+SwiftCompile normal arm64 /tmp/count-watch-capture-project/Count.kcal.watch/ContentView.swift (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-SwiftPerFileCompile ContentView.swift
+
+SwiftDriverJobDiscovery normal arm64 Compiling ContentView.swift (in target 'Count.kcal.watch' from project 'Count.kcal')
+
+SwiftDriver\ Compilation Count.kcal.watch normal arm64 com.apple.xcode.tools.swift.compiler (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Count_kcal_watch -Onone @/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch.SwiftFileList -DDEBUG -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk -target arm64-apple-watchos10.5-simulator -g -module-cache-path /tmp/count-marketing-watch/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /tmp/count-marketing-watch/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -F /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -emit-localized-strings -emit-localized-strings-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/count-marketing-watch/SDKStatCaches.noindex/watchsimulator27.0-24R360-c50668d93734557a32a78b937f5ceaf1.sdkstatcache -output-file-map /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/count-marketing-watch/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/count-marketing-watch/ModuleCache.noindex -sdk-module-cache-path /tmp/count-marketing-watch/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /tmp/count-marketing-watch/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-generated-files.hmap -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-own-target-headers.hmap -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal-7504ab1bd09e02c098e7920a821b2636-VFS-watchsimulator/all-product-headers.yaml -Xcc -iquote -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-project-headers.hmap -Xcc -I/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/include -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources-normal/arm64 -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources/arm64 -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch-Swift.h -working-directory /tmp/count-watch-capture-project -experimental-emit-module-separately -disable-cmo
+
+Ld /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Binary/Count.kcal.watch.debug.dylib normal arm64 (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-watchos10.5-simulator -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk -O0 -Xlinker -no_warn_duplicate_libraries -L/tmp/count-marketing-watch/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-watchsimulator -L/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -F/tmp/count-marketing-watch/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-watchsimulator -F/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -filelist /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch.LinkFileList -install_name @rpath/Count.kcal.watch.debug.dylib -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/watchsimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count_kcal_watch.swiftmodule -Xlinker -alias -Xlinker _main -Xlinker ___debug_main_executable_dylib_entry_point -framework WatchConnectivity -Xlinker -no_adhoc_codesign -o /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Binary/Count.kcal.watch.debug.dylib
+
+SwiftCompile normal x86_64 Compiling\ ContentView.swift /tmp/count-watch-capture-project/Count.kcal.watch/ContentView.swift (in target 'Count.kcal.watch' from project 'Count.kcal')
+
+SwiftCompile normal x86_64 /tmp/count-watch-capture-project/Count.kcal.watch/ContentView.swift (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-SwiftPerFileCompile ContentView.swift
+
+ConstructStubExecutorLinkFileList /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-ExecutorLinkFileList-normal-arm64.txt (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    construct-stub-executor-link-file-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Binary/Count.kcal.watch.debug.dylib /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-ExecutorLinkFileList-normal-arm64.txt
+note: Using stub executor library with Swift entry point. (in target 'Count.kcal.watch' from project 'Count.kcal')
+
+SwiftDriverJobDiscovery normal x86_64 Compiling ContentView.swift (in target 'Count.kcal.watch' from project 'Count.kcal')
+
+SwiftDriver\ Compilation Count.kcal.watch normal x86_64 com.apple.xcode.tools.swift.compiler (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name Count_kcal_watch -Onone @/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch.SwiftFileList -DDEBUG -DDEBUG -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk -target x86_64-apple-watchos10.5-simulator -g -module-cache-path /tmp/count-marketing-watch/ModuleCache.noindex -Xfrontend -serialize-debugging-options -enable-testing -index-store-path /tmp/count-marketing-watch/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -F /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -emit-localized-strings -emit-localized-strings-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/count-marketing-watch/SDKStatCaches.noindex/watchsimulator27.0-24R360-c50668d93734557a32a78b937f5ceaf1.sdkstatcache -output-file-map /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch-OutputFileMap.json -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/count-marketing-watch/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/count-marketing-watch/ModuleCache.noindex -sdk-module-cache-path /tmp/count-marketing-watch/SDKExplicitPrecompiledModules -emit-dependencies -emit-module -emit-module-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch.swiftmodule -serialize-diagnostics -dependency-scan-serialize-diagnostics-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch-dependency-scan.dia -validate-clang-modules-once -clang-build-session-file /tmp/count-marketing-watch/ModuleCache.noindex/Session.modulevalidation -Xcc -fmodules-prune-interval\=86400 -Xcc -fmodules-prune-after\=345600 -emit-const-values -const-gather-protocols-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-generated-files.hmap -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-own-target-headers.hmap -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal-7504ab1bd09e02c098e7920a821b2636-VFS-watchsimulator/all-product-headers.yaml -Xcc -iquote -Xcc /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-project-headers.hmap -Xcc -I/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/include -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources-normal/x86_64 -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources/x86_64 -Xcc -I/tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch-Swift.h -working-directory /tmp/count-watch-capture-project -experimental-emit-module-separately -disable-cmo
+
+Ld /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Binary/Count.kcal.watch.debug.dylib normal x86_64 (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target x86_64-apple-watchos10.5-simulator -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk -O0 -Xlinker -no_warn_duplicate_libraries -L/tmp/count-marketing-watch/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-watchsimulator -L/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -F/tmp/count-marketing-watch/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-watchsimulator -F/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -filelist /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch.LinkFileList -install_name @rpath/Count.kcal.watch.debug.dylib -Xlinker -rpath -Xlinker /usr/lib/swift -Xlinker -rpath -Xlinker @executable_path/Frameworks -Xlinker -dead_strip -Xlinker -object_path_lto -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -Xlinker -dependency_info -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch_dependency_info.dat -fobjc-link-runtime -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/watchsimulator -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count_kcal_watch.swiftmodule -Xlinker -alias -Xlinker _main -Xlinker ___debug_main_executable_dylib_entry_point -framework WatchConnectivity -Xlinker -no_adhoc_codesign -o /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Binary/Count.kcal.watch.debug.dylib
+
+CreateUniversalBinary /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/Count.kcal.watch.debug.dylib normal arm64\ x86_64 (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo -create /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Binary/Count.kcal.watch.debug.dylib /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Binary/Count.kcal.watch.debug.dylib -output /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/Count.kcal.watch.debug.dylib
+
+ConstructStubExecutorLinkFileList /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-ExecutorLinkFileList-normal-x86_64.txt (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    construct-stub-executor-link-file-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Binary/Count.kcal.watch.debug.dylib /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-ExecutorLinkFileList-normal-x86_64.txt
+note: Using stub executor library with Swift entry point. (in target 'Count.kcal.watch' from project 'Count.kcal')
+
+Ld /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Binary/Count.kcal.watch normal x86_64 (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target x86_64-apple-watchos10.5-simulator -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk -O0 -Xlinker -no_warn_duplicate_libraries -L/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -F/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -Xlinker -rpath -Xlinker @executable_path -Xlinker -rpath -Xlinker @executable_path/Frameworks -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-DebugDylibPath-normal-x86_64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-DebugDylibInstallName-normal-x86_64.txt -Xlinker -filelist -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-ExecutorLinkFileList-normal-x86_64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch.app-Simulated.xcent -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __ents_der -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch.app-Simulated.xcent.der /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Binary/Count.kcal.watch.debug.dylib -Xlinker -no_adhoc_codesign -o /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Binary/Count.kcal.watch
+
+Ld /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Binary/Count.kcal.watch normal arm64 (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-watchos10.5-simulator -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk -O0 -Xlinker -no_warn_duplicate_libraries -L/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -F/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator -Xlinker -rpath -Xlinker @executable_path -Xlinker -rpath -Xlinker @executable_path/Frameworks -rdynamic -Xlinker -no_deduplicate -Xlinker -objc_abi_version -Xlinker 2 -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-DebugDylibPath-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-DebugDylibInstallName-normal-arm64.txt -Xlinker -filelist -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch-ExecutorLinkFileList-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __entitlements -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch.app-Simulated.xcent -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __ents_der -Xlinker /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch.app-Simulated.xcent.der /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Binary/Count.kcal.watch.debug.dylib -Xlinker -no_adhoc_codesign -o /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Binary/Count.kcal.watch
+
+CreateUniversalBinary /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/Count.kcal.watch normal arm64\ x86_64 (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo -create /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Binary/Count.kcal.watch /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Binary/Count.kcal.watch -output /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/Count.kcal.watch
+
+CopySwiftLibs /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/Count.kcal.watch.debug.dylib --scan-folder /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/Frameworks --scan-folder /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/PlugIns --scan-folder /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/SystemExtensions --scan-folder /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/Extensions --scan-folder /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk/System/Library/Frameworks/WatchConnectivity.framework --platform watchsimulator --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os --back-deploy-swift-span
+
+ExtractAppIntentsMetadata (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --module-name Count_kcal_watch --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/WatchSimulator.platform/Developer/SDKs/WatchSimulator27.0.sdk --xcode-version 27A266a --platform-family watchOS --deployment-target 10.5 --bundle-identifier com.count.kcal.app.watch --output /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app --target-triple arm64-apple-watchos10.5-simulator --target-triple x86_64-apple-watchos10.5-simulator --binary-file /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/Count.kcal.watch --dependency-file /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch_dependency_info.dat --dependency-file /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch_dependency_info.dat --stringsdata-file /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --stringsdata-file /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch.SwiftFileList --source-file-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch.SwiftFileList --metadata-file-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch.DependencyMetadataFileList --static-metadata-file-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch.DependencyStaticMetadataFileList --swift-const-vals-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/arm64/Count.kcal.watch.SwiftConstValuesFileList --swift-const-vals-list /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Objects-normal/x86_64/Count.kcal.watch.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --no-app-shortcuts-localization
+2026-10-15 12:42:20.253 appintentsmetadataprocessor[84785:15233876] Starting appintentsmetadataprocessor export
+2026-10-15 12:42:20.297 appintentsmetadataprocessor[84785:15233876] Extracted no relevant App Intents symbols, skipping writing output
+
+CodeSign /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/Count.kcal.watch.debug.dylib (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/Count.kcal.watch.debug.dylib
+
+CodeSign /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/__preview.dylib (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/__preview.dylib
+/tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app/__preview.dylib: replacing existing signature
+
+CodeSign /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --entitlements /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-watchsimulator/Count.kcal.watch.build/Count.kcal.watch.app.xcent --timestamp\=none --generate-entitlement-der /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app
+
+Validate /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app (in target 'Count.kcal.watch' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-validationUtility /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app -shallow-bundle -infoplist-subpath Info.plist
+
+Copy /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/Watch/Count.kcal.watch.app /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app (in target 'Count.kcal' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -exclude Headers -exclude PrivateHeaders -exclude Modules -exclude \*.tbd -resolve-src-symlinks -remove-static-executable /tmp/count-marketing-watch/Build/Products/Debug-watchsimulator/Count.kcal.watch.app /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/Watch
+
+ProcessInfoPlistFile /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/Info.plist /tmp/count-watch-capture-project/Count.kcal/Info.plist (in target 'Count.kcal' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-infoPlistUtility /tmp/count-watch-capture-project/Count.kcal/Info.plist -producttype com.apple.product-type.application -genpkginfo /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -additionalcontentfile /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-iphonesimulator/Count.kcal.build/assetcatalog_generated_info.plist -scanforprivacyfile /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/GRDB_GRDB.bundle -scanforprivacyfile /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/PlugIns/Count.kcal.widget.appex -scanforprivacyfile /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/Watch/Count.kcal.watch.app -scanforprivacyfile /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/swift-sharing_Sharing.bundle -o /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/Info.plist
+
+CodeSign /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/Count.kcal.debug.dylib (in target 'Count.kcal' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/Count.kcal.debug.dylib
+/tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/Count.kcal.debug.dylib: replacing existing signature
+
+CodeSign /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/__preview.dylib (in target 'Count.kcal' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/__preview.dylib
+/tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/__preview.dylib: replacing existing signature
+
+CodeSign /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app (in target 'Count.kcal' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --entitlements /tmp/count-marketing-watch/Build/Intermediates.noindex/Count.kcal.build/Debug-iphonesimulator/Count.kcal.build/Count.kcal.app.xcent --timestamp\=none --generate-entitlement-der /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app
+/tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app: replacing existing signature
+
+Validate /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app (in target 'Count.kcal' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    builtin-validationUtility /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app -shallow-bundle -infoplist-subpath Info.plist
+
+ValidateEmbeddedBinary /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/Watch/Count.kcal.watch.app (in target 'Count.kcal' from project 'Count.kcal')
+    cd /tmp/count-watch-capture-project
+    /Applications/Xcode.app/Contents/Developer/usr/bin/embeddedBinaryValidationUtility /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/Watch/Count.kcal.watch.app -signing-cert - -info-plist-path /tmp/count-marketing-watch/Build/Products/Debug-iphonesimulator/Count.kcal.app/Info.plist
+
+PruneExplicitPrecompiledModules /tmp/count-marketing-watch/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /tmp/count-marketing-watch/SDKExplicitPrecompiledModules
+
+PruneExplicitPrecompiledModules /tmp/count-marketing-watch/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+** BUILD SUCCEEDED **
+
