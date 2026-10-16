@@ -7,8 +7,6 @@ struct WeeklyChart: View {
 
     @Environment(WeightHistory.self) private var weightHistory
 
-    var showsAnnotations = true
-
     @State private var plotHeight: CGFloat = 0
     @State private var labelHeight: CGFloat = 0
 
@@ -51,17 +49,15 @@ struct WeeklyChart: View {
                     .foregroundStyle(Color(index == validData.count - 1 ? "SecondaryTextColor1" : "SecondaryTextColor"))
                     .symbolSize(index == validData.count - 1 ? 113 : 50)
                     .annotation(position: labelPosition(for: item.weightAvg!), spacing: 8) {
-                        if showsAnnotations {
-                            Text(verbatim: String(format: "%.1f", item.weightAvg!))
-                                .font(.system(size: 11, weight: .semibold))
-                                .foregroundColor(Color("SecondaryTextColor1").opacity((index == validData.count - 1) ? 1 : 0.6))
-                                .fixedSize()
-                                .onGeometryChange(for: CGFloat.self) { geometry in
-                                    geometry.size.height
-                                } action: { height in
-                                    labelHeight = height
-                                }
-                        }
+                        Text(verbatim: String(format: "%.1f", item.weightAvg!))
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundColor(Color("SecondaryTextColor1").opacity((index == validData.count - 1) ? 1 : 0.6))
+                            .fixedSize()
+                            .onGeometryChange(for: CGFloat.self) { geometry in
+                                geometry.size.height
+                            } action: { height in
+                                labelHeight = height
+                            }
                     }
 
                     PointMark(

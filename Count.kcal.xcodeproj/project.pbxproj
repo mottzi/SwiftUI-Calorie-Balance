@@ -274,9 +274,6 @@
 		A81F00000000000000000002 /* CalendarPagingBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81F00000000000000000001; };
 		A81F00000000000000000004 /* CalendarPagingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81F00000000000000000003; };
 		DACE00000000000000000101 /* DashboardOrderingControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACE00000000000000000001; };
-		DACE00000000000000000102 /* DashboardLayoutPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACE00000000000000000002; };
-		DACE00000000000000000103 /* DashboardPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACE00000000000000000003; };
-		DACE00000000000000000104 /* DashboardPreviewProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACE00000000000000000004; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -510,9 +507,6 @@
 		A81F00000000000000000001 /* CalendarPagingBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPagingBehavior.swift; sourceTree = "<group>"; };
 		A81F00000000000000000003 /* CalendarPagingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPagingTests.swift; sourceTree = "<group>"; };
 		DACE00000000000000000001 /* DashboardOrderingControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardOrderingControls.swift; path = Count.kcal/Settings/DashboardOrderingControls.swift; sourceTree = SOURCE_ROOT; };
-		DACE00000000000000000002 /* DashboardLayoutPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardLayoutPreview.swift; path = Count.kcal/Settings/DashboardLayoutPreview.swift; sourceTree = SOURCE_ROOT; };
-		DACE00000000000000000003 /* DashboardPreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardPreviewCard.swift; path = Count.kcal/Settings/DashboardPreviewCard.swift; sourceTree = SOURCE_ROOT; };
-		DACE00000000000000000004 /* DashboardPreviewProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardPreviewProgress.swift; path = Count.kcal/Settings/DashboardPreviewProgress.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -785,9 +779,6 @@
 				DACD00000000000000000008 /* SettingsCardRowBackground.swift */,
 				DACD00000000000000000006 /* SettingsReorderRows.swift */,
 				DACD00000000000000000004 /* DashboardSettingsPage.swift */,
-				DACE00000000000000000004 /* DashboardPreviewProgress.swift */,
-				DACE00000000000000000003 /* DashboardPreviewCard.swift */,
-				DACE00000000000000000002 /* DashboardLayoutPreview.swift */,
 				DACE00000000000000000001 /* DashboardOrderingControls.swift */,
 				9A92F16C2B06CE1D009C4A2A /* EnergySettingsView.swift */,
 				9A92F16E2B06CF06009C4A2A /* NutrientsCard.swift */,
@@ -1352,9 +1343,6 @@
 				BC37446210184C76AFC53245 /* HealthLoadingPlaceholder.swift in Sources */,
 				9A001C3F29B6122500BB42B9 /* Dashboard.swift in Sources */,
 				DACD00000000000000000104 /* DashboardSettingsPage.swift in Sources */,
-				DACE00000000000000000104 /* DashboardPreviewProgress.swift in Sources */,
-				DACE00000000000000000103 /* DashboardPreviewCard.swift in Sources */,
-				DACE00000000000000000102 /* DashboardLayoutPreview.swift in Sources */,
 				DACE00000000000000000101 /* DashboardOrderingControls.swift in Sources */,
 				DACD00000000000000000103 /* ProgressPosition.swift in Sources */,
 				DACD00000000000000000102 /* DashboardSection.swift in Sources */,

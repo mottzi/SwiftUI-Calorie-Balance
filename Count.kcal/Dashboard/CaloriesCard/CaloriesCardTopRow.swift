@@ -12,7 +12,6 @@ struct CaloriesCardTopRow: View {
 
     let mode: GraphMode
     var isLoading = false
-    var showsDetails = true
 
     var body: some View {
         (dynamicType.isAccessibilitySize
@@ -75,7 +74,6 @@ struct CaloriesCardTopRow: View {
                             .transaction { $0.animation = .none }
                             .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                     }
-                    .opacity(showsDetails ? 1 : 0)
                 }
                              
                 HStack(spacing: dynamicType <= .xxLarge ? 14 : 10) {
@@ -138,7 +136,6 @@ struct CaloriesCardTopRow: View {
                             .transaction { $0.animation = .none }
                             .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                     }
-                    .opacity(showsDetails ? 1 : 0)
                 }
             }
             .fontDesign(.rounded)
@@ -151,7 +148,7 @@ struct CaloriesCardTopRow: View {
                 Spacer()
             }
             
-            CaloriesCardTopRowCenter(mode: mode, isLoading: isLoading, showsDetails: showsDetails)
+            CaloriesCardTopRowCenter(mode: mode, isLoading: isLoading)
                 .padding(.trailing, dynamicType.isAccessibilitySize ? 0 : 19)
         }
     }
