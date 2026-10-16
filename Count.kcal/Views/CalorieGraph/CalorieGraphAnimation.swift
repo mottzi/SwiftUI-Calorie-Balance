@@ -10,7 +10,7 @@ struct CalorieGraphAnimation: ViewModifier {
 
     func body(content: Content) -> some View {
         content.animation(
-            reduceMotion ? nil : .bouncy(duration: min(max(duration, 0), 2)),
+            reduceMotion ? nil : .smooth(duration: min(max(duration, 0), 2)),
             value: values
         )
     }

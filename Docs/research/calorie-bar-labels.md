@@ -4,7 +4,7 @@ Researched and updated on 2026-10-11 against Apple documentation and the current
 
 ## Implemented geometry
 
-`EnergyGraphValues` supplies raw calorie values, an animated common scale, and stable semantic slots. Both circle and bar geometry derive from that model. The common scale avoids forcing one side to full width midway through a transition when the larger energy total changes. See the [circle findings](circle-balance-graph.md) for the model and crossover examples.
+Updated 2026-10-17. `EnergyGraphValues` supplies calorie values, normalized segment endpoints, and stable semantic slots. Both circle and bar geometry interpolate those endpoints directly. The previous animated calorie scale compressed most visible travel into a few frames when Now and Midnight totals differed greatly. Normalizing each snapshot once preserves the full animation path, including balance crossovers. See the [circle findings](circle-balance-graph.md) for the regression and verification.
 
 `CalorieBarRowLayout` owns the same animation data. It places the occupied fill group and measures every actual styled label with `sizeThatFits(.unspecified)` before resolving label positions in one pass. It uses `Cache = Void`, with no per-label width state or preferences. Apple provides measurement and placement through layout subview proxies; `.unspecified` obtains ideal dimensions. `Layout` inherits `Animatable`. [Layout](https://developer.apple.com/documentation/swiftui/layout), [LayoutSubview.sizeThatFits](https://developer.apple.com/documentation/swiftui/layoutsubview/sizethatfits(_:)), [ProposedViewSize.unspecified](https://developer.apple.com/documentation/swiftui/proposedviewsize/unspecified).
 

@@ -32,7 +32,7 @@ extension CalorieGraphDrawing {
                 }
         }
 
-        /// Interpolates segment values and their common scale together.
+        /// Interpolates normalized endpoints alongside the calorie values.
         var animatableData: EnergyGraphValues.AnimatableData {
             get { values.animatableData }
             set { values.animatableData = newValue }

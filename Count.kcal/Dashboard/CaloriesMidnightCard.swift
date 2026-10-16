@@ -16,7 +16,10 @@ struct CaloriesMidnightCard: View {
     var body: some View {
         Button(action: toggleMode) {
             CaloriesCard(mode: mode, animateNumericValues: true)
-                .animation(reduceMotion ? nil : .snappy, value: todayPageMode.selection)
+                .animation(
+                    reduceMotion ? nil : .smooth(duration: CalorieGraphAnimation.defaultDuration),
+                    value: todayPageMode.selection
+                )
                 .contentShape(.rect(cornerRadius: 10))
         }
         .buttonStyle(RecessedCardStyle(

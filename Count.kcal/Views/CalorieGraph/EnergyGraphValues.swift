@@ -1,24 +1,31 @@
 import SwiftUI
 
 @Animatable
-/// Continuous energy values with an animated scale for burned and consumed energy.
+/// Calorie values and normalized endpoints that move together between graph snapshots.
 struct EnergyGraphValues: Equatable {
 
     var active: Double
     var resting: Double
     var restingRemaining: Double
     var consumed: Double
-    private var graphScale: Double
-    private var presence: Double
+    private var activeEndpoint: Double
+    private var restingEndpoint: Double
+    private var burnedEndpoint: Double
+    private var consumedEndpoint: Double
 
     init(_ energy: EnergyBalance) {
         active = Double(max(0, energy.active))
         resting = Double(max(0, energy.resting))
         restingRemaining = Double(max(0, energy.restingRemaining))
         consumed = Double(max(0, energy.consumed))
-        // animate the scale with the totals so graph endpoints do not stop at the balance crossover
-        graphScale = max(active + resting + restingRemaining, consumed)
-        presence = graphScale > 0 ? 1 : 0
+        let burned = active + resting + restingRemaining
+        let scale = max(burned, consumed)
+        // Normalize each snapshot once. Dividing by an interpolated calorie scale
+        // compresses nearly all visible movement into one end of extreme changes.
+        activeEndpoint = scale > 0 ? active / scale : 0
+        restingEndpoint = scale > 0 ? (active + resting) / scale : 0
+        burnedEndpoint = scale > 0 ? burned / scale : 0
+        consumedEndpoint = scale > 0 ? consumed / scale : 0
     }
 
     /// Active, recorded resting, projected resting, and unused shares of the common scale.
@@ -27,11 +34,10 @@ struct EnergyGraphValues: Equatable {
         let activeEnergy = max(0, active)
         let restingEnergy = max(0, resting)
         let projectedEnergy = max(0, restingRemaining)
-        let recordedEnergy = activeEnergy + restingEnergy
-        let burnedEnergy = recordedEnergy + projectedEnergy
-        let activeEnd = ratio(of: activeEnergy)
-        let restingEnd = ratio(of: recordedEnergy)
-        let burnedEnd = ratio(of: burnedEnergy)
+        let burnedEnergy = activeEnergy + restingEnergy + projectedEnergy
+        let activeEnd = min(max(activeEndpoint, 0), 1)
+        let restingEnd = min(max(restingEndpoint, activeEnd), 1)
+        let burnedEnd = min(max(burnedEndpoint, restingEnd), 1)
         return [
             Segment(id: .active, value: activeEnergy, range: 0...activeEnd),
             Segment(id: .resting, value: restingEnergy, range: activeEnd...restingEnd),
@@ -44,7 +50,7 @@ struct EnergyGraphValues: Equatable {
     var consumedSegments: [Segment] {
         let consumedEnergy = max(0, consumed)
         let burnedEnergy = max(0, active) + max(0, resting) + max(0, restingRemaining)
-        let consumedEnd = ratio(of: consumedEnergy)
+        let consumedEnd = min(max(consumedEndpoint, 0), 1)
         return [
             Segment(id: .consumed, value: consumedEnergy, range: 0...consumedEnd),
             Segment(id: .empty, value: max(0, burnedEnergy - consumedEnergy), range: consumedEnd...1)
@@ -57,14 +63,6 @@ struct EnergyGraphValues: Equatable {
             case .burned: burnedSegments
             case .consumed: consumedSegments
         }
-    }
-
-}
-
-extension EnergyGraphValues {
-
-    private func ratio(of amount: Double) -> Double {
-        return graphScale > 0 ? min(max(amount / graphScale, 0), 1) * min(max(presence, 0), 1) : 0
     }
 
 }

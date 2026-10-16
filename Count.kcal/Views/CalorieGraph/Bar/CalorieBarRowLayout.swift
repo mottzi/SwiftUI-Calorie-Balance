@@ -52,7 +52,7 @@ struct CalorieBarRowLayout: Layout {
         }
     }
 
-    /// Interpolates label positions with the same values and scale as the bar fill.
+    /// Interpolates label positions with the same endpoints as the bar fill.
     var animatableData: EnergyGraphValues.AnimatableData {
         get { values.animatableData }
         set { values.animatableData = newValue }
