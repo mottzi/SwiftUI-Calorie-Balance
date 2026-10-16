@@ -12,7 +12,7 @@ struct Dashboard: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            ForEach(settings.dailyCards) { card in
+            ForEach(settings.dailyCards.filter { $0 != .steps || settings.showDashboardSteps }) { card in
                 switch card {
                 case .calories:
                     DashboardCalories(todayPageMode: $todayPageMode)

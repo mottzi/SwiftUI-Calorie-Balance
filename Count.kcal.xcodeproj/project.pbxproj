@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DACD00000000000000000305 /* DashboardCustomizationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD0000000000000000000A; };
+		DACD00000000000000000305 /* DashboardCustomizationRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD0000000000000000000A; };
 		DACD00000000000000000304 /* SettingsReorderRowBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000009; };
 		DACD00000000000000000302 /* SettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000007; };
 		DACD00000000000000000303 /* SettingsCardRowBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000008; };
@@ -338,7 +338,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		DACD0000000000000000000A /* DashboardCustomizationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardCustomizationCard.swift; path = Count.kcal/Settings/DashboardCustomizationCard.swift; sourceTree = SOURCE_ROOT; };
+		DACD0000000000000000000A /* DashboardCustomizationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardCustomizationRow.swift; path = Count.kcal/Settings/DashboardCustomizationRow.swift; sourceTree = SOURCE_ROOT; };
 		DACD00000000000000000009 /* SettingsReorderRowBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsReorderRowBackground.swift; path = Count.kcal/Settings/SettingsReorderRowBackground.swift; sourceTree = SOURCE_ROOT; };
 		DACD00000000000000000007 /* SettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsSection.swift; path = Count.kcal/Settings/SettingsSection.swift; sourceTree = SOURCE_ROOT; };
 		DACD00000000000000000008 /* SettingsCardRowBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsCardRowBackground.swift; path = Count.kcal/Settings/SettingsCardRowBackground.swift; sourceTree = SOURCE_ROOT; };
@@ -773,7 +773,7 @@
 			isa = PBXGroup;
 			children = (
 				9A92F1652B052023009C4A2A /* SettingsPage.swift */,
-				DACD0000000000000000000A /* DashboardCustomizationCard.swift */,
+				DACD0000000000000000000A /* DashboardCustomizationRow.swift */,
 				DACD00000000000000000009 /* SettingsReorderRowBackground.swift */,
 				DACD00000000000000000007 /* SettingsSection.swift */,
 				DACD00000000000000000008 /* SettingsCardRowBackground.swift */,
@@ -1373,7 +1373,7 @@
 				9A6DA88D2B361ABF00585788 /* CaloriesCardTopRow.swift in Sources */,
 				9A8BA4062B4054ED0011D412 /* BackgroundColorSection.swift in Sources */,
 				9A92F1662B052023009C4A2A /* SettingsPage.swift in Sources */,
-				DACD00000000000000000305 /* DashboardCustomizationCard.swift in Sources */,
+				DACD00000000000000000305 /* DashboardCustomizationRow.swift in Sources */,
 				DACD00000000000000000304 /* SettingsReorderRowBackground.swift in Sources */,
 				DACD00000000000000000302 /* SettingsSection.swift in Sources */,
 				DACD00000000000000000303 /* SettingsCardRowBackground.swift in Sources */,

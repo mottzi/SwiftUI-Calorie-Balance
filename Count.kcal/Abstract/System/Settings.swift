@@ -17,6 +17,14 @@ final class Settings: ObservableObject {
     @AppStorage("hideCalorieStatusIcons", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     public var hideCalorieStatusIcons: Bool = false
 
+    @AppStorage("showDashboardSteps", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
+    var showDashboardSteps: Bool = true
+
+    var disableDashboardSteps: Bool {
+        get { !showDashboardSteps }
+        set { showDashboardSteps = !newValue }
+    }
+
     @AppStorage("dailyCardOrder", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     var dailyCardOrder: String = "calories,nutrients,steps"
 

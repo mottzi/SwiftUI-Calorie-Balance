@@ -24,7 +24,6 @@ struct SettingsPage: View {
                     NutrientsCard()
                     StepsCard(focusedField: _focusedField)
                     UnitsCard()
-                    DashboardCustomizationCard()
                     OtherSettingsCard()
                     ColorsCard()
                 }
