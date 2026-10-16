@@ -1,0 +1,47 @@
+Weight chart verification
+
+Automated checks:
+  zsh Tests/run-weight-semantics.sh
+
+This compiles the production WeightHistory and date helpers with lightweight query
+and settings fixtures. It runs 36 chart datasets and 2,520 additional Y-axis ranges
+in Europe/Zurich, America/New_York,
+Asia/Kathmandu, Pacific/Auckland, and UTC. Checks cover strict whole-unit Y bounds,
+2 to 5 major Y ticks, inclusion of recorded dates, monthly label cadence, latest
+label inclusion, and the existing Monday/Sunday alignment rules. The original
+shared phone/watch, unit, missing-history and refresh tests run in every timezone.
+
+Simulator visual checks:
+  Build and launch the Debug iPhone app with the argument --weight-chart-qa.
+  For an already installed build:
+    xcrun simctl launch --terminate-running-process booted com.count.kcal.app --weight-chart-qa
+
+The gallery renders the production weekly/monthly charts and empty-state view at
+their actual 130-point height, using 22-point leading and 16-point trailing padding.
+Scenario inputs use WeightChartData.roundedWeight, the same one-decimal rounding
+used by HealthRepository for real daily averages and latest readings. The gallery
+starts at full width and normal font size.
+
+Previous/Next cycle datasets. Controls switch full/320-point card width, dark/light
+appearance, and default/accessibility3 Dynamic Type. Charts retain their existing
+Dynamic Type cap and 11-point value-label size. Crowded weekly labels stagger
+vertically instead of shrinking or truncating. Restart without the argument to
+return to the dashboard. The gallery is excluded from physical-device and Release
+builds and never saves or queries HealthKit data.
+
+Cases include loss, gain, flat integers/fractions, values near scale bounds, sharp
+peaks/troughs, rapid changes, outliers, sparse/single/missing/stale readings, long
+gaps, three-digit weights including pound-scale values, small weights, alternating
+extremes, all seven ending weekdays, year/leap-day boundaries and clock changes.
+
+Visual acceptance:
+  Every recorded day has a visible point; latest and weekly labels fit.
+  Curves pass through readings without invented extrema.
+  Major Y ticks remain readable across broad ranges.
+  Light/dark value and axis labels have readable contrast.
+  Empty states and single-point charts remain valid.
+  Existing future calendar space and Sunday alignment are preserved.
+
+The visual sweep is a representative matrix on the running iPhone 18 Pro
+simulator, including a 320-point card width. It is not an exhaustive check of every
+weight, locale, device, theme, or accessibility combination.

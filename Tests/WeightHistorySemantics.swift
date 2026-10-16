@@ -110,6 +110,9 @@ struct WeightHistorySemantics {
         watch.apply(try roundTrip(phone.snapshot!))
         precondition(!watch.dataLoaded && watch.average(for: .monthly) == 0)
         precondition(watch.chartDateRange(for: .monthly) == nil)
+        checkChartBounds(end: end)
+        checkChartScenarios()
+        checkTickRanges(end: end)
         await checkLocalDelivery(calendar: calendar, end: end, start: start)
         print(
             """
@@ -122,6 +125,108 @@ struct WeightHistorySemantics {
 }
 
 extension WeightHistorySemantics {
+
+    @MainActor
+    static func checkTickRanges(end: Date) {
+        let history = WeightHistory(repository: HealthRepository(), settings: Settings())
+        history.dailyAverages = (0..<30).map { daysAgo in
+            WeightChartData(date: end.subtractDays(29 - daysAgo), weightAvg: nil)
+        }
+        for lower in stride(from: 40, through: 300, by: 13) {
+            for span in 1...120 {
+                history.dailyAverages[0].weightAvg = Double(lower) + 0.1
+                history.dailyAverages[29].weightAvg = Double(lower + span) - 0.1
+                let ticks = history.createYRangeArray(.monthly)
+                precondition((2...5).contains(ticks.count), "Y ticks for \(lower)...\(lower + span)")
+                precondition(ticks == ticks.sorted() && Set(ticks).count == ticks.count)
+                precondition(ticks.allSatisfy { history.getYRange(.monthly).contains($0) })
+            }
+        }
+        print("PASS: 2,520 additional Y-axis ranges retain 2 to 5 distinct major ticks")
+    }
+
+    @MainActor
+    static func checkChartScenarios() {
+        let calendar = Calendar.current
+        let settings = Settings()
+        let history = WeightHistory(repository: HealthRepository(), settings: settings)
+        precondition(Set(WeightChartScenario.cases[4].dailyAverages.compactMap(\.weightAvg)) == [79.9, 80.0])
+        precondition(Set(WeightChartScenario.cases[5].dailyAverages.compactMap(\.weightAvg)) == [80.0, 80.1])
+        for scenario in WeightChartScenario.cases {
+            history.dailyAverages = scenario.dailyAverages
+            for value in scenario.dailyAverages.compactMap(\.weightAvg) {
+                precondition(abs(value * 10 - (value * 10).rounded()) < 0.000_001, "One-decimal chart inputs: \(scenario.id)")
+            }
+            for page in [WeightPage.weekly, .monthly] {
+                let values = history.validData(page)
+                let labels = history.labelledData(page)
+                precondition(labels.last?.id == values.last?.id, "Latest reading is labelled: \(scenario.id)")
+                precondition(labels.allSatisfy { values.contains($0) }, scenario.id)
+                if page == .weekly {
+                    precondition(labels == values, scenario.id)
+                } else {
+                    precondition(labels.count <= 6, scenario.id)
+                    for pair in zip(labels, labels.dropFirst()) {
+                        let gap = calendar.dateComponents([.day], from: pair.0.date, to: pair.1.date).day!
+                        precondition(gap >= 7, "Monthly label spacing: \(scenario.id)")
+                    }
+                }
+                let yRange = history.getYRange(page)
+                precondition(yRange.lowerBound < yRange.upperBound, scenario.id)
+                let ticks = history.createYRangeArray(page)
+                precondition((2...5).contains(ticks.count), "Readable Y tick count: \(scenario.id)")
+                precondition(ticks.allSatisfy { yRange.contains($0) }, scenario.id)
+                for item in values {
+                    precondition(Double(yRange.lowerBound) < item.weightAvg!, scenario.id)
+                    precondition(Double(yRange.upperBound) > item.weightAvg!, scenario.id)
+                }
+                let xRange = history.chartDateRange(for: page)!
+                for item in values { precondition(xRange.contains(item.date), scenario.id) }
+                let daysAfter = calendar.dateComponents([.day], from: scenario.end, to: xRange.upperBound).day!
+                if page == .weekly {
+                    precondition(daysAfter == 1, scenario.id)
+                } else {
+                    let expectedDays = 9 - calendar.component(.weekday, from: scenario.end)
+                    precondition(daysAfter == expectedDays, "Preserve calendar alignment: \(scenario.id)")
+                    precondition(calendar.component(.weekday, from: xRange.upperBound) == 2, scenario.id)
+                }
+            }
+        }
+        print("PASS: 36 weight scenarios, strict Y bounds, readable ticks, label spacing, X coverage and calendar endings")
+    }
+
+    @MainActor
+    static func checkChartBounds(end: Date) {
+        let history = WeightHistory(repository: HealthRepository(), settings: Settings())
+        history.dailyAverages = (0..<30).map { daysAgo in
+            WeightChartData(date: end.subtractDays(29 - daysAgo), weightAvg: 79.6)
+        }
+
+        // A high reading in the upper half of a unit must not add an empty interval.
+        history.dailyAverages[0].weightAvg = 80.6
+        precondition(history.getYRange(.monthly) == 79...81)
+
+        history.dailyAverages[0].weightAvg = 80.99
+        precondition(history.getYTopRange(.monthly) == 81)
+
+        // An exact whole-unit reading still needs room above it.
+        history.dailyAverages[0].weightAvg = 81
+        precondition(history.getYTopRange(.monthly) == 82)
+        history.dailyAverages[0].weightAvg = 81.01
+        precondition(history.getYTopRange(.monthly) == 82)
+
+        // A low reading in the lower half of a unit must not add an empty interval.
+        history.dailyAverages[1].weightAvg = 79.4
+        precondition(history.getYBottomRange(.monthly) == 79)
+        history.dailyAverages[1].weightAvg = 79.01
+        precondition(history.getYBottomRange(.monthly) == 79)
+
+        // An exact whole-unit reading still needs room below it.
+        history.dailyAverages[1].weightAvg = 79
+        precondition(history.getYBottomRange(.monthly) == 78)
+        history.dailyAverages[1].weightAvg = 78.99
+        precondition(history.getYBottomRange(.monthly) == 78)
+    }
 
     static func roundTrip(_ snapshot: WeightHistorySnapshot) throws -> WeightHistorySnapshot {
 

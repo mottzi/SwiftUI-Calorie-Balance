@@ -13,24 +13,36 @@ struct CountApp: App {
 
     var body: some Scene {
         WindowGroup {
-            DatabaseGate {
-                NavigationStack {
-                    ZStack {
-                        AppSettings.AppBackground
-                            .ignoresSafeArea(.all)
+            #if DEBUG && targetEnvironment(simulator)
+            if ProcessInfo.processInfo.arguments.contains("--weight-chart-qa") {
+                WeightChartGallery()
+            } else {
+                dashboard
+            }
+            #else
+            dashboard
+            #endif
+        }
+    }
 
-                        Pager(lb: 5, tb: 1)
-                            .environmentObject(AppSettings)
-                            .environment(weightHistory)
-                            .environment(StreakManager)
-                    }
-                    #if DEBUG && targetEnvironment(simulator)
-                    .task { await SimulatorHealthSeeder.runIfRequested() }
-                    #endif
-                    #if os(iOS)
-                    .modifier(SettingsContextSync(weightHistory: weightHistory))
-                    #endif
+    private var dashboard: some View {
+        DatabaseGate {
+            NavigationStack {
+                ZStack {
+                    AppSettings.AppBackground
+                        .ignoresSafeArea(.all)
+
+                    Pager(lb: 5, tb: 1)
+                        .environmentObject(AppSettings)
+                        .environment(weightHistory)
+                        .environment(StreakManager)
                 }
+                #if DEBUG && targetEnvironment(simulator)
+                .task { await SimulatorHealthSeeder.runIfRequested() }
+                #endif
+                #if os(iOS)
+                .modifier(SettingsContextSync(weightHistory: weightHistory))
+                #endif
             }
         }
     }

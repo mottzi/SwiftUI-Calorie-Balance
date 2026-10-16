@@ -133,7 +133,7 @@ extension HealthRepository {
         let dayEnd = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: date)!
 
         let values = try await dataSource.weights(from: dayStart, to: dayEnd, unit: unit)
-        return values.map { WeightChartData(date: $0.date, weightAvg: $0.weightAvg.map { ($0 * 10).rounded() / 10 }) }
+        return values.map { WeightChartData(date: $0.date, weightAvg: $0.weightAvg.map(WeightChartData.roundedWeight)) }
     }
 
     /// Returns the latest weight value and its sample date.
@@ -141,7 +141,7 @@ extension HealthRepository {
         let unit: HKUnit = weightUnit == .lbs ? .pound() : .gramUnit(with: .kilo)
         let dayEnd = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: date)!
         let (weight, sampleDate) = try await dataSource.latestWeight(before: dayEnd, unit: unit)
-        return (weight.map { ($0 * 10).rounded() / 10 }, sampleDate)
+        return (weight.map(WeightChartData.roundedWeight), sampleDate)
     }
 
     var earliestWeightSampleDate: Date? { dataSource.earliestWeightSampleDate }

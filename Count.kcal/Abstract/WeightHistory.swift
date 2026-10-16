@@ -220,17 +220,33 @@ extension WeightHistory {
     }
 
     func createYRangeArray(_ page: WeightPage) -> [Int] {
-        var rangeArray: [Int] = []
-
-        for num in getYBottomRange(page) ... getYTopRange(page) {
-            rangeArray.append(num)
-        }
-
-        return rangeArray
+        let range = getYRange(page)
+        let minimumStep = max(Double(range.upperBound - range.lowerBound) / 4, 1)
+        let magnitude = pow(10, floor(log10(minimumStep)))
+        let multiple = [1.0, 2, 5, 10].first { $0 * magnitude >= minimumStep }!
+        let step = Int(multiple * magnitude)
+        let first = Int(ceil(Double(range.lowerBound) / Double(step))) * step
+        let ticks = Array(stride(from: first, through: range.upperBound, by: step))
+        return ticks.count >= 2 ? ticks : [range.lowerBound, range.upperBound]
     }
 
     func validData(_ page: WeightPage) -> [WeightChartData] {
         averages(for: page).filter { $0.weightAvg != nil }
+    }
+
+    /// Label every weekly reading, or roughly weekly recorded readings in the month.
+    func labelledData(_ page: WeightPage) -> [WeightChartData] {
+        let data = validData(page)
+        guard page == .monthly else { return data }
+        var selected: [WeightChartData] = []
+        for item in data.reversed() {
+            if let previous = selected.last,
+               Calendar.current.dateComponents([.day], from: item.date, to: previous.date).day ?? 0 < 7 {
+                continue
+            }
+            selected.append(item)
+        }
+        return selected.reversed()
     }
 
     func lastWeightValue(_ page: WeightPage) -> Double? {
@@ -248,17 +264,11 @@ extension WeightHistory {
     }
 
     func getYTopRange(_ page: WeightPage) -> Int {
-        switch page {
-            case .weekly:  Int(floor(maxWeightData(page)?.weightAvg ?? 0.0) + 1.0)
-            case .monthly: Int(round(maxWeightData(page)?.weightAvg ?? 0.0) + 1.0)
-        }
+        Int(floor(maxWeightData(page)?.weightAvg ?? 0.0) + 1.0)
     }
 
     func getYBottomRange(_ page: WeightPage) -> Int {
-        switch page {
-            case .weekly:  Int(ceil(minWeightData(page)?.weightAvg ?? 0.0) - 1.0)
-            case .monthly: Int(round(minWeightData(page)?.weightAvg ?? 0.0) - 1.0)
-        }
+        Int(ceil(minWeightData(page)?.weightAvg ?? 0.0) - 1.0)
     }
 
     func minWeightData(_ page: WeightPage) -> WeightChartData? {
@@ -321,6 +331,11 @@ struct WeightChartData: Identifiable, Codable, Equatable, Sendable {
     }
 
     var id: Date { date }
+
+    /// The precision used for daily averages and latest weight readings.
+    static func roundedWeight(_ weight: Double) -> Double {
+        (weight * 10).rounded() / 10
+    }
 
 }
 

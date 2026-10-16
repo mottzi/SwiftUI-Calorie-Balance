@@ -70,13 +70,15 @@ extension WeightCard {
                 // Reserve space for labels above the highest weekly point.
                 .padding(.top, 22)
                 .frame(height: 130)
-                .padding(.top, 12)
+                .padding(.top, 2)
                 .padding(.bottom, 2)
+                .padding(.leading, 22)
+                .padding(.trailing, 16)
 
             ProgressMetrics(history: progress, period: period)
                 .padding(.bottom, 8)
+                .padding(.horizontal, 27)
         }
-        .padding(.horizontal, 27)
     }
 
     private var refreshKey: RefreshKey {
@@ -99,7 +101,7 @@ extension WeightCard {
 
 }
 
-private struct ProgressWeightChart: View {
+struct ProgressWeightChart: View {
 
     @Environment(WeightHistory.self) private var weights
 

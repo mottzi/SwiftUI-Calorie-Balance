@@ -6,9 +6,11 @@ struct WeeklyChart: View {
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(WeightHistory.self) private var weightHistory
+    @Environment(\.colorScheme) private var colorScheme
 
-    @State private var plotHeight: CGFloat = 0
+    @State private var plotSize: CGSize = .zero
     @State private var labelHeight: CGFloat = 0
+    @State private var labelWidth: CGFloat = 0
 
     var body: some View {
         if let dateRange = weightHistory.chartDateRange(for: .weekly) {
@@ -34,12 +36,13 @@ struct WeeklyChart: View {
                 let validData = weightHistory.validData(.weekly)
 
                 ForEach(Array(validData.enumerated()), id: \.element.id) { (index, item) in
+                    let spacing: CGFloat = plotSize.width > 0 && labelWidth + 4 > plotSize.width / 7 && index.isMultiple(of: 2) ? 24 : 8
                     LineMark(
                         x: .value("Date", item.date, unit: .weekday),
                         y: .value("Value", item.weightAvg!)
                     )
                     .foregroundStyle(gradient)
-                    .interpolationMethod(.catmullRom)
+                    .interpolationMethod(.monotone)
                     .lineStyle(StrokeStyle(lineWidth: 8))
 
                     PointMark(
@@ -48,15 +51,16 @@ struct WeeklyChart: View {
                     )
                     .foregroundStyle(Color(index == validData.count - 1 ? "SecondaryTextColor1" : "SecondaryTextColor"))
                     .symbolSize(index == validData.count - 1 ? 113 : 50)
-                    .annotation(position: labelPosition(for: item.weightAvg!), spacing: 8) {
+                    .annotation(position: labelPosition(for: item.weightAvg!, spacing: spacing), spacing: spacing) {
                         Text(verbatim: String(format: "%.1f", item.weightAvg!))
                             .font(.system(size: 11, weight: .semibold))
-                            .foregroundColor(Color("SecondaryTextColor1").opacity((index == validData.count - 1) ? 1 : 0.6))
+                            .foregroundStyle(Color(index == validData.count - 1 ? "TextColor" : "SecondaryTextColor"))
                             .fixedSize()
-                            .onGeometryChange(for: CGFloat.self) { geometry in
-                                geometry.size.height
-                            } action: { height in
-                                labelHeight = height
+                            .onGeometryChange(for: CGSize.self) { geometry in
+                                geometry.size
+                            } action: { size in
+                                labelHeight = size.height
+                                labelWidth = max(labelWidth, size.width)
                             }
                     }
 
@@ -73,15 +77,16 @@ struct WeeklyChart: View {
             .saturation(Settings.baseSaturation)
             .chartYScale(domain: weightHistory.getYRange(.weekly))
             .chartPlotStyle { plot in
-                plot.onGeometryChange(for: CGFloat.self) { geometry in
-                    geometry.size.height
-                } action: { height in
-                    plotHeight = height
+                plot.onGeometryChange(for: CGSize.self) { geometry in
+                    geometry.size
+                } action: { size in
+                    plotSize = size
                 }
             }
             .chartYAxis {
                 AxisMarks(values: weightHistory.createYRangeArray(.weekly)) {
                     AxisValueLabel()
+                        .foregroundStyle(Color("SecondaryTextColor"))
                 }
                 
                 AxisMarks(values: [weightHistory.getYTopRange(.weekly), weightHistory.getYBottomRange(.weekly)]) {
@@ -99,8 +104,10 @@ struct WeeklyChart: View {
                     }
                     
                     AxisValueLabel(format: .dateTime.weekday(.narrow), centered: true)
+                        .foregroundStyle(Color("SecondaryTextColor"))
                 }
             }
+            .id(colorScheme)
         }
     }
     
@@ -108,12 +115,12 @@ struct WeeklyChart: View {
 
 extension WeeklyChart {
 
-    private func labelPosition(for weight: Double) -> AnnotationPosition {
+    private func labelPosition(for weight: Double, spacing: CGFloat) -> AnnotationPosition {
+        let plotHeight = plotSize.height
         guard plotHeight > 0, labelHeight > 0 else { return .top }
         let range = weightHistory.getYRange(.weekly)
         let spaceAbove = CGFloat((Double(range.upperBound) - weight) / Double(range.upperBound - range.lowerBound)) * plotHeight
-        // Include the 8-point annotation gap and the largest dot's 6-point radius.
-        let requiredSpace = labelHeight + 8 + 6
+        let requiredSpace = labelHeight + spacing + 6
         return spaceAbove < requiredSpace && plotHeight - spaceAbove >= requiredSpace ? .bottom : .top
     }
 

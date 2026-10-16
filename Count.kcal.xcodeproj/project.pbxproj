@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C4A27B000000000000000003 /* WeightChartScenarioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A27A000000000000000003; };
+		C4A27B000000000000000002 /* WeightChartGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A27A000000000000000002; };
+		C4A27B000000000000000001 /* WeightChartScenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A27A000000000000000001; };
 		DACD00000000000000000305 /* DashboardCustomizationRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD0000000000000000000A; };
 		DACD00000000000000000304 /* SettingsReorderRowBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000009; };
 		DACD00000000000000000302 /* SettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACD00000000000000000007; };
@@ -338,6 +341,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C4A27A000000000000000003 /* WeightChartScenarioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightChartScenarioView.swift; sourceTree = "<group>"; };
+		C4A27A000000000000000002 /* WeightChartGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightChartGallery.swift; sourceTree = "<group>"; };
+		C4A27A000000000000000001 /* WeightChartScenario.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightChartScenario.swift; sourceTree = "<group>"; };
 		DACD0000000000000000000A /* DashboardCustomizationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DashboardCustomizationRow.swift; path = Count.kcal/Settings/DashboardCustomizationRow.swift; sourceTree = SOURCE_ROOT; };
 		DACD00000000000000000009 /* SettingsReorderRowBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsReorderRowBackground.swift; path = Count.kcal/Settings/SettingsReorderRowBackground.swift; sourceTree = SOURCE_ROOT; };
 		DACD00000000000000000007 /* SettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsSection.swift; path = Count.kcal/Settings/SettingsSection.swift; sourceTree = SOURCE_ROOT; };
@@ -704,6 +710,9 @@
 				B385A13964874208A838B836 /* SampleHealthDataSource.swift */,
 				01C669F5EB2742AAA3DC83F8 /* SampleHealthDay.swift */,
 				9A5AF20730681E0B008CC950 /* DashboardSamplePreview.swift */,
+				C4A27A000000000000000003 /* WeightChartScenarioView.swift */,
+				C4A27A000000000000000002 /* WeightChartGallery.swift */,
+				C4A27A000000000000000001 /* WeightChartScenario.swift */,
 			);
 			path = Development;
 			sourceTree = "<group>";
@@ -1313,6 +1322,9 @@
 				9A206D7B2C5838C40079DE3D /* MainGoalVew.swift in Sources */,
 				9A8BA4122B40591D0011D412 /* ThemesSection.swift in Sources */,
 				9A5AF20830681E0B008CC950 /* DashboardSamplePreview.swift in Sources */,
+				C4A27B000000000000000003 /* WeightChartScenarioView.swift in Sources */,
+				C4A27B000000000000000002 /* WeightChartGallery.swift in Sources */,
+				C4A27B000000000000000001 /* WeightChartScenario.swift in Sources */,
 				9AAF6E502B3F183900B9363E /* ThemeButton.swift in Sources */,
 				9AA72DA82B02C33000E32650 /* BarBalanceGraph.swift in Sources */,
 				9AE3D3A52B7970EC00483339 /* CDatePicker.swift in Sources */,
