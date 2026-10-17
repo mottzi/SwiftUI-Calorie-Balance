@@ -38,7 +38,8 @@ struct BarBalanceGraph: View {
                 animatesNumericValues: animateNumericValues
             ),
             palette: palette,
-            rendering: rendering
+            rendering: rendering,
+            projectedRestingLabel: rendering == .widget ? day.sample.midnight.restingRemaining : nil
         )
         .padding(.bottom, scheme == .light ? 1 : 0)
     }

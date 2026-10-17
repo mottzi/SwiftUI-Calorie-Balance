@@ -7,6 +7,7 @@ struct CalorieBarGraph: View {
     var configuration = CalorieBarConfiguration()
     let palette: CalorieGraphPalette
     var rendering: CalorieGraphRendering = .live
+    var projectedRestingLabel: Int? = nil
 
     var body: some View {
         let values = EnergyGraphValues(energy)
@@ -19,7 +20,8 @@ struct CalorieBarGraph: View {
                     side: .burned,
                     configuration: configuration,
                     palette: palette,
-                    rendering: rendering
+                    rendering: rendering,
+                    projectedRestingLabel: projectedRestingLabel
                 )
                 .frame(height: rowHeight)
                 CalorieBarRow(

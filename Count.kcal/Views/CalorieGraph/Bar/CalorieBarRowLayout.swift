@@ -9,6 +9,7 @@ struct CalorieBarRowLayout: Layout {
     let side: EnergyGraphValues.Side
     var labelSpacing: CGFloat = 4
     var labelInset: CGFloat = 4
+    var retainsWidgetProjection = false
 
     /// Places the fill and keeps complete target labels apart as segment widths change.
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout Void) {
@@ -26,7 +27,17 @@ struct CalorieBarRowLayout: Layout {
             proposal: ProposedViewSize(width: occupiedWidth, height: height)
         )
 
-        let labels = Array(subviews.dropFirst())
+        // A widget can place its recorded fills above the projection label. Keep
+        // this cover on exactly the same occupied frame as the original fill.
+        let additionalFills = subviews.dropFirst().filter { $0[RecordedFillKey.self] }
+        for recordedFill in additionalFills {
+            recordedFill.place(
+                at: CGPoint(x: bounds.minX + occupiedWidth / 2, y: bounds.midY),
+                anchor: .center,
+                proposal: ProposedViewSize(width: occupiedWidth, height: height)
+            )
+        }
+        let labels = Array(subviews.dropFirst().filter { !$0[RecordedFillKey.self] })
         let sizes = labels.map { subview in
             let measured = subview.sizeThatFits(.unspecified)
             return CGSize(width: finiteDimension(measured.width), height: finiteDimension(measured.height))
@@ -41,12 +52,23 @@ struct CalorieBarRowLayout: Layout {
         )
         for index in labels.indices {
             let placement = placements[index]
+            let coveredProjection = retainsWidgetProjection
+                && segments.indices.contains(index)
+                && segments[index].id == .prediction
+                && !presence[index]
+            // Keep the hidden number inside the bar's archive, underneath the
+            // recorded fill. It stays measurable without reserving collision space.
+            let span = coveredProjection
+                ? max(0, occupiedWidth - finiteDimension(labelInset))
+                : placement.center + sizes[index].width / 2
+            let labelHeight = (placement.visible || coveredProjection) && sizes[index].height <= height
+                ? sizes[index].height : 0
             labels[index].place(
                 at: CGPoint(x: bounds.minX, y: bounds.midY),
                 anchor: .leading,
                 proposal: ProposedViewSize(
-                    width: placement.center + sizes[index].width / 2,
-                    height: placement.visible ? sizes[index].height : 0
+                    width: span,
+                    height: labelHeight
                 )
             )
         }
@@ -66,6 +88,11 @@ struct CalorieBarRowLayout: Layout {
 }
 
 extension CalorieBarRowLayout {
+
+    /// Additional native fills share the first fill's geometry rather than label placement.
+    struct RecordedFillKey: LayoutValueKey {
+        static let defaultValue = false
+    }
 
     private func labelPlacements(
         segments: [EnergyGraphValues.Segment],

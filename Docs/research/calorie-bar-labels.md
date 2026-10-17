@@ -31,6 +31,16 @@ Each label supplies its target visibility to the layout with `LayoutValueKey`. C
 
 ## Fill animation
 
+### Projection label follow-up, 2026-10-17
+
+The user confirmed substantially improved widget fill motion in `ad22e02`. A subsequent experiment removed the label opacity switch, retained zero-label height in both renderers, and scaled a mask across the glyphs. Physical recordings showed worse app and widget motion, including partial-digit wipes. That experiment was reverted. Keep the app's committed label and animation behavior.
+
+The second candidate retained the actual midnight projection label value in both widget modes, kept its height, and moved its native span beyond a label-specific viewport. The user's 13:27 iPhone recording showed the label appearing and disappearing instantly. Treat the separate masked-label representation as an unsuccessful archive-matching approach, not as a verified motion fix.
+
+The candidate confirmed by the user in the 13:40 iPhone recording keeps the full projection label drawn inside the full-color widget bar in both modes, with the actual midnight value. It removes the label-specific mask and identity transition. A copy of the native recorded fills is drawn above the projection label and below the other labels. That copy shares the original fill's occupied frame and normalized segment endpoints. Its moving recorded/projection boundary directly covers and uncovers the number. Label visibility has no separate opacity switch, mask scale, or animation timing. Accented rendering keeps its existing path because duplicating translucent fills would alter their shades.
+
+The string identity, numeric content transition, geometry group, and fixed-origin native span remain. Collision reservations still use the segment's actual presence, not the retained label value, preserving `9328a43`. In Now mode the retained label sits at the occupied trailing inset under the recorded fill, with its normal height. The live renderer receives no retained projection value and uses its original label and layout rules. Xcode static analysis and a device build passed. The user confirmed the app and full-color widget look good in the 13:40 iPhone recording. The accented widget still fades the projection label and remains a separate follow-up.
+
 `CalorieGraphDrawing` shares the rendering policy with the circle graph. Its live adapter recomputes native rectangle frames and offsets from interpolated energy values, and disables further descendant interpolation within the fill drawing. Numeric labels remain outside that suppression. The widget path bypasses the adapter and supplies complete target geometry to the same native drawing.
 
 The former custom fill layout produced a jumping blue boundary in the widget host. Replacing it with native `.frame` and `.offset` drawing restored intermediate boundary positions in the local widget comparison. This is observed behavior in this composition, not proof that all custom layouts fail to animate in WidgetKit.
