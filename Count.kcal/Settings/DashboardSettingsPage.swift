@@ -15,6 +15,7 @@ struct DashboardSettingsPage: View {
         .environment(\.defaultMinListHeaderHeight, 0)
         .environment(\.editMode, .constant(.active))
         .scrollContentBackground(.hidden)
+        .softTopScrollEdge()
         .background(settings.AppBackground)
         .foregroundStyle(Color("TextColor"))
         .navigationTitle("Dashboard")
