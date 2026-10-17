@@ -11,13 +11,13 @@ struct EnergySettingsView: View {
 
     @FocusState var focusedField: Field?
 
-    var body: some View {
-        VStack(spacing: 22) {
-            (dynamicType.isAccessibilitySize
-                ? AnyLayout(VStackLayout(alignment: .center, spacing: 12))
-                : AnyLayout(HStackLayout(alignment: .bottom))) {
-                if !dynamicType.isAccessibilitySize { Spacer() }
+    private let cardSpacing: CGFloat = 14
 
+    var body: some View {
+        VStack(spacing: cardSpacing) {
+            (dynamicType.isAccessibilitySize
+                ? AnyLayout(VStackLayout(alignment: .center, spacing: cardSpacing))
+                : AnyLayout(HStackLayout(alignment: .bottom, spacing: cardSpacing))) {
                 VStack(spacing: 12) {
                     Text("I want to...")
                         .font(.subheadline)
@@ -50,8 +50,6 @@ struct EnergySettingsView: View {
                 .padding(.vertical, 20)
                 .frame(maxWidth: dynamicType.isAccessibilitySize ? .infinity : nil)
                 .modifier(EnergySettingsCardStyle())
-
-                if !dynamicType.isAccessibilitySize { Spacer() }
 
                 VStack(spacing: 12) {
                     Text("For burned calories, use...")
@@ -99,9 +97,8 @@ struct EnergySettingsView: View {
                 .frame(maxWidth: dynamicType.isAccessibilitySize ? .infinity : nil)
                 .modifier(EnergySettingsCardStyle())
                 .disabled(healthDataMode.usesSampleData)
-
-                if !dynamicType.isAccessibilitySize { Spacer() }
             }
+            .frame(maxWidth: .infinity)
             .padding(.horizontal, dynamicType.isAccessibilitySize ? 16 : 0)
 
             VStack(spacing: 16) {
@@ -246,7 +243,6 @@ struct EnergySettingsView: View {
             .background(AppSettings.CardBackground, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
             .overlay(EnergySettingsCardEdges().allowsHitTesting(false))
             .padding(.horizontal, 40)
-            .padding(.top, 10)
             .animation(.snappy, value: AppSettings.dataSource)
         }
         .task(id: EstimateKey(
