@@ -38,14 +38,7 @@ struct CalorieBarRow: View {
 
     var body: some View {
         let segments = values.segments(for: side)
-        let radius = max(0, configuration.cornerRadius)
-        let row = CalorieBarRowLayout(
-            values: values,
-            side: side,
-            labelSpacing: configuration.labelSpacing,
-            labelInset: configuration.labelInset,
-            retainsWidgetProjection: retainsWidgetProjection
-        ) {
+        let row = rowLayout {
             CalorieGraphDrawing(values: values, rendering: rendering) { values in
                 CalorieBarFillDrawing(
                     values: values,
@@ -54,11 +47,7 @@ struct CalorieBarRow: View {
                     usesCumulativeLayers: rendering == .widget
                 )
             }
-            .clipShape(UnevenRoundedRectangle(
-                bottomTrailingRadius: side == .consumed ? radius : 0,
-                topTrailingRadius: side == .burned ? radius : 0,
-                style: .circular
-            ))
+            .clipShape(occupiedShape)
 
             if configuration.showsLabels {
                 ForEach(segments, id: \.id.rawValue) { segment in
@@ -81,24 +70,14 @@ struct CalorieBarRow: View {
                     usesCumulativeLayers: true,
                     includesProjection: false
                 )
-                .clipShape(UnevenRoundedRectangle(
-                    bottomTrailingRadius: side == .consumed ? radius : 0,
-                    topTrailingRadius: side == .burned ? radius : 0,
-                    style: .circular
-                ))
+                .clipShape(occupiedShape)
                 .layoutValue(key: CalorieBarRowLayout.RecordedFillKey.self, value: true)
                 .zIndex(2)
             }
         }
         .background(palette.empty.color.opacity(palette.empty.opacity))
         .compositingGroup()
-        .clipShape(UnevenRoundedRectangle(
-            topLeadingRadius: side == .burned ? radius : 0,
-            bottomLeadingRadius: side == .consumed ? radius : 0,
-            bottomTrailingRadius: side == .consumed ? radius : 0,
-            topTrailingRadius: side == .burned ? radius : 0,
-            style: .continuous
-        ))
+        .clipShape(outlineShape)
 
         if renderingMode == .accented && configuration.showsLabels {
             row.mask(labelMask)
@@ -113,33 +92,48 @@ struct CalorieBarRow: View {
 
 extension CalorieBarRow {
 
-    @ViewBuilder
-    private func label(for segment: EnergyGraphValues.Segment) -> some View {
-        if retainsWidgetProjection, segment.id == .prediction, let projectedRestingLabel {
-            // Keep full glyphs in both archives. The recorded fill above this label
-            // handles visibility, so WidgetKit never replaces a masked label image.
-            CalorieBarLabel(
-                value: max(0, projectedRestingLabel),
-                animatesNumericValues: configuration.animatesNumericValues,
-                reservesSpace: segment.value > 0
-            )
-            .accessibilityHidden(segment.value == 0)
-        } else {
-            CalorieBarLabel(
-                value: Int(segment.value.rounded()),
-                animatesNumericValues: configuration.animatesNumericValues
-            )
-        }
-    }
-
-    private var labelMask: some View {
+    private var rowLayout: CalorieBarRowLayout {
         CalorieBarRowLayout(
             values: values,
             side: side,
             labelSpacing: configuration.labelSpacing,
             labelInset: configuration.labelInset,
             retainsWidgetProjection: retainsWidgetProjection
-        ) {
+        )
+    }
+
+    private var occupiedShape: UnevenRoundedRectangle {
+        UnevenRoundedRectangle(
+            bottomTrailingRadius: side == .consumed ? max(0, configuration.cornerRadius) : 0,
+            topTrailingRadius: side == .burned ? max(0, configuration.cornerRadius) : 0,
+            style: .circular
+        )
+    }
+
+    private var outlineShape: UnevenRoundedRectangle {
+        let radius = max(0, configuration.cornerRadius)
+        return UnevenRoundedRectangle(
+            topLeadingRadius: side == .burned ? radius : 0,
+            bottomLeadingRadius: side == .consumed ? radius : 0,
+            bottomTrailingRadius: side == .consumed ? radius : 0,
+            topTrailingRadius: side == .burned ? radius : 0,
+            style: .continuous
+        )
+    }
+
+    private func label(for segment: EnergyGraphValues.Segment) -> some View {
+        let retainedValue = retainsWidgetProjection && segment.id == .prediction ? projectedRestingLabel : nil
+        // Keep projection text stable while its segment closes over it.
+        return CalorieBarLabel(
+            value: max(0, retainedValue ?? Int(segment.value.rounded())),
+            animatesNumericValues: configuration.animatesNumericValues,
+            reservesSpace: segment.value > 0
+        )
+        .accessibilityHidden(segment.value == 0)
+    }
+
+    private var labelMask: some View {
+        rowLayout {
             Color.clear
             ForEach(values.segments(for: side), id: \.id.rawValue) { segment in
                 label(for: segment)
@@ -171,10 +165,7 @@ extension CalorieBarRow {
                 .frame(width: max(0, width), height: max(0, geometry.size.height))
                 .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
         }
-        .clipShape(UnevenRoundedRectangle(
-            topTrailingRadius: max(0, configuration.cornerRadius),
-            style: .circular
-        ))
+        .clipShape(occupiedShape)
     }
 
     /// Active, resting, or consumed segments within the occupied part of a bar.

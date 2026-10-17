@@ -60,6 +60,13 @@ The fix adds `reservesSpace`, defaulting to true, to `CalorieBarLabel`. The reta
 
 Probe files and before/after output are under `/tmp/count-widget-1358/`. This establishes the previously wrong metadata and zero-height proposal, and their correction. The user accepted this candidate after physical testing and requested a commit. The general rule here is to keep retained text geometry intact and let the moving segment boundary handle visibility, with one writer for the layout-presence value.
 
+
+### Cleanup after the accepted height fix
+
+The height fix was committed as `233fb6f`. The cleanup candidate shares one row-layout configuration between drawing and mask, reuses the occupied end-cap shape, constructs labels through one stable call instead of separate retained/ordinary branches, and places all occupied fill layers through one loop. It preserves native segment IDs, timing, masks, layer order, opacity correction, the label collision solver, and the retained-height rule.
+
+A standalone macOS source probe compared the committed baseline and cleanup over 288 settled fixtures: widths 180 and 400, both layout directions, both color schemes, projection 0 and 759, consumed 500 / 1272 / 3000, burned and consumed rows, and live / full-color widget / accented widget rendering. All 2,304 recorded label placements matched. Fresh baseline and cleanup renders matched byte-for-byte except one image with a maximum one-unit RGBA channel difference. Probe sources and output are under `/tmp/count-widget-cleanup/`. These comparisons use stub domain/palette dependencies and white text in place of the named asset, so they check relative native layout and drawing equivalence, not WidgetKit archive animation. Static analysis and the device build passed. The user confirmed the installed cleanup still looks fine on the physical iPhone and requested a commit.
+
 `CalorieGraphDrawing` shares the rendering policy with the circle graph. Its live adapter recomputes native rectangle frames and offsets from interpolated energy values, and disables further descendant interpolation within the fill drawing. Numeric labels remain outside that suppression. The widget path bypasses the adapter and supplies complete target geometry to the same native drawing.
 
 The former custom fill layout produced a jumping blue boundary in the widget host. Replacing it with native `.frame` and `.offset` drawing restored intermediate boundary positions in the local widget comparison. This is observed behavior in this composition, not proof that all custom layouts fail to animate in WidgetKit.

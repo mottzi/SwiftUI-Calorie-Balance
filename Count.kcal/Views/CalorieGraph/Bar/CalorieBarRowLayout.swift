@@ -21,17 +21,10 @@ struct CalorieBarRowLayout: Layout {
         let occupiedEnd = segments.last(where: { $0.id != .empty })?.range.upperBound ?? 0
         let occupiedWidth = width * CGFloat(min(max(occupiedEnd, 0), 1))
 
-        fill.place(
-            at: CGPoint(x: bounds.minX + occupiedWidth / 2, y: bounds.midY),
-            anchor: .center,
-            proposal: ProposedViewSize(width: occupiedWidth, height: height)
-        )
-
-        // A widget can place its recorded fills above the projection label. Keep
-        // this cover on exactly the same occupied frame as the original fill.
-        let additionalFills = subviews.dropFirst().filter { $0[RecordedFillKey.self] }
-        for recordedFill in additionalFills {
-            recordedFill.place(
+        // Base fills, recorded covers, and mask covers share the occupied frame.
+        let fills = [fill] + subviews.dropFirst().filter { $0[RecordedFillKey.self] }
+        for fill in fills {
+            fill.place(
                 at: CGPoint(x: bounds.minX + occupiedWidth / 2, y: bounds.midY),
                 anchor: .center,
                 proposal: ProposedViewSize(width: occupiedWidth, height: height)
