@@ -25,8 +25,8 @@ final class DayPager {
         selectedDay = today
         pages = []
 
-        // seed one continuous range so every page has a stable scroll target
-        for offset in (-max(14, past))...max(14, future) {
+        // Cover the current seven-day graph and two full weeks on either side.
+        for offset in (-max(20, past))...max(14, future) {
             let day = Calendar.current.date(byAdding: .day, value: offset, to: today) ?? today
             pages.append(model(for: day))
         }
@@ -157,21 +157,22 @@ extension DayPager {
         return model
     }
 
-    /// Inserts adjacent pages around the requested day without changing selection.
+    /// Buffers whole graph weeks so tapping within a week never inserts scroll targets.
     private func ensurePages(through date: Date) {
 
         guard let first = pages.first?.id, let last = pages.last?.id else { return }
         // preserve existing instances while extending both ends past the requested day
         var earlier: [HealthInterface] = []
         var day = first
-        let lower = Calendar.current.date(byAdding: .day, value: -14, to: date)!
-        let upper = Calendar.current.date(byAdding: .day, value: 14, to: date)!
+        let start = balanceWeekStart(for: date)
+        let lower = Calendar.current.date(byAdding: .day, value: -14, to: start)!
+        let upper = Calendar.current.date(byAdding: .day, value: 20, to: start)!
         while lower < day {
             guard let previous = Calendar.current.date(byAdding: .day, value: -1, to: day) else { break }
             earlier.append(model(for: previous))
             day = previous
         }
-        pages.insert(contentsOf: earlier.reversed(), at: 0)
+        if !earlier.isEmpty { pages.insert(contentsOf: earlier.reversed(), at: 0) }
 
         day = last
         while upper > day {

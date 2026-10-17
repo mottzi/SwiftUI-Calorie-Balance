@@ -4,6 +4,46 @@ import Testing
 
 struct CalendarPagingTests {
 
+    @MainActor @Test(arguments: [-4, -1, 0, 1, 4])
+    func selectingDaysWithinPreparedWeekKeepsScrollTargetsStable(weekOffset: Int) {
+        let calendar = Calendar.current
+        // This week also exercises calendar-day arithmetic across the autumn DST change.
+        let today = calendar.date(from: DateComponents(year: 2026, month: 10, day: 25))!
+        let navigation = DayPager(past: 5, future: 1, today: today)
+        let start = calendar.date(
+            byAdding: .day, value: weekOffset * 7,
+            to: navigation.balanceWeekStart(for: today)
+        )!
+        let edge = navigation.day(inBalanceWeek: start)
+        navigation.selectDay(edge, animated: true)
+        // Both scroll strips have settled after displaying the destination week.
+        navigation.ensureSelectionBuffer()
+        let targets = navigation.pages.map(\.id)
+
+        for offset in [0, 6, 1, 5, 2, 4, 3] {
+            let day = calendar.date(byAdding: .day, value: offset, to: start)!
+            navigation.ensurePagesForSelection(day)
+            navigation.selectDay(day, animated: true)
+            navigation.ensureSelectionBuffer()
+            #expect(navigation.pages.map(\.id) == targets)
+            #expect(navigation.page(for: day) != nil)
+        }
+    }
+
+    @MainActor @Test func initialWeekAlreadyHasStableScrollTargets() {
+        let calendar = Calendar.current
+        let today = calendar.date(from: DateComponents(year: 2026, month: 3, day: 29))!
+        let navigation = DayPager(past: 5, future: 1, today: today)
+        let targets = navigation.pages.map(\.id)
+        let start = navigation.balanceWeekStart(for: today)
+
+        for offset in 0..<7 {
+            let day = calendar.date(byAdding: .day, value: offset, to: start)!
+            navigation.ensurePagesForSelection(day)
+            #expect(navigation.pages.map(\.id) == targets)
+        }
+    }
+
     @Test(arguments: [-117.0, -100.0, 100.0, 117.0])
     func stoppedDragAdvancesToAdjacentDay(travel: Double) {
 
