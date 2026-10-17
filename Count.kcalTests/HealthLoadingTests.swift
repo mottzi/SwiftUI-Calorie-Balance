@@ -110,7 +110,8 @@ struct HealthLoadingTests {
         await streak.updateStreaks()
         #expect(page.sample.balanceNow == 500)
         #expect(streak.streaks == 3)
-        for date in dates { #expect(streak.contains(date)) }
+        for date in dates.dropFirst() { #expect(streak.contains(date)) }
+        #expect(!streak.contains(today))
         await settings.updateShow(repository: repository)
         #expect(settings.calorieDataState == .ready)
         #expect(settings.showResting == 643)
@@ -129,7 +130,7 @@ struct HealthLoadingTests {
         #expect(streak.hasLoadedCount)
         #expect(streak.streaks == 0)
         for date in dates.dropFirst() { #expect(!streak.contains(date)) }
-        #expect(streak.contains(today))
+        #expect(!streak.contains(today))
 
         replace(dates[1], consumed: 1500)
         replace(dates[2], consumed: 2078)
@@ -144,7 +145,8 @@ struct HealthLoadingTests {
         for date in dates { replace(date, consumed: 2300) }
         await streak.updateStreaks()
         #expect(streak.streaks == 3)
-        for date in dates { #expect(streak.contains(date)) }
+        for date in dates.dropFirst() { #expect(streak.contains(date)) }
+        #expect(!streak.contains(today))
         for intake in [2199, 0] {
             replace(dates[1], consumed: intake)
             await streak.updateStreaks()
@@ -174,7 +176,7 @@ struct HealthLoadingTests {
 
     @MainActor @Test func editsInvalidateInFlightSnapshotsAndRecounts() async {
 
-        let source = SuspendedHealthSource(queryCount: 19)
+        let source = SuspendedHealthSource(queryCount: 11)
         let repository = HealthRepository(source: source)
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: .now)!
         let page = HealthInterface(.empty(for: yesterday), repository: repository)

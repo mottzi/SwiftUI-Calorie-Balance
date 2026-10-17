@@ -3,7 +3,7 @@ import Observation
 
 @MainActor
 @Observable
-/// Consecutive goal days, with a count of completed days and membership for the chart.
+/// Consecutive completed goal days and their chart membership.
 final class Streak {
 
     var showStreaksView = true
@@ -18,7 +18,7 @@ final class Streak {
         self.settings = settings ?? .shared
     }
 
-    /// Recounts completed days and includes Today in chart membership if its projected balance meets the goal.
+    /// Recounts completed goal days from yesterday until the first break.
     func updateStreaks() async {
 
         requestID += 1
@@ -26,8 +26,7 @@ final class Streak {
         let key = inputKey
         let calendar = Calendar.current
         let yesterday = calendar.date(byAdding: .day, value: -1, to: key.today)!
-        async let todaySnapshot = repository.fetchDailySnapshot(for: key.today, settings: settings)
-        async let history = repository.fetchStreakEnergy(
+        let history = try? await repository.fetchStreakEnergy(
             endingOn: yesterday,
             days: 200,
             source: key.source,
@@ -35,16 +34,14 @@ final class Streak {
             customActive: key.customActive,
             customPassive: key.customPassive
         )
-        guard let (today, days) = try? await (todaySnapshot, history) else {
+        guard let days = history else {
             if currentRequest == requestID { result = nil }
             return
         }
         guard !Task.isCancelled, currentRequest == requestID, inputKey == key else { return }
         let count = days.prefix { qualifies($0, for: key) }.count
-        let includesToday = !today.isUnavailable && qualifies(today.midnight, for: key)
         let start = calendar.date(byAdding: .day, value: -count, to: key.today)!
-        let end = calendar.date(byAdding: .day, value: includesToday ? 1 : 0, to: key.today)!
-        result = Result(key: key, count: count, days: start..<end)
+        result = Result(key: key, count: count, days: start..<key.today)
     }
 
     /// The count and membership are available only for their original measurements and goals.
@@ -52,7 +49,7 @@ final class Streak {
 
     var streaks: Int { hasLoadedCount ? result?.count ?? 0 : 0 }
 
-    /// Includes qualifying Today without adding it to the completed-day count.
+    /// Includes only completed days that contribute to the count.
     func contains(_ date: Date) -> Bool {
         hasLoadedCount && result?.days.contains(Calendar.current.startOfDay(for: date)) == true
     }

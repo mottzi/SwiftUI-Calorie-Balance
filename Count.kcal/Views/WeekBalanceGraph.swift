@@ -485,7 +485,7 @@ extension WeekBalanceChart {
                         }
                         .overlay {
                             if showsValue && barChartRatio != 0 && isInCurrentStreak {
-                                DiagonalShine()
+                                DiagonalShine(delay: 0.65)
                                     .clipShape(Self.barShape(isDeficit: barChartRatio > 0))
                             }
                         }

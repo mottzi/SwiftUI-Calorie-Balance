@@ -7,10 +7,12 @@ struct DiagonalShine: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.layoutDirection) private var layoutDirection
 
+    var delay: TimeInterval = 0
+
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 30, paused: !animates)) { timeline in
             Canvas { context, size in
-                let time = animates ? timeline.date.timeIntervalSinceReferenceDate
+                let time = animates ? (timeline.date.timeIntervalSinceReferenceDate - delay)
                     .truncatingRemainder(dividingBy: Self.cycleDuration) : 0
                 Self.draw(in: &context, size: size, time: time, layoutDirection: layoutDirection)
             }
