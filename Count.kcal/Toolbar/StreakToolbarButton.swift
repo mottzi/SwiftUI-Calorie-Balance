@@ -3,27 +3,30 @@ import SwiftUI
 /// Toolbar control for the streak count and chart visibility.
 struct StreakToolbarButton: View {
 
+    @Environment(Streak.self) private var streak
+
+    @ScaledMetric(relativeTo: .callout) private var countOffset = 1.5
+
     let color: Color
     let controlsDisabled: Bool
-
-    @Environment(Streak.self) private var streak
 
     var body: some View {
         Button {
             streak.toggleStreaksView()
         } label: {
-            HStack(spacing: 4) {
-                Image(systemName: "flame.fill")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(color.brighten(-0.1).gradient)
-                    .fontWeight(.bold)
+            HStack(spacing: 5) {
+                StreakFlameIcon(
+                    color: color,
+                    isAnimating: streak.hasLoadedCount && streak.streaks > 0 && !controlsDisabled
+                )
 
                 Text(verbatim: streak.hasLoadedCount ? streak.streaks.formatted(.number) : "00")
                     .redacted(reason: streak.hasLoadedCount ? [] : .placeholder)
                     .font(.callout)
-                    .fontDesign(.rounded)
+                    .fontDesign(.default)
                     .fontWeight(.bold)
                     .foregroundStyle(Color("TextColor"))
+                    .offset(y: countOffset)
             }
         }
         .disabled(controlsDisabled)

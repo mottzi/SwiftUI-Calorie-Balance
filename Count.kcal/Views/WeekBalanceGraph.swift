@@ -252,6 +252,7 @@ private struct WeekRefreshKey: Hashable {
 struct WeekBalanceChart: View {
 
     @EnvironmentObject private var settings: Settings
+    @Environment(Streak.self) private var streak
     @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -282,6 +283,7 @@ struct WeekBalanceChart: View {
                             maxEnergy: maxEnergy,
                             date: point.id,
                             isSelected: isDaySelected(barDay: point.id),
+                            isInCurrentStreak: streak.contains(point.id),
                             showsValue: hasLoadedWeek
                         )
                         .frame(height: graphHeight)
@@ -431,6 +433,7 @@ extension WeekBalanceChart {
         let maxEnergy: Int
         let date: Date
         var isSelected: Bool = false
+        var isInCurrentStreak = false
         var showsValue = true
 
         static let baselineGap: CGFloat = 1
@@ -464,7 +467,12 @@ extension WeekBalanceChart {
                                 .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                                 .clipShape(Self.barShape(isDeficit: barChartRatio > 0))
                         }
-
+                        .overlay {
+                            if showsValue && barChartRatio != 0 && isInCurrentStreak {
+                                DiagonalShine()
+                                    .clipShape(Self.barShape(isDeficit: barChartRatio > 0))
+                            }
+                        }
                         .offset(y: barChartRatio > 0
                             ? -barChartHeight(graphHeight: geo.size.height) / 2 - Self.baselineGap
                             : barChartHeight(graphHeight: geo.size.height) / 2 + Self.baselineGap)
