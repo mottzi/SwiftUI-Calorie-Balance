@@ -14,14 +14,14 @@ struct CircleBalanceGraph: View {
     var rendering: CalorieGraphRendering = .live
     var openAngle: Angle = .degrees(90)
     var segmentGap: CGFloat = 2
-    var ringSpacing: CGFloat? = nil
+    var ringSpacing: CGFloat = 2
 
     var body: some View {
         CalorieCircleGraph(
             energy: mode == .now ? day.sample.now : day.sample.midnight,
             configuration: CalorieCircleConfiguration(
                 lineWidth: lineWidth,
-                ringSpacing: ringSpacing ?? lineWidth * (scheme == .dark ? 0.25 : 0.125),
+                ringSpacing: ringSpacing,
                 openAngle: openAngle,
                 segmentGap: segmentGap
             ),
