@@ -14,7 +14,7 @@ struct BalanceWidgetCircle: Widget {
         ) { entry in
             BalanceWidgetCircleContent(
                 entry: entry,
-                mode: ModeToggleManager.buttonMode() ? .now : .midnight
+                mode: entry.mode
             )
             .environmentObject(AppSettings)
             .sampleHealthDataIndicator(entry)

@@ -22,7 +22,12 @@ struct CalorieBarRow: View {
             labelInset: configuration.labelInset
         ) {
             CalorieGraphDrawing(values: values, rendering: rendering) { values in
-                CalorieBarFillDrawing(values: values, side: side, palette: palette)
+                CalorieBarFillDrawing(
+                    values: values,
+                    side: side,
+                    palette: palette,
+                    usesCumulativeLayers: rendering == .widget && renderingMode != .accented
+                )
             }
             .clipShape(UnevenRoundedRectangle(
                 bottomTrailingRadius: side == .consumed ? radius : 0,
@@ -94,18 +99,24 @@ extension CalorieBarRow {
         let values: EnergyGraphValues
         let side: EnergyGraphValues.Side
         let palette: CalorieGraphPalette
+        let usesCumulativeLayers: Bool
 
         var body: some View {
             GeometryReader { geometry in
                 let segments = values.segments(for: side).dropLast()
                 let occupied = segments.last?.range.upperBound ?? 0
+                let layers = usesCumulativeLayers ? Array(segments.reversed()) : Array(segments)
                 ZStack(alignment: .leading) {
-                    ForEach(segments, id: \.id.rawValue) { segment in
+                    // Paint cumulative layers from the last segment backwards. A zero-length
+                    // projection stays underneath the recorded segments, so WidgetKit can
+                    // reveal it by resizing their edges instead of fading a new rectangle in.
+                    ForEach(layers, id: \.id.rawValue) { segment in
                         let range = segment.range
+                        let start = usesCumulativeLayers ? 0 : range.lowerBound
                         let width = occupied > 0
-                            ? geometry.size.width * (range.upperBound - range.lowerBound) / occupied
+                            ? geometry.size.width * (range.upperBound - start) / occupied
                             : 0
-                        let start = occupied > 0 ? geometry.size.width * range.lowerBound / occupied : 0
+                        let offset = occupied > 0 ? geometry.size.width * start / occupied : 0
                         let fill = palette.fill(for: segment.id)
                         Rectangle()
                             .fill(fill.color.gradient)
@@ -113,7 +124,7 @@ extension CalorieBarRow {
                             .opacity(fill.opacity)
                             .graphColorAppearance()
                             .frame(width: max(0, width), height: max(0, geometry.size.height))
-                            .offset(x: layoutDirection == .rightToLeft ? -start : start)
+                            .offset(x: layoutDirection == .rightToLeft ? -offset : offset)
                     }
                 }
                 .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)

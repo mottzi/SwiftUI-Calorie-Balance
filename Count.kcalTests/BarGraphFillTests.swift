@@ -7,6 +7,47 @@ import WidgetKit
 @MainActor
 struct BarGraphFillTests {
 
+    @Test(arguments: [ColorScheme.light, .dark], [LayoutDirection.leftToRight, .rightToLeft])
+    func widgetLayersPreserveSegmentShadesInBothDirections(scheme: ColorScheme, direction: LayoutDirection) throws {
+        let palette = CalorieGraphPalette(burned: .blue, consumed: .orange, empty: .gray)
+        let configuration = CalorieBarConfiguration(showsLabels: false, animatesNumericValues: true)
+        for projection in [0, 75] {
+            for consumed in [60, 250] {
+                let values = EnergyGraphValues(EnergyBalance(
+                    active: 25, resting: 100, restingRemaining: projection, consumed: consumed
+                ))
+                for side in [EnergyGraphValues.Side.burned, .consumed] {
+                    var images: [[UInt8]] = []
+                    for rendering in [CalorieGraphRendering.live, .widget] {
+                        images.append(try pixels(
+                            of: CalorieBarRow(
+                                values: values, side: side, configuration: configuration,
+                                palette: palette, rendering: rendering
+                            )
+                            .environment(\.colorScheme, scheme)
+                            .environment(\.layoutDirection, rendering == .live ? .leftToRight : direction)
+                            .environment(\.widgetRenderingMode, .fullColor),
+                            width: 240, height: 22
+                        ))
+                    }
+                    // Interior pixels compare each shade without antialiasing at segment edges.
+                    for segment in values.segments(for: side) where segment.range.upperBound > segment.range.lowerBound {
+                        let progress = (segment.range.lowerBound + segment.range.upperBound) / 2
+                        let referenceX = min(239, Int(progress * 240))
+                        let x = direction == .leftToRight ? referenceX : 239 - referenceX
+                        for y in [4, 11, 17] {
+                            for channel in 0..<4 {
+                                let index = (y * 240 + x) * 4 + channel
+                                let referenceIndex = (y * 240 + referenceX) * 4 + channel
+                                #expect(abs(Int(images[0][referenceIndex]) - Int(images[1][index])) <= 2)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @Test(arguments: [GraphMode.now, .midnight], [ColorScheme.light, .dark])
     func tintedBarsKeepSharedShadesAndSoftenPrediction(mode: GraphMode, scheme: ColorScheme) throws {
 

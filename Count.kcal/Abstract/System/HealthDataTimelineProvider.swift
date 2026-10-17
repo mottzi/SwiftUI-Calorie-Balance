@@ -10,6 +10,11 @@ struct HealthDataTimelineProvider: TimelineProvider {
         Task { @MainActor in
             // keep the entry and health query on the same day if midnight passes during the fetch
             let date = Date.now
+            #if os(iOS)
+            let mode: GraphMode = ModeToggleManager.buttonMode() ? .now : .midnight
+            #else
+            let mode: GraphMode = .now
+            #endif
             var revision: String
             var data: HealthData
             var isSampleData: Bool
@@ -24,7 +29,7 @@ struct HealthDataTimelineProvider: TimelineProvider {
                 matchingPolicy: .nextTime
             )!
             let timeline = Timeline(
-                entries: [HealthDataEntry(date: date, data: data, isSampleData: isSampleData)],
+                entries: [HealthDataEntry(date: date, data: data, isSampleData: isSampleData, mode: mode)],
                 policy: .after(min(date.addingTimeInterval(15 * 60), midnight))
             )
             completion(timeline)
@@ -53,5 +58,6 @@ struct HealthDataEntry: TimelineEntry {
     let date: Date
     let data: HealthData
     var isSampleData: Bool = false
+    var mode: GraphMode = .midnight
 
 }

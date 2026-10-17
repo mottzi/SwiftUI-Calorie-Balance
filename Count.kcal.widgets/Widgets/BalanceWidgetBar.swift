@@ -14,7 +14,7 @@ struct BalanceWidgetBar: Widget {
         ) { entry in
             BalanceWidgetBarContent(
                 entry: entry,
-                mode: ModeToggleManager.buttonMode() ? .now : .midnight
+                mode: entry.mode
             )
             .sampleHealthDataIndicator(entry)
             .containerBackground(Color("BackGroundColorBlack"), for: .widget)
@@ -41,6 +41,18 @@ private struct BalanceWidgetBarContent: View {
     let mode: GraphMode
 
     var body: some View {
+        // Only tinted widgets replace entire mode snapshots to keep their cutout labels aligned.
+        if renderingMode == .accented {
+            dashboard
+                .id(mode == .now ? "now" : "midnight")
+                .transition(.identity)
+        } else {
+            dashboard
+        }
+    }
+
+    @ViewBuilder
+    private var dashboard: some View {
         switch family {
             case .systemSmall:
                 ZStack(alignment: .top) {
@@ -61,9 +73,6 @@ private struct BalanceWidgetBarContent: View {
                     .padding(.top, 5)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                // replace tinted mode snapshots together so labels and bar geometry stay in sync
-                .id(renderingMode == .accented ? mode : nil)
-                .transition(.identity)
                 
             case .systemMedium:
                 ZStack(alignment: mode == .now ? .topLeading : .top) {
@@ -83,8 +92,6 @@ private struct BalanceWidgetBarContent: View {
                 
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                .id(renderingMode == .accented ? mode : nil)
-                .transition(.identity)
             
             default:
                 Text(verbatim: "Widget size not supported")
