@@ -2,6 +2,7 @@ import HealthKit
 import Testing
 @testable import Count_kcal
 
+@Suite(.serialized)
 struct HealthLoadingTests {
 
     @Test func unresolvedEnergyWaitsForData() {
@@ -195,6 +196,28 @@ struct HealthLoadingTests {
         #expect(streak.hasLoadedCount)
         #expect(page.sample.consumed > 0)
     }
+
+    @MainActor @Test func watchSettingsTransferIncludesStepsAndAcceptsOlderPayloads() throws {
+
+        let settings = Settings.shared
+        let original = settings.stepsGoal
+        defer { settings.stepsGoal = original }
+        settings.stepsGoal = 15000
+        let outbound = WatchSettingsSnapshot(settings: settings, weightHistory: nil)
+        let context = try #require(outbound.context)
+        settings.stepsGoal = 10000
+        let received = try #require(WatchSettingsSnapshot(context: context))
+        received.apply(to: settings)
+        #expect(settings.stepsGoal == 15000)
+
+        var legacy = context
+        legacy.removeValue(forKey: "stepsGoal")
+        let old = try #require(WatchSettingsSnapshot(context: legacy))
+        settings.stepsGoal = 12000
+        old.apply(to: settings)
+        #expect(settings.stepsGoal == 12000)
+    }
+
 
 }
 
