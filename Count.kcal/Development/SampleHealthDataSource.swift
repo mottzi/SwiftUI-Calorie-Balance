@@ -12,7 +12,12 @@ struct SampleHealthDataSource: HealthDataSource {
         self.calendar = calendar
     }
 
-    func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async -> [Date: Double] {
+    func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double] {
+        #if targetEnvironment(simulator)
+        if ProcessInfo.processInfo.environment["COUNT_SAMPLE_QUERY_FAILURE"] == "1" {
+            throw HKError(.errorHealthDataUnavailable)
+        }
+        #endif
         await waitForLaunchFixture()
         var sums: [Date: Double] = [:]
         for day in days(from: start, to: end) {

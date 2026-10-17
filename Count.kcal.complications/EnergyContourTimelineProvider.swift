@@ -8,6 +8,7 @@ struct EnergyContourEntry: TimelineEntry {
     let contour: EnergyContour
     let energyUnit: String
     var isSampleData = false
+    var isUnavailable = false
 
 }
 
@@ -53,37 +54,56 @@ extension EnergyContourTimelineProvider {
         #else
         repository = .shared
         #endif
-        let source = repository.dataSource
-        let unit: HKUnit = policy.unit == "kJ" ? .jouleUnit(with: .kilo) : .kilocalorie()
-        async let active = intervals(source, type: .activeEnergyBurned, start: start, end: now, unit: unit)
-        async let passive = intervals(source, type: .basalEnergyBurned, start: start, end: now, unit: unit)
-        async let consumed = intervals(source, type: .dietaryEnergyConsumed, start: start, end: now, unit: unit)
-        async let average = repository.cumDataWeek(
-            fetch: .basalEnergyBurned,
-            for: now,
-            energyUnit: policy.unit == "kJ" ? .kJ : .kcal
-        )
-        let values = await (active, passive, consumed, average)
-        let burned = values.0.merging(values.1, uniquingKeysWith: +)
-        let estimate = policy.usesCustomEnergy
-            ? Double(policy.customActive + policy.customPassive)
-            : values.0.values.reduce(0, +) + max(values.1.values.reduce(0, +), Double(values.3))
-        return EnergyContourEntry(
-            date: date,
-            contour: EnergyContour(
-                start: start,
-                end: end,
-                now: now,
-                burned: policy.usesCustomEnergy ? [:] : burned,
-                consumed: values.2,
-                estimatedBurned: estimate,
-                customBurned: policy.usesCustomEnergy ? estimate : nil,
-                balanceGoal: policy.goal,
-                isLoss: policy.isLoss
-            ),
-            energyUnit: policy.unit,
-            isSampleData: policy.isSampleData
-        )
+        do {
+            let source = repository.dataSource
+            let unit: HKUnit = policy.unit == "kJ" ? .jouleUnit(with: .kilo) : .kilocalorie()
+            async let active = intervals(source, type: .activeEnergyBurned, start: start, end: now, unit: unit)
+            async let passive = intervals(source, type: .basalEnergyBurned, start: start, end: now, unit: unit)
+            async let consumed = intervals(source, type: .dietaryEnergyConsumed, start: start, end: now, unit: unit)
+            async let average = repository.cumDataWeek(
+                fetch: .basalEnergyBurned,
+                for: now,
+                energyUnit: policy.unit == "kJ" ? .kJ : .kcal
+            )
+            let values = try await (active, passive, consumed, average)
+            let burned = values.0.merging(values.1, uniquingKeysWith: +)
+            let estimate = policy.usesCustomEnergy
+                ? Double(policy.customActive + policy.customPassive)
+                : values.0.values.reduce(0, +) + max(values.1.values.reduce(0, +), Double(values.3))
+            return EnergyContourEntry(
+                date: date,
+                contour: EnergyContour(
+                    start: start,
+                    end: end,
+                    now: now,
+                    burned: policy.usesCustomEnergy ? [:] : burned,
+                    consumed: values.2,
+                    estimatedBurned: estimate,
+                    customBurned: policy.usesCustomEnergy ? estimate : nil,
+                    balanceGoal: policy.goal,
+                    isLoss: policy.isLoss
+                ),
+                energyUnit: policy.unit,
+                isSampleData: policy.isSampleData
+            )
+        } catch {
+            return EnergyContourEntry(
+                date: date,
+                contour: EnergyContour(
+                    start: start,
+                    end: end,
+                    now: now,
+                    burned: [:],
+                    consumed: [:],
+                    estimatedBurned: 0,
+                    balanceGoal: policy.goal,
+                    isLoss: policy.isLoss
+                ),
+                energyUnit: policy.unit,
+                isSampleData: policy.isSampleData,
+                isUnavailable: true
+            )
+        }
     }
 
     private func intervals(
@@ -92,8 +112,8 @@ extension EnergyContourTimelineProvider {
         start: Date,
         end: Date,
         unit: HKUnit
-    ) async -> [Date: Double] {
-        let values = (try? await source.energyIntervals(type, from: start, to: end, unit: unit)) ?? [:]
+    ) async throws -> [Date: Double] {
+        let values = try await source.energyIntervals(type, from: start, to: end, unit: unit)
         return values.filter { $0.key >= start && $0.key < end && $0.value.isFinite && $0.value > 0 }
     }
 

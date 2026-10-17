@@ -9,8 +9,10 @@ struct BalanceCircleGaugeComplicationView : View {
     let entry: HealthDataTimelineProvider.Entry
     let mode: GraphMode
     
-    var range: ClosedRange<CGFloat> =
-        -1.6 * CGFloat(Settings.shared.balanceGoal) ... 1.6 * CGFloat(Settings.shared.balanceGoal)
+    var range: ClosedRange<CGFloat> {
+        let goal = max(1, CGFloat(entry.policy.balanceGoal))
+        return -1.6 * goal ... 1.6 * goal
+    }
     
     var body: some View {
         switch family {
@@ -60,6 +62,7 @@ struct BalanceCircleGaugeComplication<Mode: BalanceComplicationMode>: Widget {
         StaticConfiguration(kind: kind, provider: HealthDataTimelineProvider()) { entry in
             BalanceCircleGaugeComplicationView(entry: entry, mode: Mode.graphMode)
                 .accessibilityHint(entry.isSampleData ? Text("Sample Data") : Text(""))
+                .healthSnapshotAvailability(isUnavailable: entry.data.isUnavailable)
                 .containerBackground(.clear, for: .widget)
         }
         .configurationDisplayName(Mode.graphMode == .now ? String("Gauge (now)") : String("Gauge (midnight)"))

@@ -9,6 +9,7 @@ struct MacroGoalsComplication: Widget {
             MacroGoalsComplicationView(entry: entry)
                 .containerBackground(.clear, for: .widget)
                 .accessibilityHint(entry.isSampleData ? Text("Sample Data") : Text(""))
+                .healthSnapshotAvailability(isUnavailable: entry.data.isUnavailable)
         }
         .configurationDisplayName("Macro goals")
         .description("Protein, carbs and fats against your saved goals. Round slots focus on protein.")

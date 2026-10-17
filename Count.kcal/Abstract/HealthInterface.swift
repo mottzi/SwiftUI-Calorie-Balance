@@ -13,7 +13,7 @@ final class HealthInterface: Identifiable, Hashable {
     private(set) var sample: HealthData
 
     /// An empty query result is loaded data; the initial zero snapshot is not.
-    var hasLoadedSnapshot: Bool { sample.lastDataSync != nil }
+    var hasLoadedSnapshot: Bool { sample.lastDataSync != nil && !sample.isUnavailable }
 
     @ObservationIgnored private let repository: HealthRepository
     @ObservationIgnored private let settings: Settings
@@ -60,7 +60,7 @@ final class HealthInterface: Identifiable, Hashable {
             pendingKey = nil
             guard !Task.isCancelled, snapshotKey == key else { return }
 
-            loadedKey = key
+            loadedKey = updated.isUnavailable ? nil : key
             if animated, sample.lastDataSync != nil {
                 withAnimation(.snappy) { sample = updated }
             } else {

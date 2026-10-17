@@ -37,27 +37,27 @@ struct GoalComplicationTimelineProvider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<GoalComplicationEntry>) -> Void) {
         Task { @MainActor in
             let date = Date.now
-            var goals: SavedGoals
+            var goals: HealthSnapshotPolicy
             var revision: String
             var data: HealthData
             repeat {
                 revision = HealthRepository.shared.revision
-                goals = SavedGoals(settings: .shared)
-                data = await HealthRepository.shared.fetchDailySnapshot(for: date, now: date)
+                goals = HealthSnapshotPolicy(settings: .shared)
+                data = await HealthRepository.shared.fetchDailySnapshot(for: date, policy: goals, now: date)
             } while !Task.isCancelled && (
-                revision != HealthRepository.shared.revision || goals != SavedGoals(settings: .shared)
+                revision != HealthRepository.shared.revision || goals != HealthSnapshotPolicy(settings: .shared)
             )
 
             let entry = GoalComplicationEntry(
                 date: date,
                 data: data,
-                balanceGoal: goals.balance,
+                balanceGoal: goals.balanceGoal,
                 isLoss: goals.isLoss,
-                proteinGoal: goals.protein,
-                carbsGoal: goals.carbs,
-                fatsGoal: goals.fats,
-                stepsGoal: goals.steps,
-                energyUnit: goals.unit,
+                proteinGoal: goals.proteinGoal,
+                carbsGoal: goals.carbsGoal,
+                fatsGoal: goals.fatsGoal,
+                stepsGoal: goals.stepsGoal,
+                energyUnit: goals.energyUnit.rawValue,
                 isSampleData: data.isSampleData
             )
             let midnight = Calendar.current.nextDate(
@@ -80,33 +80,6 @@ struct GoalComplicationTimelineProvider: TimelineProvider {
     }
 
     func placeholder(in context: Context) -> GoalComplicationEntry { .preview }
-
-}
-
-extension GoalComplicationTimelineProvider {
-
-    private struct SavedGoals: Equatable {
-
-        let balance: Int
-        let isLoss: Bool
-        let protein: Int
-        let carbs: Int
-        let fats: Int
-        let steps: Int
-        let unit: String
-
-        @MainActor
-        init(settings: Settings) {
-            balance = settings.balanceGoal
-            isLoss = settings.weightGoal == .lose
-            protein = settings.proteinGoal
-            carbs = settings.carbsGoal
-            fats = settings.fatsGoal
-            steps = settings.stepsGoal
-            unit = settings.energyUnit.rawValue
-        }
-
-    }
 
 }
 

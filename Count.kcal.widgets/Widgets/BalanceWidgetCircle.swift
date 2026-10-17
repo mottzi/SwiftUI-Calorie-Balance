@@ -18,6 +18,7 @@ struct BalanceWidgetCircle: Widget {
             )
             .environmentObject(AppSettings)
             .sampleHealthDataIndicator(entry)
+                .healthSnapshotAvailability(isUnavailable: entry.data.isUnavailable)
             .containerBackground(Color("BackGroundColorBlack"), for: .widget)
         }
         .contentMarginsDisabled()
@@ -283,7 +284,7 @@ extension BalanceWidgetCircleContent {
                                 .foregroundColor(Color("TextColor"))
                                 .contentTransition(.numericText(value: Double(burnedCalories)))
                             
-                            Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
+                            Text(verbatim: entry.policy.energyUnit.rawValue)
                                 .font(.system(size: 13))
                                 .foregroundStyle(Color("SecondaryTextColor"))
                                 .fontWeight(.medium)
@@ -333,7 +334,7 @@ extension BalanceWidgetCircleContent {
                                 .foregroundColor(Color("TextColor"))
                                 .contentTransition(.numericText(value: Double(entry.data.consumed)))
 
-                            Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
+                            Text(verbatim: entry.policy.energyUnit.rawValue)
                                 .font(.system(size: 13))
                                 .foregroundStyle(Color("SecondaryTextColor"))
                                 .fontWeight(.medium)
@@ -369,7 +370,7 @@ extension BalanceWidgetCircleContent {
     private var burnedCalories: Int { energy.burned }
     
     private var goalReached: Bool {
-        energy.meetsGoal(AppSettings.balanceGoal, isLoss: AppSettings.weightGoal == .lose)
+        !entry.data.isUnavailable && energy.meetsGoal(entry.policy.balanceGoal, isLoss: entry.policy.isLoss)
     }
     
 }

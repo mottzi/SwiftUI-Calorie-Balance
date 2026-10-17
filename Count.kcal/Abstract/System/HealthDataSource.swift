@@ -3,7 +3,7 @@ import HealthKit
 /// Measured values only. Settings policy and calculations belong to HealthRepository.
 protocol HealthDataSource: Sendable {
 
-    func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async -> [Date: Double]
+    func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double]
     func energySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double]
     func energyIntervals(
         _ type: HKQuantityTypeIdentifier,
@@ -31,7 +31,7 @@ extension HealthDataSource {
 
     func energySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double] {
         try Task.checkCancellation()
-        return await dailySums(type, from: start, to: end, unit: unit)
+        return try await dailySums(type, from: start, to: end, unit: unit)
     }
 
     // Sample fixtures have no platform retention limit or external updates.

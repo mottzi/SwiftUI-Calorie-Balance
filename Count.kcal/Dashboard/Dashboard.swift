@@ -6,11 +6,25 @@ struct Dashboard: View {
 
     @EnvironmentObject private var settings: Settings
 
+    @Environment(HealthInterface.self) private var day
+
     @Binding var todayPageMode: TodayPageMode
 
     var nutrientGoals: NutrientGoals? = nil
     
     var body: some View {
+        if day.sample.isUnavailable {
+            ContentUnavailableView(
+                "Health data unavailable",
+                systemImage: "exclamationmark.icloud",
+                description: Text("Pull down to try again.")
+            )
+        } else {
+            cards
+        }
+    }
+
+    private var cards: some View {
         VStack(spacing: 20) {
             ForEach(settings.dailyCards.filter { $0 != .steps || settings.showDashboardSteps }) { card in
                 switch card {

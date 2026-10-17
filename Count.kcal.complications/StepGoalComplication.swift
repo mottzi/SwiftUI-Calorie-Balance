@@ -9,6 +9,7 @@ struct StepGoalComplication: Widget {
             StepGoalComplicationView(entry: entry)
                 .containerBackground(.clear, for: .widget)
                 .accessibilityHint(entry.isSampleData ? Text("Sample Data") : Text(""))
+                .healthSnapshotAvailability(isUnavailable: entry.data.isUnavailable)
         }
         .configurationDisplayName("Step goal")
         .description("Today's steps, your daily goal, and the steps still to go.")

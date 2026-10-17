@@ -44,7 +44,7 @@ extension BalanceCornerGaugeContent {
     }
 
     private var range: ClosedRange<CGFloat> {
-        -1.6 * CGFloat(Settings.shared.balanceGoal) ... 1.6 * CGFloat(Settings.shared.balanceGoal)
+        -1.6 * max(1, CGFloat(entry.policy.balanceGoal)) ... 1.6 * max(1, CGFloat(entry.policy.balanceGoal))
     }
 
 }
@@ -57,6 +57,7 @@ struct BalanceCornerGaugeComplication<Mode: BalanceComplicationMode>: Widget {
         StaticConfiguration(kind: kind, provider: HealthDataTimelineProvider()) { entry in
             BalanceCornerGaugeContent(entry: entry, mode: Mode.graphMode)
                 .accessibilityHint(entry.isSampleData ? Text("Sample Data") : Text(""))
+                .healthSnapshotAvailability(isUnavailable: entry.data.isUnavailable)
                 .containerBackground(.clear, for: .widget)
         }
         .configurationDisplayName(Mode.graphMode == .now ? String("Gauge (now)") : String("Gauge (midnight)"))

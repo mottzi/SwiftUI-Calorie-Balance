@@ -17,19 +17,27 @@ struct HealthDataTimelineProvider: TimelineProvider {
             #endif
             var revision: String
             var data: HealthData
-            var isSampleData: Bool
+            var policy: HealthSnapshotPolicy
             repeat {
                 revision = HealthRepository.shared.revision
-                isSampleData = HealthDataMode.isSampleDataEnabled
-                data = await HealthRepository.shared.fetchDailySnapshot(for: date, now: date)
-            } while revision != HealthRepository.shared.revision && !Task.isCancelled
+                policy = HealthSnapshotPolicy(settings: .shared)
+                data = await HealthRepository.shared.fetchDailySnapshot(for: date, policy: policy, now: date)
+            } while !Task.isCancelled && (
+                revision != HealthRepository.shared.revision || policy != HealthSnapshotPolicy(settings: .shared)
+            )
             let midnight = Calendar.current.nextDate(
                 after: date,
                 matching: DateComponents(hour: 0, minute: 0, second: 0),
                 matchingPolicy: .nextTime
             )!
             let timeline = Timeline(
-                entries: [HealthDataEntry(date: date, data: data, isSampleData: isSampleData, mode: mode)],
+                entries: [HealthDataEntry(
+                    date: date,
+                    data: data,
+                    isSampleData: data.isSampleData,
+                    mode: mode,
+                    policy: policy
+                )],
                 policy: .after(min(date.addingTimeInterval(15 * 60), midnight))
             )
             completion(timeline)
@@ -59,5 +67,23 @@ struct HealthDataEntry: TimelineEntry {
     let data: HealthData
     var isSampleData: Bool = false
     var mode: GraphMode = .midnight
+    var policy = HealthSnapshotPolicy()
+
+}
+
+extension View {
+
+    /// Replaces failed widget measurements with an unavailable message.
+    func healthSnapshotAvailability(isUnavailable: Bool) -> some View {
+        opacity(isUnavailable ? 0 : 1)
+            .accessibilityHidden(isUnavailable)
+            .overlay {
+                if isUnavailable {
+                    Text("Health data unavailable")
+                        .font(.caption2)
+                        .multilineTextAlignment(.center)
+                }
+            }
+    }
 
 }

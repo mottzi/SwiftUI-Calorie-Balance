@@ -20,6 +20,8 @@ struct HealthData: Equatable {
     
     var steps: Int
 
+    var isUnavailable = false
+
     /// Records the source used for this snapshot, including while the mode changes.
     var isSampleData: Bool = false
 
@@ -103,6 +105,13 @@ extension HealthData {
         }
     }
     
+    /// An unsuccessful read contains no confirmed measurements.
+    static func unavailable(for date: Date) -> HealthData {
+        var data = empty(for: date)
+        data.isUnavailable = true
+        return data
+    }
+
     static func empty(for date: Date) -> HealthData {
         HealthData(
             date: date,
@@ -125,5 +134,40 @@ enum BalanceOption {
 
     case deficit
     case surplus
+
+}
+
+/// Fixed measurement policy and goals for one health snapshot.
+struct HealthSnapshotPolicy: Equatable {
+
+    var energyUnit: Settings.EnergyUnit = .kcal
+    var dataSource: Settings.DataSources = .apple
+    var usesCustomEnergy = false
+    var customActive = 0
+    var customPassive = 0
+    var balanceGoal = 500
+    var isLoss = true
+    var proteinGoal = 140
+    var carbsGoal = 240
+    var fatsGoal = 65
+    var stepsGoal = 10000
+
+    init() { }
+
+    @MainActor
+    init(settings: Settings) {
+
+        energyUnit = settings.energyUnit
+        dataSource = settings.dataSource
+        usesCustomEnergy = settings.usesCustomEnergy
+        customActive = settings.customCalActive
+        customPassive = settings.customCalPassive
+        balanceGoal = settings.balanceGoal
+        isLoss = settings.weightGoal == .lose
+        proteinGoal = settings.proteinGoal
+        carbsGoal = settings.carbsGoal
+        fatsGoal = settings.fatsGoal
+        stepsGoal = settings.stepsGoal
+    }
 
 }

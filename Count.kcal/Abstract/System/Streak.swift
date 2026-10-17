@@ -35,10 +35,13 @@ final class Streak {
             customActive: key.customActive,
             customPassive: key.customPassive
         )
-        let (today, days) = await (todaySnapshot, history)
+        guard let (today, days) = try? await (todaySnapshot, history) else {
+            if currentRequest == requestID { result = nil }
+            return
+        }
         guard !Task.isCancelled, currentRequest == requestID, inputKey == key else { return }
         let count = days.prefix { qualifies($0, for: key) }.count
-        let includesToday = qualifies(today.midnight, for: key)
+        let includesToday = !today.isUnavailable && qualifies(today.midnight, for: key)
         let start = calendar.date(byAdding: .day, value: -count, to: key.today)!
         let end = calendar.date(byAdding: .day, value: includesToday ? 1 : 0, to: key.today)!
         result = Result(key: key, count: count, days: start..<end)

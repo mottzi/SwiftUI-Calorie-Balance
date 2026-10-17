@@ -9,6 +9,7 @@ struct CalorieRoomComplication: Widget {
             CalorieRoomComplicationView(entry: entry)
                 .containerBackground(.clear, for: .widget)
                 .accessibilityHint(entry.isSampleData ? Text("Sample Data") : Text(""))
+                .healthSnapshotAvailability(isUnavailable: entry.data.isUnavailable)
         }
         .configurationDisplayName("Calorie room")
         .description("Estimated calories left for today, adjusted for your weight goal. Updates as you eat and move.")

@@ -21,31 +21,47 @@ final class HealthRepository {
     /// Fetches one daily value with fixed settings and calendar bounds.
     func fetchDailySnapshot(for date: Date, settings: Settings? = nil, now: Date = .now) async -> HealthData {
 
-        let settings = settings ?? .shared
+        await fetchDailySnapshot(for: date, policy: HealthSnapshotPolicy(settings: settings ?? .shared), now: now)
+    }
+
+    /// Applies one fixed policy to every measurement in the daily read.
+    func fetchDailySnapshot(for date: Date, policy: HealthSnapshotPolicy, now: Date = .now) async -> HealthData {
+
         // capture the policy and query range before any HealthKit suspension
         let measuredData = dataSource
         let calendar = Calendar.current
         let dayStart = calendar.startOfDay(for: date)
         let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart)!
         let weekStart = calendar.date(byAdding: .day, value: -7, to: dayStart)!
-        let usesCustomEnergy = settings.usesCustomEnergy
-        let energyUnit = settings.energyUnit
-        let customActive = settings.customCalActive
-        let customPassive = settings.customCalPassive
+        let usesCustomEnergy = policy.usesCustomEnergy
+        let energyUnit = policy.energyUnit
+        let customActive = policy.customActive
+        let customPassive = policy.customPassive
         let isToday = calendar.isDate(date, inSameDayAs: now)
         var snapshot = HealthData.empty(for: dayStart)
         snapshot.usesMeasuredActiveAtMidnight = !usesCustomEnergy
         snapshot.isSampleData = injectedSource == nil && HealthDataMode.isSampleDataEnabled
 
-        if !Task.isCancelled {
+        do {
+            try Task.checkCancellation()
             let energy: HKUnit = energyUnit == .kJ ? .jouleUnit(with: .kilo) : .kilocalorie()
             let grams = HKUnit.gram()
             let count = HKUnit.count()
 
             // run independent queries against the same captured day
-            async let active = dailySum(measuredData, .activeEnergyBurned, from: dayStart, to: dayEnd, unit: energy)
-            async let passive = dailySum(measuredData, .basalEnergyBurned, from: dayStart, to: dayEnd, unit: energy)
-            async let passiveAverage = weeklyAverage(
+            async let active = usesCustomEnergy ? 0 : try await dailySum(
+                measuredData, .activeEnergyBurned,
+                from: dayStart,
+                to: dayEnd,
+                unit: energy
+            )
+            async let passive = usesCustomEnergy ? 0 : try await dailySum(
+                measuredData, .basalEnergyBurned,
+                from: dayStart,
+                to: dayEnd,
+                unit: energy
+            )
+            async let passiveAverage = usesCustomEnergy ? 0 : try await weeklyAverage(
                 measuredData, .basalEnergyBurned,
                 from: weekStart,
                 to: dayStart,
@@ -56,8 +72,8 @@ final class HealthRepository {
             async let carbs = dailySum(measuredData, .dietaryCarbohydrates, from: dayStart, to: dayEnd, unit: grams)
             async let fats = dailySum(measuredData, .dietaryFatTotal, from: dayStart, to: dayEnd, unit: grams)
             async let steps = dailySum(measuredData, .stepCount, from: dayStart, to: dayEnd, unit: count)
-            let values = await (active, passive, passiveAverage, consumed, protein, carbs, fats, steps)
-            guard !Task.isCancelled else { return snapshot }
+            let values = try await (active, passive, passiveAverage, consumed, protein, carbs, fats, steps)
+            try Task.checkCancellation()
 
             snapshot.consumed = values.3
             snapshot.protein = values.4
@@ -67,6 +83,10 @@ final class HealthRepository {
             snapshot.burnedActive = values.0
             snapshot.burnedPassive = values.1
             snapshot.burnedPassive7 = values.2
+        } catch {
+            var unavailable = HealthData.unavailable(for: dayStart)
+            unavailable.isSampleData = snapshot.isSampleData
+            return unavailable
         }
 
         if usesCustomEnergy {
@@ -127,7 +147,7 @@ extension HealthRepository {
         energyUnit: Settings.EnergyUnit,
         customActive: Int,
         customPassive: Int
-    ) async -> [EnergyBalance] {
+    ) async throws -> [EnergyBalance] {
 
         guard days > 0 else { return [] }
         let usesCustomEnergy = Settings.usesCustomEnergy(for: source)
@@ -141,15 +161,26 @@ extension HealthRepository {
         var passive: [Date: Double] = [:]
         var consumed: [Date: Double] = [:]
         if !Task.isCancelled {
-            async let activeSums = measuredData.dailySums(.activeEnergyBurned, from: start, to: end, unit: unit)
-            async let passiveSums = measuredData.dailySums(.basalEnergyBurned, from: start, to: end, unit: unit)
+            async let activeSums: [Date: Double] = usesCustomEnergy ? [:] : try await measuredData.dailySums(
+                .activeEnergyBurned,
+                from: start,
+                to: end,
+                unit: unit
+            )
+            async let passiveSums: [Date: Double] = usesCustomEnergy ? [:] : try await measuredData.dailySums(
+                .basalEnergyBurned,
+                from: start,
+                to: end,
+                unit: unit
+            )
             async let consumedSums = measuredData.dailySums(.dietaryEnergyConsumed, from: start, to: end, unit: unit)
-            let sums = await (activeSums, passiveSums, consumedSums)
+            let sums = try await (activeSums, passiveSums, consumedSums)
             active = sums.0
             passive = sums.1
             consumed = sums.2
         }
 
+        try Task.checkCancellation()
         return (0..<days).map { offset in
             let day = calendar.date(byAdding: .day, value: -offset - 1, to: end)!
             let burnedActive = usesCustomEnergy ? customActive : Int(active[day, default: 0].rounded())
@@ -193,7 +224,7 @@ extension HealthRepository {
         fetch dataType: HKQuantityTypeIdentifier,
         for date: Date,
         energyUnit: Settings.EnergyUnit? = nil
-    ) async -> Int {
+    ) async throws -> Int {
 
         let energyUnit = energyUnit ?? Settings.shared.energyUnit
         let measuredData = dataSource
@@ -201,7 +232,7 @@ extension HealthRepository {
         let end = calendar.startOfDay(for: date)
         let start = calendar.date(byAdding: .day, value: -7, to: end)!
         let unit: HKUnit = energyUnit == .kJ ? .jouleUnit(with: .kilo) : .kilocalorie()
-        return await weeklyAverage(measuredData, dataType, from: start, to: end, unit: unit)
+        return try await weeklyAverage(measuredData, dataType, from: start, to: end, unit: unit)
     }
 
 }
@@ -214,8 +245,8 @@ extension HealthRepository {
         from start: Date,
         to end: Date,
         unit: HKUnit
-    ) async -> Int {
-        let sums = await source.dailySums(type, from: start, to: end, unit: unit)
+    ) async throws -> Int {
+        let sums = try await source.dailySums(type, from: start, to: end, unit: unit)
         return Int(sums[start, default: 0].rounded())
     }
 
@@ -225,8 +256,8 @@ extension HealthRepository {
         from start: Date,
         to end: Date,
         unit: HKUnit
-    ) async -> Int {
-        let sums = await source.dailySums(type, from: start, to: end, unit: unit)
+    ) async throws -> Int {
+        let sums = try await source.dailySums(type, from: start, to: end, unit: unit)
         // The statistics collection can include the bucket at end. Exclude it.
         let total = sums.filter { $0.key >= start && $0.key < end }.values.reduce(0, +)
         return Int((total / 7).rounded())
@@ -265,8 +296,8 @@ extension HealthRepository {
 
         func dailySums(
             _ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit
-        ) async -> [Date: Double] {
-            replacing(await base.dailySums(type, from: start, to: end, unit: unit), type, start, end, unit)
+        ) async throws -> [Date: Double] {
+            replacing(try await base.dailySums(type, from: start, to: end, unit: unit), type, start, end, unit)
         }
 
         func energySums(

@@ -7,8 +7,8 @@ final class HealthKitDataSource: HealthDataSource {
 
     init(store: HKHealthStore = HKHealthStore()) { self.store = store }
 
-    func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async -> [Date: Double] {
-        (try? await energySums(type, from: start, to: end, unit: unit)) ?? [:]
+    func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double] {
+        try await energySums(type, from: start, to: end, unit: unit)
     }
 
     func energySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double] {

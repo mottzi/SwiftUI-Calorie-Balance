@@ -45,7 +45,7 @@ struct RectangleBalanceComplicationView : View {
                                         .foregroundStyle(Settings.shared.burnedColor.brighten(0.45))
                                         .frame(minWidth: 50, alignment: .trailing)
                                     
-                                    Text(verbatim: Settings.shared.energyUnit == .kJ ? "kJ" : "kcal")
+                                    Text(verbatim: entry.policy.energyUnit.rawValue)
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                         .fontWeight(.regular)
@@ -66,7 +66,7 @@ struct RectangleBalanceComplicationView : View {
                                         .foregroundStyle(Settings.shared.consumedColor.brighten(0.3))
                                         .frame(minWidth: 50, alignment: .trailing)
                                     
-                                    Text(verbatim: Settings.shared.energyUnit == .kJ ? "kJ" : "kcal")
+                                    Text(verbatim: entry.policy.energyUnit.rawValue)
                                         .font(.caption)
                                         .foregroundStyle(.secondary)
                                         .fontWeight(.regular)
@@ -93,7 +93,7 @@ struct RectangleBalanceComplicationView : View {
                                         .foregroundStyle(.primary)
                                         .frame(minWidth: 50, alignment: .trailing)
                                     
-                                    Text(verbatim: Settings.shared.energyUnit == .kJ ? "kJ" : "kcal")
+                                    Text(verbatim: entry.policy.energyUnit.rawValue)
                                         .font(.caption)
                                         .fontWeight(.regular)
                                         .foregroundStyle(.secondary)
@@ -154,6 +154,7 @@ struct RectangleBalanceComplication<Mode: BalanceComplicationMode>: Widget {
 
             RectangleBalanceComplicationView(entry: entry, mode: Mode.graphMode)
                 .accessibilityHint(entry.isSampleData ? Text("Sample Data") : Text(""))
+                .healthSnapshotAvailability(isUnavailable: entry.data.isUnavailable)
                 .containerBackground(color.brighten(0.1).gradient, for: .widget)
         }
         .configurationDisplayName(Mode.graphMode == .now ? String("Circle (now)") : String("Circle (midnight)"))

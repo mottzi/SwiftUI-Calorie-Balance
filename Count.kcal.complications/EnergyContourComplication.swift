@@ -7,6 +7,7 @@ struct EnergyContourComplication: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "Energy.contour", provider: EnergyContourTimelineProvider()) { entry in
             EnergyContourComplicationView(entry: entry)
+                .healthSnapshotAvailability(isUnavailable: entry.isUnavailable)
                 .containerBackground(.clear, for: .widget)
                 .accessibilityHint(entry.isSampleData
                     ? Text("Sample data. Dashed lines are estimates.")

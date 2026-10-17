@@ -112,6 +112,7 @@ final class Settings: ObservableObject {
     public var stepsGoal: Int = 10000
 
     private var nutrientGoalsReady = false
+    private var estimatesRequestID = 0
 
     private init() {
 
@@ -136,15 +137,18 @@ final class Settings: ObservableObject {
 
         let repository = repository ?? .shared
 
+        estimatesRequestID += 1
+        let request = estimatesRequestID
         let revision = repository.revision
         let unit = energyUnit
         let date = Date.now
         async let resting = repository.cumDataWeek(fetch: .basalEnergyBurned, for: date, energyUnit: unit)
         async let active = repository.cumDataWeek(fetch: .activeEnergyBurned, for: date, energyUnit: unit)
-        let estimates = await (resting, active)
+        guard let estimates = try? await (resting, active) else { return }
 
         // Discard estimates if the user changed units or health mode during the queries.
         guard !Task.isCancelled,
+              request == estimatesRequestID,
               energyUnit == unit, repository.revision == revision else { return }
         // Publish the complete pair together, including a confirmed empty result.
         energyEstimates = EnergyEstimates(

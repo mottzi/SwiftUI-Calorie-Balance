@@ -17,6 +17,7 @@ struct BalanceWidgetBar: Widget {
                 mode: entry.mode
             )
             .sampleHealthDataIndicator(entry)
+                .healthSnapshotAvailability(isUnavailable: entry.data.isUnavailable)
             .containerBackground(Color("BackGroundColorBlack"), for: .widget)
             .environmentObject(AppSettings)
         }
@@ -254,7 +255,7 @@ extension BalanceWidgetBarContent {
     private var burnedPassiveTotal: Int { energy.resting + energy.restingRemaining }
     
     private var goalReached: Bool {
-        energy.meetsGoal(AppSettings.balanceGoal, isLoss: AppSettings.weightGoal == .lose)
+        !entry.data.isUnavailable && energy.meetsGoal(entry.policy.balanceGoal, isLoss: entry.policy.isLoss)
     }
     
 }

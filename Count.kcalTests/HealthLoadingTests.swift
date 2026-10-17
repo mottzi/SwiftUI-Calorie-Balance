@@ -73,7 +73,7 @@ struct HealthLoadingTests {
         #expect(!streak.hasLoadedCount)
     }
 
-    @MainActor @Test func editedMeasurementsKeepSnapshotsCountAndMembershipTogether() async {
+    @MainActor @Test func editedMeasurementsKeepSnapshotsCountAndMembershipTogether() async throws {
 
         let settings = Settings.shared
         let original = (settings.dataSource, settings.energyUnit, settings.weightGoal, settings.balanceGoal)
@@ -158,7 +158,7 @@ struct HealthLoadingTests {
         settings.energyUnit = .kJ
         #expect(!streak.hasLoadedCount)
         await page.updateMetrics(animated: false)
-        let history = await repository.fetchStreakEnergy(
+        let history = try await repository.fetchStreakEnergy(
             endingOn: dates[1], days: 1, source: .apple, energyUnit: .kJ, customActive: 0, customPassive: 0
         )
         #expect(page.sample.now == history.first)
@@ -197,6 +197,108 @@ struct HealthLoadingTests {
         #expect(page.sample.consumed > 0)
     }
 
+    @MainActor @Test func failedFoodReadIsUnavailableAndCanRecover() async {
+
+        let source = FailableHealthSource()
+        let repository = HealthRepository(source: source)
+        let day = HealthInterface(.empty(for: .now), repository: repository)
+        let streak = Streak(repository: repository)
+        await day.updateMetrics(animated: false)
+        #expect(day.hasLoadedSnapshot)
+        await source.fail(.dietaryEnergyConsumed)
+        await day.updateMetrics(animated: false, force: true)
+        await streak.updateStreaks()
+        #expect(day.sample.isUnavailable)
+        #expect(!day.hasLoadedSnapshot)
+        #expect(day.sample.lastDataSync == nil)
+        #expect(!streak.hasLoadedCount)
+        await source.fail(nil)
+        await day.updateMetrics(animated: false)
+        await streak.updateStreaks()
+        #expect(day.hasLoadedSnapshot)
+        #expect(!day.sample.isUnavailable)
+        #expect(streak.hasLoadedCount)
+    }
+
+    @MainActor @Test func customSnapshotDoesNotRequireUnusedBurnMeasurements() async {
+
+        let source = FailableHealthSource()
+        await source.fail(.basalEnergyBurned)
+        let repository = HealthRepository(source: source)
+        var policy = HealthSnapshotPolicy()
+        policy.usesCustomEnergy = true
+        policy.customActive = 500
+        policy.customPassive = 1500
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: .now)!
+        let data = await repository.fetchDailySnapshot(for: yesterday, policy: policy)
+        #expect(!data.isUnavailable)
+        #expect(data.now.burned == 2000)
+        #expect(data.consumed == 1000)
+    }
+
+    @MainActor @Test func capturedSnapshotKeepsItsOriginalUnitsAndGoals() async {
+
+        let settings = Settings.shared
+        let unit = settings.energyUnit
+        let goal = settings.balanceGoal
+        let nutrients = (settings.carbsGoal, settings.fatsGoal, settings.proteinGoal)
+        defer {
+            settings.energyUnit = unit
+            settings.balanceGoal = goal
+            settings.carbsGoal = nutrients.0
+            settings.fatsGoal = nutrients.1
+            settings.proteinGoal = nutrients.2
+        }
+        settings.energyUnit = .kcal
+        settings.balanceGoal = 200
+        let policy = HealthSnapshotPolicy(settings: settings)
+        settings.energyUnit = .kJ
+        settings.balanceGoal = 2000
+        let repository = HealthRepository(source: FailableHealthSource())
+        let data = await repository.fetchDailySnapshot(for: .now, policy: policy)
+        #expect(!data.isUnavailable)
+        #expect(data.consumed == 1000)
+        #expect(policy.energyUnit == .kcal)
+        #expect(policy.balanceGoal == 200)
+        #expect(policy != HealthSnapshotPolicy(settings: settings))
+    }
+
+    @MainActor @Test func lateEstimatesCannotReplaceANewerRefresh() async {
+
+        let settings = Settings.shared
+        let unit = settings.energyUnit
+        let nutrients = (settings.carbsGoal, settings.fatsGoal, settings.proteinGoal)
+        defer {
+            settings.energyUnit = unit
+            settings.carbsGoal = nutrients.0
+            settings.fatsGoal = nutrients.1
+            settings.proteinGoal = nutrients.2
+        }
+        settings.energyUnit = .kcal
+        let source = OrderedEstimatesSource()
+        let repository = HealthRepository(source: source)
+        let older = Task { await settings.updateShow(repository: repository) }
+        await source.waitForQueries(2)
+        let newer = Task { await settings.updateShow(repository: repository) }
+        await source.waitForQueries(4)
+        await source.finish(batch: 1, active: 600, resting: 2000)
+        await newer.value
+        #expect(settings.showActive + settings.showResting == 2600)
+        await source.finish(batch: 0, active: 100, resting: 1000)
+        await older.value
+        #expect(settings.showActive + settings.showResting == 2600)
+
+        let earlier = Task { await settings.updateShow(repository: repository) }
+        await source.waitForQueries(6)
+        let failing = Task { await settings.updateShow(repository: repository) }
+        await source.waitForQueries(8)
+        await source.finish(batch: 3, active: 0, resting: 0, fails: true)
+        await failing.value
+        await source.finish(batch: 2, active: 100, resting: 1000)
+        await earlier.value
+        #expect(settings.showActive + settings.showResting == 2600)
+    }
+
     @MainActor @Test func watchSettingsTransferIncludesStepsAndAcceptsOlderPayloads() throws {
 
         let settings = Settings.shared
@@ -217,7 +319,6 @@ struct HealthLoadingTests {
         old.apply(to: settings)
         #expect(settings.stepsGoal == 12000)
     }
-
 
 }
 
@@ -252,6 +353,65 @@ private actor SuspendedHealthSource: HealthDataSource {
         finished = true
         for query in queries { query.resume(returning: [:]) }
         queries.removeAll()
+    }
+
+    func weights(from start: Date, to end: Date, unit: HKUnit) async throws -> [WeightChartData] { [] }
+    func latestWeight(before end: Date, unit: HKUnit) async throws -> (Double?, Date?) { (nil, nil) }
+    func requestPermission() async -> Bool { true }
+
+}
+
+private actor FailableHealthSource: HealthDataSource {
+
+    private var failedType: HKQuantityTypeIdentifier?
+
+    func fail(_ type: HKQuantityTypeIdentifier?) { failedType = type }
+
+    func dailySums(
+        _ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit
+    ) async throws -> [Date: Double] {
+
+        if type == failedType { throw HKError(.errorHealthDataUnavailable) }
+        let energy: Double
+        switch type {
+            case .activeEnergyBurned: energy = 500
+            case .basalEnergyBurned: energy = 1500
+            case .dietaryEnergyConsumed: energy = 1000
+            default: return [:]
+        }
+        return [start: HKQuantity(unit: .kilocalorie(), doubleValue: energy).doubleValue(for: unit)]
+    }
+
+    func weights(from start: Date, to end: Date, unit: HKUnit) async throws -> [WeightChartData] { [] }
+    func latestWeight(before end: Date, unit: HKUnit) async throws -> (Double?, Date?) { (nil, nil) }
+    func requestPermission() async -> Bool { true }
+
+}
+
+private actor OrderedEstimatesSource: HealthDataSource {
+
+    private var queries: [(HKQuantityTypeIdentifier, Date, CheckedContinuation<[Date: Double], Error>)] = []
+
+    func dailySums(
+        _ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit
+    ) async throws -> [Date: Double] {
+        try await withCheckedThrowingContinuation { queries.append((type, start, $0)) }
+    }
+
+    func waitForQueries(_ count: Int) async {
+        while queries.count < count { await Task.yield() }
+    }
+
+    func finish(batch: Int, active: Double, resting: Double, fails: Bool = false) {
+
+        for index in (batch * 2)..<(batch * 2 + 2) {
+            let (type, date, continuation) = queries[index]
+            if fails {
+                continuation.resume(throwing: HKError(.errorHealthDataUnavailable))
+            } else {
+                continuation.resume(returning: [date: (type == .activeEnergyBurned ? active : resting) * 7])
+            }
+        }
     }
 
     func weights(from start: Date, to end: Date, unit: HKUnit) async throws -> [WeightChartData] { [] }

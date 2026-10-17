@@ -59,6 +59,16 @@ struct ContentView: View {
                     }
                 }
             }
+            .opacity(Interface.sample.isUnavailable && tabSelection != .weight ? 0 : 1)
+            .accessibilityHidden(Interface.sample.isUnavailable && tabSelection != .weight)
+            .overlay {
+                if Interface.sample.isUnavailable, tabSelection != .weight {
+                    Text("Health data unavailable")
+                        .font(.caption)
+                        .padding()
+                        .background(.background, in: .rect(cornerRadius: 12))
+                }
+            }
             .tabViewStyle(.verticalPage)
             .toolbar(tabSelection == .weight ? .hidden : .visible, for: .navigationBar)
             .task(id: healthDataMode.usesSampleData) {

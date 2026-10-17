@@ -14,6 +14,7 @@ struct NutritionWidget: Widget {
             NutritionWidgetNow(entry: entry)
                 .containerRelativeFrame([.horizontal, .vertical])
                 .sampleHealthDataIndicator(entry)
+                .healthSnapshotAvailability(isUnavailable: entry.data.isUnavailable)
                 .containerBackground(Color("BackGroundColorBlack"), for: .widget)
                 .environmentObject(AppSettings)
         }
@@ -54,6 +55,14 @@ struct NutritionWidgetNow: View {
         }
     }
 
+    private func goal(for macro: MacroNutrient) -> Int {
+        switch macro {
+            case .carbs: entry.policy.carbsGoal
+            case .fats: entry.policy.fatsGoal
+            case .protein: entry.policy.proteinGoal
+        }
+    }
+
     private var nutrientRows: some View {
         VStack(spacing: 14) {
             ForEach(AppSettings.macros) { macro in
@@ -61,7 +70,7 @@ struct NutritionWidgetNow: View {
                     family == .systemSmall ? macro.shortTitle : macro.title,
                     context: .widget(family),
                     consumedValue: macro.consumed(in: entry.data),
-                    goalValue: macro.goal(in: AppSettings),
+                    goalValue: goal(for: macro),
                     color: AppSettings.consumedColor,
                     graphHeight: 10
                 )
