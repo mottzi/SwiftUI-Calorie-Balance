@@ -6,8 +6,6 @@ struct WeightTab: View {
 
     @Environment(WeightHistory.self) private var history
 
-    @EnvironmentObject private var settings: Settings
-
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -22,27 +20,6 @@ struct WeightTab: View {
                         .font(.body)
                         .foregroundStyle(.secondary)
                         .scenePadding(.horizontal)
-                }
-
-                if let weight = history.latestWeight {
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text(weight, format: .number.precision(.fractionLength(1)))
-                            .font(.system(.body, design: .rounded, weight: .semibold))
-                            .monospacedDigit()
-                        Text(settings.weightUnit.rawValue)
-                            .font(.body)
-                            .foregroundStyle(.secondary)
-                        Spacer(minLength: 4)
-                        if let date = history.latestWeightDate {
-                            Text(date.relative)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    .scenePadding(.horizontal)
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(Text("Last Sample"))
-                    .accessibilityValue(latestDescription(weight))
                 }
 
                 if history.refreshFailed {
@@ -66,7 +43,7 @@ struct WeightTab: View {
 
 }
 
-extension WeightTab {
+extension WeightSection {
 
     private func latestDescription(_ weight: Double) -> Text {
         if let date = history.latestWeightDate {
@@ -95,7 +72,12 @@ private struct WeightSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             VStack(alignment: .leading, spacing: 0) {
-                Text(period == .weekly ? "Weekly average" : "Monthly average")
+                Label {
+                    Text(period == .weekly ? "Weekly" : "Monthly")
+                } icon: {
+                    Image(systemName: "circle.slash")
+                        .rotationEffect(.degrees(-90))
+                }
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 if history.dataLoaded, !history.validData(period).isEmpty {
@@ -123,10 +105,9 @@ private struct WeightSection: View {
                     : Text("No weight data")
             )
 
-            if let first = history.averages(for: period).first,
-               let last = history.averages(for: period).last,
+            if let dateRange = history.chartDateRange(for: period),
                history.dataLoaded, !history.validData(period).isEmpty {
-                WeightChart(period: period, dateRange: first.date ... last.date.tomorrow)
+                WeightChart(period: period, dateRange: dateRange)
                     .frame(height: chartHeight)
                     .padding(.horizontal, 4)
             } else {
@@ -134,6 +115,27 @@ private struct WeightSection: View {
                     .font(.body)
                     .foregroundStyle(.secondary)
                     .scenePadding(.horizontal)
+            }
+
+            if period == .weekly, let weight = history.latestWeight {
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text(weight, format: .number.precision(.fractionLength(1)))
+                        .font(.system(.body, design: .rounded, weight: .semibold))
+                        .monospacedDigit()
+                    Text(settings.weightUnit.rawValue)
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                    Spacer(minLength: 4)
+                    if let date = history.latestWeightDate {
+                        Text(date.relative)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .scenePadding(.horizontal)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("Last Sample"))
+                .accessibilityValue(latestDescription(weight))
             }
 
             if history.hasLimitedHistory(for: period) {
@@ -159,9 +161,16 @@ private struct WeightChart: View {
     var body: some View {
         Chart {
             let data = history.validData(period)
+            let labelledDates = Set(history.labelledData(period).map(\.id))
+            let gradient = LinearGradient(
+                stops: [.init(color: trendColor, location: 0.5), .init(color: .clear, location: 1.5)],
+                startPoint: .trailing,
+                endPoint: .leading
+            )
+
             RuleMark(y: .value("Average", history.average(for: period)))
-                .foregroundStyle(.white.opacity(0.4))
-                .lineStyle(StrokeStyle(lineWidth: 1, dash: [2, 3]))
+                .foregroundStyle(trendColor.opacity(0.8))
+                .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [2, 3]))
                 .accessibilityLabel(Text("Average"))
                 .accessibilityValue(
                     Text(
@@ -172,42 +181,52 @@ private struct WeightChart: View {
                     )
                 )
 
+            if let last = history.averages(for: period).last {
+                RectangleMark(
+                    xStart: .value("Date", period == .weekly ? last.date : last.date.lastMonday),
+                    xEnd: .value("Date", dateRange.upperBound)
+                )
+                .foregroundStyle(.white.opacity(0.05))
+                .accessibilityHidden(true)
+            }
+
             ForEach(data) { day in
                 if let weight = day.weightAvg {
-                    AreaMark(
-                        x: .value("Date", day.date, unit: .day),
-                        yStart: .value("Weight", Double(history.getYBottomRange(period))),
-                        yEnd: .value("Weight", weight)
-                    )
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [trendColor.opacity(0.25), trendColor.opacity(0.02)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
-                    .interpolationMethod(.catmullRom)
-                    .accessibilityHidden(true)
-
                     LineMark(
                         x: .value("Date", day.date, unit: .day),
                         y: .value("Weight", weight)
                     )
-                    .foregroundStyle(trendColor)
-                    .interpolationMethod(.catmullRom)
-                    .lineStyle(StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+                    .foregroundStyle(gradient)
+                    .interpolationMethod(.monotone)
+                    .lineStyle(StrokeStyle(lineWidth: period == .weekly ? 8 : 7))
                     .accessibilityLabel(Text(day.date, format: .dateTime.month().day().year()))
                     .accessibilityValue(
                         Text("\(weight, format: .number.precision(.fractionLength(1))) \(settings.weightUnit.rawValue)")
                     )
 
-                    if period == .weekly || day.id == data.last?.id {
+                    if labelledDates.contains(day.id) {
                         PointMark(
                             x: .value("Date", day.date, unit: .day),
                             y: .value("Weight", weight)
                         )
-                        .foregroundStyle(.white)
-                        .symbolSize(day.id == data.last?.id ? 35 : 12)
+                        .foregroundStyle(.white.opacity(day.id == data.last?.id ? 1 : 0.6))
+                        .symbolSize(day.id == data.last?.id ? 80 : 28)
+                        .accessibilityHidden(true)
+
+                        PointMark(
+                            x: .value("Date", day.date, unit: .day),
+                            y: .value("Weight", weight)
+                        )
+                        .foregroundStyle(.black)
+                        .symbolSize(day.id == data.last?.id ? 20 : 7)
+                        .accessibilityHidden(true)
+                    } else {
+                        PointMark(
+                            x: .value("Date", day.date, unit: .day),
+                            y: .value("Weight", weight)
+                        )
+                        .foregroundStyle(.white.opacity(0.45))
+                        .symbolSize(7)
                         .accessibilityHidden(true)
                     }
                 }
@@ -217,6 +236,9 @@ private struct WeightChart: View {
         .chartYScale(domain: history.getYRange(period))
         .chartXAxis {
             AxisMarks(values: .stride(by: .day, count: period == .weekly ? 1 : 7)) {
+                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [1, 3]))
+                .foregroundStyle(.white.opacity(0.15))
+
                 if period == .weekly {
                     AxisValueLabel(format: .dateTime.weekday(.narrow), centered: true)
                         .font(.system(.caption, design: .rounded, weight: .medium))
@@ -230,14 +252,15 @@ private struct WeightChart: View {
             AxisMarks(
                 preset: .inset,
                 position: .trailing,
-                values: [history.getYBottomRange(period), history.getYTopRange(period)]
-            ) { value in
-                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
-                    .foregroundStyle(.white.opacity(0.12))
-                AxisValueLabel(
-                    anchor: value.as(Int.self) == history.getYTopRange(period) ? .topTrailing : .bottomTrailing
-                )
+                values: history.createYRangeArray(period)
+            ) {
+                AxisValueLabel()
                     .font(.system(.caption, design: .rounded, weight: .medium))
+            }
+
+            AxisMarks(values: [history.getYBottomRange(period), history.getYTopRange(period)]) {
+                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
+                    .foregroundStyle(.white.opacity(0.15))
             }
         }
         .font(.caption)

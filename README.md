@@ -111,11 +111,14 @@ read can use a cached phone snapshot.
 
 Weekly and Monthly averages and charts appear together on one scrollable page. The charts use
 the available width without cards or period controls. Each section leads with a large average;
-the latest measurement and its date appear in a compact footer. The monthly chart preserves the
-phone's Monday-aligned series, while its average uses the last 30 days with recorded weights.
-The watch chart ends at the last daily entry rather than reserving space for the phone chart's
-empty future days. An older phone supplement shows its capture date. Independent device reads
-share calculation semantics; their values can differ while HealthKit synchronization is pending.
+the latest measurement and its date appear directly below the weekly chart. The monthly chart
+preserves the phone's Monday-aligned series, while its average uses the last 30 days with recorded weights.
+Both apps use the same chart date bounds: the weekly chart ends tomorrow, and the monthly chart
+keeps the empty future days through the next Sunday. The watch uses a dotted daily or weekly
+grid, the phone's line widths and monotone curves, and compact axis labels. Section headings pair
+the average symbol with the localized period label. An older phone supplement shows its capture date.
+Independent device reads share calculation semantics; their values can differ while HealthKit
+synchronization is pending.
 
 The iPhone Progress card retains the weight charts and adds two completed-period summaries.
 Average deficit uses the last 7 or 30 completed calendar days, excluding today. Missing food or
