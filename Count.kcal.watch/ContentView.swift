@@ -35,35 +35,37 @@ struct ContentView: View {
                     .tag(WatchTab.weight)
             }
             .toolbar {
-                // Keep both placements present so watchOS retains the centered system clock.
-                ToolbarItem(placement: .topBarLeading) {
-                    CircleBalanceGraphWatch(mode: modeSelection, context: .toolbar)
-                        .scaleEffect(reduceMotion ? 1 : tabSelection == .macros ? 1 : 0.3)
-                        .blur(radius: !reduceMotion && tabSelection != .macros ? 4 : 0)
-                        .opacity(tabSelection == .macros ? 1 : 0)
-                        .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: tabSelection)
-                        .accessibilityHidden(true)
-                }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    if tabSelection == .calories {
-                        Button(action: toggleMode) {
-                            Label(
-                                modeSelection == .now ? "Midnight" : "Now",
-                                systemImage: modeSelection == .now ? "sun.min.fill" : "moon.stars.fill"
-                            )
-                            .labelStyle(.iconOnly)
-                            .foregroundStyle(.white.opacity(0.9))
-                            .contentTransition(.symbolEffect(.replace))
-                        }
-                    } else {
-                        Spacer(minLength: 0)
+                if tabSelection != .weight {
+                    // Both placements keep the system clock centered on these pages.
+                    ToolbarItem(placement: .topBarLeading) {
+                        CircleBalanceGraphWatch(mode: modeSelection, context: .toolbar)
+                            .scaleEffect(reduceMotion ? 1 : tabSelection == .macros ? 1 : 0.3)
+                            .blur(radius: !reduceMotion && tabSelection != .macros ? 4 : 0)
+                            .opacity(tabSelection == .macros ? 1 : 0)
+                            .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: tabSelection)
                             .accessibilityHidden(true)
+                    }
+
+                    ToolbarItem(placement: .topBarTrailing) {
+                        if tabSelection == .calories {
+                            Button(action: toggleMode) {
+                                Label(
+                                    modeSelection == .now ? "Midnight" : "Now",
+                                    systemImage: modeSelection == .now ? "sun.min.fill" : "moon.stars.fill"
+                                )
+                                .labelStyle(.iconOnly)
+                                .foregroundStyle(.white.opacity(0.9))
+                                .contentTransition(.symbolEffect(.replace))
+                            }
+                        } else {
+                            Spacer(minLength: 0)
+                                .accessibilityHidden(true)
+                        }
                     }
                 }
             }
             .tabViewStyle(.verticalPage)
-            .navigationTitle(tabSelection == .weight ? Text("Weight") : Text(""))
+            .toolbar(tabSelection == .weight ? .hidden : .visible, for: .navigationBar)
             .task(id: healthDataMode.usesSampleData) {
                 healthAccessRequested = false
                 weightHistory.reset()
