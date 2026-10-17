@@ -252,7 +252,7 @@ struct EnergySettingsView: View {
         .task(id: EstimateKey(
             source: AppSettings.dataSource.rawValue,
             unit: AppSettings.energyUnit.rawValue,
-            revision: healthDataMode.revision
+            revision: HealthRepository.shared.revision
         )) {
             await AppSettings.updateShow()
         }

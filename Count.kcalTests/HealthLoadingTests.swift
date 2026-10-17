@@ -72,6 +72,130 @@ struct HealthLoadingTests {
         #expect(!streak.hasLoadedCount)
     }
 
+    @MainActor @Test func editedMeasurementsKeepSnapshotsCountAndMembershipTogether() async {
+
+        let settings = Settings.shared
+        let original = (settings.dataSource, settings.energyUnit, settings.weightGoal, settings.balanceGoal)
+        let nutrients = (settings.carbsGoal, settings.fatsGoal, settings.proteinGoal)
+        defer {
+            settings.dataSource = original.0
+            settings.energyUnit = original.1
+            settings.weightGoal = original.2
+            settings.balanceGoal = original.3
+            settings.carbsGoal = nutrients.0
+            settings.fatsGoal = nutrients.1
+            settings.proteinGoal = nutrients.2
+        }
+        settings.dataSource = .apple
+        settings.energyUnit = .kcal
+        settings.weightGoal = .lose
+        settings.balanceGoal = 200
+        let source = SuspendedHealthSource()
+        await source.finish()
+        let repository = HealthRepository(source: source)
+        let today = Calendar.current.startOfDay(for: .now)
+        let dates = (0...3).map { Calendar.current.date(byAdding: .day, value: -$0, to: today)! }
+        func replace(_ date: Date, consumed: Int) {
+            var day = HealthData.empty(for: date)
+            day.burnedActive = 500
+            day.burnedPassive = 1500
+            day.consumed = consumed
+            repository.replaceDevelopmentMeasurements(day, energyUnit: .kcal)
+        }
+        for date in dates { replace(date, consumed: 1500) }
+        let page = HealthInterface(.empty(for: dates[1]), repository: repository)
+        let streak = Streak(repository: repository)
+        await page.updateMetrics(animated: false)
+        await streak.updateStreaks()
+        #expect(page.sample.balanceNow == 500)
+        #expect(streak.streaks == 3)
+        for date in dates { #expect(streak.contains(date)) }
+        await settings.updateShow(repository: repository)
+        #expect(settings.calorieDataState == .ready)
+        #expect(settings.showResting == 643)
+
+        let revision = repository.revision
+        replace(dates[1], consumed: 2078)
+        #expect(repository.revision != revision)
+        #expect(!streak.hasLoadedCount)
+        #expect(!streak.contains(dates[1]))
+        #expect(settings.calorieDataState == .loading)
+        await settings.updateShow(repository: repository)
+        #expect(settings.calorieDataState == .ready)
+        await page.updateMetrics(animated: false)
+        await streak.updateStreaks()
+        #expect(page.sample.balanceNow == -78)
+        #expect(streak.hasLoadedCount)
+        #expect(streak.streaks == 0)
+        for date in dates.dropFirst() { #expect(!streak.contains(date)) }
+        #expect(streak.contains(today))
+
+        replace(dates[1], consumed: 1500)
+        replace(dates[2], consumed: 2078)
+        await streak.updateStreaks()
+        #expect(streak.streaks == 1)
+        #expect(streak.contains(dates[1]))
+        #expect(!streak.contains(dates[2]))
+        #expect(!streak.contains(dates[3]))
+
+        settings.weightGoal = .gain
+        #expect(!streak.hasLoadedCount)
+        for date in dates { replace(date, consumed: 2300) }
+        await streak.updateStreaks()
+        #expect(streak.streaks == 3)
+        for date in dates { #expect(streak.contains(date)) }
+        for intake in [2199, 0] {
+            replace(dates[1], consumed: intake)
+            await streak.updateStreaks()
+            #expect(streak.streaks == 0)
+            #expect(!streak.contains(dates[1]))
+        }
+        replace(dates[1], consumed: 2200)
+        await streak.updateStreaks()
+        #expect(streak.streaks == 3)
+
+        settings.energyUnit = .kJ
+        #expect(!streak.hasLoadedCount)
+        await page.updateMetrics(animated: false)
+        let history = await repository.fetchStreakEnergy(
+            endingOn: dates[1], days: 1, source: .apple, energyUnit: .kJ, customActive: 0, customPassive: 0
+        )
+        #expect(page.sample.now == history.first)
+        #expect(page.sample.burnedActive == 2092)
+        #expect(page.sample.consumed == 9205)
+
+        let beforeDemo = repository.revision
+        page.randomizeDemoData()
+        #expect(repository.revision == beforeDemo)
+        let unchanged = await repository.fetchDailySnapshot(for: dates[1])
+        #expect(unchanged.now == history.first)
+    }
+
+    @MainActor @Test func editsInvalidateInFlightSnapshotsAndRecounts() async {
+
+        let source = SuspendedHealthSource(queryCount: 19)
+        let repository = HealthRepository(source: source)
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: .now)!
+        let page = HealthInterface(.empty(for: yesterday), repository: repository)
+        let streak = Streak(repository: repository)
+        let pageLoad = Task { await page.updateMetrics(animated: false) }
+        let recount = Task { await streak.updateStreaks() }
+        await source.waitUntilSuspended()
+        var changed = HealthData.empty(for: yesterday)
+        changed.consumed = 1915
+        repository.replaceDevelopmentMeasurements(changed, energyUnit: .kcal)
+        await source.finish()
+        await pageLoad.value
+        await recount.value
+        #expect(!page.hasLoadedSnapshot)
+        #expect(!streak.hasLoadedCount)
+        await page.updateMetrics(animated: false)
+        await streak.updateStreaks()
+        #expect(page.hasLoadedSnapshot)
+        #expect(streak.hasLoadedCount)
+        #expect(page.sample.consumed > 0)
+    }
+
 }
 
 /// Holds the real daily-query path open without timers or HealthKit permissions.

@@ -147,14 +147,16 @@ final class Settings: ObservableObject {
         guard !Task.isCancelled,
               energyUnit == unit, repository.revision == revision else { return }
         // Publish the complete pair together, including a confirmed empty result.
-        energyEstimates = EnergyEstimates(resting: estimates.0, active: estimates.1, unit: unit, revision: revision)
+        energyEstimates = EnergyEstimates(
+            resting: estimates.0, active: estimates.1, unit: unit, revision: revision, repository: repository
+        )
         updateNutrientGoals()
     }
 
     private var currentEnergyEstimates: EnergyEstimates? {
         guard let energyEstimates,
               energyEstimates.unit == energyUnit,
-              energyEstimates.revision == HealthDataMode.currentRevision else { return nil }
+              energyEstimates.revision == energyEstimates.repository.revision else { return nil }
         return energyEstimates
     }
 
@@ -163,6 +165,7 @@ final class Settings: ObservableObject {
         let active: Int
         let unit: EnergyUnit
         let revision: String
+        let repository: HealthRepository
     }
 
 }

@@ -54,7 +54,7 @@ extension WelcomeView {
     /// The view task owns the animation cycle and cancels it when onboarding leaves.
     private func animateWelcome() async {
 
-        onboardingInterface.randomizeHealthData()
+        onboardingInterface.randomizeDemoData()
         guard !reduceMotion else {
             welcomeScale = 1
             return
@@ -65,7 +65,7 @@ extension WelcomeView {
         while !Task.isCancelled {
             do { try await Task.sleep(for: .seconds(2)) }
             catch { return }
-            withAnimation(.bouncy(duration: 1)) { onboardingInterface.randomizeHealthData() }
+            withAnimation(.bouncy(duration: 1)) { onboardingInterface.randomizeDemoData() }
         }
     }
 

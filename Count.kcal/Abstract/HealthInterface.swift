@@ -104,25 +104,14 @@ extension HealthInterface {
     /// Tells views whether this model is the current calendar day.
     var isTodayPage: Bool { id.isToday }
 
-    /// Fills the visible day with sample values for development controls.
-    func randomizeHealthData() {
+    /// Replaces the isolated onboarding snapshot without changing repository measurements.
+    func randomizeDemoData() {
 
         pendingLoad?.cancel()
         pendingLoad = nil
         pendingKey = nil
         requestID += 1
-        var updated = sample
-        updated.burnedActive = Int.random(in: 100...1000)
-        updated.burnedPassive = Int.random(in: 200...2300)
-        updated.burnedPassive7 = Int.random(in: 1800...2500)
-        updated.burnedActive7 = Int.random(in: 200...1000)
-        updated.consumed = Int.random(in: 400...3600)
-        updated.protein = Int.random(in: 70...200)
-        updated.carbs = Int.random(in: 180...300)
-        updated.fats = Int.random(in: 50...80)
-        updated.steps = Int.random(in: 0...30000)
-        updated.lastDataSync = .now
-        sample = updated
+        sample = .example(for: id, random: true)
     }
 
 }

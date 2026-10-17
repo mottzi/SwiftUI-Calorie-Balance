@@ -86,7 +86,7 @@ extension WeightCard {
             active: scenePhase == .active,
             today: today,
             policy: ProgressPolicy(settings: settings),
-            healthRevision: HealthDataMode.currentRevision,
+            healthRevision: HealthRepository.shared.revision,
             refreshRevision: refreshRevision
         )
     }

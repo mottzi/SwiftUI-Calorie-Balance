@@ -1,11 +1,19 @@
 import HealthKit
+import Observation
 
-/// Shared settings policy and calculations over HealthKit or sample measurements.
 @MainActor
+@Observable
+/// Shared settings policy and calculations over HealthKit or sample measurements.
 final class HealthRepository {
 
-    private let injectedSource: (any HealthDataSource)?
-    private lazy var healthKit = HealthKitDataSource()
+    @ObservationIgnored private let injectedSource: (any HealthDataSource)?
+    @ObservationIgnored private lazy var healthKit = HealthKitDataSource()
+
+    #if DEBUG && (os(iOS) || os(watchOS))
+    private var developmentRevision = 0
+    @ObservationIgnored private var developmentSourceRevision: String?
+    @ObservationIgnored private var developmentDays: [Date: [HKQuantityTypeIdentifier: HKQuantity]] = [:]
+    #endif
 
     /// Omit the source for app mode selection, or inject one for focused tests.
     init(source: (any HealthDataSource)? = nil) { injectedSource = source }
@@ -79,8 +87,37 @@ final class HealthRepository {
 
 extension HealthRepository {
 
+    /// Invalidates consumers after a source change or a temporary measurement edit.
+    var revision: String {
 
-    var revision: String { HealthDataMode.currentRevision }
+        // observe local changes and read shared defaults again for extension updates
+        _ = HealthDataMode.shared.revision
+        #if DEBUG && (os(iOS) || os(watchOS))
+        return "\(HealthDataMode.currentRevision):\(developmentRevision)"
+        #else
+        return HealthDataMode.currentRevision
+        #endif
+    }
+
+    #if DEBUG && (os(iOS) || os(watchOS))
+    /// Replaces one day's measurements in this process. Derived averages remain repository calculations.
+    func replaceDevelopmentMeasurements(_ day: HealthData, energyUnit: Settings.EnergyUnit) {
+
+        if developmentSourceRevision != HealthDataMode.currentRevision { developmentDays.removeAll() }
+        developmentSourceRevision = HealthDataMode.currentRevision
+        let energy: HKUnit = energyUnit == .kJ ? .jouleUnit(with: .kilo) : .kilocalorie()
+        developmentDays[Calendar.current.startOfDay(for: day.date)] = [
+            .activeEnergyBurned: HKQuantity(unit: energy, doubleValue: Double(day.burnedActive)),
+            .basalEnergyBurned: HKQuantity(unit: energy, doubleValue: Double(day.burnedPassive)),
+            .dietaryEnergyConsumed: HKQuantity(unit: energy, doubleValue: Double(day.consumed)),
+            .dietaryProtein: HKQuantity(unit: .gram(), doubleValue: Double(day.protein)),
+            .dietaryCarbohydrates: HKQuantity(unit: .gram(), doubleValue: Double(day.carbs)),
+            .dietaryFatTotal: HKQuantity(unit: .gram(), doubleValue: Double(day.fats)),
+            .stepCount: HKQuantity(unit: .count(), doubleValue: Double(day.steps))
+        ]
+        developmentRevision += 1
+    }
+    #endif
 
     /// Loads daily energy balances for a bounded streak count with fixed settings.
     func fetchStreakEnergy(
@@ -200,6 +237,15 @@ extension HealthRepository {
 extension HealthRepository {
 
     var dataSource: any HealthDataSource {
+        #if DEBUG && (os(iOS) || os(watchOS))
+        if developmentSourceRevision == HealthDataMode.currentRevision, !developmentDays.isEmpty {
+            return DevelopmentMeasurements(base: baseSource, days: developmentDays)
+        }
+        #endif
+        return baseSource
+    }
+
+    private var baseSource: any HealthDataSource {
         if let injectedSource { return injectedSource }
         #if DEBUG && (os(iOS) || os(watchOS))
         if HealthDataMode.isSampleDataEnabled { return SampleHealthDataSource() }
@@ -208,6 +254,68 @@ extension HealthRepository {
     }
 
 }
+
+#if DEBUG && (os(iOS) || os(watchOS))
+extension HealthRepository {
+
+    private struct DevelopmentMeasurements: HealthDataSource {
+
+        let base: any HealthDataSource
+        let days: [Date: [HKQuantityTypeIdentifier: HKQuantity]]
+
+        func dailySums(
+            _ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit
+        ) async -> [Date: Double] {
+            replacing(await base.dailySums(type, from: start, to: end, unit: unit), type, start, end, unit)
+        }
+
+        func energySums(
+            _ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit
+        ) async throws -> [Date: Double] {
+            replacing(try await base.energySums(type, from: start, to: end, unit: unit), type, start, end, unit)
+        }
+
+        func energyIntervals(
+            _ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit
+        ) async throws -> [Date: Double] {
+
+            let intervals = try await base.energyIntervals(type, from: start, to: end, unit: unit)
+            guard let quantity = days[Calendar.current.startOfDay(for: start)]?[type], end > start else {
+                return intervals
+            }
+            let value = quantity.doubleValue(for: unit)
+            let total = intervals.values.reduce(0, +)
+            return total > 0 ? intervals.mapValues { $0 * value / total } : [start: value]
+        }
+
+        func weights(from start: Date, to end: Date, unit: HKUnit) async throws -> [WeightChartData] {
+            try await base.weights(from: start, to: end, unit: unit)
+        }
+
+        func latestWeight(before end: Date, unit: HKUnit) async throws -> (Double?, Date?) {
+            try await base.latestWeight(before: end, unit: unit)
+        }
+
+        var earliestWeightSampleDate: Date? { base.earliestWeightSampleDate }
+        func weightChanges() -> AsyncStream<Void> { base.weightChanges() }
+        func requestPermission() async -> Bool { await base.requestPermission() }
+
+        private func replacing(
+            _ values: [Date: Double], _ type: HKQuantityTypeIdentifier,
+            _ start: Date, _ end: Date, _ unit: HKUnit
+        ) -> [Date: Double] {
+
+            var result = values
+            for (day, quantities) in days where day >= start && day < end {
+                if let quantity = quantities[type] { result[day] = quantity.doubleValue(for: unit) }
+            }
+            return result
+        }
+
+    }
+
+}
+#endif
 
 extension HealthRepository {
 

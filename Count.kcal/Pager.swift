@@ -21,9 +21,10 @@ struct Pager: View {
     @Environment(\.requestReview) private var requestReview
     
     @State private var SliderData = HSlider()
-    @State private var healthDataMode = HealthDataMode.shared
     @State private var manualRefresh = 0
     @State private var calendarRefresh = 0
+
+    private let repository = HealthRepository.shared
     
     init(lb: Int, tb: Int) {
         navigation = DayPager(past: lb, future: tb)
@@ -99,7 +100,7 @@ struct Pager: View {
                         navigation.ensureSelectionBuffer()
                     }
                 }
-                .onChange(of: healthDataMode.revision) {
+                .onChange(of: repository.revision) {
                     // Keep the visible day's model and refresh it with the new source revision.
                     weightHistory.reset()
                     streak.reset()
@@ -156,7 +157,7 @@ extension Pager {
             activeGoal: AppSettings.customCalActive,
             passiveGoal: AppSettings.customCalPassive,
             revision: manualRefresh,
-            healthRevision: healthDataMode.revision
+            healthRevision: repository.revision
         )
     }
 
@@ -184,7 +185,7 @@ extension Pager {
             activeGoal: AppSettings.customCalActive,
             passiveGoal: AppSettings.customCalPassive,
             revision: manualRefresh,
-            healthRevision: healthDataMode.revision
+            healthRevision: repository.revision
         )
     }
 

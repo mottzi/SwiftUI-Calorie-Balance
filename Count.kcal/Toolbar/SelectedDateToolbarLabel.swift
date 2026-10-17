@@ -34,9 +34,10 @@ struct SelectedDateToolbarLabel: View {
 
     #if DEBUG
     private func randomizeSelectedDay() {
-        withAnimation(.snappy) {
-            navigation.page(for: navigation.selectedDay)?.randomizeHealthData()
-        }
+        HealthRepository.shared.replaceDevelopmentMeasurements(
+            .example(for: navigation.selectedDay, random: true),
+            energyUnit: .kcal
+        )
     }
     #endif
 

@@ -3,12 +3,11 @@ import Observation
 
 @MainActor
 @Observable
-/// Consecutive past days that meet the selected energy balance goal.
+/// Consecutive goal days, with a count of completed days and membership for the chart.
 final class Streak {
 
-    var streaks: Int = 0
-    private(set) var hasLoadedCount = false
-    var showStreaksView: Bool = true
+    var showStreaksView = true
+    private var result: Result?
 
     @ObservationIgnored private let repository: HealthRepository
     @ObservationIgnored private let settings: Settings
@@ -18,45 +17,47 @@ final class Streak {
         self.repository = repository ?? .shared
         self.settings = settings ?? .shared
     }
-    
-    /// Clears the count and invalidates any pending recount, preserving visibility.
-    func reset() {
-        requestID += 1
-        streaks = 0
-        hasLoadedCount = false
-    }
 
-    /// Recounts goal days from yesterday until a day fails or the limit is reached.
+    /// Recounts completed days and includes Today in chart membership if its projected balance meets the goal.
     func updateStreaks() async {
 
         requestID += 1
         let currentRequest = requestID
-        let revision = repository.revision
-        let goal = settings.balanceGoal
-        let isLossGoal = settings.weightGoal == .lose
-        let source = settings.dataSource
-        let energyUnit = settings.energyUnit
-        let customActive = settings.customCalActive
-        let customPassive = settings.customCalPassive
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: .now)!
-        var streak = 0
-
-        let days = await repository.fetchStreakEnergy(
+        let key = inputKey
+        let calendar = Calendar.current
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: key.today)!
+        async let todaySnapshot = repository.fetchDailySnapshot(for: key.today, settings: settings)
+        async let history = repository.fetchStreakEnergy(
             endingOn: yesterday,
             days: 200,
-            source: source,
-            energyUnit: energyUnit,
-            customActive: customActive,
-            customPassive: customPassive
+            source: key.source,
+            energyUnit: key.energyUnit,
+            customActive: key.customActive,
+            customPassive: key.customPassive
         )
-        guard !Task.isCancelled, currentRequest == requestID, repository.revision == revision else { return }
-        for day in days {
-            guard day.consumed > 0, day.meetsGoal(goal, isLoss: isLossGoal) else { break }
-            streak += 1
-        }
+        let (today, days) = await (todaySnapshot, history)
+        guard !Task.isCancelled, currentRequest == requestID, inputKey == key else { return }
+        let count = days.prefix { qualifies($0, for: key) }.count
+        let includesToday = qualifies(today.midnight, for: key)
+        let start = calendar.date(byAdding: .day, value: -count, to: key.today)!
+        let end = calendar.date(byAdding: .day, value: includesToday ? 1 : 0, to: key.today)!
+        result = Result(key: key, count: count, days: start..<end)
+    }
 
-        streaks = streak
-        hasLoadedCount = true
+    /// The count and membership are available only for their original measurements and goals.
+    var hasLoadedCount: Bool { result?.key == inputKey }
+
+    var streaks: Int { hasLoadedCount ? result?.count ?? 0 : 0 }
+
+    /// Includes qualifying Today without adding it to the completed-day count.
+    func contains(_ date: Date) -> Bool {
+        hasLoadedCount && result?.days.contains(Calendar.current.startOfDay(for: date)) == true
+    }
+
+    /// Discards the result and prevents a pending recount from publishing it again.
+    func reset() {
+        requestID += 1
+        result = nil
     }
 
 }
@@ -65,5 +66,43 @@ extension Streak {
 
     /// Shows or hides the streak value.
     func toggleStreaksView() { withAnimation(.snappy) { showStreaksView.toggle() } }
+
+}
+
+extension Streak {
+
+    private var inputKey: InputKey {
+        InputKey(
+            revision: repository.revision,
+            today: Calendar.current.startOfDay(for: .now),
+            goal: settings.balanceGoal,
+            isLoss: settings.weightGoal == .lose,
+            source: settings.dataSource,
+            energyUnit: settings.energyUnit,
+            customActive: settings.customCalActive,
+            customPassive: settings.customCalPassive
+        )
+    }
+
+    private func qualifies(_ energy: EnergyBalance, for key: InputKey) -> Bool {
+        energy.consumed > 0 && energy.meetsGoal(key.goal, isLoss: key.isLoss)
+    }
+
+    private struct Result: Equatable {
+        let key: InputKey
+        let count: Int
+        let days: Range<Date>
+    }
+
+    private struct InputKey: Equatable {
+        let revision: String
+        let today: Date
+        let goal: Int
+        let isLoss: Bool
+        let source: Settings.DataSources
+        let energyUnit: Settings.EnergyUnit
+        let customActive: Int
+        let customPassive: Int
+    }
 
 }

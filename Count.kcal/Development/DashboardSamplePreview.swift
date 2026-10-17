@@ -60,9 +60,11 @@ private struct DashboardSamplePreview: View {
         weights.latestWeightDate = today
         _weightModel = State(initialValue: weights)
 
-        let sampleStreak = Streak()
-        sampleStreak.streaks = 5
-        _streak = State(initialValue: sampleStreak)
+        let repository = HealthRepository(source: SampleHealthDataSource())
+        for page in samplePages {
+            repository.replaceDevelopmentMeasurements(page.sample, energyUnit: .kcal)
+        }
+        _streak = State(initialValue: Streak(repository: repository))
     }
 
     var body: some View {
@@ -115,6 +117,7 @@ private struct DashboardSamplePreview: View {
         .environmentObject(Settings.shared)
         .environment(weightModel)
         .environment(streak)
+        .task { await streak.updateStreaks() }
     }
 
 }
