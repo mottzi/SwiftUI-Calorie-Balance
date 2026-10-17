@@ -21,7 +21,7 @@
           "image-name" : "02 Consumed.svg",
           "name" : "02 Energy consumed",
           "position" : {
-            "scale" : 1.05,
+            "scale" : 1.15,
             "translation-in-points" : [
               0.013876420782594323,
               29.24866740392042
@@ -39,7 +39,7 @@
           "image-name" : "01 Burned.svg",
           "name" : "01 Energy burned",
           "position" : {
-            "scale" : 1.05,
+            "scale" : 1.15,
             "translation-in-points" : [
               0.013876420782594323,
               29.24866740392042
