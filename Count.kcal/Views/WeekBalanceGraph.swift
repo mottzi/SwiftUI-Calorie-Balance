@@ -27,9 +27,8 @@ struct WeekBalanceGraph: View {
                         selectDay: selectDay,
                         excludedDayIDs: excludedDayIDs
                     )
-                    .padding(.horizontal, 6)
                     // Keep chart insets inside each page so the pager clips at the screen edge.
-                    .padding(.horizontal)
+                    .padding(.horizontal, CardMetrics.horizontalInset + 4)
                     .containerRelativeFrame(.horizontal)
                     .id(week.id)
                 }
@@ -379,12 +378,16 @@ struct WeekBalanceChart: View {
 
 private struct WeekDayLabel: View {
 
+    @Environment(\.colorScheme) private var colorScheme
     @ScaledMetric(relativeTo: .footnote) private var dateDiameter: CGFloat = 24
 
     let date: Date
     let isSelected: Bool
 
     var body: some View {
+        let isToday = date.isToday
+        let todayFill = Color("SecondaryTextColor").opacity(colorScheme == .dark ? 0.28 : 0.15)
+
         VStack(spacing: 0) {
             Text(date, format: .dateTime.weekday(.abbreviated))
                 .textCase(.uppercase)
@@ -398,9 +401,9 @@ private struct WeekDayLabel: View {
                 .frame(height: dateDiameter)
                 .background {
                     Circle()
-                        .fill(Color("TextColor"))
+                        .fill(isSelected ? Color("TextColor") : todayFill)
                         .frame(maxWidth: dateDiameter)
-                        .opacity(isSelected ? 1 : 0)
+                        .opacity(isSelected || isToday ? 1 : 0)
                 }
         }
         .lineLimit(1)

@@ -83,7 +83,7 @@ private struct DashboardSamplePreview: View {
                                     selectedPage = pages.first { $0.id == day }
                                 }
                             )
-                            .padding(.horizontal, 12)
+                            .padding(.horizontal, 4)
                         }
                         .padding(.bottom, 15)
 
