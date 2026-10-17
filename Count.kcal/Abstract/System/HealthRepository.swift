@@ -28,7 +28,7 @@ final class HealthRepository {
     func fetchDailySnapshot(for date: Date, policy: HealthSnapshotPolicy, now: Date = .now) async -> HealthData {
 
         // capture the policy and query range before any HealthKit suspension
-        let measuredData = dataSource
+        let measuredData = snapshotSource(policy: policy, now: now)
         let calendar = Calendar.current
         let dayStart = calendar.startOfDay(for: date)
         let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart)!
@@ -106,6 +106,8 @@ final class HealthRepository {
 }
 
 extension HealthRepository {
+
+    var usesMarketingSamples: Bool { injectedSource == nil && HealthDataMode.isMarketingDataEnabled }
 
     /// Invalidates consumers after a source change or a temporary measurement edit.
     var revision: String {
@@ -279,10 +281,38 @@ extension HealthRepository {
     private var baseSource: any HealthDataSource {
         if let injectedSource { return injectedSource }
         #if DEBUG && (os(iOS) || os(watchOS))
-        if HealthDataMode.isSampleDataEnabled { return SampleHealthDataSource() }
+        if HealthDataMode.isSampleDataEnabled {
+            return sampleSource(policy: HealthSnapshotPolicy(settings: .shared))
+        }
         #endif
         return healthKit
     }
+
+}
+
+extension HealthRepository {
+
+    private func snapshotSource(policy: HealthSnapshotPolicy, now: Date) -> any HealthDataSource {
+        #if DEBUG && (os(iOS) || os(watchOS))
+        if injectedSource == nil, HealthDataMode.isSampleDataEnabled,
+           developmentSourceRevision != HealthDataMode.currentRevision || developmentDays.isEmpty {
+            return sampleSource(policy: policy, now: now)
+        }
+        #endif
+        return dataSource
+    }
+
+    #if DEBUG && (os(iOS) || os(watchOS))
+    private func sampleSource(policy: HealthSnapshotPolicy, now: Date = .now) -> SampleHealthDataSource {
+        let marketing = HealthDataMode.isMarketingDataEnabled ? MarketingHealthProfile(
+            balanceGoal: Double(policy.balanceGoal) / (policy.energyUnit == .kJ ? 4.184 : 1),
+            proteinGoal: policy.proteinGoal,
+            carbsGoal: policy.carbsGoal,
+            fatsGoal: policy.fatsGoal
+        ) : nil
+        return SampleHealthDataSource(now: now, marketing: marketing)
+    }
+    #endif
 
 }
 

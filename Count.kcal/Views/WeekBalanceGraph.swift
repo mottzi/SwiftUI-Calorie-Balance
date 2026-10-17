@@ -71,6 +71,8 @@ struct WeekBalanceGraph: View {
             unit: settings.energyUnit.rawValue,
             activeGoal: settings.customCalActive,
             passiveGoal: settings.customCalPassive,
+            marketingGoals: HealthDataMode.isMarketingDataEnabled
+                ? [settings.balanceGoal, settings.proteinGoal, settings.carbsGoal, settings.fatsGoal] : [],
             revision: refreshRevision,
             bufferedWeeks: navigation.balanceWeeks.count
         )
@@ -248,6 +250,7 @@ private struct WeekRefreshKey: Hashable {
     let unit: String
     let activeGoal: Int
     let passiveGoal: Int
+    let marketingGoals: [Int]
     let revision: Int
     let bufferedWeeks: Int
 }

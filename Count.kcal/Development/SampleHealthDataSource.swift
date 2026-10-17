@@ -6,10 +6,12 @@ struct SampleHealthDataSource: HealthDataSource {
 
     let now: Date
     let calendar: Calendar
+    let marketing: MarketingHealthProfile?
 
-    init(now: Date = .now, calendar: Calendar = .current) {
+    init(now: Date = .now, calendar: Calendar = .current, marketing: MarketingHealthProfile? = nil) {
         self.now = now
         self.calendar = calendar
+        self.marketing = marketing
     }
 
     func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double] {
@@ -22,7 +24,7 @@ struct SampleHealthDataSource: HealthDataSource {
         var sums: [Date: Double] = [:]
         for day in days(from: start, to: end) {
             let sample = SampleHealthDay(date: day, now: now, calendar: calendar)
-            sums[day] = sample?.quantity(type)?.doubleValue(for: unit) ?? 0
+            sums[day] = sample.flatMap { quantity(type, on: $0) }?.doubleValue(for: unit) ?? 0
         }
         return sums
     }
@@ -45,7 +47,7 @@ struct SampleHealthDataSource: HealthDataSource {
 
         guard end > start else { return [:] }
         guard let sample = SampleHealthDay(date: start, now: min(now, end), calendar: calendar),
-              let quantity = sample.quantity(type) else { return [:] }
+              let quantity = quantity(type, on: sample) else { return [:] }
         let count = Int(ceil(min(now, end).timeIntervalSince(start) / 900))
         guard count > 0 else { return [:] }
         var weights = (0..<count).map { index in
@@ -85,6 +87,10 @@ struct SampleHealthDataSource: HealthDataSource {
 }
 
 extension SampleHealthDataSource {
+
+    private func quantity(_ type: HKQuantityTypeIdentifier, on day: SampleHealthDay) -> HKQuantity? {
+        marketing?.quantity(type, on: day) ?? day.quantity(type)
+    }
 
     /// Simulator QA can hold queries open to inspect the first-load presentation.
     private func waitForLaunchFixture() async {

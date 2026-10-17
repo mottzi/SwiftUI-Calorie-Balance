@@ -157,7 +157,9 @@ extension Pager {
             activeGoal: AppSettings.customCalActive,
             passiveGoal: AppSettings.customCalPassive,
             revision: manualRefresh,
-            healthRevision: repository.revision
+            healthRevision: repository.revision,
+            marketingGoals: HealthDataMode.isMarketingDataEnabled
+                ? [AppSettings.balanceGoal, AppSettings.proteinGoal, AppSettings.carbsGoal, AppSettings.fatsGoal] : []
         )
     }
 
@@ -193,8 +195,13 @@ extension Pager {
     private func refreshSummary(force: Bool = false) async {
         guard scenePhase == .active else { return }
         let weekPages = navigation.weekPages.filter { $0.id != navigation.selectedDay }
+        // Marketing nutrients use the goals derived from the sample energy budget.
+        // Resolve those goals before starting the week's snapshots.
+        let marketing = repository.usesMarketingSamples
+        if marketing { await AppSettings.updateShow() }
+        guard !Task.isCancelled else { return }
         // Start independent summaries together so estimates cannot delay the visible cards.
-        async let estimatesRefresh: Void = AppSettings.updateShow()
+        async let estimatesRefresh: Void = marketing ? () : AppSettings.updateShow()
         async let weightRefresh: Void = weightHistory.fetchData()
         async let streakRefresh: Void = streak.updateStreaks()
         await withTaskGroup(of: Void.self) { group in
@@ -302,6 +309,7 @@ private struct DayRefreshKey: Hashable {
     let passiveGoal: Int
     let revision: Int
     let healthRevision: String
+    let marketingGoals: [Int]
 
 }
 

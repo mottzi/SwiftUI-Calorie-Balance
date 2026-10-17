@@ -25,6 +25,12 @@ struct DebugSettingsCard: View {
                     .tint(.green)
                     .fontWeight(.semibold)
 
+                if mode.usesSampleData {
+                    Toggle("Marketing Mode", isOn: $mode.usesMarketingData)
+                        .tint(.green)
+                        .fontWeight(.semibold)
+                }
+
                 #if targetEnvironment(simulator)
                 Button("Seed Simulator Health Data", systemImage: "cross.case", action: seedHealthData)
                     .disabled(isSeedingHealthData || healthDataMode.usesSampleData)

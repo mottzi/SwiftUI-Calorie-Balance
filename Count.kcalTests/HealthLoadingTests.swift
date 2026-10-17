@@ -421,3 +421,88 @@ private actor OrderedEstimatesSource: HealthDataSource {
     func requestPermission() async -> Bool { true }
 
 }
+
+
+@Suite(.serialized)
+struct MarketingHealthTests {
+
+    private let profile = MarketingHealthProfile(
+        balanceGoal: 200, proteinGoal: 150, carbsGoal: 240, fatsGoal: 93
+    )
+
+    @Test(arguments: [200, 500]) func macrosReconcileWithIntakeAndDeficit(goal: Int) throws {
+        let now = Calendar.current.startOfDay(for: .now).addingTimeInterval(12 * 3600)
+        let budget = Double(2600 - goal)
+        let carbsGoal = Int((budget * 0.4 / 4).rounded())
+        let fatsGoal = Int((budget * 0.35 / 9).rounded())
+        let proteinGoal = Int((budget * 0.25 / 4).rounded())
+        let profile = MarketingHealthProfile(
+            balanceGoal: Double(goal), proteinGoal: proteinGoal, carbsGoal: carbsGoal, fatsGoal: fatsGoal
+        )
+        for daysAgo in 0..<7 {
+            let date = Calendar.current.date(byAdding: .day, value: -daysAgo, to: now)!
+            let day = try #require(SampleHealthDay(date: date, now: now))
+            let carbs = try #require(profile.quantity(.dietaryCarbohydrates, on: day)).doubleValue(for: .gram())
+            let fats = try #require(profile.quantity(.dietaryFatTotal, on: day)).doubleValue(for: .gram())
+            let protein = try #require(profile.quantity(.dietaryProtein, on: day)).doubleValue(for: .gram())
+            let eaten = try #require(profile.quantity(.dietaryEnergyConsumed, on: day)).doubleValue(for: .kilocalorie())
+            #expect(carbs * 4 + fats * 9 + protein * 4 == eaten)
+            if daysAgo == 0 {
+                for (value, goal) in [(carbs, carbsGoal), (fats, fatsGoal), (protein, proteinGoal)] {
+                    #expect((0.6...1).contains(value / Double(goal)))
+                }
+            }
+        }
+    }
+
+    @MainActor @Test func todayHasRoundedEnergyAndVisibleProjectionAtAnyHour() async {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        for hour in [1, 8, 15, 23] {
+            let now = calendar.date(bySettingHour: hour, minute: 0, second: 0, of: today)!
+            let repository = HealthRepository(source: SampleHealthDataSource(now: now, marketing: profile))
+            let data = await repository.fetchDailySnapshot(for: today, policy: HealthSnapshotPolicy(), now: now)
+            #expect(data.balanceMidnight == 240)
+            #expect(data.balanceNow > 0)
+            #expect(data.midnight.burned == 2600)
+            for value in [data.burnedActive, data.burnedPassive, data.burnedPassiveRemaining, data.consumed] {
+                #expect(value > 0)
+                #expect(value % 10 == 0)
+            }
+            #expect(data.midnight.ratio(of: data.burnedPassiveRemaining) > 0.05)
+            for (value, goal) in [(data.protein, 150), (data.carbs, 240), (data.fats, 93)] {
+                #expect((0.6...1).contains(Double(value) / Double(goal)))
+            }
+        }
+    }
+
+    @MainActor @Test func everyRollingWeekHasTwoDifferentSurpluses() async throws {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        let now = today.addingTimeInterval(12 * 3600)
+        let repository = HealthRepository(source: SampleHealthDataSource(now: now, marketing: profile))
+        for offset in 0..<14 {
+            let end = calendar.date(byAdding: .day, value: -offset, to: today)!
+            let days = try await repository.fetchStreakEnergy(
+                endingOn: end, days: 7, source: .apple, energyUnit: .kcal, customActive: 0, customPassive: 0
+            )
+            let surpluses = days.filter { $0.balance < 0 }.map(\.balance).sorted()
+            #expect(surpluses == [-360, -140])
+            #expect(days.filter { $0.balance > 0 }.count == 5)
+        }
+    }
+
+    @Test func marketingLeavesWeightSamplesUnchangedAndConvertsEnergyUnits() async throws {
+        let today = Calendar.current.startOfDay(for: .now)
+        let now = today.addingTimeInterval(12 * 3600)
+        let start = Calendar.current.date(byAdding: .day, value: -30, to: today)!
+        let normal = SampleHealthDataSource(now: now)
+        let marketing = SampleHealthDataSource(now: now, marketing: profile)
+        let normalWeights = await normal.weights(from: start, to: now, unit: .gramUnit(with: .kilo))
+        let marketingWeights = await marketing.weights(from: start, to: now, unit: .gramUnit(with: .kilo))
+        #expect(normalWeights.map(\.weightAvg) == marketingWeights.map(\.weightAvg))
+        let kcal = try await marketing.dailySums(.dietaryEnergyConsumed, from: today, to: now, unit: .kilocalorie())
+        let kJ = try await marketing.dailySums(.dietaryEnergyConsumed, from: today, to: now, unit: .jouleUnit(with: .kilo))
+        #expect(abs(kJ[today]! - kcal[today]! * 4.184) < 0.001)
+    }
+}

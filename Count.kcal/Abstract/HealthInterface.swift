@@ -79,7 +79,9 @@ final class HealthInterface: Identifiable, Hashable {
             source: settings.dataSource.rawValue,
             unit: settings.energyUnit.rawValue,
             active: settings.customCalActive,
-            passive: settings.customCalPassive
+            passive: settings.customCalPassive,
+            marketingGoals: repository.usesMarketingSamples
+                ? [settings.balanceGoal, settings.proteinGoal, settings.carbsGoal, settings.fatsGoal] : []
         )
     }
 
@@ -89,6 +91,7 @@ final class HealthInterface: Identifiable, Hashable {
         let unit: String
         let active: Int
         let passive: Int
+        let marketingGoals: [Int]
     }
 
     /// Compares fixed calendar-day identities.

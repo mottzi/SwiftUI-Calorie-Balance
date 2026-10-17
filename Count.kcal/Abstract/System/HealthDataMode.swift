@@ -14,10 +14,18 @@ final class HealthDataMode {
         }
     }
 
+    var usesMarketingData: Bool {
+        didSet {
+            guard usesMarketingData != oldValue else { return }
+            invalidateData()
+        }
+    }
+
     private(set) var revision: String
 
     private init() {
         usesSampleData = Self.isSampleDataEnabled
+        usesMarketingData = Self.defaults.dictionary(forKey: Self.key)?["marketing"] as? Bool ?? false
         revision = Self.currentRevision
     }
 
@@ -25,7 +33,9 @@ final class HealthDataMode {
     func invalidateData() {
         #if DEBUG && (os(iOS) || os(watchOS))
         revision = UUID().uuidString
-        Self.defaults.set(["enabled": usesSampleData, "revision": revision], forKey: Self.key)
+        Self.defaults.set([
+            "enabled": usesSampleData, "marketing": usesMarketingData, "revision": revision
+        ], forKey: Self.key)
         WidgetCenter.shared.reloadAllTimelines()
         #endif
     }
@@ -34,8 +44,12 @@ final class HealthDataMode {
     func configureLaunchArguments() {
         #if DEBUG && os(iOS)
         let arguments = ProcessInfo.processInfo.arguments
-        if arguments.contains("--health-data-sample") { usesSampleData = true }
-        else if arguments.contains("--health-data-live") || arguments.contains("--health-data-seed-simulator") {
+        if arguments.contains("--health-data-marketing") {
+            usesSampleData = true
+            usesMarketingData = true
+        } else if arguments.contains("--health-data-sample") {
+            usesSampleData = true
+        } else if arguments.contains("--health-data-live") || arguments.contains("--health-data-seed-simulator") {
             usesSampleData = false
         }
         #endif
@@ -44,6 +58,14 @@ final class HealthDataMode {
 }
 
 extension HealthDataMode {
+
+    static var isMarketingDataEnabled: Bool {
+        #if DEBUG && (os(iOS) || os(watchOS))
+        return isSampleDataEnabled && defaults.dictionary(forKey: key)?["marketing"] as? Bool == true
+        #else
+        return false
+        #endif
+    }
 
     /// Read defaults for every request so extensions see the latest local mode.
     static var isSampleDataEnabled: Bool {
