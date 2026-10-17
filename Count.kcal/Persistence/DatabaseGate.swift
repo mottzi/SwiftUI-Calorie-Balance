@@ -32,7 +32,9 @@ struct DatabaseGate<Content: View>: View {
                 let database = try AppDatabase.open()
                 prepareDependencies { $0.defaultDatabase = database }
                 ready = true
-            } catch { failed = true }
+            } catch {
+                failed = true
+            }
         }
     }
 
