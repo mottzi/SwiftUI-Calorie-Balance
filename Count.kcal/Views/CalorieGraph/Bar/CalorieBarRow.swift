@@ -120,9 +120,9 @@ extension CalorieBarRow {
             // handles visibility, so WidgetKit never replaces a masked label image.
             CalorieBarLabel(
                 value: max(0, projectedRestingLabel),
-                animatesNumericValues: configuration.animatesNumericValues
+                animatesNumericValues: configuration.animatesNumericValues,
+                reservesSpace: segment.value > 0
             )
-            .layoutValue(key: CalorieBarLabel.PresenceKey.self, value: segment.value > 0)
             .accessibilityHidden(segment.value == 0)
         } else {
             CalorieBarLabel(
