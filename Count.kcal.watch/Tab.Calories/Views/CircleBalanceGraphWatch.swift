@@ -23,8 +23,7 @@ struct CircleBalanceGraphWatch: View {
                 configuration: CalorieCircleConfiguration(
                     lineWidth: lineWidth(for: diameter),
                     ringSpacing: ringSpacing(for: diameter),
-                    openAngle: .degrees(cutout * 360),
-                    segmentGap: 0
+                    openAngle: .degrees(cutout * 360)
                 ),
                 palette: palette,
                 rendering: context == .app || context == .toolbar ? .live : .widget
