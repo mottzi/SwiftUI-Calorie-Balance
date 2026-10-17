@@ -33,7 +33,6 @@ private struct BalanceWidgetBarContent: View {
 
     @Environment(\.colorScheme) private var scheme
     @Environment(\.widgetFamily) var family: WidgetFamily
-    @Environment(\.widgetRenderingMode) private var renderingMode
     
     @EnvironmentObject private var AppSettings: Settings
 
@@ -41,14 +40,7 @@ private struct BalanceWidgetBarContent: View {
     let mode: GraphMode
 
     var body: some View {
-        // Only tinted widgets replace entire mode snapshots to keep their cutout labels aligned.
-        if renderingMode == .accented {
-            dashboard
-                .id(mode == .now ? "now" : "midnight")
-                .transition(.identity)
-        } else {
-            dashboard
-        }
+        dashboard
     }
 
     @ViewBuilder

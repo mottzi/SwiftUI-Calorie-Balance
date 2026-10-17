@@ -13,8 +13,27 @@ struct CalorieBarRow: View {
     var rendering: CalorieGraphRendering = .live
     var projectedRestingLabel: Int? = nil
 
+    private var isTintedWidget: Bool {
+        rendering == .widget && renderingMode == .accented
+    }
+
     private var retainsWidgetProjection: Bool {
-        rendering == .widget && renderingMode != .accented && projectedRestingLabel != nil
+        rendering == .widget && projectedRestingLabel != nil
+    }
+
+    private var widgetFillPalette: CalorieGraphPalette {
+        guard isTintedWidget else { return palette }
+        var result = palette
+        // WidgetKit tints all these fills to the same color. For cumulative
+        // layers, solve target = overlay + underneath * (1 - overlay).
+        result.active.opacity = replacementOpacity(palette.active.opacity, over: palette.resting.opacity)
+        result.resting.opacity = replacementOpacity(palette.resting.opacity, over: palette.prediction.opacity)
+        return result
+    }
+
+    private func replacementOpacity(_ target: Double, over underneath: Double) -> Double {
+        guard underneath < 1 else { return 0 }
+        return min(max((target - underneath) / (1 - underneath), 0), 1)
     }
 
     var body: some View {
@@ -31,8 +50,8 @@ struct CalorieBarRow: View {
                 CalorieBarFillDrawing(
                     values: values,
                     side: side,
-                    palette: palette,
-                    usesCumulativeLayers: rendering == .widget && renderingMode != .accented
+                    palette: widgetFillPalette,
+                    usesCumulativeLayers: rendering == .widget
                 )
             }
             .clipShape(UnevenRoundedRectangle(
@@ -45,11 +64,14 @@ struct CalorieBarRow: View {
                 ForEach(segments, id: \.id.rawValue) { segment in
                     label(for: segment)
                     .geometryGroup()
+                    // In tinted widgets the mask is the only drawing of filled
+                    // values. A second white numeric transition can leak through it.
+                    .opacity(isTintedWidget && segment.id != .empty ? 0 : 1)
                     .zIndex(retainsWidgetProjection ? (segment.id == .prediction ? 1 : 3) : 0)
                 }
             }
 
-            if retainsWidgetProjection && configuration.showsLabels {
+            if retainsWidgetProjection && configuration.showsLabels && !isTintedWidget {
                 // The recorded fills cover the retained projection label with the
                 // same native endpoints that reveal and close its segment.
                 CalorieBarFillDrawing(
@@ -124,11 +146,35 @@ extension CalorieBarRow {
                 .colorMultiply(.black)
                 .opacity(segment.id == .empty ? 0 : 1)
                 .geometryGroup()
+                .zIndex(isTintedWidget && segment.id == .prediction ? 1 : 3)
+            }
+            if isTintedWidget && retainsWidgetProjection {
+                // White restores mask coverage over the retained black projection
+                // glyphs, using exactly the recorded fill's native endpoint.
+                recordedLabelMaskCover
+                    .layoutValue(key: CalorieBarRowLayout.RecordedFillKey.self, value: true)
+                    .zIndex(2)
             }
         }
         .background(.white)
         .compositingGroup()
         .luminanceToAlpha()
+    }
+
+    private var recordedLabelMaskCover: some View {
+        GeometryReader { geometry in
+            let occupied = values.burnedSegments.dropLast().last?.range.upperBound ?? 0
+            let recorded = values.burnedSegments.first(where: { $0.id == .resting })?.range.upperBound ?? 0
+            let width = occupied > 0 ? geometry.size.width * recorded / occupied : 0
+            Rectangle()
+                .fill(.white)
+                .frame(width: max(0, width), height: max(0, geometry.size.height))
+                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
+        }
+        .clipShape(UnevenRoundedRectangle(
+            topTrailingRadius: max(0, configuration.cornerRadius),
+            style: .circular
+        ))
     }
 
     /// Active, resting, or consumed segments within the occupied part of a bar.
