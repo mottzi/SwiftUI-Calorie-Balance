@@ -1,4 +1,5 @@
 import SwiftUI
+import SQLiteData
 
 /// Week paging and day selection share the dashboard's calendar navigation.
 struct WeekBalanceGraph: View {
@@ -8,11 +9,14 @@ struct WeekBalanceGraph: View {
 
     @State private var completedRefreshRevision = 0
 
+    @FetchAll private var dayChoices: [StoredDayChoice]
+
     let navigation: DayPager
     let refreshRevision: Int
     let selectDay: (Date) -> Void
 
     var body: some View {
+        let excludedDayIDs = Set(dayChoices.filter { $0.choice == DayChoice.excluded.rawValue }.map(\.id))
         ScrollView(.horizontal) {
             // Loaded weeks retain their identities; SwiftUI creates only nearby charts.
             LazyHStack(spacing: 0) {
@@ -20,7 +24,8 @@ struct WeekBalanceGraph: View {
                     WeekBalanceChart(
                         dataPoints: week.days,
                         selectedDay: navigation.selectedDay,
-                        selectDay: selectDay
+                        selectDay: selectDay,
+                        excludedDayIDs: excludedDayIDs
                     )
                     .padding(.horizontal, 6)
                     // Keep chart insets inside each page so the pager clips at the screen edge.
@@ -262,6 +267,7 @@ struct WeekBalanceChart: View {
 
     let selectedDay: Date
     let selectDay: (Date) -> Void
+    var excludedDayIDs: Set<String> = []
 
     private var hasLoadedWeek: Bool { dataPoints.allSatisfy(\.hasLoadedSnapshot) }
     
@@ -284,6 +290,9 @@ struct WeekBalanceChart: View {
                             date: point.id,
                             isSelected: isDaySelected(barDay: point.id),
                             isInCurrentStreak: streak.contains(point.id),
+                            isExcluded: excludedDayIDs.contains(
+                                AppDatabase.recordID(for: point.id, sampleData: point.sample.isSampleData)
+                            ),
                             showsValue: hasLoadedWeek
                         )
                         .frame(height: graphHeight)
@@ -427,6 +436,7 @@ extension WeekBalanceChart {
         @Environment(\.dynamicTypeSize) private var dynamicType
 
         @Environment(\.colorScheme) private var scheme
+        @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
         /// Current or midnight balance for the selected day.
         let energy: EnergyBalance
@@ -434,6 +444,7 @@ extension WeekBalanceChart {
         let date: Date
         var isSelected: Bool = false
         var isInCurrentStreak = false
+        var isExcluded: Bool = false
         var showsValue = true
 
         static let baselineGap: CGFloat = 1
@@ -457,6 +468,7 @@ extension WeekBalanceChart {
                 ZStack {
                     Self.barShape(isDeficit: barChartRatio > 0)
                         .fill(color.brighten(0.1).gradient)
+                        .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: isExcluded)
                         .frame(width: geo.size.width * 0.75, height: barChartHeight(graphHeight: geo.size.height))
                         .overlay {
                             LinearGradient(
@@ -464,6 +476,7 @@ extension WeekBalanceChart {
                                 startPoint: scheme == .dark ? .bottom : .top,
                                 endPoint: scheme == .dark ? .top : .bottom
                             )
+                                .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: isExcluded)
                                 .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                                 .clipShape(Self.barShape(isDeficit: barChartRatio > 0))
                         }
@@ -509,6 +522,8 @@ extension WeekBalanceChart.VBarBalanceGraph {
     }
 
     var color: Color {
+        if isExcluded { return .secondary }
+
         let color = barChartRatio > 0 ? AppSettings.burnedColor : AppSettings.consumedColor
         let isToday = date.isToday
 

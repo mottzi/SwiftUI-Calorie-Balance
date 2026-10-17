@@ -1,4 +1,5 @@
 import SwiftUI
+import SQLiteData
 
 /// Calendar that browses months without extending the dashboard's swipe range.
 struct CDatePicker: View {
@@ -10,6 +11,8 @@ struct CDatePicker: View {
 
     @Binding var currentMonth: Date
 
+    @FetchAll private var dayChoices: [StoredDayChoice]
+
     let days: [HealthInterface]
 
     let navigation: DayPager
@@ -18,6 +21,7 @@ struct CDatePicker: View {
     let selectDay: (Date) -> Void
     
     var body: some View {
+        let excludedDayIDs = Set(dayChoices.filter { $0.choice == DayChoice.excluded.rawValue }.map(\.id))
         let columns = Array(repeating: GridItem(.flexible()), count: 7)
         let width = 43.0
         let spacing = 2.0
@@ -81,7 +85,13 @@ struct CDatePicker: View {
                     Button {
                         selectDay(day.id)
                     } label: {
-                        CalendarDayLabel(day: day, isCurrentMonth: day.id.isSameMonth(as: currentMonth))
+                        CalendarDayLabel(
+                            day: day,
+                            isCurrentMonth: day.id.isSameMonth(as: currentMonth),
+                            isExcluded: excludedDayIDs.contains(
+                                AppDatabase.recordID(for: day.id, sampleData: day.sample.isSampleData)
+                            )
+                        )
                             .offset(y: -1)
                             .frame(width: width, height: width)
                             .background { dayBackground(day.id, index: index, count: days.count) }
@@ -190,15 +200,17 @@ extension CDatePicker {
 
 }
 
-/// One date and its balance indicator, updated only by that day's health snapshot.
+/// One date and its balance indicator, including saved exclusions.
 private struct CalendarDayLabel: View {
 
     @EnvironmentObject private var settings: Settings
 
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     let day: HealthInterface
     let isCurrentMonth: Bool
+    let isExcluded: Bool
 
     var body: some View {
         VStack(spacing: 2) {
@@ -210,6 +222,7 @@ private struct CalendarDayLabel: View {
 
             Circle()
                 .fill(balanceColor.gradient)
+                .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: isExcluded)
                 .frame(width: 7)
                 .brightness(level: scheme == .dark ? .primary : .none)
         }
@@ -220,7 +233,9 @@ private struct CalendarDayLabel: View {
 extension CalendarDayLabel {
 
     private var balanceColor: Color {
-        guard day.sample.consumed > 0 else { return settings.getGraphEmptyColor(scheme).brighten(-0.1) }
+        guard !isExcluded, day.sample.consumed > 0 else {
+            return settings.getGraphEmptyColor(scheme).brighten(-0.1)
+        }
         if day.sample.balanceNow > 0 { return settings.burnedColor }
         if day.sample.balanceNow < 0 { return settings.consumedColor }
         return settings.getGraphEmptyColor(scheme).brighten(-0.1)

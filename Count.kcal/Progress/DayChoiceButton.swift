@@ -26,15 +26,26 @@ struct DayChoiceButton: View {
                     }
                 }
             } label: {
-                Label("Day calculation options", systemImage: symbol(for: choice))
-                    .labelStyle(.iconOnly)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(Color("SecondaryTextColor"))
-                    .frame(width: 44, height: 44)
-                    .contentShape(.rect)
+                Group {
+                    if choice == .excluded {
+                        Text(choice.title)
+                            .padding(.horizontal, 8)
+                    } else {
+                        Label("Day calculation options", systemImage: symbol(for: choice))
+                            .labelStyle(.iconOnly)
+                    }
+                }
+                .font(.subheadline.weight(.medium))
+                .fontDesign(.rounded)
+                .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+                .lineLimit(1)
+                .foregroundStyle(Color("SecondaryTextColor"))
+                .frame(minWidth: 44, minHeight: 44, maxHeight: 44)
+                .contentShape(.rect)
             }
             .menuStyle(.borderlessButton)
             .disabled(healthDay.sample.lastDataSync == nil || $records.isLoading || $records.loadError != nil)
+            .accessibilityLabel("Day calculation options")
             .accessibilityValue(Text(choice.title))
             .alert("Could not save this choice", isPresented: $saveFailed) {
                 Button("OK", role: .cancel) { }
