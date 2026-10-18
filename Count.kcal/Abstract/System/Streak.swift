@@ -8,6 +8,7 @@ final class Streak {
 
     var showStreaksView = true
     private var result: Result?
+    private var excludedDays: Set<String> = []
 
     @ObservationIgnored private let repository: HealthRepository
     @ObservationIgnored private let settings: Settings
@@ -40,18 +41,36 @@ final class Streak {
         }
         guard !Task.isCancelled, currentRequest == requestID, inputKey == key else { return }
         let count = days.prefix { qualifies($0, for: key) }.count
-        let start = calendar.date(byAdding: .day, value: -count, to: key.today)!
-        result = Result(key: key, count: count, days: start..<key.today)
+        result = Result(key: key, count: count)
     }
 
     /// The count and membership are available only for their original measurements and goals.
     var hasLoadedCount: Bool { result?.key == inputKey }
 
-    var streaks: Int { hasLoadedCount ? result?.count ?? 0 : 0 }
+    var streaks: Int {
+
+        guard hasLoadedCount, let result else { return 0 }
+        let calendar = Calendar.current
+        for offset in 0..<result.count {
+            let day = calendar.date(byAdding: .day, value: -offset - 1, to: result.key.today)!
+            if excludedDays.contains(DayKey.make(day)) { return offset }
+        }
+        return result.count
+    }
+
+    /// Applies saved exclusions to the count and membership without reloading measurements.
+    func updateDayChoices(_ choices: [String: DayChoice]) {
+        excludedDays = Set(choices.filter { $0.value == .excluded }.keys)
+    }
 
     /// Includes only completed days that contribute to the count.
     func contains(_ date: Date) -> Bool {
-        hasLoadedCount && result?.days.contains(Calendar.current.startOfDay(for: date)) == true
+
+        guard hasLoadedCount, let result else { return false }
+        let calendar = Calendar.current
+        let day = calendar.startOfDay(for: date)
+        let start = calendar.date(byAdding: .day, value: -streaks, to: result.key.today)!
+        return (start..<result.key.today).contains(day)
     }
 
     /// Discards the result and prevents a pending recount from publishing it again.
@@ -91,7 +110,6 @@ extension Streak {
     private struct Result: Equatable {
         let key: InputKey
         let count: Int
-        let days: Range<Date>
     }
 
     private struct InputKey: Equatable {

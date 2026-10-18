@@ -36,7 +36,7 @@ struct ProgressDetails: View {
                     Section {
                         ForEach(summary.days.reversed(), id: \.day.id) { item in
                             Menu {
-                                Section("Only affects your average deficit") {
+                                Section("Affects your average deficit and streak") {
                                     if item.eligibility == .excluded {
                                         Button("Use recorded data", systemImage: "arrow.uturn.backward") {
                                             saveChoice(.automatic, for: item.day.date)

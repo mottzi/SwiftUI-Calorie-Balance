@@ -1,5 +1,7 @@
 import HealthKit
 import Testing
+import Dependencies
+import SQLiteData
 @testable import Count_kcal
 
 @Suite(.serialized)
@@ -172,6 +174,69 @@ struct HealthLoadingTests {
         #expect(repository.revision == beforeDemo)
         let unchanged = await repository.fetchDailySnapshot(for: dates[1])
         #expect(unchanged.now == history.first)
+    }
+
+    @MainActor @Test func savedExclusionsUpdateStreakCountAndMembershipWithoutReloading() async throws {
+
+        let settings = Settings.shared
+        let original = (settings.dataSource, settings.energyUnit, settings.weightGoal, settings.balanceGoal)
+        defer {
+            settings.dataSource = original.0
+            settings.energyUnit = original.1
+            settings.weightGoal = original.2
+            settings.balanceGoal = original.3
+        }
+        settings.dataSource = .apple
+        settings.energyUnit = .kcal
+        settings.weightGoal = .lose
+        settings.balanceGoal = 200
+        let source = SuspendedHealthSource(queryCount: 3)
+        let repository = HealthRepository(source: source)
+        let today = Calendar.current.startOfDay(for: .now)
+        let dates = (0...4).map { Calendar.current.date(byAdding: .day, value: -$0, to: today)! }
+        for date in dates.prefix(4) {
+            var day = HealthData.empty(for: date)
+            day.burnedActive = 500
+            day.burnedPassive = 1500
+            day.consumed = 1500
+            repository.replaceDevelopmentMeasurements(day, energyUnit: .kcal)
+        }
+        let database = try AppDatabase.makeDatabase(path: nil)
+        let streak = Streak(repository: repository)
+        func save(_ choice: DayChoice, on date: Date, sampleData: Bool = false) throws {
+            try withDependencies { $0.defaultDatabase = database } operation: {
+                try AppDatabase.setChoice(choice, for: date, sampleData: sampleData)
+            }
+            let records = try database.read { try StoredDayChoice.fetchAll($0) }
+            streak.updateDayChoices(AppDatabase.choices(records, sampleData: false))
+        }
+        let load = Task { await streak.updateStreaks() }
+        await source.waitUntilSuspended()
+        try save(.excluded, on: dates[2])
+        await source.finish()
+        await load.value
+        #expect(streak.hasLoadedCount)
+        #expect(streak.streaks == 1)
+        #expect(streak.contains(dates[1]))
+        #expect(!streak.contains(dates[2]))
+        #expect(!streak.contains(dates[3]))
+
+        try save(.automatic, on: dates[2])
+        #expect(streak.streaks == 3)
+        for date in dates[1...3] { #expect(streak.contains(date)) }
+        try save(.excluded, on: dates[1], sampleData: true)
+        try save(.excluded, on: today)
+        try save(.excluded, on: dates[4])
+        #expect(streak.streaks == 3)
+        #expect(!streak.contains(today))
+        #expect(!streak.contains(dates[4]))
+
+        try save(.excluded, on: dates[1])
+        #expect(streak.streaks == 0)
+        for date in dates { #expect(!streak.contains(date)) }
+        try save(.automatic, on: dates[1])
+        #expect(streak.streaks == 3)
+        for date in dates[1...3] { #expect(streak.contains(date)) }
     }
 
     @MainActor @Test func editsInvalidateInFlightSnapshotsAndRecounts() async {

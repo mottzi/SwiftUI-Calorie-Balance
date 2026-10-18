@@ -14,7 +14,7 @@ struct DayChoiceButton: View {
             let choice = AppDatabase.choices(records, sampleData: healthDay.sample.isSampleData)[DayKey.make(healthDay.id)]
                 ?? .automatic
             Menu {
-                Section("Only affects your average deficit") {
+                Section("Affects your average deficit and streak") {
                     if choice == .excluded {
                         Button("Use recorded data", systemImage: "arrow.uturn.backward") {
                             saveChoice(.automatic)

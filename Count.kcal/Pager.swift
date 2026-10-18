@@ -1,6 +1,7 @@
 import SwiftUI
 import WidgetKit
 import StoreKit
+import SQLiteData
 
 /// Daily dashboard with calendar, streak, and settings controls.
 struct Pager: View {
@@ -126,6 +127,7 @@ struct Pager: View {
         .toolbar { Toolbar }
         .navigationDestination(isPresented: $showSettings) { settingsDestination }
         .safeAreaPadding(.top, AppSettings.showWelcome ? 0 : 10)
+        .modifier(StreakDayChoices())
     }
 
 }
@@ -247,6 +249,22 @@ extension Pager {
                     #endif
                 }
             }
+    }
+
+}
+
+/// Saved exclusions update the streak even if its weekly chart is hidden.
+private struct StreakDayChoices: ViewModifier {
+
+    @Environment(Streak.self) private var streak
+
+    @FetchAll private var records: [StoredDayChoice]
+
+    func body(content: Content) -> some View {
+        let choices = AppDatabase.choices(records, sampleData: HealthDataMode.shared.usesSampleData)
+        content.onChange(of: choices, initial: true) {
+            streak.updateDayChoices(choices)
+        }
     }
 
 }

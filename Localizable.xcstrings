@@ -3670,31 +3670,31 @@
         }
       }
     },
-    "Only affects your average deficit" : {
+    "Affects your average deficit and streak" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Betrifft nur dein durchschnittliches Defizit"
+            "value" : "Betrifft dein durchschnittliches Defizit und deine Serie"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Solo afecta a tu déficit medio"
+            "value" : "Afecta a tu déficit medio y a tu racha"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Modifie uniquement votre déficit moyen"
+            "value" : "Modifie votre déficit moyen et votre série"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "仅影响你的平均热量缺口"
+            "value" : "影响你的平均热量缺口和连续达标天数"
           }
         }
       }
