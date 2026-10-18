@@ -25,7 +25,13 @@ struct CaloriesTab: View {
                     )
                     // Supply the large frame while the shared toolbar copy draws the graph.
                     .opacity(reduceMotion ? 1 : 0)
-                    .overlay { CircleBalanceGraphOverlay(balance: balance, isSampleData: Interface.sample.isSampleData) }
+                    .overlay {
+                        CircleBalanceGraphOverlay(
+                            balance: balance,
+                            isSampleData: Interface.sample.isSampleData,
+                            isMarketingMode: HealthDataMode.isMarketingDataEnabled
+                        )
+                    }
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)

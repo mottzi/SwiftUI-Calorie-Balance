@@ -4,6 +4,7 @@ struct CircleBalanceGraphOverlay: View {
 
     var balance: Int
     var isSampleData = false
+    var isMarketingMode = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -21,7 +22,7 @@ struct CircleBalanceGraphOverlay: View {
                 .offset(y: -4)
         }
         .overlay(alignment: .bottom) {
-            if isSampleData {
+            if isSampleData && !isMarketingMode {
                 Image(systemName: "testtube.2")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
