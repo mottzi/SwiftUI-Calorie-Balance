@@ -61,16 +61,19 @@ struct CalorieBarRow: View {
             }
 
             if retainsWidgetProjection && configuration.showsLabels && !isTintedWidget {
-                // The recorded fills cover the retained projection label with the
-                // same native endpoints that reveal and close its segment.
-                CalorieBarFillDrawing(
-                    values: values,
-                    side: side,
-                    palette: palette,
-                    usesCumulativeLayers: true,
-                    includesProjection: false
-                )
-                .clipShape(occupiedShape)
+                // Preserve the fill geometry while allowing a narrow projection's
+                // label to extend into the recorded segment without being covered.
+                rowLayout {
+                    CalorieBarFillDrawing(
+                        values: values,
+                        side: side,
+                        palette: palette,
+                        usesCumulativeLayers: true,
+                        includesProjection: false
+                    )
+                    .clipShape(occupiedShape)
+                }
+                .mask(projectionCoverMask)
                 .layoutValue(key: CalorieBarRowLayout.RecordedFillKey.self, value: true)
                 .zIndex(2)
             }
@@ -144,9 +147,9 @@ extension CalorieBarRow {
             }
             if isTintedWidget && retainsWidgetProjection {
                 // White restores mask coverage over the retained black projection
-                // glyphs, using exactly the recorded fill's native endpoint.
-                recordedLabelMaskCover
-                    .layoutValue(key: CalorieBarRowLayout.RecordedFillKey.self, value: true)
+                // glyphs, stopping before the full label when it is visible.
+                Color.white
+                    .layoutValue(key: CalorieBarRowLayout.ProjectionCoverKey.self, value: true)
                     .zIndex(2)
             }
         }
@@ -155,17 +158,16 @@ extension CalorieBarRow {
         .luminanceToAlpha()
     }
 
-    private var recordedLabelMaskCover: some View {
-        GeometryReader { geometry in
-            let occupied = values.burnedSegments.dropLast().last?.range.upperBound ?? 0
-            let recorded = values.burnedSegments.first(where: { $0.id == .resting })?.range.upperBound ?? 0
-            let width = occupied > 0 ? geometry.size.width * recorded / occupied : 0
-            Rectangle()
-                .fill(.white)
-                .frame(width: max(0, width), height: max(0, geometry.size.height))
-                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
+    private var projectionCoverMask: some View {
+        rowLayout {
+            Color.clear
+            ForEach(values.segments(for: side), id: \.id.rawValue) { segment in
+                label(for: segment)
+                    .hidden()
+            }
+            Color.white
+                .layoutValue(key: CalorieBarRowLayout.ProjectionCoverKey.self, value: true)
         }
-        .clipShape(occupiedShape)
     }
 
     /// Active, resting, or consumed segments within the occupied part of a bar.

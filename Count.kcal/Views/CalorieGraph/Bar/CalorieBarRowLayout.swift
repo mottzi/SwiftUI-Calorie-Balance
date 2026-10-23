@@ -21,16 +21,19 @@ struct CalorieBarRowLayout: Layout {
         let occupiedEnd = segments.last(where: { $0.id != .empty })?.range.upperBound ?? 0
         let occupiedWidth = width * CGFloat(min(max(occupiedEnd, 0), 1))
 
-        // Base fills, recorded covers, and mask covers share the occupied frame.
-        let fills = [fill] + subviews.dropFirst().filter { $0[RecordedFillKey.self] }
-        for fill in fills {
-            fill.place(
-                at: CGPoint(x: bounds.minX + occupiedWidth / 2, y: bounds.midY),
-                anchor: .center,
-                proposal: ProposedViewSize(width: occupiedWidth, height: height)
-            )
+        fill.place(
+            at: CGPoint(x: bounds.minX + occupiedWidth / 2, y: bounds.midY),
+            anchor: .center,
+            proposal: ProposedViewSize(width: occupiedWidth, height: height)
+        )
+        // Recorded covers resolve their fill and label mask against the full row.
+        for cover in subviews.dropFirst().filter({ $0[RecordedFillKey.self] }) {
+            cover.place(at: CGPoint(x: bounds.minX, y: bounds.midY), anchor: .leading,
+                        proposal: ProposedViewSize(width: width, height: height))
         }
-        let labels = Array(subviews.dropFirst().filter { !$0[RecordedFillKey.self] })
+        let labels = Array(subviews.dropFirst().filter {
+            !$0[RecordedFillKey.self] && !$0[ProjectionCoverKey.self]
+        })
         let sizes = labels.map { subview in
             let measured = subview.sizeThatFits(.unspecified)
             return CGSize(width: finiteDimension(measured.width), height: finiteDimension(measured.height))
@@ -43,6 +46,18 @@ struct CalorieBarRowLayout: Layout {
             width: width,
             height: height
         )
+        var coverWidth = width * CGFloat(segments.first(where: { $0.id == .resting })?.range.upperBound ?? 0)
+        if let index = segments.firstIndex(where: { $0.id == .prediction }),
+           placements.indices.contains(index), placements[index].visible {
+            // A narrow projection can borrow space from the preceding segment.
+            // Let its complete text show while retaining native cover-width motion.
+            let labelLeading = placements[index].center - sizes[index].width / 2
+            coverWidth = min(coverWidth, max(0, labelLeading - finiteDimension(labelInset)))
+        }
+        for cover in subviews.dropFirst().filter({ $0[ProjectionCoverKey.self] }) {
+            cover.place(at: CGPoint(x: bounds.minX, y: bounds.midY), anchor: .leading,
+                        proposal: ProposedViewSize(width: coverWidth, height: height))
+        }
         for index in labels.indices {
             let placement = placements[index]
             let coveredProjection = retainsWidgetProjection
@@ -82,8 +97,13 @@ struct CalorieBarRowLayout: Layout {
 
 extension CalorieBarRowLayout {
 
-    /// Additional native fills share the first fill's geometry rather than label placement.
+    /// A recorded fill and its mask resolve their geometry within the full row.
     struct RecordedFillKey: LayoutValueKey {
+        static let defaultValue = false
+    }
+
+    /// Native mask rectangles cover hidden projections and leave visible labels complete.
+    struct ProjectionCoverKey: LayoutValueKey {
         static let defaultValue = false
     }
 

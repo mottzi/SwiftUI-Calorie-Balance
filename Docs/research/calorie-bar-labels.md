@@ -31,6 +31,16 @@ Each label supplies its target visibility to the layout with `LayoutValueKey`. C
 
 ## Fill animation
 
+### Narrow widget projection labels, 2026-10-23
+
+The small widget screenshot with active 700, resting 1,580, projection 320, and consumed 2,000 exposed a conflict between the label solver and the retained projection cover. At a row width of 138 points, the projection occupies 16.98 points while its label measures 23.75 points in the standalone iOS-caption-sized probe. The solver correctly lets the label extend into the recorded segment, but the recorded fill above it covers those leading digits. The production-source probe rendered a clipped `20`. At width 300, the complete label fit inside the projection and remained visible.
+
+The cover now uses the resolved projection label's leading edge, with the existing label inset, as an additional limit on its native width. When the projection is absent, the cover still reaches the recorded endpoint and hides the retained full-height label. Full-color rendering keeps the original recorded fill geometry inside a full-row wrapper and masks that copy with the shared cover calculation. The accented mask uses the same calculation directly. The visible fills, label placement policy, stable identities, numeric transitions, and animation duration are unchanged.
+
+The standalone reproduction fails before the change and passes afterward at both widths, preserving all solid projection glyph pixels. `widgetProjectionLabelsRemainComplete` adds iOS rendering coverage for narrow and wide rows, both layout directions, full-color and accented modes, deficit and surplus totals, and hidden Now labels. All 14 focused iOS test cases passed, including a subsequent pass of the expanded projection test. The 144-transition geometry check also passed. These static checks cover visibility and geometry; physical animation was verified separately.
+
+The Debug build installed and launched successfully on the user's iPhone 16 Pro running iOS 27.0.1. The user confirmed that the result looks good after checking the installed build and approved a focused commit.
+
 ### Projection label follow-up, 2026-10-17
 
 The user confirmed substantially improved widget fill motion in `ad22e02`. A subsequent experiment removed the label opacity switch, retained zero-label height in both renderers, and scaled a mask across the glyphs. Physical recordings showed worse app and widget motion, including partial-digit wipes. That experiment was reverted. Keep the app's committed label and animation behavior.

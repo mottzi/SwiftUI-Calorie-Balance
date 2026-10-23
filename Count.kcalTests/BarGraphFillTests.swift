@@ -7,6 +7,55 @@ import WidgetKit
 @MainActor
 struct BarGraphFillTests {
 
+    @Test(arguments: [138, 300], [LayoutDirection.leftToRight, .rightToLeft])
+    func widgetProjectionLabelsRemainComplete(width: Int, direction: LayoutDirection) throws {
+        let palette = CalorieGraphPalette(burned: .blue, consumed: .orange, empty: .gray)
+        let configuration = CalorieBarConfiguration(animatesNumericValues: true)
+        for consumed in [2_000, 3_000] {
+            for mode in [WidgetRenderingMode.fullColor, .accented] {
+                for projection in [0, 320] {
+                    let values = EnergyGraphValues(EnergyBalance(
+                        active: 700, resting: 1_580, restingRemaining: projection, consumed: consumed
+                    ))
+                    var images: [[UInt8]] = []
+                    for retained in [false, true] {
+                        images.append(try pixels(
+                            of: CalorieBarRow(
+                                values: values, side: .burned, configuration: configuration,
+                                palette: palette, rendering: .widget,
+                                projectedRestingLabel: retained ? 320 : nil
+                            )
+                            .environment(\.colorScheme, .dark)
+                            .environment(\.layoutDirection, direction)
+                            .environment(\.widgetRenderingMode, mode),
+                            width: width, height: 22
+                        ))
+                    }
+                    // Compare the projection's solid glyph pixels against the ordinary
+                    // complete label. In Now mode the retained number must stay covered.
+                    let occupiedEnd = Int(Double(width) * values.burnedSegments[2].range.upperBound)
+                    var comparedPixels = 0
+                    var mismatchedPixels = 0
+                    for y in 4..<18 {
+                        for trailingX in 4..<40 {
+                            let x = direction == .leftToRight
+                                ? occupiedEnd - 1 - trailingX : width - occupiedEnd + trailingX
+                            let index = (y * width + x) * 4
+                            let reference = Int(images[0][index])
+                            let actual = Int(images[1][index])
+                            if projection == 0 || (mode == .accented ? reference < 5 : reference > 245) {
+                                comparedPixels += 1
+                                if abs(actual - reference) > 2 { mismatchedPixels += 1 }
+                            }
+                        }
+                    }
+                    #expect(comparedPixels > 0)
+                    #expect(mismatchedPixels == 0)
+                }
+            }
+        }
+    }
+
     @Test(arguments: [ColorScheme.light, .dark], [LayoutDirection.leftToRight, .rightToLeft])
     func widgetLayersPreserveSegmentShadesInBothDirections(scheme: ColorScheme, direction: LayoutDirection) throws {
         let palette = CalorieGraphPalette(burned: .blue, consumed: .orange, empty: .gray)
