@@ -2,13 +2,15 @@ import SwiftUI
 
 struct ColorsCard: View {
 
+    @EnvironmentObject private var settings: Settings
+
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
     var body: some View {
         Card("Colors") {
             VStack(spacing: 8) {
                 if scheme == .dark {
-                    BackgroundColorSection()
+                    BackgroundColorSection(selection: $settings.appBackground)
                 }
 
                 CalorieColorSection()

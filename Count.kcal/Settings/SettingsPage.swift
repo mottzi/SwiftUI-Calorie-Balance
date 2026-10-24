@@ -5,6 +5,7 @@ import WidgetKit
 struct SettingsPage: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(\.colorScheme) private var scheme: ColorScheme
@@ -159,6 +160,10 @@ struct SettingsPage: View {
                     .accessibilityScrollWidth(dynamicType.isAccessibilitySize)
                 #endif
             }
+            .animation(
+                reduceMotion ? nil : .smooth,
+                value: AppSettings.showCalorieLabelBackgrounds
+            )
             .scrollIndicators(.hidden)
             .softTopScrollEdge()
             .navigationTitle("Settings")

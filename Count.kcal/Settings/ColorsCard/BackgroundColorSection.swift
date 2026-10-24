@@ -4,47 +4,52 @@ struct BackgroundColorSection: View {
 
     @Environment(\.dynamicTypeSize) private var dynamicType
 
-    @EnvironmentObject private var settings: Settings
+    @Binding var selection: Settings.AppBackgrounds
+    var showsDivider = true
+    var showsTitle = true
+    var color: KeyPath<Settings.AppBackgrounds, Color> = \.swatchColor
 
     var body: some View {
         let layout = dynamicType.isAccessibilitySize
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: 8))
             : AnyLayout(HStackLayout(alignment: .top))
         layout {
-            Text("Background")
-                .font(.subheadline)
-                .fontWeight(.semibold)
+            if showsTitle {
+                Text("Background")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
 
-            if !dynamicType.isAccessibilitySize { Spacer() }
+                if !dynamicType.isAccessibilitySize { Spacer() }
+            }
 
             HStack(spacing: 24) {
                 BackgroundOption(
-                    selection: $settings.appBackground,
+                    selection: $selection,
                     title: "Black",
-                    color: .black,
+                    color: Settings.AppBackgrounds.black[keyPath: color],
                     value: .black
                 )
                 BackgroundOption(
-                    selection: $settings.appBackground,
+                    selection: $selection,
                     title: "Dark",
-                    color: Color("BackGroundColor"),
+                    color: Settings.AppBackgrounds.dark[keyPath: color],
                     value: .dark
                 )
                 BackgroundOption(
-                    selection: $settings.appBackground,
+                    selection: $selection,
                     title: "Gray",
-                    color: Color(white: 0.1),
+                    color: Settings.AppBackgrounds.light[keyPath: color],
                     value: .light
                 )
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.vertical, 6)
-            .sensoryFeedback(.selection, trigger: settings.appBackground)
+            .sensoryFeedback(.selection, trigger: selection)
         }
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
         .padding(.top, 6)
 
-        Divider()
+        if showsDivider { Divider() }
     }
 
 }

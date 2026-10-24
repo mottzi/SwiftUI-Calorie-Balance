@@ -6,6 +6,8 @@ struct CalorieBarConfiguration {
     var cornerRadius: CGFloat = 6
     var rowSpacing: CGFloat = 2
     var showsLabels = true
+    var usesContrastLabelBackground = false
+    var labelBackgroundColor: Color = .black
     var animatesNumericValues = false
     var labelSpacing: CGFloat = 4
     var labelInset: CGFloat = 4

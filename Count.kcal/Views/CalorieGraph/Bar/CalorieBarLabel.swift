@@ -10,15 +10,24 @@ struct CalorieBarLabel: View {
     let value: Int
     let animatesNumericValues: Bool
     var reservesSpace = true
+    var usesContrastBackground = false
+    var backgroundColor: Color = .black
 
     var body: some View {
         Text("\(value)")
-            .foregroundStyle(Color("GraphTextColor"))
+            .foregroundStyle(usesContrastBackground ? Color.white : Color("GraphTextColor"))
             .font(.caption)
             .fontDesign(.rounded)
             .fontWeight(.semibold)
             .contentTransition(animatesNumericValues ? .numericText(value: Double(value)) : .identity)
             .fixedSize()
+            .padding(.horizontal, usesContrastBackground ? 2 : 0)
+            .background {
+                if usesContrastBackground {
+                    RoundedRectangle(cornerRadius: 2)
+                        .fill(backgroundColor)
+                }
+            }
             .frame(
                 minWidth: 0,
                 maxWidth: .infinity,
@@ -27,8 +36,8 @@ struct CalorieBarLabel: View {
                 alignment: .trailing
             )
             .clipped()
-            .shadow(color: renderingMode == .accented ? .clear : .black.opacity(scheme == .dark ? 0.8 : 0.5), radius: 4)
-            .contrast(scheme == .dark ? 1.5 : 2)
+            .shadow(color: renderingMode == .accented ? .clear : .black.opacity(scheme == .dark ? 0.8 : 0.5), radius: usesContrastBackground ? 0 : 4)
+            .contrast(usesContrastBackground ? 1 : (scheme == .dark ? 1.5 : 2))
             .opacity(value > 0 ? 1 : 0)
             .accessibilityHidden(value == 0)
             .layoutValue(key: PresenceKey.self, value: reservesSpace && value > 0)

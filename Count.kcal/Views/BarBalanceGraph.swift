@@ -35,6 +35,8 @@ struct BarBalanceGraph: View {
             configuration: CalorieBarConfiguration(
                 rowSpacing: scheme == .light ? 1 : 2,
                 showsLabels: labels,
+                usesContrastLabelBackground: settings.showCalorieLabelBackgrounds,
+                labelBackgroundColor: settings.calorieLabelBackground.labelBackgroundColor,
                 animatesNumericValues: animateNumericValues
             ),
             palette: palette,

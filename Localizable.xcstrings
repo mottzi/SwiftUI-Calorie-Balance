@@ -541,6 +541,9 @@
         }
       }
     },
+    "Add contrast behind bar values in the app and widgets" : {
+
+    },
     "Allow" : {
       "localizations" : {
         "de" : {
@@ -1254,6 +1257,9 @@
           }
         }
       }
+    },
+    "Calorie label backgrounds" : {
+
     },
     "Calorie room" : {
       "localizations" : {

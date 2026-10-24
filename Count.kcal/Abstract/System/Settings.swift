@@ -17,6 +17,12 @@ final class Settings: ObservableObject {
     @AppStorage("hideCalorieStatusIcons", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     public var hideCalorieStatusIcons: Bool = false
 
+    @AppStorage("showCalorieLabelBackgrounds", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
+    var showCalorieLabelBackgrounds: Bool = false
+
+    @AppStorage("calorieLabelBackground", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
+    var calorieLabelBackground: AppBackgrounds = .black
+
     @AppStorage("showDashboardSteps", store: UserDefaults(suiteName: "group.4DXABR577J.com.count.kcal.app"))
     var showDashboardSteps: Bool = true
 
@@ -358,6 +364,24 @@ extension Settings {
         case black = 0
         case dark
         case light
+
+        /// Preview colors for the app background choices.
+        var swatchColor: Color {
+            switch self {
+            case .black: .black
+            case .dark: Color(.displayP3, red: 0.072, green: 0.072, blue: 0.087)
+            case .light: Color(white: 0.1)
+            }
+        }
+
+        /// Small label backings need more separation than full-screen backgrounds.
+        var labelBackgroundColor: Color {
+            switch self {
+            case .black: .black
+            case .dark: Color(white: 0.20)
+            case .light: Color(white: 0.40)
+            }
+        }
 
     }
 

@@ -55,7 +55,7 @@ struct CalorieBarRow: View {
                     .geometryGroup()
                     // In tinted widgets the mask is the only drawing of filled
                     // values. A second white numeric transition can leak through it.
-                    .opacity(isTintedWidget && segment.id != .empty ? 0 : 1)
+                    .opacity(isTintedWidget && (segment.id != .empty || configuration.usesContrastLabelBackground) ? 0 : 1)
                     .zIndex(retainsWidgetProjection ? (segment.id == .prediction ? 1 : 3) : 0)
                 }
             }
@@ -130,7 +130,9 @@ extension CalorieBarRow {
         return CalorieBarLabel(
             value: max(0, retainedValue ?? Int(segment.value.rounded())),
             animatesNumericValues: configuration.animatesNumericValues,
-            reservesSpace: segment.value > 0
+            reservesSpace: segment.value > 0,
+            usesContrastBackground: configuration.usesContrastLabelBackground,
+            backgroundColor: configuration.labelBackgroundColor
         )
         .accessibilityHidden(segment.value == 0)
     }
@@ -140,8 +142,10 @@ extension CalorieBarRow {
             Color.clear
             ForEach(values.segments(for: side), id: \.id.rawValue) { segment in
                 label(for: segment)
-                .colorMultiply(.black)
-                .opacity(segment.id == .empty ? 0 : 1)
+                // Backed labels cut out a dark rectangle while retaining the glyphs.
+                // Unbacked labels keep the existing numeric cutouts.
+                .colorMultiply(configuration.usesContrastLabelBackground ? .white : .black)
+                .opacity(segment.id == .empty && !configuration.usesContrastLabelBackground ? 0 : 1)
                 .geometryGroup()
                 .zIndex(isTintedWidget && segment.id == .prediction ? 1 : 3)
             }
