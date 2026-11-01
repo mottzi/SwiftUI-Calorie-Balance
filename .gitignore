@@ -17,3 +17,10 @@ build/
 
 # Generated design previews and simulator captures
 /output/
+
+# Local investigation artifacts; keep the sharing issue tracker in version control
+/.scratch/*
+!/.scratch/calorie-card-sharing/
+/.scratch/calorie-card-sharing/*
+!/.scratch/calorie-card-sharing/README.md
+!/.scratch/calorie-card-sharing/issues/
