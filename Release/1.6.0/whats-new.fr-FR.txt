@@ -1,0 +1,10 @@
+Count.kcal 1.6.0
+
+- Consultez votre déficit calorique moyen et l'évolution de votre poids sur les 7 et 30 derniers jours complets.
+- Excluez des jours passés du déficit moyen et de votre série, ou rétablissez leurs données enregistrées.
+- Consultez vos graphiques de poids hebdomadaires et mensuels sur Apple Watch.
+- Ajoutez de nouvelles complications pour le budget calorique restant, les objectifs de macronutriments, les pas, ainsi que les apports et dépenses énergétiques au fil de la journée.
+- Le nouveau grand widget affiche les calories et la progression nutritionnelle sur l'écran d'accueil.
+- Réorganisez le tableau de bord, choisissez la position de la progression et masquez les pas si vous le souhaitez.
+- Une icône repensée, de nouveaux thèmes de couleurs, des graphiques plus fluides et des indicateurs de chargement plus clairs.
+- Amélioration de l'actualisation des données Apple Santé et de la synchronisation des réglages entre iPhone et Apple Watch.

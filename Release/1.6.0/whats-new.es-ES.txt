@@ -1,0 +1,10 @@
+Count.kcal 1.6.0
+
+- Consulta tu déficit calórico medio y el cambio de peso de los últimos 7 y 30 días completos.
+- Excluye días anteriores del déficit medio y de tu racha, o vuelve a usar sus datos registrados.
+- Consulta gráficos de peso semanales y mensuales en el Apple Watch.
+- Añade nuevas complicaciones para las calorías disponibles, los objetivos de macronutrientes, los pasos y las calorías consumidas y quemadas a lo largo del día.
+- El nuevo widget grande muestra las calorías y el progreso nutricional juntos en la pantalla de inicio.
+- Reordena las secciones del panel, elige dónde aparece Progreso y oculta los pasos cuando no los necesites.
+- Un icono renovado, más temas de color, gráficos más fluidos e indicadores de carga más claros.
+- Mejoras en la actualización de datos de Salud de Apple y en la sincronización de ajustes entre el iPhone y el Apple Watch.

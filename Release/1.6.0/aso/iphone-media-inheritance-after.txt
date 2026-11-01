@@ -1,0 +1,27 @@
+Browser tab: 1, Title: "App Store Connect", URL: "https://appstoreconnect.apple.com/apps/6476797015/distribution/ios/version/inflight/media-manager/iphone".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~							830 Draggable item. Press space bar to lift App Preview count-kcal-iphone-app-preview-en-us-886x1920.mp4, ID: 33800018-20c1-8457-8f32-f8a090e168a3
+~								831 button App Preview count-kcal-iphone-app-preview-en-us-886x1920.mp4
++									1041 pop up button (collapsed) Description: Remove, Secondary Actions: Expand
+~							909 button App Preview count-kcal-iphone-app-preview-en-us-886x1920.mp4
+~					921 pop up button (collapsed) Browse Assets, Secondary Actions: Expand
+~					923 pop up button (disabled, collapsed) Remove All, Secondary Actions: Expand
+~							927 button App Preview count-kcal-iphone-app-preview-en-us-886x1920.mp4
+~					941 pop up button (disabled, collapsed) Remove All, Secondary Actions: Expand
+~					948 pop up button (collapsed) Browse Assets, Secondary Actions: Expand
+~					950 pop up button (disabled, collapsed) Remove All, Secondary Actions: Expand
+~							954 button App Preview count-kcal-iphone-app-preview-en-us-886x1920.mp4
+~					966 pop up button (collapsed) Browse Assets, Secondary Actions: Expand
+~					968 pop up button (disabled, collapsed) Remove All, Secondary Actions: Expand
+~							972 button App Preview count-kcal-iphone-app-preview-en-us-886x1920.mp4
+~					986 pop up button (disabled, collapsed) Remove All, Secondary Actions: Expand
+~							990 button App Preview count-kcal-iphone-app-preview-en-us-886x1920.mp4
+~					1002 pop up button (collapsed) Browse Assets, Secondary Actions: Expand
+~					1004 pop up button (disabled, collapsed) Remove All, Secondary Actions: Expand
+~							1008 button App Preview count-kcal-iphone-app-preview-en-us-886x1920.mp4
+~					1020 pop up button (collapsed) Browse Assets, Secondary Actions: Expand
+~					1022 pop up button (disabled, collapsed) Remove All, Secondary Actions: Expand
+~							1026 button App Preview count-kcal-iphone-app-preview-en-us-886x1920.mp4
+~					1037 pop up button (collapsed) Browse Assets, Secondary Actions: Expand
+~					1039 pop up button (disabled, collapsed) Remove All, Secondary Actions: Expand
+The focused UI element is 823 button (expanded) iPhone with Home Button (3.5" display), ID: accordion-toggle-0.76122992555583-9396, Secondary Actions: Collapse

@@ -1,0 +1,10 @@
+Count.kcal 1.6.0
+
+- See your average calorie deficit and weight change over the last 7 and 30 completed days.
+- Exclude past days from your average deficit and streak, or restore their recorded data.
+- View weekly and monthly weight charts on Apple Watch.
+- Add new Watch complications for calorie room, macro goals, steps, and your energy intake and burn throughout the day.
+- See calories and nutrition progress together in the new large Home Screen widget.
+- Reorder dashboard sections, choose where Progress appears, and hide steps when you don't need them.
+- Enjoy a refreshed app icon, more color themes, smoother graphs, and clearer loading states.
+- Improved Apple Health refreshes and settings sync between iPhone and Apple Watch.

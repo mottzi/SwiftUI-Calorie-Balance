@@ -1,0 +1,88 @@
+Count.kcal 1.6.0 release preparation
+Prepared 18 October 2026. Updated 20 October 2026.
+
+Prepared
+
+- Updated the iPhone app, iPhone widget, Watch app, and Watch complications to 1.6.0 in Debug and Release. The current build number is 2; the earlier build 1 artifacts below are preserved.
+- Created a signed Release archive at build/Count.kcal-1.6.0.xcarchive. Verified all four embedded bundles report 1.6.0, build 1, and codesign --verify --deep --strict passes.
+- Exported the App Store IPA at build/Count.kcal-1.6.0-export/Count.kcal.ipa, 16,327,221 bytes. Verified all four bundles and App Store provisioning profiles. Debugging is disabled in every exported profile.
+- Kept iOS 17.0 and watchOS 10.5 deployment targets.
+- Saved What's New copy for the existing App Store locales: English (U.S.), German, French, and Spanish (Spain). Saved English App Review notes.
+- Created the 1.6.0 App Store Connect draft on 20 October 2026. Its status is Prepare for Submission. Saved all four What's New localizations and the English App Review notes.
+- Saved App Store export and upload options. Product-page media and metadata have been uploaded and saved to the draft. Nothing has been submitted for review, released, tagged, committed, or pushed during this preparation.
+- Created and uploaded a fresh signed build 2 after the build 1 upload collided with an old expired TestFlight build. All four archive and exported bundles report 1.6.0 (2), and strict signing checks pass. Archive, export and upload logs contain no warnings or errors. Apple completed processing, and build 2 is selected and saved in the 1.6.0 draft.
+  Archive: build/Count.kcal-1.6.0-build2.xcarchive
+  IPA: build/Count.kcal-1.6.0-export-build2/Count.kcal.ipa
+  IPA SHA-256: 2d08981f35f0b8464ab5b75f868a884c99fad7205e0edc8ae7cd56b4f6e82039
+  Full verification: output/release-1.6.0/build2-release-verification.json
+
+Release fixes
+
+- The initial Release build failed because DashboardSamplePreview referenced SampleHealthDataSource, which is compiled only in Debug. The fixture and its local previews now use the same Debug guard. PreviewPager returns EmptyView in Release so other preview declarations still resolve.
+- The widget shade test failed on individual mirrored gradient pixels under iOS 18.6. Diagnostic comparisons showed single-layer native gradients also vary across mirrored samples. The test now averages 5-by-5 interior patches and retains the original two-level channel tolerance. Production graph rendering did not change.
+- Corrected README claims about fasting controls and day exclusions. The current UI offers exclusion/restoration, and excluded days break the iPhone streak.
+- Xcode reserialized the project while updating version settings, so the project file diff includes ordering and formatting changes.
+
+Validation
+
+- Release simulator build on iPhone 16 Pro, iOS 18.6: passed after the preview guard fix.
+- Count.kcal simulator suite on iOS 18.6: 71 passed, 0 failed, 0 skipped.
+  Result bundle: build/release-1.6.0-final-tests.xcresult.
+- Tests/run-weight-semantics.sh: passed in Europe/Zurich, America/New_York, Asia/Kathmandu, Pacific/Auckland, and UTC. Covers 36 scenarios and 2,520 additional axis ranges per timezone, plus delivery semantics.
+- Tests/run-energy-contour.sh: passed.
+- Tests/run-complication-goals.sh: passed.
+- Tests/run-graph-transitions.sh: passed, including 144 transitions.
+- git diff --check: passed.
+- git fetch origin confirmed main is 173 commits ahead and 0 behind origin/main. No new Git blobs exceed 50 MiB.
+- An initial Debug dependency scan warned that PerceptionCore lacked a declared IssueReporting dependency. Subsequent incremental test runs produced no warnings. No dependency changes were made.
+- Archive bundle metadata is recorded in output/release-1.6.0/archive-bundles.json. Build/export logs are under output/release-1.6.0/.
+
+Standards
+
+No release-relevant findings in the focused review of persistence, progress, health queries, settings, Watch transfers, weight history, streaks, timelines, and shared graphs. The review used Docs/styles.md, Docs/comments.md, Docs/stepdown.md, and the code-review skill's smell baseline. It was not an exhaustive cosmetic audit of all 441 changed files.
+
+Spec
+
+No independent originating issue or release spec was supplied. The behavior review used README and research notes, with later explicit commit intent taking precedence over stale documentation. It found two documentation mismatches, both corrected above. The Release build found the preview compilation blocker, also fixed above.
+
+Follow-up checks
+
+- Physical iPhone/Watch smoke testing and App Store server validation remain outstanding.
+- A Watch history boundary occurring partway through a day may affect which daily bucket receives a phone supplement. Existing focused fixtures use midnight boundaries. This remains an unverified edge case.
+- The widget diagnostic also showed a larger difference in the live graph's RTL rendering. Shipped app localizations are LTR. RTL support deserves a separate visual check; no production rendering changes were made during release preparation.
+- The final 20 October iPhone refresh has three 1206-by-2622 screenshots per locale and no App Preview. The new Progress image uses Theme 2 with the calendar open and a colored declining weight chart. All device bodies are 2239 px high with 60 px left/bottom margins. Front phones also have 60 px right margins; the original Affinity colors composition retains its intentional right crop. Localized headings share a baseline. Previous exports are stashed under Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/. All 12 PNGs passed checks. Fourth screenshots and both video versions are preserved under Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-theme-02-progress-and-preview-removal/. iPad and Watch are unchanged. DEBUG Marketing Mode now uses deterministic declining weights; 15 health-loading and 4 marketing-data checks passed. The attached Release build 2 is unchanged.
+  Apple screenshot reference: https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/
+
+App Store Connect agreement block resolved
+
+App: 6476797015. Draft English name is now Count.kcal: Calorie Deficit.
+Count.kcal is free and has no in-app purchases. Paid Apps renewal is not an established requirement for this release.
+Current live version: 1.5.4, Ready for Distribution.
+New version: 1.6.0, Prepare for Submission.
+Draft URL: https://appstoreconnect.apple.com/apps/6476797015/distribution/ios/version/inflight
+
+On 18 October, creating a version failed with Your paid application agreement is outdated. Apple Developer recorded the license issued 14 October as accepted on 18 October, while App Store Connect continued to show the acceptance banner and an expired Paid Apps Agreement without a renewal action.
+
+On 20 October, the same creation action opened the New Version form and successfully created 1.6.0. This confirms the version-creation block has cleared. No additional agreement acceptance was needed during this check. The underlying account-status cause was not confirmed, and the Business agreement statuses were not re-audited. The adjacent support draft is now historical; no support message was sent.
+
+Apple documents free-app distribution under the Developer Program License Agreement. The Paid Apps Agreement covers selling apps or offering in-app purchases. The observed Paid Apps error therefore needs an account-specific explanation, rather than assuming Count.kcal requires a paid agreement:
+https://developer.apple.com/help/app-store-connect/manage-agreements/sign-and-update-agreements/
+
+Distribution signing resolved
+
+The initial local export failed because no iOS Distribution certificate with its private key or App Store profiles were available. Retrying with automatic provisioning returned No Accounts. After the account holder signed into Xcode, automatic provisioning and App Store export succeeded.
+
+The successful export command was:
+
+xcodebuild -exportArchive -archivePath build/Count.kcal-1.6.0.xcarchive -exportPath build/Count.kcal-1.6.0-export -exportOptionsPlist Release/1.6.0/ExportOptions.plist -allowProvisioningUpdates
+
+The export options use destination export, so that command prepares local files without uploading them.
+Export verification and the IPA's SHA-256 are recorded in output/release-1.6.0/export-verification.json. The successful log is output/release-1.6.0/export-after-sign-in.log.
+
+Remaining release preparation
+
+1. Three revised screenshots and no previews are saved in all four locales. Video files are stashed for later. The header inherits correctly in all locales. Product-page copy, names, subtitles, keywords and marketing URLs are saved in all four locales.
+2. Supply working public support and privacy pages. count.mottzi.codes works, but /help and /privacy return 404. The inherited English support domain fails to resolve and the inherited Google Sites privacy link redirects to sign-in. The website source location has been requested from the owner.
+3. Complete physical-device smoke checks and any required app-information questionnaires, then review the prepared submission before submitting it to Apple. Build 2 has processed and is attached; the expired build 1 is not selected.
+
+Review totals: Standards 0 release-relevant findings; Spec 2 documentation mismatches corrected. The build blocker, rendering-test issue, distribution-signing blocker, and App Store Connect version-creation blocker are resolved. The draft, localized metadata, revised iPhone media and shared product-page header are saved. Build 2 uploaded, processed, and is attached to the draft. Public support/privacy URLs remain outstanding. Preview videos are stashed at the owner's request.

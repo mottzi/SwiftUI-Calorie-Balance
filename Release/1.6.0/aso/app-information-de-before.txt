@@ -1,0 +1,4 @@
+Browser tab: 1, Title: "App Store Connect", URL: "https://appstoreconnect.apple.com/apps/6476797015/distribution/info".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 564-626
+The focused UI element is 550 pop up button (collapsed) German, Secondary Actions: Expand

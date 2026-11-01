@@ -1,0 +1,61 @@
+Count.kcal 1.6.0 App Store draft refresh
+20 October 2026
+
+Saved in App Store Connect
+App 6476797015 remains Prepare for Submission.
+https://appstoreconnect.apple.com/apps/6476797015/distribution/ios/version/inflight
+
+English US, German, French and Spanish Spain now have revised names,
+subtitles, promotional text, descriptions, keywords, What's New, and
+https://count.mottzi.codes as the marketing URL. Copyright is 2026.
+Existing App Review notes were retained. iPad and Watch media were not changed.
+
+Each locale uses three iPhone screenshots: calorie balance, custom colors,
+then progress with its calendar open. No App Preview is assigned. Custom
+colors preserves the original Affinity perspective and intentional right crop.
+All device bodies are 2239 px high, positioned at y=323, with 60 px left and
+bottom margins. Front devices also have 60 px right margins.
+
+Progress uses the native Theme 2 calendar capture. Its indigo weight chart
+shows 79.7 kg today against a 79.9 kg weekly mean. No steps or macros are
+visible. All 12 production PNGs are 1206 x 2622 RGB without alpha. Localized
+headings share a baseline; the app UI is English. Previous exports and
+manifests are stashed under:
+Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/
+
+Production files:
+Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/{locale}/
+
+Stashed media, including the fourth screenshot in each locale, old Progress
+captures/exports, both video versions and their sources, are preserved with
+SHA256 inventory under:
+Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-theme-02-progress-and-preview-removal/
+Removed draft assets remain in Apple's Asset Library. Other iPhone sizes
+inherit the revised media; iPad and Watch remain unchanged.
+
+The declining sample weights are restricted to DEBUG Marketing Mode. General
+sample data and Release behavior are unchanged. HealthLoadingTests passed 15
+checks and MarketingHealthTests passed 4, including the updated weight fixture.
+Native capture proof is recorded in:
+output/release-1.6.0/aso/progress-retake-verification.json
+
+The 3840 x 1646 header is uploaded in English and explicitly inherited by
+German, French and Spanish. The dark product-page preview shows the new
+header, updated app icon, name/subtitle and screenshot carousel.
+
+Version 1.6.0 build 2 uploaded, processed and is selected and saved in the
+draft. All four embedded bundles passed version and strict signing checks.
+The prior build 1 upload failed because an old expired 1.6 build 1 existed.
+No review submission, release, commit, tag or push was performed.
+
+Remaining
+Preview videos are stashed at the owner's request. Apple-side playback was
+not confirmed before removal and is not a requirement for this draft.
+
+The new website root works. Its /help and /privacy routes return 404. The
+English support URL still uses the unresolved old count.mottzi.de domain;
+other locales retain the existing X profile. The current Google Sites privacy
+URL redirects anonymous visitors to sign-in. Working public support/privacy
+destinations are still needed; the website source location was requested.
+
+Proof and backups are under output/release-1.6.0/aso/.

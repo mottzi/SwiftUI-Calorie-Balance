@@ -1,0 +1,10 @@
+Count.kcal 1.6.0
+
+- Sieh dein durchschnittliches Kaloriendefizit und deine Gewichtsänderung über die letzten 7 und 30 abgeschlossenen Tage.
+- Schließe vergangene Tage vom durchschnittlichen Defizit und deiner Serie aus oder verwende wieder ihre aufgezeichneten Daten.
+- Betrachte wöchentliche und monatliche Gewichtsdiagramme auf der Apple Watch.
+- Neue Watch-Komplikationen zeigen dein verbleibendes Kalorienbudget, Makronährstoffziele, Schritte sowie Kalorienaufnahme und Verbrauch im Tagesverlauf.
+- Das neue große Home-Bildschirm-Widget zeigt Kalorien und Nährstofffortschritt gemeinsam.
+- Ordne die Dashboard-Bereiche neu an, wähle die Position von Fortschritt und blende Schritte bei Bedarf aus.
+- Ein überarbeitetes App-Symbol, weitere Farbthemen, flüssigere Diagramme und klarere Ladeanzeigen.
+- Verbesserte Aktualisierung von Apple-Health-Daten und Synchronisierung der Einstellungen zwischen iPhone und Apple Watch.

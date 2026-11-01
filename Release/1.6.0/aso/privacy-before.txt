@@ -1,0 +1,6 @@
+Browser tab: 1, Title: "App Store Connect", URL: "https://appstoreconnect.apple.com/apps/6476797015/distribution/privacy".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 238, 241
++				317 text |
++				318 text |
+The focused UI element is 266 link Description: App Privacy, URL: appstoreconnect.apple.com/apps/6476797015/distribution/privacy

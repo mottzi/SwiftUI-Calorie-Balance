@@ -1,0 +1,15 @@
+Subject: Free app update incorrectly blocked by Paid Apps Agreement error
+
+Count.kcal is a free app with no in-app purchases. I am trying to prepare its 1.6.0 update, not sell an app or add purchases.
+
+My Apple Developer account shows the Apple Developer Program License Agreement issued October 14, 2026 as accepted on October 18, 2026. My membership renewal date is September 27, 2027.
+
+App Store Connect still shows a banner asking me to accept the Developer Program agreement. Under Business > Agreements, the Free Apps Agreement is Active (New Agreement Available), while the Paid Apps Agreement is Expired. The Paid Apps Agreement lists October 23, 2025 to February 15, 2026.
+
+The Paid Apps row has no Renew Agreement or View and Agree to Terms action. Refreshing App Store Connect and following the Paid Applications Agreement link from the Developer account both return to this page without a renewal action.
+
+Trying to create version 1.6.0 for app 6476797015, bundle identifier com.count.kcal.app, opens an Agreement Update dialog saying the paid application agreement is outdated.
+
+Please check the agreement status for team 4DXABR577J and explain why an expired Paid Apps Agreement is blocking an update to a free app. Please resolve the account mismatch or identify the applicable requirement for this free-app update. I am not requesting paid-app distribution.
+
+This is a draft for the account holder to send. No support request has been submitted.

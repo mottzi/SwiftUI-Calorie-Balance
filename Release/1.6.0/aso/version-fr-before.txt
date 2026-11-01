@@ -1,0 +1,23 @@
+Browser tab: 1, Title: "App Store Connect", URL: "https://appstoreconnect.apple.com/apps/6476797015/distribution/ios/version/inflight".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 789-790
++						819 container accordion-section-0.10501506845562525-26986
++							820 container Description: iPhone with Dynamic Island (medium display), ID: iphone-dynamic-island-medium-panel
++								821 content list
++									822 image App Preview count-kcal-iphone-app-preview-en-us-886x1920.mp4
++								823 content list
++									824 button Screenshot 01-balance.png
++									825 button Screenshot 02-now-and-midnight.png
++									826 button Screenshot 03-macros.png
++									827 button Screenshot 04-weekly-balance.png
++									828 button Screenshot 05-progress.png
++									829 button Screenshot 06-themes.png
++								830 text Using Existing Assets
++								831 pop up button (collapsed) Description: More information, Secondary Actions: Expand
++							832 text 0 of 3 App Previews
++							833 text 0 of 10 App Screenshots
++							834 pop up button (collapsed) Browse Assets, Secondary Actions: Expand
++							835 button Upload
++							836 pop up button (disabled) Remove All
++							837 text Drag and drop to add assets or choose from your Asset Library for iPhone 6.1" or 6.3" displays. Supported sizes for app previews include 1920 × 886px and 886 × 1920px. For app screenshots, supported sizes include 2556 × 1179px, 1179 × 2556px, 2622 × 1206px and 1206 × 2622px.
+The focused UI element is 775 pop up button (collapsed) French, Secondary Actions: Expand

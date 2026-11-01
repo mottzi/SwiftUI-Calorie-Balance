@@ -1,0 +1,9 @@
+Count.kcal displays calorie balance, nutrition, steps, and weight using records the user has authorized it to read from Apple Health. No sign-in is required. Food entries come from Apple Health, typically through a food-tracking app that writes to Health.
+
+The Now view shows the current calorie balance. Tap the calorie card to switch to Midnight, which estimates the end-of-day balance. Burn estimates can also use the user's custom energy settings.
+
+Version 1.6.0 adds average calorie deficit and weight change for completed 7-day and 30-day periods. These appear in Progress. At least two eligible days are needed for an average deficit, and at least two measured days in each comparison period are needed for weight change. Missing food or resting-energy data can exclude a day. Users can exclude completed days through the calorie card's day options and restore the recorded data later. Exclusions also break the iPhone streak; they do not change Apple Health records.
+
+The Apple Watch app adds weekly and monthly weight charts. New complications show calorie room, macro goals, step progress, and the energy contour for today's intake and burn. A new large iPhone widget combines calorie and nutrition progress.
+
+Development sample data, simulator seeding, and marketing controls are disabled in Release builds. An empty Apple Health store can therefore show empty charts or unavailable summaries. Granting read permission does not create Health records.
