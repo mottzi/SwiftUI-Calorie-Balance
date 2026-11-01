@@ -9,6 +9,7 @@ struct CountWidgetBundle: WidgetBundle {
         BalanceWidgetCircle()
         BalanceWidgetBar()
         NutritionWidget()
+        WeightWidget()
     }
 
 }

@@ -3,6 +3,8 @@ import Charts
 
 struct WeeklyChart: View {
 
+    var showsAlternateLabels = false
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(WeightHistory.self) private var weightHistory
@@ -36,7 +38,9 @@ struct WeeklyChart: View {
                 let validData = weightHistory.validData(.weekly)
 
                 ForEach(Array(validData.enumerated()), id: \.element.id) { (index, item) in
-                    let spacing: CGFloat = plotSize.width > 0 && labelWidth + 4 > plotSize.width / 7 && index.isMultiple(of: 2) ? 24 : 8
+                    let spacing: CGFloat = showsAlternateLabels
+                        ? 8
+                        : plotSize.width > 0 && labelWidth + 4 > plotSize.width / 7 && index.isMultiple(of: 2) ? 24 : 8
                     LineMark(
                         x: .value("Date", item.date, unit: .weekday),
                         y: .value("Value", item.weightAvg!)
@@ -52,16 +56,18 @@ struct WeeklyChart: View {
                     .foregroundStyle(Color(index == validData.count - 1 ? "SecondaryTextColor1" : "SecondaryTextColor"))
                     .symbolSize(index == validData.count - 1 ? 113 : 50)
                     .annotation(position: labelPosition(for: item.weightAvg!, spacing: spacing), spacing: spacing) {
-                        Text(verbatim: String(format: "%.1f", item.weightAvg!))
-                            .font(.system(size: 11, weight: .semibold))
-                            .foregroundStyle(Color(index == validData.count - 1 ? "TextColor" : "SecondaryTextColor"))
-                            .fixedSize()
-                            .onGeometryChange(for: CGSize.self) { geometry in
-                                geometry.size
-                            } action: { size in
-                                labelHeight = size.height
-                                labelWidth = max(labelWidth, size.width)
-                            }
+                        if !showsAlternateLabels || (validData.count - 1 - index).isMultiple(of: 2) {
+                            Text(verbatim: String(format: "%.1f", item.weightAvg!))
+                                .font(.system(size: 11, weight: .semibold))
+                                .foregroundStyle(Color(index == validData.count - 1 ? "TextColor" : "SecondaryTextColor"))
+                                .fixedSize()
+                                .onGeometryChange(for: CGSize.self) { geometry in
+                                    geometry.size
+                                } action: { size in
+                                    labelHeight = size.height
+                                    labelWidth = max(labelWidth, size.width)
+                                }
+                        }
                     }
 
                     PointMark(
@@ -135,4 +141,6 @@ extension WeeklyChart {
 
 }
 
+#if !WIDGET_EXTENSION
 #Preview { PreviewPager }
+#endif

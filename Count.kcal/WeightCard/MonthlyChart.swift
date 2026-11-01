@@ -3,6 +3,8 @@ import Charts
 
 struct MonthlyChart: View {
 
+    var showsAlternateLabels = false
+
     @EnvironmentObject private var AppSettings: Settings
 
     @Environment(WeightHistory.self) private var weightHistory
@@ -14,7 +16,12 @@ struct MonthlyChart: View {
     var body: some View {
         if let dateRange = weightHistory.chartDateRange(for: .monthly) {
             let validData = weightHistory.validData(.monthly)
-            let labelledData = weightHistory.labelledData(.monthly)
+            let allLabelledData = weightHistory.labelledData(.monthly)
+            let labelledData = showsAlternateLabels
+                ? allLabelledData.enumerated().compactMap { index, item in
+                    (allLabelledData.count - 1 - index).isMultiple(of: 2) ? item : nil
+                }
+                : allLabelledData
             let labelledDates = Set(labelledData.map(\.id))
 
             Chart {
