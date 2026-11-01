@@ -1,6 +1,55 @@
 #if DEBUG && (os(iOS) || os(watchOS))
 import HealthKit
 
+/// Saved identities for repeatable sample measurements across app processes.
+enum SampleHealthProfile: String, CaseIterable, Identifiable, Sendable {
+
+    case active
+    case lowActivity
+    case maintenance
+    case irregularLogging
+
+    var id: String { rawValue }
+
+    var title: LocalizedStringResource {
+        switch self {
+        case .active: "Active"
+        case .lowActivity: "Low activity"
+        case .maintenance: "Maintenance"
+        case .irregularLogging: "Irregular logging"
+        }
+    }
+
+    var detail: LocalizedStringResource {
+        switch self {
+        case .active: "Higher activity, regular food logging, and gradual weight loss."
+        case .lowActivity: "Fewer steps, lower energy expenditure, and a small calorie surplus."
+        case .maintenance: "Intake close to energy expenditure and a steady weight."
+        case .irregularLogging: "Variable food logging, including days with no food recorded."
+        }
+    }
+
+    fileprivate var seed: Int {
+        switch self {
+        case .active: 17
+        case .lowActivity: 43
+        case .maintenance: 71
+        case .irregularLogging: 97
+        }
+    }
+
+    fileprivate var baseline: (resting: Double, active: Double, intake: Double, steps: Double,
+                               weight: Double, dailyWeightChange: Double) {
+        switch self {
+        case .active: (1850, 800, 2200, 12000, 79.7, -0.008)
+        case .lowActivity: (1550, 220, 2050, 3500, 68.4, 0.004)
+        case .maintenance: (1750, 450, 2200, 7500, 73.2, 0)
+        case .irregularLogging: (1700, 380, 1950, 6200, 85.6, -0.003)
+        }
+    }
+
+}
+
 /// One repeatable dataset for app-local samples and simulator HealthKit seeding.
 struct SampleHealthDay {
 
@@ -10,8 +59,11 @@ struct SampleHealthDay {
     let energyFraction: Double
     let variation: Int
     let daysAgo: Int
+    let profile: SampleHealthProfile
+    private let ordinal: Int
 
-    init?(date: Date, now: Date = .now, calendar: Calendar = .current) {
+    init?(date: Date, now: Date = .now, calendar: Calendar = .current,
+          profile: SampleHealthProfile = .active) {
         let day = calendar.startOfDay(for: date)
         let today = calendar.startOfDay(for: now)
         let age = calendar.dateComponents([.day], from: day, to: today).day ?? 0
@@ -21,43 +73,65 @@ struct SampleHealthDay {
         end = min(now, nextDay.addingTimeInterval(-1))
         weightDate = min(end, calendar.date(bySettingHour: 7, minute: 0, second: 0, of: day)!)
         energyFraction = age == 0 ? min(max(now.timeIntervalSince(day) / nextDay.timeIntervalSince(day), 0), 1) : 1
-        // Stable calendar-day variation, shared by separate app and widget processes.
         let ordinal = calendar.ordinality(of: .day, in: .era, for: day) ?? 0
-        variation = ordinal % 28
+        self.ordinal = ordinal
+        self.profile = profile
+        variation = (ordinal + profile.seed) % 28
         daysAgo = age
     }
 
     func quantity(_ type: HKQuantityTypeIdentifier) -> HKQuantity? {
+        let baseline = profile.baseline
+        let intake = loggedIntake
         let value: Double
         let unit: HKUnit
         switch type {
             case .basalEnergyBurned:
-                value = Double(1640 + (variation * 37) % 180) * energyFraction
+                value = (baseline.resting + noise(1) * 60) * energyFraction
                 unit = .kilocalorie()
             case .activeEnergyBurned:
-                value = Double(350 + (variation * 53) % 380) * energyFraction
+                value = baseline.active * (1 + noise(2) * 0.35) * energyFraction
                 unit = .kilocalorie()
             case .dietaryEnergyConsumed:
-                value = Double(1850 + (variation * 67) % 700) * energyFraction
+                value = intake * energyFraction
                 unit = .kilocalorie()
             case .dietaryProtein:
-                value = Double(100 + (variation * 7) % 45) * energyFraction
+                value = intake * 0.25 / 4 * energyFraction
                 unit = .gram()
             case .dietaryCarbohydrates:
-                value = Double(190 + (variation * 11) % 65) * energyFraction
+                value = intake * 0.45 / 4 * energyFraction
                 unit = .gram()
             case .dietaryFatTotal:
-                value = Double(58 + (variation * 3) % 30) * energyFraction
+                value = intake * 0.30 / 9 * energyFraction
                 unit = .gram()
             case .stepCount:
-                value = Double(5500 + (variation * 431) % 7500) * energyFraction
+                // Steps and active energy follow the same daily activity variation.
+                value = baseline.steps * (1 + noise(2) * 0.35) * energyFraction
                 unit = .count()
             case .bodyMass:
-                value = 79.7 + Double(daysAgo) * 0.025 + sin(Double(variation)) * 0.15
+                // Gregorian day 739617 is January 1, 2026. Historical weights stay fixed as today moves.
+                value = baseline.weight + Double(ordinal - 739617) * baseline.dailyWeightChange + noise(4) * 0.2
                 unit = .gramUnit(with: .kilo)
             default: return nil
         }
         return HKQuantity(unit: unit, doubleValue: value)
+    }
+
+    private var loggedIntake: Double {
+        let intake = profile.baseline.intake + noise(3) * 180
+        guard profile == .irregularLogging else { return intake }
+        switch variation % 5 {
+        case 0: return 0
+        case 1: return intake * 0.4
+        case 2: return intake * 0.7
+        default: return intake
+        }
+    }
+
+    /// Integer arithmetic stays identical across launches, devices, and Swift hash seeds.
+    private func noise(_ salt: Int) -> Double {
+        let value = (ordinal * (37 + salt * 12) + profile.seed * (101 + salt * 18)) % 997
+        return Double(value) / 498 - 1
     }
 
 }
@@ -111,6 +185,10 @@ struct MarketingHealthProfile: Sendable {
         case .dietaryFatTotal:
             value = Double(macros(for: eaten, isToday: day.daysAgo == 0).fats)
             unit = .gram()
+        case .bodyMass:
+            let variation = [0.0, 0.01, -0.01, 0.015, -0.005, 0.005, -0.015][index]
+            value = 79.7 + Double(day.daysAgo) * 0.07 + variation
+            unit = .gramUnit(with: .kilo)
         case .stepCount:
             value = [8_640.0, 10_230, 7_810, 9_470, 6_920, 11_140, 8_120][index]
             unit = .count()

@@ -5,16 +5,28 @@ struct CaloriesCardTopRowCenter: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    @EnvironmentObject private var AppSettings: Settings
+    /// Energy totals for the selected calorie card.
+    let energy: EnergyBalance
 
-    @Environment(HealthInterface.self) private var DataViewModel
+    /// Burned-energy graph color for the selected appearance.
+    let burnedColor: Color
 
-    let mode: GraphMode
+    /// Eaten-energy graph color for the selected appearance.
+    let consumedColor: Color
+
+    /// Empty graph color for the selected appearance.
+    let graphEmptyColor: Color
+
+    /// Goal result shown in the center when the dashboard exposes one.
+    let visibleGoalReached: Bool?
     var isLoading = false
     
     var body: some View {
         ZStack {
-            CircleBalanceGraph(mode: mode)
+            CalorieCircleGraph(
+                energy: energy,
+                palette: CalorieGraphPalette(burned: burnedColor, consumed: consumedColor, empty: graphEmptyColor)
+            )
                 .frame(width: 130, height: 130)
                 .opacity(isLoading ? 0.2 : 1)
 
@@ -36,13 +48,14 @@ struct CaloriesCardTopRowCenter: View {
             }
             .fontDesign(.rounded)
         
-            if !isLoading && !AppSettings.hideCalorieStatusIcons && !energy.isEmpty {
+            if !isLoading, let goalReached = visibleGoalReached, !energy.isEmpty {
                 Image(systemName: goalReached ? "checkmark" : "xmark")
                     .font(.system(size: 12))
                     .fontWeight(.semibold)
                     .foregroundStyle(Color("SecondaryTextColor"))
                     .offset(y: 40)
                     .contentTransition(reduceMotion ? .identity : .symbolEffect(.replace))
+                    .accessibilityLabel(goalReached ? Text("Goal reached") : Text("Goal not reached"))
             }
         }
     }
@@ -51,10 +64,6 @@ struct CaloriesCardTopRowCenter: View {
 
 extension CaloriesCardTopRowCenter {
 
-    private var energy: EnergyBalance {
-        mode == .now ? DataViewModel.sample.now : DataViewModel.sample.midnight
-    }
-
     private var balance: Int { energy.balance }
 
     private var balanceLabel: LocalizedStringKey {
@@ -62,13 +71,6 @@ extension CaloriesCardTopRowCenter {
         if balance > 0 { return "Deficit" }
         if balance < 0 { return "Surplus" }
         return ""
-    }
-
-    private var goalReached: Bool {
-        energy.meetsGoal(
-            AppSettings.balanceGoal,
-            isLoss: AppSettings.weightGoal == .lose
-        )
     }
 
 }

@@ -6,5 +6,11 @@
 	<array>
 		<string>twitter</string>
 	</array>
+	<key>CKSharingSupported</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>

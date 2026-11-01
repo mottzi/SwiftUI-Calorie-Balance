@@ -21,10 +21,10 @@ private struct WidgetSampleDataBadge: View {
 
 extension View {
 
-    /// The entry keeps the badge consistent with the values displayed by the widget.
+    /// Marks sample values except when preparing marketing captures.
     func sampleHealthDataIndicator(_ entry: HealthDataEntry) -> some View {
         overlay(alignment: .topLeading) {
-            if entry.isSampleData {
+            if entry.isSampleData && !HealthDataMode.isMarketingDataEnabled {
                 WidgetSampleDataBadge()
             }
         }

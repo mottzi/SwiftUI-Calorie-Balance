@@ -108,6 +108,7 @@ final class HealthRepository {
 extension HealthRepository {
 
     var usesMarketingSamples: Bool { injectedSource == nil && HealthDataMode.isMarketingDataEnabled }
+    var usesSampleMeasurements: Bool { injectedSource == nil && HealthDataMode.isSampleDataEnabled }
 
     /// Invalidates consumers after a source change or a temporary measurement edit.
     var revision: String {
@@ -310,7 +311,7 @@ extension HealthRepository {
             carbsGoal: policy.carbsGoal,
             fatsGoal: policy.fatsGoal
         ) : nil
-        return SampleHealthDataSource(now: now, marketing: marketing)
+        return SampleHealthDataSource(now: now, marketing: marketing, profile: HealthDataMode.currentSampleProfile)
     }
     #endif
 

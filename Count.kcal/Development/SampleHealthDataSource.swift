@@ -7,11 +7,14 @@ struct SampleHealthDataSource: HealthDataSource {
     let now: Date
     let calendar: Calendar
     let marketing: MarketingHealthProfile?
+    let profile: SampleHealthProfile
 
-    init(now: Date = .now, calendar: Calendar = .current, marketing: MarketingHealthProfile? = nil) {
+    init(now: Date = .now, calendar: Calendar = .current, marketing: MarketingHealthProfile? = nil,
+         profile: SampleHealthProfile = .active) {
         self.now = now
         self.calendar = calendar
         self.marketing = marketing
+        self.profile = profile
     }
 
     func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async throws -> [Date: Double] {
@@ -23,7 +26,7 @@ struct SampleHealthDataSource: HealthDataSource {
         await waitForLaunchFixture()
         var sums: [Date: Double] = [:]
         for day in days(from: start, to: end) {
-            let sample = SampleHealthDay(date: day, now: now, calendar: calendar)
+            let sample = SampleHealthDay(date: day, now: now, calendar: calendar, profile: profile)
             sums[day] = sample.flatMap { quantity(type, on: $0) }?.doubleValue(for: unit) ?? 0
         }
         return sums
@@ -32,8 +35,8 @@ struct SampleHealthDataSource: HealthDataSource {
     func weights(from start: Date, to end: Date, unit: HKUnit) async -> [WeightChartData] {
         await waitForLaunchFixture()
         return days(from: start, to: end).map { date in
-            let sample = SampleHealthDay(date: date, now: now, calendar: calendar)
-            return WeightChartData(date: date, weightAvg: sample?.quantity(.bodyMass)?.doubleValue(for: unit))
+            let sample = SampleHealthDay(date: date, now: now, calendar: calendar, profile: profile)
+            return WeightChartData(date: date, weightAvg: sample.flatMap { quantity(.bodyMass, on: $0) }?.doubleValue(for: unit))
         }
     }
 
@@ -46,7 +49,7 @@ struct SampleHealthDataSource: HealthDataSource {
     ) async -> [Date: Double] {
 
         guard end > start else { return [:] }
-        guard let sample = SampleHealthDay(date: start, now: min(now, end), calendar: calendar),
+        guard let sample = SampleHealthDay(date: start, now: min(now, end), calendar: calendar, profile: profile),
               let quantity = quantity(type, on: sample) else { return [:] }
         let count = Int(ceil(min(now, end).timeIntervalSince(start) / 900))
         guard count > 0 else { return [:] }
@@ -72,14 +75,14 @@ struct SampleHealthDataSource: HealthDataSource {
     func latestWeight(before end: Date, unit: HKUnit) async -> (Double?, Date?) {
         await waitForLaunchFixture()
         let date = min(end, now)
-        guard let sample = SampleHealthDay(date: date, now: now, calendar: calendar) else { return (nil, nil) }
+        guard let sample = SampleHealthDay(date: date, now: now, calendar: calendar, profile: profile) else { return (nil, nil) }
         // A historical query before its weighing time must use the previous day.
         if sample.weightDate > end {
             guard let previous = calendar.date(byAdding: .day, value: -1, to: date),
-                  let earlier = SampleHealthDay(date: previous, now: now, calendar: calendar) else { return (nil, nil) }
-            return (earlier.quantity(.bodyMass)?.doubleValue(for: unit), earlier.weightDate)
+                  let earlier = SampleHealthDay(date: previous, now: now, calendar: calendar, profile: profile) else { return (nil, nil) }
+            return (quantity(.bodyMass, on: earlier)?.doubleValue(for: unit), earlier.weightDate)
         }
-        return (sample.quantity(.bodyMass)?.doubleValue(for: unit), sample.weightDate)
+        return (quantity(.bodyMass, on: sample)?.doubleValue(for: unit), sample.weightDate)
     }
 
     func requestPermission() async -> Bool { true }

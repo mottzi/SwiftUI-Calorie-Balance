@@ -284,31 +284,15 @@ extension Settings {
 extension Settings {
 
     var AppBackground: Color {
-        switch self.appBackground {
-            case AppBackgrounds.black: return Color.backGroundColorBlack
-            case AppBackgrounds.dark: return Color.backGround
-            case AppBackgrounds.light: return Color.backGroundColorLight
-        }
+        appBackground.pageColor
     }
 
     var CardBackground: Color {
-        switch self.appBackground {
-            case Settings.AppBackgrounds.black: return Color.cardColorBlack
-            case Settings.AppBackgrounds.dark: return Color.cardColorDark
-            case Settings.AppBackgrounds.light: return Color.cardColorLight
-        }
+        appBackground.cardColor
     }
 
     func getGraphEmptyColor(_ scheme: ColorScheme) -> Color {
-        if scheme == .light {
-            return Color(white: 0.75)
-        }
-        
-        switch self.appBackground {
-            case Settings.AppBackgrounds.black: return Color(white: 0.22)
-            case Settings.AppBackgrounds.dark: return Color(white: 0.27)
-            case Settings.AppBackgrounds.light: return Color(white: 0.32)
-        }
+        appBackground.graphEmptyColor(scheme)
     }
 
 }
@@ -364,6 +348,31 @@ extension Settings {
         case black = 0
         case dark
         case light
+
+        var pageColor: Color {
+            switch self {
+            case .black: Color.backGroundColorBlack
+            case .dark: Color.backGround
+            case .light: Color.backGroundColorLight
+            }
+        }
+
+        var cardColor: Color {
+            switch self {
+            case .black: Color.cardColorBlack
+            case .dark: Color.cardColorDark
+            case .light: Color.cardColorLight
+            }
+        }
+
+        func graphEmptyColor(_ scheme: ColorScheme) -> Color {
+            if scheme == .light { return Color(white: 0.75) }
+            switch self {
+            case .black: return Color(white: 0.22)
+            case .dark: return Color(white: 0.27)
+            case .light: return Color(white: 0.32)
+            }
+        }
 
         /// Preview colors for the app background choices.
         var swatchColor: Color {

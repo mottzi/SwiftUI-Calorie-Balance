@@ -18,6 +18,7 @@ struct WatchSettingsSnapshot: Codable, Equatable, Sendable {
     let consumedColor: String?
     var usesSampleData: Bool? = nil
     var usesMarketingData: Bool? = nil
+    var sampleProfile: String? = nil
     var weightHistory: WeightHistorySnapshot? = nil
 
 }
@@ -53,6 +54,7 @@ extension WatchSettingsSnapshot {
             consumedColor: settings.consumedColor.rawValue,
             usesSampleData: Self.sampleModeForTransfer,
             usesMarketingData: Self.marketingModeForTransfer,
+            sampleProfile: Self.sampleProfileForTransfer,
             weightHistory: weightHistory?.unit == settings.weightUnit.rawValue ? weightHistory : nil
         )
     }
@@ -76,6 +78,9 @@ extension WatchSettingsSnapshot {
         #if DEBUG && os(watchOS)
         if let usesSampleData { HealthDataMode.shared.usesSampleData = usesSampleData }
         if let usesMarketingData { HealthDataMode.shared.usesMarketingData = usesMarketingData }
+        if let sampleProfile, let profile = SampleHealthProfile(rawValue: sampleProfile) {
+            HealthDataMode.shared.sampleProfile = profile
+        }
         #endif
 
         if let weightGoal, let value = Settings.WeightGoals(rawValue: weightGoal) {
@@ -108,6 +113,15 @@ extension WatchSettingsSnapshot {
 }
 
 extension WatchSettingsSnapshot {
+
+    @MainActor
+    private static var sampleProfileForTransfer: String? {
+        #if DEBUG && (os(iOS) || os(watchOS))
+        HealthDataMode.currentSampleProfile.rawValue
+        #else
+        nil
+        #endif
+    }
 
     @MainActor
     private static var sampleModeForTransfer: Bool? {

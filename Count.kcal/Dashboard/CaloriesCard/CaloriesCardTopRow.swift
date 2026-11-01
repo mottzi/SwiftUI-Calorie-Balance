@@ -6,11 +6,23 @@ struct CaloriesCardTopRow: View {
     @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(\.colorScheme) private var scheme: ColorScheme
 
-    @EnvironmentObject private var AppSettings: Settings
+    /// Energy values for the selected calorie-card snapshot.
+    let energy: EnergyBalance
 
-    @Environment(HealthInterface.self) private var DataViewModel
+    /// Unit label used by the selected snapshot.
+    let energyUnit: String
 
-    let mode: GraphMode
+    /// Color used for burned energy.
+    let burnedColor: Color
+
+    /// Color used for consumed energy.
+    let consumedColor: Color
+
+    /// Color used for empty graph space.
+    let graphEmptyColor: Color
+
+    /// Goal status already resolved by the snapshot's sender policy.
+    let visibleGoalReached: Bool?
     var isLoading = false
 
     var body: some View {
@@ -23,9 +35,10 @@ struct CaloriesCardTopRow: View {
                         Image(systemName: "bolt.fill")
                             .resizable()
                             .scaledToFit()
+                            .accessibilityHidden(true)
                             .frame(width: 23, height: 23)
                             .foregroundStyle(GraphColorStyle(
-                                color: energy.isEmpty ? Color("SecondaryTextColor") : AppSettings.burnedColor,
+                                color: energy.isEmpty ? Color("SecondaryTextColor") : burnedColor,
                                 brightness: !energy.isEmpty && scheme == .dark ? 0.15 : 0
                             ).gradient)
                             .background {
@@ -36,7 +49,7 @@ struct CaloriesCardTopRow: View {
                                             : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
                                         .stroke(
                                             balance > 0
-                                                ? AppSettings.burnedColor.brighten(scheme == .light ? -0.15 : 0)
+                                                ? burnedColor.brighten(scheme == .light ? -0.15 : 0)
                                                 : Color("TextColor").opacity(0.2),
                                             style: StrokeStyle(
                                                 lineWidth: scheme == .light && balance > 0 ? 1.5 : 1
@@ -59,7 +72,7 @@ struct CaloriesCardTopRow: View {
                                 .foregroundStyle(Color(energy.isEmpty ? "SecondaryTextColor" : "TextColor"))
                                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
                             
-                            Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
+                            Text(verbatim: energyUnit)
                                 .font(.caption)
                                 .foregroundStyle(Color("SecondaryTextColor"))
                                 .fontWeight(.medium)
@@ -81,9 +94,10 @@ struct CaloriesCardTopRow: View {
                         Image(systemName: "fork.knife")
                             .resizable()
                             .scaledToFit()
+                            .accessibilityHidden(true)
                             .frame(width: 23, height: 23)
                             .foregroundStyle(GraphColorStyle(
-                                color: energy.isEmpty ? Color("SecondaryTextColor") : AppSettings.consumedColor,
+                                color: energy.isEmpty ? Color("SecondaryTextColor") : consumedColor,
                                 brightness: !energy.isEmpty && scheme == .dark ? 0.15 : 0
                             ).gradient)
                             .background {
@@ -94,7 +108,7 @@ struct CaloriesCardTopRow: View {
                                             : Color("TextColor").opacity(scheme == .dark ? 0 : 0.02))
                                         .stroke(
                                             balance < 0
-                                                ? AppSettings.consumedColor.brighten(scheme == .light ? -0.15 : 0)
+                                                ? consumedColor.brighten(scheme == .light ? -0.15 : 0)
                                                 : Color("TextColor").opacity(0.2),
                                             style: StrokeStyle(
                                                 lineWidth: scheme == .light && balance < 0 ? 1.5 : 1
@@ -112,16 +126,16 @@ struct CaloriesCardTopRow: View {
                             Text(
                                 verbatim: isLoading
                                     ? "1,500"
-                                    : DataViewModel.sample.consumed.formatted(.number)
+                                    : energy.consumed.formatted(.number)
                             )
                                 .redacted(reason: isLoading ? .placeholder : [])
-                                .contentTransition(.numericText(value: Double(DataViewModel.sample.consumed)))
+                                .contentTransition(.numericText(value: Double(energy.consumed)))
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .foregroundStyle(Color(energy.isEmpty ? "SecondaryTextColor" : "TextColor"))
                                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
 
-                            Text(verbatim: AppSettings.energyUnit == .kJ ? "kJ" : "kcal")
+                            Text(verbatim: energyUnit)
                                 .font(.caption)
                                 .foregroundStyle(Color("SecondaryTextColor"))
                                 .fontWeight(.medium)
@@ -148,7 +162,14 @@ struct CaloriesCardTopRow: View {
                 Spacer()
             }
             
-            CaloriesCardTopRowCenter(mode: mode, isLoading: isLoading)
+            CaloriesCardTopRowCenter(
+                energy: energy,
+                burnedColor: burnedColor,
+                consumedColor: consumedColor,
+                graphEmptyColor: graphEmptyColor,
+                visibleGoalReached: visibleGoalReached,
+                isLoading: isLoading
+            )
                 .padding(.trailing, dynamicType.isAccessibilitySize ? 0 : 19)
         }
     }
@@ -156,10 +177,6 @@ struct CaloriesCardTopRow: View {
 }
 
 extension CaloriesCardTopRow {
-
-    private var energy: EnergyBalance {
-        mode == .now ? DataViewModel.sample.now : DataViewModel.sample.midnight
-    }
 
     private var balance: Int { energy.balance }
 

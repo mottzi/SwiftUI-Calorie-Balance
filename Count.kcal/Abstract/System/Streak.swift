@@ -22,6 +22,7 @@ final class Streak {
     /// Recounts completed goal days from yesterday until the first break.
     func updateStreaks() async {
 
+        guard !Task.isCancelled else { return }
         requestID += 1
         let currentRequest = requestID
         let key = inputKey
@@ -35,11 +36,13 @@ final class Streak {
             customActive: key.customActive,
             customPassive: key.customPassive
         )
+        // A cancelled refresh must leave the last completed count visible.
+        guard !Task.isCancelled else { return }
         guard let days = history else {
             if currentRequest == requestID { result = nil }
             return
         }
-        guard !Task.isCancelled, currentRequest == requestID, inputKey == key else { return }
+        guard currentRequest == requestID, inputKey == key else { return }
         let count = days.prefix { qualifies($0, for: key) }.count
         result = Result(key: key, count: count)
     }

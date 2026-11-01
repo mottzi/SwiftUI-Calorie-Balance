@@ -64,6 +64,41 @@ This works on an iPhone or simulator. The choice persists between launches and a
 Debug iPhone widgets. The toggle shows whether sample mode is active, and widgets display a test-tube icon while it is on.
 Widgets refresh when iOS processes the requested timeline reload.
 
+Choose **Sample profile** in the Debug card to use Active, Low activity, Maintenance, or
+Irregular logging. Turn Marketing Mode off to enable the picker. Each profile has different
+energy, nutrition, steps, and weight values with repeatable calendar-day variation. The selection
+is saved on that device, shared with its widgets, and sent to its paired Debug watch. Choose a
+different profile on each sharing test device. Profile changes refresh local measurements and
+schedule sharing publication through the existing publisher. Marketing Mode keeps its fixed
+screenshot dataset.
+
+For a fuller Sharing screen, enable **Settings → Debug → Show Four Sample People**.
+This adds four local people alongside accepted real connections. Each sample
+person has a different profile and seven days of calorie cards. Rows are labeled Sample;
+Marketing Mode hides these labels for screenshots.
+Sample rows appear as Lea, Jonas, Maya, and Noah. Jonas uses theme 1, Lea theme 3,
+Noah theme 5, and Maya theme 8.
+Lea and Noah use the default Dark background, Jonas uses Black, and Maya uses Gray.
+Sample people use in-memory stores and a fake transport; their data never enters CloudKit or
+the live sharing database. Their requests are accepted automatically, and removed sample
+people return while the setting is on. Turn the setting off to clear them, or off and on to reset their
+permissions. The setting persists across launches and works independently of sample health
+data and Marketing Mode. Release builds do not include sample people.
+
+Shared snapshots carry the sender's page background as well as card colors. The entire person
+detail uses the latest received background, including behind the cards and navigation bar.
+Older snapshots without this field use the viewer's background until an updated sender publishes.
+
+Sharing settings include a separate **Streak** option. Both people must accept it before the
+sender's full streak appears; existing Today and History permissions do not include it. The
+count follows the dashboard's completed-day and excluded-day rules and is hidden with hidden
+goal status. Streak records contain no calorie values and expire at sender midnight. The
+overview and detail use the dashboard-size flame, with positive flames animated together by
+one clock per visible screen. The overview centers a number-then-flame column beside the
+chevron, keeping the original name and calorie spacing. Detail and dashboard toolbars keep
+flame-then-number order. Zero counts stay still, and Reduce Motion disables the animation.
+The local sample people have Streak enabled for manual testing and marketing captures.
+
 Sample mode provides 200 days of energy, nutrition, steps, and weight measurements. It does not
 read, write, or delete HealthKit records, and it leaves your saved goals and units unchanged.
 Sample mode also uses sample burned calories. The energy source picker is read-only while it is active;
@@ -126,11 +161,11 @@ measured resting energy excludes a day automatically; zero active energy is vali
 uses the current configured daily burn, as before. A surplus contributes a negative deficit.
 At least two included days are required. Weight change compares unrounded daily means with the
 previous consecutive period, with at least two measured days in each period. Calorie exclusions
-do not remove weights, change daily Health readings, or affect streaks.
+do not remove weights or change daily Health readings. An excluded day breaks the iPhone streak
+and does not receive a streak highlight in the chart or calendar.
 
-The Calories heading offers retrospective day choices. Manual exclusion and fasting confirmation
-remain saved until the user changes them. Food arriving after a fasting confirmation excludes the
-day as a conflict; it never silently overrides the choice. The coverage row opens the calculation
+The Calories heading offers an option to exclude a completed day or restore its recorded data.
+Manual exclusions remain saved until the user changes them. The coverage row opens the calculation
 explanation and day list. Automatic exclusions can resolve when missing readings arrive.
 
 SQLiteData 1.12.0 stores only explicit choices in the iPhone App Group's Application Support folder,

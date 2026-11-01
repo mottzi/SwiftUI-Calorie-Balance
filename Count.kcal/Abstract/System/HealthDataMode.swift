@@ -21,20 +21,40 @@ final class HealthDataMode {
         }
     }
 
-    private(set) var revision: String
+    #if DEBUG && (os(iOS) || os(watchOS))
+    var sampleProfile: SampleHealthProfile {
+        didSet {
+            guard sampleProfile != oldValue else { return }
+            invalidateData()
+        }
+    }
+    #endif
 
-    private init() {
-        usesSampleData = Self.isSampleDataEnabled
-        usesMarketingData = Self.defaults.dictionary(forKey: Self.key)?["marketing"] as? Bool ?? false
-        revision = Self.currentRevision
+    private(set) var revision: String
+    @ObservationIgnored private let storage: UserDefaults
+
+    init(defaults: UserDefaults) {
+        storage = defaults
+        let saved = defaults.dictionary(forKey: Self.key)
+        #if DEBUG && (os(iOS) || os(watchOS))
+        usesSampleData = saved?["enabled"] as? Bool ?? false
+        usesMarketingData = saved?["marketing"] as? Bool ?? false
+        sampleProfile = (saved?["profile"] as? String).flatMap(SampleHealthProfile.init(rawValue:)) ?? .active
+        revision = saved?["revision"] as? String ?? "healthkit"
+        #else
+        usesSampleData = false
+        usesMarketingData = false
+        revision = "healthkit"
+        #endif
     }
 
     /// Also used after simulator seeding so cached empty results do not survive a save.
     func invalidateData() {
         #if DEBUG && (os(iOS) || os(watchOS))
         revision = UUID().uuidString
-        Self.defaults.set([
-            "enabled": usesSampleData, "marketing": usesMarketingData, "revision": revision
+        storage.set([
+            "enabled": usesSampleData, "marketing": usesMarketingData,
+            "profile": sampleProfile.rawValue, "revision": revision
         ], forKey: Self.key)
         WidgetCenter.shared.reloadAllTimelines()
         #endif
@@ -58,6 +78,13 @@ final class HealthDataMode {
 }
 
 extension HealthDataMode {
+
+    #if DEBUG && (os(iOS) || os(watchOS))
+    static var currentSampleProfile: SampleHealthProfile {
+        let rawValue = defaults.dictionary(forKey: key)?["profile"] as? String
+        return rawValue.flatMap(SampleHealthProfile.init(rawValue:)) ?? .active
+    }
+    #endif
 
     static var isMarketingDataEnabled: Bool {
         #if DEBUG && (os(iOS) || os(watchOS))
@@ -88,7 +115,7 @@ extension HealthDataMode {
 
 extension HealthDataMode {
 
-    static let shared = HealthDataMode()
+    static let shared = HealthDataMode(defaults: defaults)
 
 }
 

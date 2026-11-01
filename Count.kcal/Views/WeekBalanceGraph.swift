@@ -255,79 +255,83 @@ private struct WeekRefreshKey: Hashable {
     let bufferedWeeks: Int
 }
 
-/// One compact seven-day balance page; also used by self-contained previews.
+/// Adapts dashboard health data and preferences to the shared chart drawing.
 struct WeekBalanceChart: View {
-
     @EnvironmentObject private var settings: Settings
     @Environment(Streak.self) private var streak
+
+    let dataPoints: [HealthInterface]
+    let selectedDay: Date
+    let selectDay: (Date) -> Void
+    var excludedDayIDs: Set<String> = []
+
+    var body: some View {
+        WeekBalanceChartContent(
+            dataPoints: dataPoints.map { point in
+                let energy = point.isTodayPage ? point.sample.midnight : point.sample.now
+                return .init(
+                    id: point.id,
+                    energy: energy,
+                    color: WeekBalanceChartContent.VBarBalanceGraph.barColor(
+                        energy: energy, isToday: point.id.isToday,
+                        goalReached: energy.meetsGoal(settings.balanceGoal, isLoss: settings.weightGoal == .lose),
+                        isExcluded: excludedDayIDs.contains(AppDatabase.recordID(for: point.id, sampleData: point.sample.isSampleData)),
+                        burned: settings.burnedColor, consumed: settings.consumedColor
+                    ),
+                    isInCurrentStreak: streak.contains(point.id),
+                    isLoaded: point.hasLoadedSnapshot
+                )
+            },
+            selectedDay: selectedDay,
+            goalBalance: settings.weightGoal == .lose ? settings.balanceGoal : -settings.balanceGoal,
+            selectDay: selectDay
+        )
+    }
+}
+
+/// One compact seven-day balance page; also used by self-contained previews.
+struct WeekBalanceChartContent: View {
+
     @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let graphHeight: CGFloat = 60
 
-    let dataPoints: [HealthInterface]
+    struct Day: Identifiable {
+        let id: Date
+        let energy: EnergyBalance
+        let color: Color
+        var isInCurrentStreak = false
+        var isLoaded = true
+    }
 
+    let dataPoints: [Day]
     let selectedDay: Date
-    let selectDay: (Date) -> Void
-    var excludedDayIDs: Set<String> = []
+    var calendar = Calendar.current
+    var goalBalance: Int? = nil
+    var selectDay: ((Date) -> Void)? = nil
 
-    private var hasLoadedWeek: Bool { dataPoints.allSatisfy(\.hasLoadedSnapshot) }
-    
+    private var hasLoadedWeek: Bool { dataPoints.allSatisfy(\.isLoaded) }
+    private var energyBalances: [EnergyBalance] { dataPoints.map(\.energy) }
+    private var maxEnergy: Int { energyBalances.map { abs($0.balance) }.max() ?? 0 }
+
+    private func isDaySelected(barDay: Date) -> Bool {
+        calendar.isDate(barDay, inSameDayAs: selectedDay)
+    }
+
     var body: some View {
         HStack(spacing: 0) {
             ForEach(dataPoints, id: \.id) { point in
-                Button {
-                    selectDay(point.id)
-                } label: {
-                    VStack(spacing: 6) {
-                        WeekDayLabel(
-                            date: point.id,
-                            isSelected: isDaySelected(barDay: point.id)
-                        )
-                        .dynamicTypeSize(...DynamicTypeSize.xxLarge)
-                    
-                        VBarBalanceGraph(
-                            energy: point.isTodayPage ? point.sample.midnight : point.sample.now,
-                            maxEnergy: maxEnergy,
-                            date: point.id,
-                            isSelected: isDaySelected(barDay: point.id),
-                            isInCurrentStreak: streak.contains(point.id),
-                            isExcluded: excludedDayIDs.contains(
-                                AppDatabase.recordID(for: point.id, sampleData: point.sample.isSampleData)
-                            ),
-                            showsValue: hasLoadedWeek
-                        )
-                        .frame(height: graphHeight)
-                        .opacity(hasLoadedWeek ? 1 : 0)
-                        .accessibilityHidden(!hasLoadedWeek)
-                        .overlay {
-                            if !hasLoadedWeek {
-                                Capsule()
-                                    .fill(.quaternary)
-                                    .frame(height: 2)
-                                    .accessibilityHidden(true)
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .contentShape(.rect)
-                }
-                .buttonStyle(.plain)
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(Text(point.id, format: .dateTime.weekday(.wide).month().day()))
-                .accessibilityValue(hasLoadedWeek
-                    ? Text("\(abs((point.isTodayPage ? point.sample.midnight : point.sample.now).balance))")
-                    : Text("Loading calorie data"))
-                .accessibilityAddTraits(isDaySelected(barDay: point.id) ? .isSelected : [])
+                dayColumn(point)
             }
         }
         .background {
             GeometryReader { geometry in
                 // Keep the existing max-based scale. An out-of-range goal has
                 // no visible reference rather than being clamped to a false value.
-                if settings.balanceGoal > 0, settings.balanceGoal <= maxEnergy {
-                    let ratio = Double(settings.balanceGoal) / Double(maxEnergy)
-                    let direction: CGFloat = settings.weightGoal == .lose ? 1 : -1
+                if let goalBalance, goalBalance != 0, abs(goalBalance) <= maxEnergy {
+                    let ratio = Double(abs(goalBalance)) / Double(maxEnergy)
+                    let direction: CGFloat = goalBalance > 0 ? 1 : -1
                     let baseline = geometry.size.height - graphHeight / 2
                     let goalY = baseline - direction * (VBarBalanceGraph.barHeight(graphHeight: graphHeight, ratio: ratio) + VBarBalanceGraph.baselineGap)
 
@@ -346,7 +350,7 @@ struct WeekBalanceChart: View {
                             mask.addRect(CGRect(origin: .zero, size: geometry.size))
                             let columnWidth = geometry.size.width / CGFloat(dataPoints.count)
                             for (index, point) in dataPoints.enumerated() {
-                                let energy = point.isTodayPage ? point.sample.midnight : point.sample.now
+                                let energy = point.energy
                                 let isDeficit = energy.balance > 0
                                 let height = VBarBalanceGraph.barHeight(graphHeight: graphHeight, ratio: Double(energy.balance) / Double(maxEnergy))
                                 let barRect = CGRect(
@@ -377,6 +381,53 @@ struct WeekBalanceChart: View {
         }
     }
 
+    @ViewBuilder
+    private func dayColumn(_ point: Day) -> some View {
+        if let selectDay {
+            Button { selectDay(point.id) } label: { dayContent(point) }
+                .buttonStyle(.plain)
+        } else {
+            dayContent(point)
+        }
+    }
+
+    private func dayContent(_ point: Day) -> some View {
+        VStack(spacing: 6) {
+            WeekDayLabel(
+                date: point.id,
+                calendar: calendar,
+                isSelected: isDaySelected(barDay: point.id)
+            )
+            .dynamicTypeSize(...DynamicTypeSize.xxLarge)
+
+            VBarBalanceGraph(
+                energy: point.energy,
+                maxEnergy: maxEnergy,
+                color: point.color,
+                isSelected: isDaySelected(barDay: point.id),
+                isInCurrentStreak: point.isInCurrentStreak,
+                showsValue: point.isLoaded
+            )
+            .frame(height: graphHeight)
+            .opacity(point.isLoaded ? 1 : 0)
+            .accessibilityHidden(!point.isLoaded)
+            .overlay {
+                if !point.isLoaded {
+                    Capsule()
+                        .fill(.quaternary)
+                        .frame(height: 2)
+                        .accessibilityHidden(true)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .contentShape(.rect)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(point.id.formatted(Date.FormatStyle(calendar: calendar, timeZone: calendar.timeZone).weekday(.wide).month().day())))
+        .accessibilityValue(point.isLoaded ? Text("\(abs(point.energy.balance))") : Text("Loading calorie data"))
+        .accessibilityAddTraits(isDaySelected(barDay: point.id) ? .isSelected : [])
+    }
+
 }
 
 private struct WeekDayLabel: View {
@@ -385,19 +436,20 @@ private struct WeekDayLabel: View {
     @ScaledMetric(relativeTo: .footnote) private var dateDiameter: CGFloat = 24
 
     let date: Date
+    let calendar: Calendar
     let isSelected: Bool
 
     var body: some View {
-        let isToday = date.isToday
+        let isToday = calendar.isDateInToday(date)
         let todayFill = Color("SecondaryTextColor").opacity(colorScheme == .dark ? 0.28 : 0.15)
 
         VStack(spacing: 0) {
-            Text(date, format: .dateTime.weekday(.abbreviated))
+            Text(date.formatted(Date.FormatStyle(calendar: calendar, timeZone: calendar.timeZone).weekday(.abbreviated)))
                 .textCase(.uppercase)
                 .font(.caption2.weight(.medium))
                 .foregroundStyle(isSelected ? Color("TextColor") : Color("SecondaryTextColor"))
 
-            Text(date, format: .dateTime.day())
+            Text(date.formatted(Date.FormatStyle(calendar: calendar, timeZone: calendar.timeZone).day()))
                 .font(.footnote.weight(.semibold))
                 .foregroundStyle(isSelected ? Color("BackGroundColor") : Color("TextColor"))
                 .frame(maxWidth: .infinity)
@@ -416,28 +468,10 @@ private struct WeekDayLabel: View {
 
 }
 
-extension WeekBalanceChart {
-
-    func isDaySelected(barDay: Date) -> Bool {
-        Calendar.current.startOfDay(for: barDay) == selectedDay
-    }
-
-    private var energyBalances: [EnergyBalance] {
-        dataPoints.map { $0.isTodayPage ? $0.sample.midnight : $0.sample.now }
-    }
-
-    var maxEnergy: Int {
-        energyBalances.map { abs($0.balance) }.max() ?? 0
-    }
-
-}
-
-extension WeekBalanceChart {
+extension WeekBalanceChartContent {
 
     /// Daily balance bar with goal feedback for past days.
     struct VBarBalanceGraph: View {
-
-        @EnvironmentObject private var AppSettings: Settings
 
         @Environment(\.dynamicTypeSize) private var dynamicType
 
@@ -447,10 +481,9 @@ extension WeekBalanceChart {
         /// Current or midnight balance for the selected day.
         let energy: EnergyBalance
         let maxEnergy: Int
-        let date: Date
+        let color: Color
         var isSelected: Bool = false
         var isInCurrentStreak = false
-        var isExcluded: Bool = false
         var showsValue = true
 
         static let baselineGap: CGFloat = 1
@@ -468,13 +501,13 @@ extension WeekBalanceChart {
                 topTrailing: isDeficit ? 10 : 0
             ))
         }
-        
+
         var body: some View {
             GeometryReader { geo in
                 ZStack {
                     Self.barShape(isDeficit: barChartRatio > 0)
                         .fill(color.brighten(0.1).gradient)
-                        .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: isExcluded)
+                        .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: color)
                         .frame(width: geo.size.width * 0.75, height: barChartHeight(graphHeight: geo.size.height))
                         .overlay {
                             LinearGradient(
@@ -482,7 +515,7 @@ extension WeekBalanceChart {
                                 startPoint: scheme == .dark ? .bottom : .top,
                                 endPoint: scheme == .dark ? .top : .bottom
                             )
-                                .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: isExcluded)
+                                .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: color)
                                 .opacity(scheme == .dark ? gradientOpacityDark : gradientOpacityLight)
                                 .clipShape(Self.barShape(isDeficit: barChartRatio > 0))
                         }
@@ -495,7 +528,7 @@ extension WeekBalanceChart {
                         .offset(y: barChartRatio > 0
                             ? -barChartHeight(graphHeight: geo.size.height) / 2 - Self.baselineGap
                             : barChartHeight(graphHeight: geo.size.height) / 2 + Self.baselineGap)
-                    
+
                     Rectangle()
                         .frame(width: geo.size.width, height: 2)
                         .foregroundStyle(Color("TextColor").opacity(0.7))
@@ -520,32 +553,19 @@ extension WeekBalanceChart {
 
 }
 
-extension WeekBalanceChart.VBarBalanceGraph {
+extension WeekBalanceChartContent.VBarBalanceGraph {
 
     var barChartRatio: Double {
         guard maxEnergy > 0 else { return 0 }
         return min(1, max(-1, Double(energy.balance) / Double(maxEnergy)))
     }
 
-    var color: Color {
-        if isExcluded { return .secondary }
-
-        let color = barChartRatio > 0 ? AppSettings.burnedColor : AppSettings.consumedColor
-        let isToday = date.isToday
-
-        if energy.consumed <= 0 {
-            if isToday {
-                return color
-            } else {
-                return .secondary
-            }
-        } else {
-            if energy.meetsGoal(AppSettings.balanceGoal, isLoss: AppSettings.weightGoal == .lose) && !isToday {
-                return color.brighten(0.3)
-            } else {
-                return color
-            }
-        }
+    /// Resolves the same bar appearance for local and received days.
+    static func barColor(energy: EnergyBalance, isToday: Bool, goalReached: Bool,
+                         isExcluded: Bool, burned: Color, consumed: Color) -> Color {
+        if isExcluded || (energy.consumed <= 0 && !isToday) { return .secondary }
+        let color = energy.balance > 0 ? burned : consumed
+        return goalReached && !isToday ? color.brighten(0.3) : color
     }
 
     func barChartHeight(graphHeight: CGFloat) -> CGFloat {

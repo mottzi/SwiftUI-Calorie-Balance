@@ -15,6 +15,9 @@ final class HealthInterface: Identifiable, Hashable {
     /// An empty query result is loaded data; the initial zero snapshot is not.
     var hasLoadedSnapshot: Bool { sample.lastDataSync != nil && !sample.isUnavailable }
 
+    /// Publication requires measurements calculated with the current units and source policy.
+    var hasCurrentSnapshot: Bool { hasLoadedSnapshot && loadedKey == snapshotKey }
+
     @ObservationIgnored private let repository: HealthRepository
     @ObservationIgnored private let settings: Settings
     @ObservationIgnored private var requestID = 0
@@ -76,6 +79,7 @@ final class HealthInterface: Identifiable, Hashable {
     private var snapshotKey: SnapshotKey {
         SnapshotKey(
             revision: repository.revision,
+            timeZoneIdentifier: Calendar.current.timeZone.identifier,
             source: settings.dataSource.rawValue,
             unit: settings.energyUnit.rawValue,
             active: settings.customCalActive,
@@ -87,6 +91,9 @@ final class HealthInterface: Identifiable, Hashable {
 
     private struct SnapshotKey: Equatable {
         let revision: String
+
+        /// Time zone used to calculate the loaded day.
+        let timeZoneIdentifier: String
         let source: Int
         let unit: String
         let active: Int

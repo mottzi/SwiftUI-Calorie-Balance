@@ -10,5 +10,17 @@
 	<array>
 		<string>group.4DXABR577J.com.count.kcal.app</string>
 	</array>
+	<key>com.apple.developer.icloud-container-identifiers</key>
+	<array>
+		<string>iCloud.com.count.kcal.app</string>
+	</array>
+	<key>com.apple.developer.icloud-services</key>
+	<array>
+		<string>CloudKit</string>
+	</array>
+	<key>aps-environment</key>
+	<string>development</string>
+	<key>com.apple.developer.healthkit.background-delivery</key>
+	<true/>
 </dict>
 </plist>

@@ -79,16 +79,16 @@ struct BarGraphFillTests {
                             width: 240, height: 22
                         ))
                     }
-                    // Interior pixels compare each shade without antialiasing at segment edges.
+                    // average interior patches to avoid native gradient dithering and segment edges
                     for segment in values.segments(for: side) where segment.range.upperBound > segment.range.lowerBound {
                         let progress = (segment.range.lowerBound + segment.range.upperBound) / 2
                         let referenceX = min(239, Int(progress * 240))
                         let x = direction == .leftToRight ? referenceX : 239 - referenceX
                         for y in [4, 11, 17] {
                             for channel in 0..<4 {
-                                let index = (y * 240 + x) * 4 + channel
-                                let referenceIndex = (y * 240 + referenceX) * 4 + channel
-                                #expect(abs(Int(images[0][referenceIndex]) - Int(images[1][index])) <= 2)
+                                let reference = averageChannel(images[0], x: referenceX, y: y, channel: channel)
+                                let widget = averageChannel(images[1], x: x, y: y, channel: channel)
+                                #expect(abs(reference - widget) <= 2)
                             }
                         }
                     }
@@ -334,6 +334,17 @@ struct BarGraphFillTests {
 }
 
 extension BarGraphFillTests {
+
+    private func averageChannel(_ pixels: [UInt8], x: Int, y: Int, channel: Int) -> Double {
+
+        var total = 0
+        for row in (y - 2)...(y + 2) {
+            for column in (x - 2)...(x + 2) {
+                total += Int(pixels[(row * 240 + column) * 4 + channel])
+            }
+        }
+        return Double(total) / 25
+    }
 
     private func pixels<V: View>(of view: V, width: Int = 8, height: Int = 8) throws -> [UInt8] {
 

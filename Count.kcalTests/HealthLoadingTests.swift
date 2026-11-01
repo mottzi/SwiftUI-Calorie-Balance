@@ -7,6 +7,26 @@ import SQLiteData
 @Suite(.serialized)
 struct HealthLoadingTests {
 
+    @MainActor @Test func completedProgressStaysVisibleDuringForegroundRefresh() async {
+        let source = SuspendedHealthSource(queryCount: 1)
+        let repository = HealthRepository(source: source)
+        let history = ProgressHistory()
+        let initial = Task { await history.refresh(repository: repository) }
+        await source.waitUntilSuspended()
+        #expect(history.isLoading)
+        await source.finish()
+        await initial.value
+        #expect(!history.isLoading)
+
+        await source.suspendAgain()
+        let refresh = Task { await history.refresh(repository: repository) }
+        await source.waitUntilSuspended()
+        #expect(!history.isLoading)
+        await source.finish()
+        await refresh.value
+        #expect(!history.isLoading)
+    }
+
     @Test func unresolvedEnergyWaitsForData() {
         #expect(CalorieDataState(energy: nil, balanceGoal: 500, isLoss: true) == .loading)
         #expect(CalorieDataState(energy: nil, balanceGoal: 500, isLoss: false) == .loading)
@@ -73,6 +93,36 @@ struct HealthLoadingTests {
         #expect(streak.streaks == 0)
         streak.reset()
         #expect(!streak.hasLoadedCount)
+    }
+
+    @MainActor @Test(arguments: [false, true])
+    func cancelledStreakRefreshPreservesLoadedCount(cancelBeforeStarting: Bool) async {
+        let source = SuspendedHealthSource(queryCount: 3)
+        let streak = Streak(repository: HealthRepository(source: source))
+        let initial = Task { await streak.updateStreaks() }
+        await source.waitUntilSuspended()
+        await source.finish()
+        await initial.value
+        #expect(streak.hasLoadedCount)
+        let count = streak.streaks
+
+        if cancelBeforeStarting {
+            let refresh = Task {
+                withUnsafeCurrentTask { $0?.cancel() }
+                await streak.updateStreaks()
+            }
+            await refresh.value
+        } else {
+            await source.suspendAgain()
+            let refresh = Task { await streak.updateStreaks() }
+            await source.waitUntilSuspended()
+            refresh.cancel()
+            await source.finish()
+            await refresh.value
+        }
+
+        #expect(streak.hasLoadedCount)
+        #expect(streak.streaks == count)
     }
 
     @MainActor @Test func editedMeasurementsKeepSnapshotsCountAndMembershipTogether() async throws {
@@ -381,7 +431,9 @@ struct HealthLoadingTests {
 
         var legacy = context
         legacy.removeValue(forKey: "stepsGoal")
+        legacy.removeValue(forKey: "sampleProfile")
         let old = try #require(WatchSettingsSnapshot(context: legacy))
+        #expect(old.sampleProfile == nil)
         settings.stepsGoal = 12000
         old.apply(to: settings)
         #expect(settings.stepsGoal == 12000)
@@ -414,6 +466,8 @@ private actor SuspendedHealthSource: HealthDataSource {
         guard queries.count < queryCount else { return }
         await withCheckedContinuation { suspended = $0 }
     }
+
+    func suspendAgain() { finished = false }
 
     func finish() {
 
@@ -488,6 +542,128 @@ private actor OrderedEstimatesSource: HealthDataSource {
 }
 
 
+struct SampleHealthProfileTests {
+
+    private var calendar: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Europe/Zurich")!
+        return calendar
+    }
+
+    private var now: Date {
+        calendar.date(from: DateComponents(year: 2026, month: 10, day: 25, hour: 12))!
+    }
+
+    private let measurements: [(HKQuantityTypeIdentifier, HKUnit)] = [
+        (.basalEnergyBurned, .kilocalorie()), (.activeEnergyBurned, .kilocalorie()),
+        (.dietaryEnergyConsumed, .kilocalorie()), (.dietaryProtein, .gram()),
+        (.dietaryCarbohydrates, .gram()), (.dietaryFatTotal, .gram()),
+        (.stepCount, .count()), (.bodyMass, .gramUnit(with: .kilo))
+    ]
+
+    @Test(arguments: SampleHealthProfile.allCases)
+    func dailyMeasurementsRepeatAndHistoryDoesNotDrift(profile: SampleHealthProfile) throws {
+        let date = calendar.date(byAdding: .day, value: -1, to: now)!
+        let later = calendar.date(byAdding: .day, value: 2, to: now)!
+        let first = try #require(SampleHealthDay(date: date, now: now, calendar: calendar, profile: profile))
+        let repeated = try #require(SampleHealthDay(date: date, now: now, calendar: calendar, profile: profile))
+        let revisited = try #require(SampleHealthDay(date: date, now: later, calendar: calendar, profile: profile))
+        for (type, unit) in measurements {
+            let value = try #require(first.quantity(type)).doubleValue(for: unit)
+            #expect(value == repeated.quantity(type)?.doubleValue(for: unit))
+            #expect(value == revisited.quantity(type)?.doubleValue(for: unit))
+            #expect(value.isFinite && value >= 0)
+        }
+    }
+
+    @Test func profilesHaveDistinctHistoriesAndCoherentNutrition() throws {
+        var histories = Set<[Double]>()
+        for profile in SampleHealthProfile.allCases {
+            var intakeHistory: [Double] = []
+            var balances: [Double] = []
+            for offset in 1...14 {
+                let date = calendar.date(byAdding: .day, value: -offset, to: now)!
+                let day = try #require(SampleHealthDay(date: date, now: now, calendar: calendar, profile: profile))
+                func value(_ type: HKQuantityTypeIdentifier, unit: HKUnit = .kilocalorie()) throws -> Double {
+                    try #require(day.quantity(type)).doubleValue(for: unit)
+                }
+                let intake = try value(.dietaryEnergyConsumed)
+                let protein = try value(.dietaryProtein, unit: .gram())
+                let carbs = try value(.dietaryCarbohydrates, unit: .gram())
+                let fats = try value(.dietaryFatTotal, unit: .gram())
+                #expect(abs(protein * 4 + carbs * 4 + fats * 9 - intake) < 0.001)
+                intakeHistory.append(intake)
+                balances.append(try value(.basalEnergyBurned) + value(.activeEnergyBurned) - intake)
+            }
+            #expect(Set(intakeHistory).count > 1)
+            #expect(histories.insert(intakeHistory).inserted)
+            let averageBalance = balances.reduce(0, +) / Double(balances.count)
+            switch profile {
+            case .active: #expect(averageBalance > 200)
+            case .lowActivity: #expect(averageBalance < -100)
+            case .maintenance: #expect(abs(averageBalance) < 150)
+            case .irregularLogging:
+                #expect(intakeHistory.contains(0))
+                #expect(intakeHistory.contains { $0 > 0 })
+            }
+        }
+    }
+
+    @Test(arguments: SampleHealthProfile.allCases)
+    func sourceUsesProfileForEnergyIntervalsWeightsAndUnits(profile: SampleHealthProfile) async throws {
+        let source = SampleHealthDataSource(now: now, calendar: calendar, profile: profile)
+        let start = calendar.startOfDay(for: now)
+        let day = try #require(SampleHealthDay(date: now, now: now, calendar: calendar, profile: profile))
+        let kcal = try await source.dailySums(.dietaryEnergyConsumed, from: start, to: now, unit: .kilocalorie())
+        let kJ = try await source.dailySums(.dietaryEnergyConsumed, from: start, to: now, unit: .jouleUnit(with: .kilo))
+        let intervals = await source.energyIntervals(.dietaryEnergyConsumed, from: start, to: now, unit: .kilocalorie())
+        let intake = try #require(kcal[start])
+        #expect(intake == day.quantity(.dietaryEnergyConsumed)?.doubleValue(for: .kilocalorie()))
+        #expect(abs(intervals.values.reduce(0, +) - intake) < 0.001)
+        #expect(abs(try #require(kJ[start]) - intake * 4.184) < 0.001)
+        let weights = await source.weights(from: start, to: now, unit: .gramUnit(with: .kilo))
+        let latest = await source.latestWeight(before: now, unit: .gramUnit(with: .kilo))
+        #expect(weights.first?.weightAvg == day.quantity(.bodyMass)?.doubleValue(for: .gramUnit(with: .kilo)))
+        #expect(latest.0 == weights.first?.weightAvg)
+    }
+
+    @MainActor @Test func selectionPersistsAndInvalidatesMeasurementsWithoutChangingOtherModes() throws {
+        let suite = "SampleHealthProfileTests.\(UUID().uuidString)"
+        let defaults = try #require(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        // Existing installs have no profile key, and must get a usable default.
+        defaults.set(["enabled": true, "marketing": false], forKey: "debugHealthDataMode")
+        let mode = HealthDataMode(defaults: defaults)
+        #expect(mode.sampleProfile == .active)
+        let originalRevision = mode.revision
+        mode.sampleProfile = .lowActivity
+        #expect(mode.revision != originalRevision)
+        let restored = HealthDataMode(defaults: defaults)
+        #expect(restored.sampleProfile == .lowActivity)
+        #expect(restored.usesSampleData)
+        #expect(!restored.usesMarketingData)
+        let savedRevision = restored.revision
+        restored.sampleProfile = .lowActivity
+        #expect(restored.revision == savedRevision)
+        restored.usesMarketingData = true
+        restored.usesSampleData = false
+        #expect(HealthDataMode(defaults: defaults).sampleProfile == .lowActivity)
+        defaults.set(["profile": "future-profile"], forKey: "debugHealthDataMode")
+        #expect(HealthDataMode(defaults: defaults).sampleProfile == .active)
+    }
+
+    @MainActor @Test func profileSurvivesWatchSettingsEncoding() throws {
+        for profile in SampleHealthProfile.allCases {
+            var snapshot = WatchSettingsSnapshot(settings: .shared, weightHistory: nil)
+            snapshot.sampleProfile = profile.rawValue
+            let context = try #require(snapshot.context)
+            let received = try #require(WatchSettingsSnapshot(context: context))
+            #expect(received.sampleProfile == profile.rawValue)
+        }
+    }
+
+}
+
 @Suite(.serialized)
 struct MarketingHealthTests {
 
@@ -557,15 +733,32 @@ struct MarketingHealthTests {
         }
     }
 
-    @Test func marketingLeavesWeightSamplesUnchangedAndConvertsEnergyUnits() async throws {
-        let today = Calendar.current.startOfDay(for: .now)
+    @MainActor @Test func marketingWeightsDeclineAndConvertEnergyUnits() async throws {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
         let now = today.addingTimeInterval(12 * 3600)
-        let start = Calendar.current.date(byAdding: .day, value: -30, to: today)!
+        let start = calendar.date(byAdding: .day, value: -30, to: today)!
         let normal = SampleHealthDataSource(now: now)
         let marketing = SampleHealthDataSource(now: now, marketing: profile)
         let normalWeights = await normal.weights(from: start, to: now, unit: .gramUnit(with: .kilo))
         let marketingWeights = await marketing.weights(from: start, to: now, unit: .gramUnit(with: .kilo))
-        #expect(normalWeights.map(\.weightAvg) == marketingWeights.map(\.weightAvg))
+        #expect(normalWeights.map(\.weightAvg) != marketingWeights.map(\.weightAvg))
+
+        let history = WeightHistory()
+        history.dailyAverages = marketingWeights.map {
+            WeightChartData(date: $0.date, weightAvg: $0.weightAvg.map(WeightChartData.roundedWeight))
+        }
+        #expect(history.weeklyAverages.compactMap(\.weightAvg) == [80.1, 80.1, 80.0, 79.9, 79.8, 79.8, 79.7])
+        #expect(history.weightAvg7 == 79.9)
+        #expect(history.trend(for: .weekly) == .orderedAscending)
+
+        let latest = await marketing.latestWeight(before: now, unit: .gramUnit(with: .kilo))
+        #expect(latest.0 == 79.7)
+        let beforeWeighIn = calendar.date(bySettingHour: 6, minute: 0, second: 0, of: today)!
+        let previous = await marketing.latestWeight(before: beforeWeighIn, unit: .gramUnit(with: .kilo))
+        let previousWeight = try #require(previous.0)
+        #expect(WeightChartData.roundedWeight(previousWeight) == 79.8)
+
         let kcal = try await marketing.dailySums(.dietaryEnergyConsumed, from: today, to: now, unit: .kilocalorie())
         let kJ = try await marketing.dailySums(.dietaryEnergyConsumed, from: today, to: now, unit: .jouleUnit(with: .kilo))
         #expect(abs(kJ[today]! - kcal[today]! * 4.184) < 0.001)

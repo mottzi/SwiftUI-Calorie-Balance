@@ -6,6 +6,7 @@ struct StreakFlameIcon: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.layoutDirection) private var layoutDirection
+    @Environment(\.streakAnimationClock) private var clock
 
     @ScaledMetric(relativeTo: .body) private var size = 29.04
 
@@ -13,13 +14,15 @@ struct StreakFlameIcon: View {
     var isAnimating = true
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 30, paused: !animates)) { timeline in
-            let time = animates ? timeline.date.timeIntervalSinceReferenceDate
-                .truncatingRemainder(dividingBy: DiagonalShine.cycleDuration) : 0
-            Canvas { context, size in
-                draw(in: &context, size: size, time: time)
+        Group {
+            if let clock {
+                flame(at: animates ? clock.time.truncatingRemainder(dividingBy: DiagonalShine.cycleDuration) : 0)
+            } else {
+                TimelineView(.animation(minimumInterval: 1.0 / 30, paused: !animates)) { timeline in
+                    flame(at: animates ? timeline.date.timeIntervalSinceReferenceDate
+                        .truncatingRemainder(dividingBy: DiagonalShine.cycleDuration) : 0)
+                }
             }
-            .scaleEffect(pulseScale(at: time))
         }
         .frame(width: size * 0.82, height: size)
         .offset(y: -2)
@@ -29,6 +32,13 @@ struct StreakFlameIcon: View {
 }
 
 extension StreakFlameIcon {
+
+    private func flame(at time: TimeInterval) -> some View {
+        Canvas { context, size in
+            draw(in: &context, size: size, time: time)
+        }
+        .scaleEffect(pulseScale(at: time))
+    }
 
     private var animates: Bool {
         isAnimating && !reduceMotion && scenePhase == .active
@@ -166,7 +176,7 @@ extension StreakFlameIcon {
                             StreakFlameIcon(color: .blue)
                             Text("1")
                                 .font(.callout.bold())
-                                .fontDesign(.default)
+                                .fontDesign(.rounded)
                                 .offset(y: 1.5)
                         }
                     }

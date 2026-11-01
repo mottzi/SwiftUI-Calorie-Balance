@@ -14,6 +14,8 @@ final class ProgressHistory {
     private(set) var weightFailed = false
 
     @ObservationIgnored private var requestID = 0
+    @ObservationIgnored private var completedPolicy: ProgressPolicy?
+    @ObservationIgnored private var completedRevision: String?
 
     func refresh(repository: HealthRepository? = nil, settings: Settings? = nil) async {
 
@@ -24,9 +26,8 @@ final class ProgressHistory {
         let revision = repository.revision
         let day = Calendar.current.startOfDay(for: Date.now)
         let policy = ProgressPolicy(settings: settings)
-        isLoading = true
-        energyFailed = false
-        weightFailed = false
+        // Keep the completed presentation visible during a same-context refresh.
+        isLoading = completedPolicy != policy || completedRevision != revision || today != day
         defer { if request == requestID { isLoading = false } }
 
         async let energyResult = Result { try await repository.fetchProgressEnergy(before: day, policy: policy) }
@@ -35,6 +36,10 @@ final class ProgressHistory {
         guard !Task.isCancelled, request == requestID, revision == repository.revision,
               policy == ProgressPolicy(settings: settings) else { return }
         today = day
+        completedPolicy = policy
+        completedRevision = revision
+        energyFailed = false
+        weightFailed = false
         switch results.0 {
             case .success(let values): energy = values
 

@@ -1,0 +1,901 @@
+import SwiftUI
+import UserNotifications
+import Dependencies
+import SQLiteData
+
+/// Your card, shared people, and incoming requests.
+struct SharingOverviewView: View {
+
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    @State private var showsInvite = false
+    @State private var mode = GraphMode.now
+    @State private var nativeInvitation: SharingCloudInvitation?
+    @State private var invitationError: Error?
+
+    let runtime: SharingRuntime
+
+    /// Keeps your own card and the people you share with in the same overview.
+    var body: some View {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            List {
+                if runtime.isFixture && runtime.showsSampleLabels {
+                    Text("Sample sharing").font(.caption).foregroundStyle(.secondary)
+                }
+                if let coordinator = runtime.coordinator {
+                    SharingAccountStatusSection(runtime: runtime, coordinator: coordinator)
+                    SharingRequestsSection(runtime: runtime, coordinator: coordinator)
+                    if !coordinator.pendingRevocations.isEmpty {
+                        Section {
+                            SharingPendingRemovalView(runtime: runtime, coordinator: coordinator)
+                        }
+                    }
+                }
+                SharingMeSection(runtime: runtime, mode: mode)
+                if let coordinator = runtime.coordinator {
+                    SharingPeopleSection(runtime: runtime, mode: mode)
+                    Section {
+                        Button("Invite", systemImage: "plus.circle.fill") { showsInvite = true }
+                            .modifier(SharingActionAppearance())
+                            .padding(.top, 14)
+                            .frame(maxWidth: .infinity)
+                            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                    }
+                    .listSectionSpacing(20)
+                    SharingPendingInvitationsSection(
+                        nativeInvitation: $nativeInvitation,
+                        runtime: runtime,
+                        coordinator: coordinator
+                    )
+
+                }
+            }
+            .modifier(StreakAnimationScope())
+            .softTopScrollEdge()
+            .listSectionSpacing(30)
+            .navigationTitle("Sharing")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    CalorieModeToolbarButton(mode: mode) {
+                        withAnimation(reduceMotion ? nil : .snappy) {
+                            mode = mode == .now ? .midnight : .now
+                        }
+                    }
+                }
+            }
+            .sheet(isPresented: $showsInvite) { SharingInvitationView(runtime: runtime) }
+            .sheet(item: $nativeInvitation, onDismiss: {
+                let error = invitationError
+                invitationError = nil
+                Task { await runtime.finishInvitation(error: error) }
+            }) { invitation in
+                SharingNativeInvitationSheet(invitation: invitation) { _, error in
+                    invitationError = error
+                    nativeInvitation = nil
+                }
+            }
+            .task(id: scenePhase == .active) {
+                guard scenePhase == .active else { return }
+                await runtime.observeSharingScreen()
+            }
+        } else {
+            ContentUnavailableView("Sharing is available on iPhone", systemImage: "iphone")
+                .navigationTitle("Sharing")
+        }
+    }
+
+}
+
+/// Shared, neutral treatment for the centered sharing actions.
+struct SharingActionAppearance: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            styled(content)
+                .buttonStyle(.glass)
+        } else {
+            styled(content)
+                .buttonStyle(.bordered)
+                .buttonBorderShape(.capsule)
+                .tint(.primary)
+        }
+    }
+
+    private func styled(_ content: Content) -> some View {
+        content
+            .labelStyle(SharingActionLabelStyle())
+            .foregroundStyle(.primary)
+            .controlSize(.regular)
+    }
+}
+
+private struct SharingActionLabelStyle: LabelStyle {
+    func makeBody(configuration: LabelStyleConfiguration) -> some View {
+        HStack(spacing: 8) {
+            configuration.icon
+                .font(.subheadline.weight(.medium))
+            configuration.title
+                .font(.body.weight(.medium))
+        }
+        .frame(minHeight: 32)
+        .padding(.horizontal, 4)
+    }
+}
+
+/// Initial loading for an empty screen and account recovery when iCloud cannot be verified.
+private struct SharingAccountStatusSection: View {
+
+    let runtime: SharingRuntime
+    let coordinator: SharingCoordinator
+
+    var body: some View {
+        if !runtime.hasLoaded {
+            if coordinator.connections.isEmpty,
+               coordinator.pendingRevocations.isEmpty,
+               runtime.pendingInvitations.isEmpty {
+                Section { ProgressView("Loading sharing…") }
+            }
+        } else {
+            switch coordinator.accountStatus {
+                case .available: EmptyView()
+                case .signedOut:
+                    Section {
+                        Label("Sign in to iCloud in Settings to use sharing", systemImage: "icloud.slash")
+                        Link("Open Settings", destination: URL(string: UIApplication.openSettingsURLString)!)
+                            .frame(minHeight: 44)
+                    }
+                case .uncertain: EmptyView()
+            }
+        }
+    }
+
+}
+
+/// Active and paused people, with an explanation for an empty list.
+private struct SharingPeopleSection: View {
+
+    let runtime: SharingRuntime
+    let mode: GraphMode
+
+    var body: some View {
+        let people = runtime.people
+        Section {
+            if people.isEmpty, runtime.hasLoaded {
+                ContentUnavailableView {
+                    Label("Share calorie cards", systemImage: "person.2")
+                } description: {
+                    Text("See each other's calorie cards. Choose Today, Previous 6 Days, or both.")
+                }
+            } else {
+                ForEach(people) { person in
+                    let connection = person.connection
+                    let coordinator = person.coordinator
+                    let hasPendingRequest = connection.proposal.map {
+                        $0.proposerID == coordinator.identity?.id
+                    } ?? false
+                    NavigationLink {
+                        SharingPersonDetail(runtime: runtime, coordinator: coordinator, connectionID: connection.id)
+                    } label: {
+                        HStack(spacing: 12) {
+                            SharingPersonRow(connection: connection, coordinator: coordinator, mode: mode)
+                            if person.isSample && runtime.showsSampleLabels {
+                                Text("Sample")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            if hasPendingRequest {
+                                Circle()
+                                    .fill(.red)
+                                    .frame(width: 8, height: 8)
+                                    .accessibilityHidden(true)
+                            }
+                        }
+                    }
+                    .accessibilityValue(hasPendingRequest ? Text("Request awaiting approval") : Text(""))
+                    .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
+                }
+            }
+        } header: { Text("People").textCase(nil) }
+    }
+
+}
+
+/// Metadata invitations and initial outgoing requests that are not yet people.
+private struct SharingPendingInvitationsSection: View {
+
+    @Binding var nativeInvitation: SharingCloudInvitation?
+
+    let runtime: SharingRuntime
+    let coordinator: SharingCoordinator
+
+    var body: some View {
+        let outgoing = coordinator.connections.filter {
+            $0.isInitialRequest && $0.proposal?.proposerID == coordinator.identity?.id
+        }
+        if !runtime.pendingInvitations.isEmpty || !outgoing.isEmpty {
+            Section {
+                ForEach(runtime.pendingInvitations) { invitation in
+                    VStack(alignment: .leading, spacing: 8) {
+                        switch invitation.stage {
+                            case .awaitingRecipient(let name, let scopes, let expiry, _):
+                                Text(name).font(.headline)
+                                Text(scopes.sharingDescription).font(.subheadline)
+                                Text("Invitation ready").foregroundStyle(.secondary)
+                                Text("Expires \(expiry, format: .dateTime.month().day())")
+                                    .font(.caption).foregroundStyle(.secondary)
+                                Button("Continue invitation", systemImage: "square.and.arrow.up") {
+                                    Task { nativeInvitation = await runtime.resumeInvitation(id: invitation.id) }
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .controlSize(.large)
+                                .disabled(runtime.isWorking)
+                                Button("Cancel invitation", role: .destructive) {
+                                    Task { await runtime.cancelPendingInvitation(id: invitation.id) }
+                                }
+                                .frame(minHeight: 44)
+                                .disabled(runtime.isWorking)
+                            case .awaitingInviter:
+                                Label("Finishing invitation", systemImage: "person.crop.circle.badge.clock")
+                                Text("Calorie sharing hasn't started. Waiting for the other iPhone.")
+                                    .font(.subheadline).foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.vertical, 6)
+                }
+                ForEach(outgoing) { connection in
+                    if let proposal = connection.proposal {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "")
+                                .font(.headline)
+                            Text(proposal.scopes.sharingDescription)
+                            Text("Waiting for acceptance").foregroundStyle(.secondary)
+                            Button("Cancel request", role: .destructive) {
+                                Task {
+                                    await runtime.perform {
+                                        try await coordinator.cancel(connectionID: connection.id, proposalID: proposal.id)
+                                    }
+                                }
+                            }
+                            .frame(minHeight: 44)
+                            .disabled(runtime.isWorking)
+                        }
+                    }
+                }
+            } header: { Text("Invitations") }
+        }
+    }
+
+}
+
+/// Incoming requests remain reviewable before the recipient sets a display name.
+private struct SharingRequestsSection: View {
+
+    @State private var selectedRequest: SharingConnection?
+
+    let runtime: SharingRuntime
+    let coordinator: SharingCoordinator
+
+    var body: some View {
+        let requests = coordinator.connections.filter { $0.proposal?.recipientID == coordinator.identity?.id }
+        if !requests.isEmpty {
+            Section {
+                ForEach(requests) { connection in
+                    Button { selectedRequest = connection } label: {
+                        HStack(spacing: 12) {
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "")
+                                    .font(.headline).foregroundStyle(Color.primary)
+                                Text(connection.requestTitle).font(.subheadline).foregroundStyle(Color.primary)
+                                if !connection.scopes.isEmpty {
+                                    Text("Currently sharing \(Text(connection.scopes.sharingDescription))")
+                                        .font(.caption).foregroundStyle(Color.secondary)
+                                }
+                                Text("Review").font(.subheadline).foregroundStyle(Color.accentColor)
+                            }
+                            Spacer(minLength: 0)
+                            Image(systemName: "chevron.right").foregroundStyle(Color.secondary)
+                                .accessibilityHidden(true)
+                        }
+                        .frame(minHeight: 44, alignment: .leading)
+                        .padding(.vertical, 6)
+                    }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityHint("Review the requested change before accepting or declining")
+                }
+            } header: { Text("Requests") }
+            .sheet(item: $selectedRequest) { connection in
+                SharingRequestConsentView(runtime: runtime, coordinator: coordinator, connectionID: connection.id)
+            }
+        }
+    }
+
+}
+
+/// Your own local calorie card, using the same summary as shared people.
+private struct SharingMeSection: View {
+
+    @EnvironmentObject private var settings: Settings
+    @State private var card = SharingOwnCard()
+
+    let runtime: SharingRuntime
+    let mode: GraphMode
+
+    var body: some View {
+        Section {
+            NavigationLink {
+                SharingMeDetail(runtime: runtime, card: card)
+            } label: {
+                SharingCardSummary(
+                    name: runtime.hasDisplayName ? runtime.displayName : String(localized: "Me"),
+                    snapshot: card.snapshot(settings: settings),
+                    mode: mode,
+                    status: card.day.sample.isUnavailable ? "Card unavailable" : "Loading calories…",
+                    streak: card.streak
+                )
+            }
+            .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
+        } header: {
+            Text("Me", comment: "Section for the person's own calorie card in Sharing.")
+                .textCase(nil)
+        }
+        .modifier(SharingOwnCardLoading(card: card))
+    }
+
+}
+
+@MainActor @Observable
+/// Local card state shared by the Me row and its detail, independent of cloud publication.
+private final class SharingOwnCard {
+
+    private(set) var day: HealthInterface
+    private let streakTracker: Streak
+    var streak: CalorieCardSnapshot.StreakSummary? { SharingStreakBuilder.summary(streakTracker, settings: settings) }
+    @ObservationIgnored private let repository: HealthRepository
+    @ObservationIgnored private let settings: Settings
+
+    init(repository: HealthRepository? = nil, settings: Settings? = nil) {
+        let repository = repository ?? .shared
+        let settings = settings ?? .shared
+        self.repository = repository
+        self.settings = settings
+        streakTracker = Streak(repository: repository, settings: settings)
+        day = HealthInterface(.empty(for: .now), repository: repository, settings: settings)
+    }
+
+    func snapshot(settings: Settings) -> CalorieCardSnapshot? {
+        CalorieCardSnapshotBuilder.build(from: day, settings: settings)
+    }
+
+    func refresh() async {
+        if !Calendar.current.isDateInToday(day.id) {
+            day = HealthInterface(.empty(for: .now), repository: repository, settings: settings)
+        }
+        await day.updateMetrics(animated: false)
+        @Dependency(\.defaultDatabase) var database
+        guard let choices = try? await database.read({ try StoredDayChoice.fetchAll($0) }) else {
+            streakTracker.reset()
+            return
+        }
+        guard !settings.hideCalorieStatusIcons else { streakTracker.reset(); return }
+        streakTracker.updateDayChoices(AppDatabase.choices(choices, sampleData: day.sample.isSampleData))
+        await streakTracker.updateStreaks()
+    }
+
+}
+
+/// Reloads the local card on foreground activity, policy changes, and day boundaries.
+private struct SharingOwnCardLoading: ViewModifier {
+
+    @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject private var settings: Settings
+    @State private var calendarDay = Calendar.current.startOfDay(for: .now)
+
+    let card: SharingOwnCard
+
+    func body(content: Content) -> some View {
+        content
+            .task(id: RefreshKey(active: scenePhase == .active, day: calendarDay,
+                                 policy: HealthSnapshotPolicy(settings: settings),
+                                 revision: HealthRepository.shared.revision,
+                                 hiddenGoalStatus: settings.hideCalorieStatusIcons)) {
+                guard scenePhase == .active else { return }
+                await card.refresh()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.significantTimeChangeNotification)) { _ in
+                calendarDay = Calendar.current.startOfDay(for: .now)
+            }
+    }
+
+    private struct RefreshKey: Equatable {
+        let active: Bool
+        let day: Date
+        let policy: HealthSnapshotPolicy
+        let revision: String
+        let hiddenGoalStatus: Bool
+    }
+
+}
+
+/// Your card and sharing controls. Only name editing has a Save/Cancel session.
+private struct SharingMeDetail: View {
+
+    @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject private var settings: Settings
+    @State private var mode = GraphMode.now
+    @State private var showsNameEditor = false
+    @State private var showsDisclosure = false
+
+    let runtime: SharingRuntime
+    let card: SharingOwnCard
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                if let snapshot = card.snapshot(settings: settings) {
+                    SharingCardSection(snapshot: snapshot, isToday: true, mode: $mode)
+                        .padding(.horizontal, CardMetrics.horizontalInset)
+                } else if card.day.sample.isUnavailable {
+                    ContentUnavailableView("Card unavailable", systemImage: "heart.text.clipboard")
+                } else {
+                    ProgressView("Loading calories…")
+                        .frame(maxWidth: .infinity)
+                }
+
+                SharingOwnSettingsCard(
+                    runtime: runtime,
+                    showsNameEditor: $showsNameEditor,
+                    showsDisclosure: $showsDisclosure
+                )
+
+                if runtime.publisherNeedsConfirmation,
+                   let coordinator = runtime.coordinator,
+                   !coordinator.isPublisher {
+                    Card("Updates") {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Choose the iPhone that sends your calorie-card updates.")
+                                .foregroundStyle(.secondary)
+                            SharingPublisherChoice(runtime: runtime, coordinator: coordinator)
+                        }
+                    }
+                }
+                if let error = runtime.actionError {
+                    Card { Text(error).foregroundStyle(.secondary) }
+                }
+            }
+            .padding(.vertical, CardMetrics.horizontalInset)
+        }
+        .softTopScrollEdge()
+        .background(settings.AppBackground)
+        .navigationTitle("Your sharing")
+        .navigationBarTitleDisplayMode(.inline)
+        .modifier(SharingOwnCardLoading(card: card))
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                if let streak = card.streak { SharingStreakBadge(streak: streak) }
+            }
+        }
+        .sheet(isPresented: $showsNameEditor) { SharingNameEditor(runtime: runtime) }
+        .sheet(isPresented: $showsDisclosure) { SharingDisclosureView() }
+        .task(id: scenePhase == .active) {
+            guard scenePhase == .active else { return }
+            await runtime.refreshNotificationSettings()
+        }
+        .onAppear { runtime.clearError() }
+        .modifier(StreakAnimationScope())
+    }
+
+}
+
+/// Own sharing controls in the app's standard settings card.
+private struct SharingOwnSettingsCard: View {
+
+    let runtime: SharingRuntime
+    @Binding var showsNameEditor: Bool
+    @Binding var showsDisclosure: Bool
+
+    var body: some View {
+        Card(innerPadding: 0) {
+            VStack(spacing: 0) {
+                Button {
+                    showsNameEditor = true
+                } label: {
+                    HStack {
+                        LabeledContent {
+                            Text(runtime.hasDisplayName ? runtime.displayName : String(localized: "Add name"))
+                                .foregroundStyle(.secondary)
+                        } label: { Text("Name") }
+                        Image(systemName: "chevron.right")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(.tertiary)
+                            .accessibilityHidden(true)
+                    }
+                    .frame(minHeight: 44)
+                    .contentShape(.rect)
+                }
+                .foregroundStyle(.primary)
+                .padding(.horizontal, 16)
+
+                Divider().padding(.horizontal, 16)
+
+                SharingNotificationRow(runtime: runtime)
+                    .frame(minHeight: 44)
+                    .padding(.horizontal, 16)
+
+                Divider().padding(.horizontal, 16)
+
+                Button("How sharing works", systemImage: "info.circle") { showsDisclosure = true }
+                    .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                    .padding(.horizontal, 16)
+            }
+            .buttonStyle(.borderless)
+        }
+    }
+
+}
+
+/// A single notification row that requests permission or opens the system settings.
+private struct SharingNotificationRow: View {
+
+    let runtime: SharingRuntime
+
+    var body: some View {
+        if runtime.notificationAuthorization == .notDetermined {
+            Button {
+                Task { await runtime.requestNotifications() }
+            } label: {
+                LabeledContent {
+                    Text("Off").foregroundStyle(.secondary)
+                } label: {
+                    Label("Notifications", systemImage: "bell")
+                }
+            }
+        } else {
+            Link(destination: URL(string: UIApplication.openNotificationSettingsURLString)!) {
+                LabeledContent {
+                    Text(runtime.notificationsEnabled ? "On" : "Off").foregroundStyle(.secondary)
+                } label: {
+                    Label("Notifications", systemImage: "bell")
+                }
+            }
+        }
+    }
+
+}
+
+/// A name draft is saved explicitly and discarded when cancelled.
+struct SharingNameEditor: View {
+
+    @Environment(\.dismiss) private var dismiss
+    @FocusState private var isFocused: Bool
+    @State private var name: String
+    @State private var contentHeight: CGFloat = 180
+    @State private var navigationHeight: CGFloat = 0
+
+    let runtime: SharingRuntime
+    let onSaved: (() -> Void)?
+
+    init(runtime: SharingRuntime, onSaved: (() -> Void)? = nil) {
+        self.runtime = runtime
+        self.onSaved = onSaved
+        _name = State(initialValue: runtime.displayName)
+    }
+
+    private var saveIsDisabled: Bool {
+        runtime.isWorking || name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            || name.count > 80 || name == runtime.displayName
+    }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        TextField("Name", text: $name)
+                            .textContentType(.nickname)
+                            .focused($isFocused)
+                            .submitLabel(onSaved == nil ? .done : .continue)
+                            .onSubmit { save() }
+                            .padding(.horizontal, 16)
+                            .frame(minHeight: 52)
+                            .background(.background.secondary, in: .rect(cornerRadius: 24))
+                            .disabled(runtime.isWorking)
+                        Text("Shown to people you share with.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal, 16)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    if let error = runtime.actionError {
+                        Text(error)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .padding(16)
+                .onGeometryChange(for: CGFloat.self) { geometry in
+                    ceil(geometry.size.height)
+                } action: { contentHeight = $0 }
+            }
+            .onGeometryChange(for: CGFloat.self) { geometry in
+                geometry.safeAreaInsets.top
+            } action: { navigationHeight = $0 }
+            .softTopScrollEdge()
+            .navigationTitle(runtime.hasDisplayName ? "Name" : "Your name")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    if #available(iOS 26, *) {
+                        Button(role: .cancel) { dismiss() }
+                    } else {
+                        Button("Cancel", role: .cancel) { dismiss() }
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    if #available(iOS 26, *) {
+                        Button(role: .confirm, action: save) {
+                            Image(systemName: onSaved == nil ? "checkmark" : "arrow.right")
+                        }
+                            .accessibilityLabel(onSaved == nil ? "Save" : "Continue")
+                            .disabled(saveIsDisabled)
+                    } else {
+                        Button(onSaved == nil ? "Save" : "Continue", action: save)
+                            .disabled(saveIsDisabled)
+                    }
+                }
+            }
+            .interactiveDismissDisabled(runtime.isWorking)
+        }
+        .presentationDetents([.height(contentHeight + navigationHeight)])
+        .presentationDragIndicator(.visible)
+        .onAppear { runtime.clearError() }
+    }
+
+    private func save() {
+        guard !saveIsDisabled else { return }
+        isFocused = false
+        Task {
+            if await runtime.saveName(name) {
+                if let onSaved { onSaved() } else { dismiss() }
+            }
+        }
+    }
+
+}
+
+/// Explicit publishing-device replacement after a contextual user confirmation.
+struct SharingPublisherChoice: View {
+
+    @State private var confirmsTakeover = false
+
+    let runtime: SharingRuntime
+    let coordinator: SharingCoordinator
+
+    var body: some View {
+        Button("Use this iPhone", systemImage: "iphone.and.arrow.forward") { confirmsTakeover = true }
+            .frame(minHeight: 44)
+            .disabled(runtime.isWorking)
+            .confirmationDialog("Use this iPhone for updates?", isPresented: $confirmsTakeover,
+                                titleVisibility: .visible) {
+                Button("Use this iPhone") {
+                    Task { await runtime.perform { try await coordinator.takeOverPublisher() } }
+                }
+            } message: {
+                Text("Your other iPhone will stop sending calorie-card updates for this Apple Account.")
+            }
+    }
+
+}
+
+/// A person's latest balance, paired with the same energy rings as their full card.
+struct SharingPersonRow: View {
+
+    let connection: SharingConnection
+    let coordinator: SharingCoordinator
+    var mode: GraphMode = .now
+
+    var body: some View {
+        SharingCardSummary(
+            name: connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "",
+            snapshot: snapshot,
+            mode: connection.scopes.contains(.today) ? mode : .now,
+            status: connection.sharingStatus(coordinator: coordinator),
+            streak: coordinator.streak(connectionID: connection.id)
+        )
+    }
+
+    private var snapshot: CalorieCardSnapshot? {
+        let scope: SharingScope = connection.scopes.contains(.today) ? .today : .history
+        return coordinator.snapshots(connectionID: connection.id, scope: scope).first?.snapshot
+    }
+
+}
+
+/// The same rings and balance for your own card and another person's card.
+private struct SharingCardSummary: View {
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.dynamicTypeSize) private var dynamicType
+    @Environment(\.layoutDirection) private var layoutDirection
+    // Preserve the original two-line summary's visible arc height.
+    @ScaledMetric(relativeTo: .body) private var ringVisibleHeight: CGFloat = 49
+
+    let name: String
+    let snapshot: CalorieCardSnapshot?
+    var mode = GraphMode.now
+    let status: LocalizedStringResource
+    var streak: CalorieCardSnapshot.StreakSummary? = nil
+
+    var body: some View {
+        let values = mode == .midnight ? snapshot?.midnight ?? snapshot?.now : snapshot?.now
+        HStack(alignment: .center, spacing: 12) {
+            SharingPersonLayout(layoutDirection: layoutDirection, ringVisibleHeight: ringVisibleHeight) {
+                if let snapshot, let values, snapshot.isSupported, !dynamicType.isAccessibilitySize {
+                    CalorieCircleGraph(
+                        energy: values.energy,
+                        configuration: CalorieCircleConfiguration(lineWidth: 6, ringSpacing: 2, segmentGap: 2),
+                        palette: CalorieGraphPalette(
+                            burned: snapshot.color(snapshot.appearance.burned, scheme: scheme),
+                            consumed: snapshot.color(snapshot.appearance.consumed, scheme: scheme),
+                            empty: snapshot.color(snapshot.appearance.graphEmpty, scheme: scheme)
+                        )
+                    )
+                    .accessibilityHidden(true)
+                }
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(name)
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(nameColor)
+                        .brightness(scheme == .dark && snapshot?.isSupported == true
+                            ? BrightnessLevel.secondary.amount(in: .circlegraphMidnight) : 0)
+                    if let snapshot {
+                        if snapshot.isSupported, let values {
+                            SharingPersonBalance(balance: values.balance, unit: snapshot.energyUnit.rawValue)
+                                .font(.body.weight(.regular).monospacedDigit())
+                        } else {
+                            Text("Card unavailable").font(.subheadline).foregroundStyle(.secondary)
+                        }
+                    } else {
+                        Text(status)
+                            .font(.subheadline).foregroundStyle(.secondary)
+                    }
+                    if let snapshot {
+                        Text("Updated \(Text(snapshot.capturedAt, format: .relative(presentation: .named)))")
+                            .font(.caption.weight(.regular))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            if let streak { SharingStreakBadge(streak: streak, placement: .overview) }
+        }
+        .animation(reduceMotion ? nil : .smooth(duration: CalorieGraphAnimation.defaultDuration), value: mode)
+        .accessibilityElement(children: .combine)
+    }
+
+    private var nameColor: Color {
+        guard let snapshot, snapshot.isSupported else { return .primary }
+        return snapshot.color(snapshot.appearance.burned, scheme: scheme)
+    }
+
+}
+
+/// Keeps the original arc proportions and optical center independently of text row count.
+/// Captions and wrapped names can grow the text without enlarging the graph.
+private struct SharingPersonLayout: Layout {
+
+    let layoutDirection: LayoutDirection
+    let ringVisibleHeight: CGFloat
+    private let spacing: CGFloat = 16
+    // The 90° opening leaves the bottom of the square unused.
+    private let visibleRingHeightRatio: CGFloat = (1 + sqrt(0.5)) / 2
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        guard let text = subviews.last else { return .zero }
+        let ringWidth = subviews.count > 1
+            ? ringVisibleHeight / visibleRingHeightRatio + spacing : 0
+        let availableWidth = proposal.width.flatMap { $0.isFinite ? max(0, $0 - ringWidth) : nil }
+        let textSize = text.sizeThatFits(ProposedViewSize(width: availableWidth, height: nil))
+        return CGSize(width: textSize.width + ringWidth,
+                      height: max(textSize.height, subviews.count > 1 ? ringVisibleHeight : 0))
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        guard let text = subviews.last else { return }
+        let diameter = subviews.count > 1
+            ? ringVisibleHeight / visibleRingHeightRatio : 0
+        let ringWidth = subviews.count > 1 ? diameter + spacing : 0
+        let isRightToLeft = layoutDirection == .rightToLeft
+        if subviews.count > 1 {
+            subviews[0].place(
+                at: CGPoint(x: isRightToLeft ? bounds.maxX - diameter / 2 : bounds.minX + diameter / 2,
+                            y: bounds.midY + diameter * (1 - visibleRingHeightRatio) / 2),
+                anchor: .center,
+                proposal: ProposedViewSize(width: diameter, height: diameter)
+            )
+        }
+        let textWidth = max(0, bounds.width - ringWidth)
+        text.place(
+            at: CGPoint(x: isRightToLeft ? bounds.minX + textWidth / 2 : bounds.maxX - textWidth / 2,
+                        y: bounds.midY),
+            anchor: .center,
+            proposal: ProposedViewSize(width: textWidth, height: bounds.height)
+        )
+    }
+
+}
+
+/// A neutral observation of the recorded balance, without a goal judgment.
+private struct SharingPersonBalance: View {
+
+    let balance: Int
+    let unit: String
+
+    var body: some View {
+        label.contentTransition(.numericText(value: Double(abs(balance))))
+    }
+
+    private var label: Text {
+        if balance == 0 {
+            Text("\(abs(balance), format: .number) \(unit) balance")
+        } else if balance > 0 {
+            Text("\(abs(balance), format: .number) \(unit) deficit")
+        } else {
+            Text("\(abs(balance), format: .number) \(unit) surplus")
+        }
+    }
+
+}
+
+extension Set where Element == SharingScope {
+
+    /// Localized label for the selected sharing scopes.
+    var sharingDescription: LocalizedStringResource {
+        switch self {
+            case [.today]: "Today"
+            case [.history]: "Previous 6 Days"
+            case [.today, .history]: "Today and Previous 6 Days"
+            case [.streaks]: "Streak"
+            case [.today, .streaks]: "Today and Streak"
+            case [.history, .streaks]: "Previous 6 Days and Streak"
+            case [.today, .history, .streaks]: "Today, Previous 6 Days and Streak"
+            default: "Sharing paused"
+        }
+    }
+
+}
+
+extension SharingConnection {
+
+    /// The first proposal is the only transition that can produce revision one.
+    var isInitialRequest: Bool { revision == 1 && scopes.isEmpty && proposal != nil }
+
+    /// Describes the addition without implying that existing permissions changed.
+    var requestTitle: LocalizedStringResource {
+        guard let proposal else { return "Sharing request" }
+        if scopes.isEmpty {
+            if isInitialRequest && proposal.scopes == [.streaks] { return "Share streaks" }
+            return isInitialRequest ? "Share calorie cards" : "Sharing request"
+        }
+        switch proposal.scopes.subtracting(scopes) {
+        case [.history]: return "Add Previous 6 Days?"
+        case [.today]: return "Add Today?"
+        case [.streaks]: return "Share streaks?"
+        default: return "Add sharing options?"
+        }
+    }
+
+    @MainActor
+    /// Returns the visible state without implying that a refresh wakes the sender.
+    func sharingStatus(coordinator: SharingCoordinator) -> LocalizedStringResource {
+        if scopes.isEmpty { return proposal == nil ? "Sharing paused" : "Waiting for acceptance" }
+        if grants.contains(where: { !isReady($0.scope) }) { return "Connecting" }
+        if scopes == [.streaks] { return "No calorie cards shared" }
+        return scopes.contains(.today) ? "Waiting for today's update" : "No shared days yet"
+    }
+
+}

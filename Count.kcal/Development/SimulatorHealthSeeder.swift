@@ -25,7 +25,8 @@ enum SimulatorHealthSeeder {
         var samples: [HKObject] = []
         for daysAgo in (0..<SampleHealthDay.historyDays).reversed() {
             guard let date = calendar.date(byAdding: .day, value: -daysAgo, to: today),
-                  let day = SampleHealthDay(date: date, now: now, calendar: calendar) else { continue }
+                  let day = SampleHealthDay(date: date, now: now, calendar: calendar,
+                                            profile: HealthDataMode.currentSampleProfile) else { continue }
             for identifier in identifiers {
                 guard let quantity = day.quantity(identifier) else { continue }
                 let start = identifier == .bodyMass ? day.weightDate : day.date

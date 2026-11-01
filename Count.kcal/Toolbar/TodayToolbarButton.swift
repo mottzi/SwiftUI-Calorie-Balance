@@ -14,20 +14,11 @@ struct TodayToolbarButton: View {
     let selectDay: (Date) -> Void
 
     var body: some View {
-        Button(action: selectToday) {
-            Image(
-                systemName: !isTodaySelected
-                    ? "arrow.turn.down.left"
-                    : todayPageMode.selection == .first ? "sun.min.fill" : "moon.stars.fill"
-            )
-            .foregroundStyle(Color("TextColor"))
-            .contentTransition(.symbolEffect(.replace))
-            .fontWeight(.medium)
-            .frame(width: symbolWidth)
-        }
-        .padding(.leading, leadingPadding)
-        .disabled(controlsDisabled)
-        .accessibilityLabel(actionLabel)
+        CalorieModeToolbarButton(
+            mode: isTodaySelected ? (todayPageMode.selection == .first ? .now : .midnight) : nil,
+            controlsDisabled: controlsDisabled,
+            action: selectToday
+        )
     }
 
 }
@@ -50,16 +41,50 @@ extension TodayToolbarButton {
         navigation.selectedDay == Calendar.current.startOfDay(for: .now)
     }
 
+}
+
+/// The shared sun/moon control. An unselected day returns to Today.
+struct CalorieModeToolbarButton: View {
+
+    let mode: GraphMode?
+    var controlsDisabled = false
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: symbolName)
+                .foregroundStyle(Color("TextColor"))
+                .contentTransition(.symbolEffect(.replace))
+                .fontWeight(.medium)
+                .frame(width: symbolWidth)
+        }
+        .padding(.leading, leadingPadding)
+        .disabled(controlsDisabled)
+        .accessibilityLabel(actionLabel)
+    }
+
+    private var symbolName: String {
+        switch mode {
+        case .now: "sun.min.fill"
+        case .midnight: "moon.stars.fill"
+        case nil: "arrow.turn.down.left"
+        }
+    }
+
+    private var actionLabel: LocalizedStringKey {
+        switch mode {
+        case .now: "Midnight"
+        case .midnight: "Now"
+        case nil: "Today"
+        }
+    }
+
     private var symbolWidth: CGFloat? {
         if #available(iOS 26, *) { nil } else { 30 }
     }
 
     private var leadingPadding: CGFloat {
         if #available(iOS 26, *) { 0 } else { 16 }
-    }
-
-    private var actionLabel: LocalizedStringKey {
-        !isTodaySelected ? "Today" : todayPageMode.selection == .first ? "Midnight" : "Now"
     }
 
 }

@@ -68,8 +68,18 @@ struct Pager: View {
                                         todayPageMode: $todayPageMode
                                     )
                                 case .progress:
-                                    WeightCard(refreshRevision: manualRefresh + calendarRefresh)
-                                        .padding(.bottom, AppSettings.dashboardProgressPosition == .above ? 20 : 0)
+                                    VStack(spacing: 20) {
+                                        WeightCard(refreshRevision: manualRefresh + calendarRefresh)
+                                        NavigationLink {
+                                            SharingOverviewView(runtime: .shared)
+                                        } label: {
+                                            Label("Sharing", systemImage: "person.2.fill")
+                                        }
+                                        .modifier(SharingActionAppearance())
+                                        .padding(.top, 14)
+                                        .accessibilityHint("Open shared calorie cards and requests")
+                                    }
+                                    .padding(.bottom, AppSettings.dashboardProgressPosition == .above ? 20 : 0)
                                 }
                             }
                         } else {
@@ -169,6 +179,7 @@ extension Pager {
     private func refreshSelectedDay(force: Bool = false) async {
         guard scenePhase == .active, let selectedPage else { return }
         await selectedPage.updateMetrics(animated: false, force: force)
+        SharingRuntime.shared.schedulePublication(settings: AppSettings)
         guard !Task.isCancelled else { return }
         if selectedPage.id == Calendar.current.startOfDay(for: .now) {
             WidgetCenter.shared.reloadAllTimelines()

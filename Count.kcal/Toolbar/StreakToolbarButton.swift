@@ -23,7 +23,6 @@ struct StreakToolbarButton: View {
                 Text(verbatim: streak.hasLoadedCount ? streak.streaks.formatted(.number) : "00")
                     .redacted(reason: streak.hasLoadedCount ? [] : .placeholder)
                     .font(.callout)
-                    .fontDesign(.default)
                     .fontWeight(.bold)
                     .foregroundStyle(Color("TextColor"))
                     .offset(y: countOffset)

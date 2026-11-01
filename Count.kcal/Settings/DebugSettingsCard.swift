@@ -9,6 +9,7 @@ struct DebugSettingsCard: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var healthDataMode = HealthDataMode.shared
+    @State private var sharing = SharingRuntime.shared
 
     #if targetEnvironment(simulator)
     @State private var isSeedingHealthData = false
@@ -18,6 +19,7 @@ struct DebugSettingsCard: View {
 
     var body: some View {
         @Bindable var mode = healthDataMode
+        @Bindable var sharing = sharing
 
         Card("Debug") {
             VStack(alignment: .leading, spacing: 8) {
@@ -26,6 +28,36 @@ struct DebugSettingsCard: View {
                     .fontWeight(.semibold)
 
                 if mode.usesSampleData {
+                    HStack {
+                        Text("Sample profile")
+                            .fontWeight(.semibold)
+                        Spacer()
+                        Menu {
+                            Picker("Sample profile", selection: $mode.sampleProfile) {
+                                ForEach(SampleHealthProfile.allCases) { profile in
+                                    Text(profile.title).tag(profile)
+                                }
+                            }
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text(mode.sampleProfile.title)
+                                    .font(.system(.body, design: .rounded))
+                                Image(systemName: "chevron.up.chevron.down")
+                                    .font(.caption2.weight(.semibold))
+                            }
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Sample profile")
+                        .accessibilityValue(Text(mode.sampleProfile.title))
+                        .disabled(mode.usesMarketingData)
+                    }
+
+                    Text(mode.usesMarketingData
+                         ? "Turn off Marketing Mode to use sample profiles."
+                         : mode.sampleProfile.detail)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
                     Toggle("Marketing Mode", isOn: $mode.usesMarketingData)
                         .tint(.green)
                         .fontWeight(.semibold)
@@ -36,6 +68,13 @@ struct DebugSettingsCard: View {
                     .disabled(isSeedingHealthData || healthDataMode.usesSampleData)
                     .fontWeight(.semibold)
                 #endif
+
+                Divider()
+                    .padding(.vertical, 4)
+
+                Toggle("Show Four Sample People", isOn: $sharing.samplePeopleEnabled)
+                    .tint(.green)
+                    .fontWeight(.semibold)
 
                 Divider()
                     .padding(.vertical, 4)
