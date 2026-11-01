@@ -1,0 +1,42 @@
+[
+  {
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/en-US/01-calorie-balance.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "mode": "RGB",
+    "sources": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ],
+    "composition": "Centered single-line title. Phone fills 96.2% of canvas width. Original aspect ratio; bottom ends five pixels outside canvas."
+  },
+  {
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/en-US/02-your-colors.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "mode": "RGB",
+    "sources": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png",
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png",
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ],
+    "composition": "Three silver iPhones in controlled perspective. Theme1 left/back, Theme2 center, Theme4 front/right. Whole framed images transformed together. Deliberate side and bottom crops."
+  },
+  {
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/en-US/03-now-to-midnight.png",
+    "size": [
+      1206,
+      2622
+    ],
+    "mode": "RGB",
+    "sources": [
+      "Marketing/2026-10-calorie-card/source/iphone-18-pro-theme-01-dark-now-calorie-card-capture.png",
+      "Marketing/2026-10-calorie-card/source/iphone-18-pro-theme-01-dark-midnight-calorie-card-capture.png",
+      "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png"
+    ],
+    "composition": "Two overlapping current framed iPhones in opposing gentle perspective. Both balance numbers remain visible. Labels sit above their respective device."
+  }
+]

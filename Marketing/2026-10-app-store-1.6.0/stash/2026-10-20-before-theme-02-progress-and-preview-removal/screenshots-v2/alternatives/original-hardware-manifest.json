@@ -1,0 +1,77 @@
+{
+  "original": "Marketing/archive/legacy-app-store/iphone-65/exports/iphone-65-02-customize.png",
+  "native": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/alternatives/02-your-colors-original-hardware-1284x2778.png",
+  "adapted": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/alternatives/02-your-colors-original-hardware-1206x2622.png",
+  "hardware_pixels_unchanged_outside_apertures": true,
+  "sources": [
+    {
+      "theme": 1,
+      "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "plane": [
+        [
+          192,
+          440
+        ],
+        [
+          1070,
+          596
+        ],
+        [
+          1070,
+          2486
+        ],
+        [
+          192,
+          2663
+        ]
+      ],
+      "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-1.png"
+    },
+    {
+      "theme": 2,
+      "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "plane": [
+        [
+          596,
+          440
+        ],
+        [
+          1474,
+          596
+        ],
+        [
+          1474,
+          2486
+        ],
+        [
+          596,
+          2663
+        ]
+      ],
+      "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-2.png"
+    },
+    {
+      "theme": 4,
+      "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "plane": [
+        [
+          1000,
+          440
+        ],
+        [
+          1878,
+          596
+        ],
+        [
+          1878,
+          2486
+        ],
+        [
+          1000,
+          2663
+        ]
+      ],
+      "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-3.png"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "locale": "de-de",
+    "video": "count-kcal-iphone-app-preview-v2-de-de-886x1920.mp4",
+    "poster": "count-kcal-iphone-app-preview-v2-de-de-poster-05s.png",
+    "ffprobe": "count-kcal-iphone-app-preview-v2-de-de-ffprobe.json",
+    "size_bytes": 27981874,
+    "sha256": "31031a4b40e1d87004f1d7e3ab2ff935d51337e525e0421906d20264bc79c0c7",
+    "duration_seconds": 22.0,
+    "poster_time_seconds": 5,
+    "full_decode": "passed",
+    "color_space": "bt709",
+    "color_transfer": "bt709",
+    "color_primaries": "bt709"
+  },
+  {
+    "locale": "en-us",
+    "video": "count-kcal-iphone-app-preview-v2-en-us-886x1920.mp4",
+    "poster": "count-kcal-iphone-app-preview-v2-en-us-poster-05s.png",
+    "ffprobe": "count-kcal-iphone-app-preview-v2-en-us-ffprobe.json",
+    "size_bytes": 27981872,
+    "sha256": "84e6c9b767ff7599745cdfbabdccef6fdb223fe342e19048b622aa3b344c52b4",
+    "duration_seconds": 22.0,
+    "poster_time_seconds": 5,
+    "full_decode": "passed",
+    "color_space": "bt709",
+    "color_transfer": "bt709",
+    "color_primaries": "bt709"
+  },
+  {
+    "locale": "es-es",
+    "video": "count-kcal-iphone-app-preview-v2-es-es-886x1920.mp4",
+    "poster": "count-kcal-iphone-app-preview-v2-es-es-poster-05s.png",
+    "ffprobe": "count-kcal-iphone-app-preview-v2-es-es-ffprobe.json",
+    "size_bytes": 27981867,
+    "sha256": "bdbc3182e530c4ec296c64de15657f176598f84abd39494f3bfe1089d6330433",
+    "duration_seconds": 22.0,
+    "poster_time_seconds": 5,
+    "full_decode": "passed",
+    "color_space": "bt709",
+    "color_transfer": "bt709",
+    "color_primaries": "bt709"
+  },
+  {
+    "locale": "fr-fr",
+    "video": "count-kcal-iphone-app-preview-v2-fr-fr-886x1920.mp4",
+    "poster": "count-kcal-iphone-app-preview-v2-fr-fr-poster-05s.png",
+    "ffprobe": "count-kcal-iphone-app-preview-v2-fr-fr-ffprobe.json",
+    "size_bytes": 27981882,
+    "sha256": "a7ffe0c6e5901ba6aac3a18282f28c8bb99b96dac8ca20bd557da36b74adcc8c",
+    "duration_seconds": 22.0,
+    "poster_time_seconds": 5,
+    "full_decode": "passed",
+    "color_space": "bt709",
+    "color_transfer": "bt709",
+    "color_primaries": "bt709"
+  }
+]

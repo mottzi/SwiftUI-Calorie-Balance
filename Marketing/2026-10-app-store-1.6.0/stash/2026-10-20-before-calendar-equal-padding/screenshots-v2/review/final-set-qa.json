@@ -1,0 +1,126 @@
+{
+  "passed": true,
+  "files": [
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/01-calorie-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "fe36cb0f685b369c8aa6bb28abea120a469a5c4c42a726bf67e7886195e21737"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/02-custom-colors.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "a4176ef477344575b35aa79107085c665be4f2502ca1d30cd010e96d12a5a51d"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/03-progress.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "14e49f723c561e2624db20e591e0d680030d17946d0f00c4e858b008eac3c2d3"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/01-calorie-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "cec6d2a8b8f92c146119a6e493401a8f8ea218f41ff06f4240390fb2edab6fbb"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/02-custom-colors.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "9d3916f5b9289627a51e7f19da1f424b3805079ba8e83ea0d96f23f56f04521d"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/03-progress.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "a3aa53fc851fa7749911711a281ef869841d6f4d880cfe41ff8dcce68f0e1dc7"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/01-calorie-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "5b270cb0aec955b58e2df431ba03b606a83055973b573b109517b570c21ef0cb"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/02-custom-colors.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "9fec9babf8f4ff7c62f8e2220b28fab546c91faa7cbcf9de5627e859baddc8dc"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/03-progress.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "dae7ee0f434725c51f9c5fa4126eddda551bbc522a2e217b10363ea331c8f071"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/01-calorie-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "85c4767adf73932da773dab4a3be53dc87962dbf0e70da958bb7ff88728db4fa"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/02-custom-colors.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "25aef8f7c200fe9c8b4365fa1c6c0dca1f390b35569dc57a40b9c83da0f7487b"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/03-progress.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "b3998d76e8a155f4cf7c24c1716097eb4f01d381ab5e2b93fd37e760c8472d32"
+    }
+  ],
+  "image_count": 12,
+  "scene_count": 3,
+  "locale_count": 4,
+  "no_alpha": true,
+  "all_sizes": [
+    1206,
+    2622
+  ],
+  "approved_first_eight_pngs_byte_identical": true,
+  "custom_colors_parent_scale_preserved": true,
+  "progress_theme": 2,
+  "heading_shared_baseline": true,
+  "source_capture": "Marketing/2026-10-app-store-1.6.0/captures/progress-theme-02-top-en-US.png"
+}

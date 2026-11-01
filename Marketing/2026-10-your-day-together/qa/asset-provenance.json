@@ -1,0 +1,47 @@
+{
+  "theme": 2,
+  "appearance": "dark",
+  "calorie_mode": "Midnight",
+  "steps": false,
+  "native_readings": {
+    "burned_kcal": 2600,
+    "eaten_kcal": 2000,
+    "today_kg": 79.7
+  },
+  "native_ui_reconstructed": false,
+  "sources": [
+    {
+      "role": "phone",
+      "original": "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png",
+      "local": "source/assets/native-dashboard-framed.png",
+      "sha256": "69a9e1877f9a992386a3ccef5c499e2316c67858baec6f6ae5da59bca9ede5ee",
+      "copy_byte_identical": true
+    },
+    {
+      "role": "capture",
+      "original": "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "local": "source/assets/native-dashboard.png",
+      "sha256": "efe705af1914d322fda6b0150594cdd47a29de11c6ae63b78fba7654845b3b8f",
+      "copy_byte_identical": true
+    },
+    {
+      "role": "health",
+      "original": "Assets.xcassets/Health.imageset/Icon - Apple Health.png",
+      "local": "source/assets/health.png",
+      "sha256": "83be5922e0e48ff8f46889b98a18bc2a56d3ac1ae77da7495d277d4a71a81ce6",
+      "copy_byte_identical": true
+    }
+  ],
+  "phone_rendering": "Genuine Ranguel iPhone 17 Pro GLB mesh, SceneKit PBR studio rendering, native capture on OLED. Front PNG frame is reference only, not used in renders.",
+  "model": {
+    "model_sha256": "46f28404981cbd53b891aad212f2736db582de2ba98296f2dc4109e06c4645c2",
+    "renderer_sha256": "ba7dc0b07587f732b0cd085f4a7187c25b6f405b2c55ad303a4e5542f07af3c0",
+    "importer_sha256": "bfa927db8ae81c392b06e9bc7074d321775008a184970c67c29865799cb88e11",
+    "capture_sha256": "efe705af1914d322fda6b0150594cdd47a29de11c6ae63b78fba7654845b3b8f",
+    "version": 3,
+    "count": 61,
+    "yaw_start": 22,
+    "yaw_end": 6
+  },
+  "pose_count": 61
+}

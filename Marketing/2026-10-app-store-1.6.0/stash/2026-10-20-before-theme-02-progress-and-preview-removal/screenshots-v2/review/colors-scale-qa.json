@@ -1,0 +1,20 @@
+{
+  "original_native_uniform_scale": 1.03,
+  "increase_over_previous_export_percent": 9.13,
+  "output_heading_top": 104,
+  "bounds": {
+    "01-calorie-balance.png": {
+      "visible_top": 273,
+      "visible_bottom": 2607,
+      "visible_left": 37,
+      "visible_right": 1168
+    },
+    "02-custom-colors.png": {
+      "visible_top": 283,
+      "visible_bottom": 2610,
+      "visible_left": 27,
+      "visible_right": 1205
+    }
+  },
+  "other_12_screenshots_byte_identical": true
+}

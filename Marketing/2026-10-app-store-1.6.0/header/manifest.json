@@ -1,0 +1,55 @@
+{
+  "file": "Marketing/2026-10-app-store-1.6.0/header/count-kcal-product-page-header-3840x1646.png",
+  "width": 3840,
+  "height": 1646,
+  "mode": "RGB",
+  "alpha": false,
+  "background": "#080A0F",
+  "placements_back_to_front": [
+    {
+      "source": "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "theme": 2,
+      "crop": [
+        46,
+        795,
+        1160,
+        1458
+      ],
+      "x": -650,
+      "y": 350,
+      "width": 1600,
+      "height": 952,
+      "brightness": 0.62
+    },
+    {
+      "source": "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "theme": 4,
+      "crop": [
+        46,
+        795,
+        1160,
+        1458
+      ],
+      "x": 2890,
+      "y": 350,
+      "width": 1600,
+      "height": 952,
+      "brightness": 0.62
+    },
+    {
+      "source": "Marketing/2026-10-calorie-card/stills/calorie-card-theme-01-dark-midnight-transparent.png",
+      "theme": 1,
+      "crop": null,
+      "x": 790,
+      "y": 154,
+      "width": 2260,
+      "height": 1337,
+      "brightness": 1
+    }
+  ],
+  "source_sha256": {
+    "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png": "efe705af1914d322fda6b0150594cdd47a29de11c6ae63b78fba7654845b3b8f",
+    "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png": "49fa1b2584e7c0ee0a71d387caabd85e12823db5ca403a54cce72c8ea3d3c635",
+    "Marketing/2026-10-calorie-card/stills/calorie-card-theme-01-dark-midnight-transparent.png": "81e5c977b03d6da2babfd8d9716a11b397989e5bd251e5295657116b6625c846"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "video_decode_passed": true,
+  "video_count": 3,
+  "duration_seconds": 10,
+  "fps": 30,
+  "audio": false,
+  "webm_decoded_alpha_range": [
+    0,
+    255
+  ],
+  "phone": "Genuine Ranguel iPhone 17 Pro mesh, 22 to 6 degree turn",
+  "screen": "Native Theme 2 dark dashboard",
+  "storyboard_review": "All six times checked for both layouts. No heading overlap or Health/phone collision. Correct screen orientation and matching data.",
+  "published": false
+}

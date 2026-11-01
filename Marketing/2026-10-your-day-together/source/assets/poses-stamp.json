@@ -1,0 +1,10 @@
+{
+  "model_sha256": "46f28404981cbd53b891aad212f2736db582de2ba98296f2dc4109e06c4645c2",
+  "renderer_sha256": "ba7dc0b07587f732b0cd085f4a7187c25b6f405b2c55ad303a4e5542f07af3c0",
+  "importer_sha256": "bfa927db8ae81c392b06e9bc7074d321775008a184970c67c29865799cb88e11",
+  "capture_sha256": "efe705af1914d322fda6b0150594cdd47a29de11c6ae63b78fba7654845b3b8f",
+  "version": 3,
+  "count": 61,
+  "yaw_start": 22,
+  "yaw_end": 6
+}

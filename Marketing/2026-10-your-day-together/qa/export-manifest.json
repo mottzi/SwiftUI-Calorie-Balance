@@ -1,0 +1,65 @@
+[
+  {
+    "file": "videos/count-kcal-your-day-together-loop-dark-bg.mp4",
+    "bytes": 787281,
+    "sha256": "89932267b269d2e114782fed2aaddf23a48b0d0b6079bc1b04d1978dc20133dc"
+  },
+  {
+    "file": "videos/count-kcal-your-day-together-loop-transparent.webm",
+    "bytes": 1447780,
+    "sha256": "6e0fa197670dbc619dfeb28c9e01001ac23d2a934a69e3ce2a0c4a450c2307a5"
+  },
+  {
+    "file": "videos/count-kcal-your-day-together-portrait-dark-bg.mp4",
+    "bytes": 1104303,
+    "sha256": "c85fbf4523f2eabfe4032c39792c249a8c8f65649ce2a716e3ad1aaa6edb32ff"
+  },
+  {
+    "file": "stills/count-kcal-your-day-together-poster-dark.png",
+    "bytes": 1111294,
+    "sha256": "9c3dd015e511e5a57d6b8c563f001a78e6139d982dd989f499ee1b09b0ddccc6",
+    "width": 3600,
+    "height": 2200,
+    "mode": "RGBA"
+  },
+  {
+    "file": "stills/count-kcal-your-day-together-final-hold-portrait.png",
+    "bytes": 1447531,
+    "sha256": "db6574eb48a1ccf692c0a2adbd3bb00e15186c6c86c0c9c53d6997ef0ea34d1e",
+    "width": 2160,
+    "height": 3840,
+    "mode": "RGBA"
+  },
+  {
+    "file": "stills/count-kcal-your-day-together-final-hold-transparent.png",
+    "bytes": 981237,
+    "sha256": "a8bf3ce50bf5c0c8f53468d3bd76d655868e24e5d34656f52b1b686956d4f161",
+    "width": 3600,
+    "height": 2200,
+    "mode": "RGBA"
+  },
+  {
+    "file": "stills/count-kcal-your-day-together-poster-transparent.png",
+    "bytes": 1169116,
+    "sha256": "e3f9acac8fad550668378af220940b8105f5620fd749dd1bfbcfbcc52d940733",
+    "width": 3600,
+    "height": 2200,
+    "mode": "RGBA"
+  },
+  {
+    "file": "stills/count-kcal-your-day-together-poster-portrait.png",
+    "bytes": 1083008,
+    "sha256": "b759c4df55aeeaca97639ab3f998c629c9632526838380b2b990030a0dcc736a",
+    "width": 2160,
+    "height": 3840,
+    "mode": "RGBA"
+  },
+  {
+    "file": "stills/count-kcal-your-day-together-final-hold-dark.png",
+    "bytes": 972968,
+    "sha256": "bdddcbfb2c95bf167c0484c33462336715b337e35af8295457c6536867e2a647",
+    "width": 3600,
+    "height": 2200,
+    "mode": "RGBA"
+  }
+]

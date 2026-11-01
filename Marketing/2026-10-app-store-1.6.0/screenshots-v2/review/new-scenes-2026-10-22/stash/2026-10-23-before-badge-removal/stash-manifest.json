@@ -1,0 +1,96 @@
+{
+  "files": [
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/fr-FR/02-home-screen-widgets.png",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/fr-FR/02-home-screen-widgets.png",
+      "sha256": "7bc12fa793feb0a19becfb4be7cb62fedae5859c2de61d886ca08ba305b7ea42"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/de-DE/02-home-screen-widgets.png",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/de-DE/02-home-screen-widgets.png",
+      "sha256": "aa0e74c217410efc38b322b25803ee4b5c9ed1a09e01f5611bf47d8b32818aeb"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/es-ES/02-home-screen-widgets.png",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/es-ES/02-home-screen-widgets.png",
+      "sha256": "f4c055f933dcb15e003e4242235f5650435c8684848b0f2e3660beb4891d0ddd"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/source/02-home-screen-widgets.png",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/source/02-home-screen-widgets.png",
+      "sha256": "dbb0360dcb2610ff456bff3c354f660f52fed9d48713c137adce88526257a5dd"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/en-US/02-home-screen-widgets.png",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/en-US/02-home-screen-widgets.png",
+      "sha256": "689f5025bcce836724b7b8db7bccefca8a7dd20c4c6ebef6b1bb64b48e43f292"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/candidate-pair-en-US-full.png",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/candidate-pair-en-US-full.png",
+      "sha256": "f976fcac2cdac8013730b7e842aa6202e840851dad21c29ee2f31a4606d7373a"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/candidate-pair-en-US.jpg",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/candidate-pair-en-US.jpg",
+      "sha256": "355da81aa77ae99c848ceac8f4e63cc2cad0eb8d9549f0dd255e24cacb7ba77a"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/candidate-pair-es-ES-full.png",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/candidate-pair-es-ES-full.png",
+      "sha256": "24ab823832c912129ca0484e45bdc9fe9f9652b78ef750c76bc19ac2fba48d74"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/candidate-pair-es-ES.jpg",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/candidate-pair-es-ES.jpg",
+      "sha256": "44d97552cf09929646d22d3af7ca2e74a5e4d0f99cbae4a8f120fdd4fbda4158"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/candidate-pair-fr-FR.jpg",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/candidate-pair-fr-FR.jpg",
+      "sha256": "a77e1daac1646f90929ceafc11370332fa08ccaac1424ce0717a56cc0f010ebc"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/candidate-pair-de-DE.jpg",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/candidate-pair-de-DE.jpg",
+      "sha256": "b762b4f7e213227d33f3550becd20c600a61c18012f9ebbf75110995735258d2"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/candidate-pair-fr-FR-full.png",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/candidate-pair-fr-FR-full.png",
+      "sha256": "f993265f2b443a6626466d14a506761a35848e691548f028efea900f2ea7cdcc"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/candidate-pair-de-DE-full.png",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/candidate-pair-de-DE-full.png",
+      "sha256": "80f0ef6a6b0250538e0ffb645160a2e4ea0fa960d2186c91e89ed344d52b61f4"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/manifest.json",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/manifest.json",
+      "sha256": "4ad873d676ea1f043d01629b43b9655ed3d8645ecd0687041eb61d89d0667835"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/qa.json",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/qa.json",
+      "sha256": "f12ec9e8cd33cd74431f92d6c94ce1b357dc66968b603e35a5ca47777daf643f"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/readme.txt",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/readme.txt",
+      "sha256": "d6d029e696346a45d8c83eaf6b622d9574ad7ec18d3f9b457c3c9588a472c2ae"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/build_new_scene_candidates_2026_10_22.py",
+      "stashed": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/stash/2026-10-23-before-badge-removal/renderer.py",
+      "sha256": "c4032bf8f3f8df281d53742f27c9340bac9a322b226ccaefa88e667ef558fffd"
+    }
+  ],
+  "approved_settings_hashes": {
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/fr-FR/01-visual-customization.png": "19d3e32f9cc4562dfd4680aa21e015025dbd233bfe1c53c9accd4ca21100df4f",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/de-DE/01-visual-customization.png": "f443761a054c6dd1d64766d91157ed901ca0b1044927b9d8befd84698b32f900",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/es-ES/01-visual-customization.png": "61516bc1e96b0f3db94b263bab843f6bfc408a1b6a964be98e898a85ae9affc9",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/source/01-visual-customization.png": "18a2533a31e3f372df6cbdf297083f92a6d03bc9891d4ee48586277bf61b6cb0",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/en-US/01-visual-customization.png": "56216cc77606bf3899cd25f7f366f5b224e71461b9d0f4a96146570debf7c27e"
+  }
+}

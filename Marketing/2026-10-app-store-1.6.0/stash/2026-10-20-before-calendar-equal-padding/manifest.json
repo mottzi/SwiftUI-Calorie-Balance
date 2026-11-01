@@ -1,0 +1,102 @@
+[
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/manifest.json",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/manifest.json",
+    "sha256": "bdf1213bab62e58885b8f84597d1e9f6bca1020391dec5707b9e04a5db54f52b"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/01-calorie-balance.png",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/fr-FR/01-calorie-balance.png",
+    "sha256": "5b270cb0aec955b58e2df431ba03b606a83055973b573b109517b570c21ef0cb"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/02-custom-colors.png",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/fr-FR/02-custom-colors.png",
+    "sha256": "9fec9babf8f4ff7c62f8e2220b28fab546c91faa7cbcf9de5627e859baddc8dc"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/03-progress.png",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/fr-FR/03-progress.png",
+    "sha256": "dae7ee0f434725c51f9c5fa4126eddda551bbc522a2e217b10363ea331c8f071"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/01-calorie-balance.png",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/de-DE/01-calorie-balance.png",
+    "sha256": "cec6d2a8b8f92c146119a6e493401a8f8ea218f41ff06f4240390fb2edab6fbb"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/02-custom-colors.png",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/de-DE/02-custom-colors.png",
+    "sha256": "9d3916f5b9289627a51e7f19da1f424b3805079ba8e83ea0d96f23f56f04521d"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/03-progress.png",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/de-DE/03-progress.png",
+    "sha256": "a3aa53fc851fa7749911711a281ef869841d6f4d880cfe41ff8dcce68f0e1dc7"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/01-calorie-balance.png",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/es-ES/01-calorie-balance.png",
+    "sha256": "85c4767adf73932da773dab4a3be53dc87962dbf0e70da958bb7ff88728db4fa"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/02-custom-colors.png",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/es-ES/02-custom-colors.png",
+    "sha256": "25aef8f7c200fe9c8b4365fa1c6c0dca1f390b35569dc57a40b9c83da0f7487b"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/03-progress.png",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/es-ES/03-progress.png",
+    "sha256": "b3998d76e8a155f4cf7c24c1716097eb4f01d381ab5e2b93fd37e760c8472d32"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/01-calorie-balance.png",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/en-US/01-calorie-balance.png",
+    "sha256": "fe36cb0f685b369c8aa6bb28abea120a469a5c4c42a726bf67e7886195e21737"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/02-custom-colors.png",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/en-US/02-custom-colors.png",
+    "sha256": "a4176ef477344575b35aa79107085c665be4f2502ca1d30cd010e96d12a5a51d"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/03-progress.png",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/final/en-US/03-progress.png",
+    "sha256": "14e49f723c561e2624db20e591e0d680030d17946d0f00c4e858b008eac3c2d3"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/final-set-es-ES.jpg",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/review/final-set-es-ES.jpg",
+    "sha256": "412e10f07a9c3993c04c9c4e3b8530b731a3e22d7cf72ede89912b38ccc4aab5"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/final-set-fr-FR.jpg",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/review/final-set-fr-FR.jpg",
+    "sha256": "5eac6eb1eacc3926ad43008e7f17aca316cdfa897fab7314debd3a2c0b284ce5"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/final-set-de-DE.jpg",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/review/final-set-de-DE.jpg",
+    "sha256": "dcfcd45e63ed1d7f61e714993b6eb6152e5443903afef8be350e5eb9a316d025"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/final-set-en-US.jpg",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/review/final-set-en-US.jpg",
+    "sha256": "375341da60306db1f7961d59d67ba425fafccfc055529d3000562ff9b98e0f70"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/final-set-qa.json",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/review/final-set-qa.json",
+    "sha256": "207ddef30e98c7a543b7378e4fd575605568dd6723a6f8c5d7ed7a2b96f95492"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/readme.txt",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/readme.txt",
+    "sha256": "a6e56cbfffd36fc2c82c2ac4c5f3a6469573ecf33de83d991aa979225be9173a"
+  },
+  {
+    "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/build_final_set.py",
+    "stashed": "Marketing/2026-10-app-store-1.6.0/stash/2026-10-20-before-calendar-equal-padding/screenshots-v2/source/build_final_set.py",
+    "sha256": "a132f521410d54adbdc01eb2dceaef8a0609af507fe906f8534d32c35b0ca042"
+  }
+]

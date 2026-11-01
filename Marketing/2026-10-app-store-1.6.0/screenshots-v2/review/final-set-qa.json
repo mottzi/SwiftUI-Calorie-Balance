@@ -1,0 +1,276 @@
+{
+  "passed": true,
+  "files": [
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/01-calorie-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "12499386799eb19dc23f9fa0e83f89e430402725ccb090da7a159d2c14529f7a",
+      "measured_visible_body_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "margins": {
+        "left": 60,
+        "right": 60,
+        "bottom": 60
+      },
+      "hardware_height": 2239
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/02-custom-colors.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "362c30b15cc0eca647da076cc8da249e955b56ffadb32b8df66408e3d154e015",
+      "measured_visible_body_bounds_exclusive": [
+        60,
+        323,
+        1206,
+        2562
+      ],
+      "margins": {
+        "left": 60,
+        "right": 0,
+        "bottom": 60
+      },
+      "hardware_height": 2239
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/03-progress.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "65f4b974444a9ffbed82fed317e15fc095c0f56786b3e22e2a6e155acf8e048b",
+      "measured_visible_body_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "margins": {
+        "left": 60,
+        "right": 60,
+        "bottom": 60
+      },
+      "hardware_height": 2239
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/01-calorie-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "9989050e554515365301f5149ceb49e9d3e3d765a005322592f554cf2baf407e",
+      "measured_visible_body_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "margins": {
+        "left": 60,
+        "right": 60,
+        "bottom": 60
+      },
+      "hardware_height": 2239
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/02-custom-colors.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "4c891cfbcfc0dafb7d756cadd5cea3936cd375d9df967402c2e4f6ef8ed07ad0",
+      "measured_visible_body_bounds_exclusive": [
+        60,
+        323,
+        1206,
+        2562
+      ],
+      "margins": {
+        "left": 60,
+        "right": 0,
+        "bottom": 60
+      },
+      "hardware_height": 2239
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/03-progress.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "fd61e3df0e2eb73aad1698999b0677fccceaa87be842d1340f9bda3285e9e494",
+      "measured_visible_body_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "margins": {
+        "left": 60,
+        "right": 60,
+        "bottom": 60
+      },
+      "hardware_height": 2239
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/01-calorie-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "9f2099534e14347edf780f97f27f7d20320d0bec98e017c56f1f45db54c9fc14",
+      "measured_visible_body_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "margins": {
+        "left": 60,
+        "right": 60,
+        "bottom": 60
+      },
+      "hardware_height": 2239
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/02-custom-colors.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "793043301f2858f3f58414ec6311b8d2554fe5f9788c96a23bdf2d12549a2bdd",
+      "measured_visible_body_bounds_exclusive": [
+        60,
+        323,
+        1206,
+        2562
+      ],
+      "margins": {
+        "left": 60,
+        "right": 0,
+        "bottom": 60
+      },
+      "hardware_height": 2239
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/03-progress.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "a38013da726a0fd53dd6f03d5800476598e01191564e38594cbb469129a33fa0",
+      "measured_visible_body_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "margins": {
+        "left": 60,
+        "right": 60,
+        "bottom": 60
+      },
+      "hardware_height": 2239
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/01-calorie-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "d451b347bf1fe42f4e28f9ca5bb9097f66e5a72300c480b759e94d3fb464d023",
+      "measured_visible_body_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "margins": {
+        "left": 60,
+        "right": 60,
+        "bottom": 60
+      },
+      "hardware_height": 2239
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/02-custom-colors.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "575f4f5b08dba52107fa5ebdf611a09d11a99eeab1821822bc690c87e59bc4e1",
+      "measured_visible_body_bounds_exclusive": [
+        60,
+        323,
+        1206,
+        2562
+      ],
+      "margins": {
+        "left": 60,
+        "right": 0,
+        "bottom": 60
+      },
+      "hardware_height": 2239
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/03-progress.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "94abb1a42b365756017c17fe7f7c9e21851bf5519e1f2ba46cb5ebfdae913b3c",
+      "measured_visible_body_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "margins": {
+        "left": 60,
+        "right": 60,
+        "bottom": 60
+      },
+      "hardware_height": 2239
+    }
+  ],
+  "image_count": 12,
+  "scene_count": 3,
+  "locale_count": 4,
+  "no_alpha": true,
+  "all_sizes": [
+    1206,
+    2622
+  ],
+  "minimum_margin": 60,
+  "front_phones_identical_scale": true,
+  "all_visible_body_heights_identical": true,
+  "all_bottom_margins_equal_left_margin": true,
+  "original_colors_perspective_preserved": true,
+  "colors_intentional_right_bleed": true,
+  "colors_right_margin_exception": "0px. Original third phone remains cropped at canvas edge.",
+  "first_two_heading_pixels_unchanged": true,
+  "progress_heading_shared_baseline": true,
+  "progress_theme": 2,
+  "source_capture": "Marketing/2026-10-app-store-1.6.0/captures/progress-theme-02-calendar-en-US.png"
+}

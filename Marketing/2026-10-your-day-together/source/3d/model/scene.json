@@ -1,0 +1,390 @@
+{
+  "source": "iphone_17_pro.glb",
+  "source_sha256": "46f28404981cbd53b891aad212f2736db582de2ba98296f2dc4109e06c4645c2",
+  "author": "Ranguel",
+  "license": "CC BY 4.0",
+  "model": "iPhone 17 Pro",
+  "normalizationHeight": 3,
+  "uniformScale": 19.999999205271436,
+  "sourceBounds": [
+    [
+      -0.03655056655406952,
+      -0.07500000298023224,
+      -0.008916454389691353
+    ],
+    [
+      0.036550600081682205,
+      0.07500000298023224,
+      0.004375002812594175
+    ]
+  ],
+  "meshes": [
+    {
+      "name": "Object_4",
+      "vertices": "mesh-00-vertices.bin",
+      "indices": "mesh-00-indices.bin",
+      "vertexCount": 16648,
+      "indexCount": 61200,
+      "material": 0
+    },
+    {
+      "name": "Object_5",
+      "vertices": "mesh-01-vertices.bin",
+      "indices": "mesh-01-indices.bin",
+      "vertexCount": 2139,
+      "indexCount": 6702,
+      "material": 1
+    },
+    {
+      "name": "Object_6",
+      "vertices": "mesh-02-vertices.bin",
+      "indices": "mesh-02-indices.bin",
+      "vertexCount": 419,
+      "indexCount": 1029,
+      "material": 2
+    },
+    {
+      "name": "Object_7",
+      "vertices": "mesh-03-vertices.bin",
+      "indices": "mesh-03-indices.bin",
+      "vertexCount": 5670,
+      "indexCount": 16908,
+      "material": 3
+    },
+    {
+      "name": "Object_8",
+      "vertices": "mesh-04-vertices.bin",
+      "indices": "mesh-04-indices.bin",
+      "vertexCount": 96,
+      "indexCount": 282,
+      "material": 4
+    },
+    {
+      "name": "Object_9",
+      "vertices": "mesh-05-vertices.bin",
+      "indices": "mesh-05-indices.bin",
+      "vertexCount": 387,
+      "indexCount": 1137,
+      "material": 5
+    },
+    {
+      "name": "Object_10",
+      "vertices": "mesh-06-vertices.bin",
+      "indices": "mesh-06-indices.bin",
+      "vertexCount": 1246,
+      "indexCount": 4032,
+      "material": 6
+    },
+    {
+      "name": "Object_11",
+      "vertices": "mesh-07-vertices.bin",
+      "indices": "mesh-07-indices.bin",
+      "vertexCount": 885,
+      "indexCount": 2868,
+      "material": 7
+    },
+    {
+      "name": "Object_12",
+      "vertices": "mesh-08-vertices.bin",
+      "indices": "mesh-08-indices.bin",
+      "vertexCount": 4800,
+      "indexCount": 17268,
+      "material": 8
+    },
+    {
+      "name": "Object_13",
+      "vertices": "mesh-09-vertices.bin",
+      "indices": "mesh-09-indices.bin",
+      "vertexCount": 2574,
+      "indexCount": 9948,
+      "material": 9
+    },
+    {
+      "name": "Object_14",
+      "vertices": "mesh-10-vertices.bin",
+      "indices": "mesh-10-indices.bin",
+      "vertexCount": 768,
+      "indexCount": 2304,
+      "material": 10
+    },
+    {
+      "name": "Object_15",
+      "vertices": "mesh-11-vertices.bin",
+      "indices": "mesh-11-indices.bin",
+      "vertexCount": 4217,
+      "indexCount": 21504,
+      "material": 11
+    },
+    {
+      "name": "Object_16",
+      "vertices": "mesh-12-vertices.bin",
+      "indices": "mesh-12-indices.bin",
+      "vertexCount": 44,
+      "indexCount": 66,
+      "material": 12
+    },
+    {
+      "name": "Object_17",
+      "vertices": "mesh-13-vertices.bin",
+      "indices": "mesh-13-indices.bin",
+      "vertexCount": 597,
+      "indexCount": 1773,
+      "material": 13
+    },
+    {
+      "name": "Object_19",
+      "vertices": "mesh-14-vertices.bin",
+      "indices": "mesh-14-indices.bin",
+      "vertexCount": 34,
+      "indexCount": 114,
+      "material": 0
+    },
+    {
+      "name": "Object_20",
+      "vertices": "mesh-15-vertices.bin",
+      "indices": "mesh-15-indices.bin",
+      "vertexCount": 522,
+      "indexCount": 1560,
+      "material": 8
+    },
+    {
+      "name": "Object_21",
+      "vertices": "mesh-16-vertices.bin",
+      "indices": "mesh-16-indices.bin",
+      "vertexCount": 761,
+      "indexCount": 3846,
+      "material": 14
+    },
+    {
+      "name": "Object_22",
+      "vertices": "mesh-17-vertices.bin",
+      "indices": "mesh-17-indices.bin",
+      "vertexCount": 198,
+      "indexCount": 570,
+      "material": 15
+    },
+    {
+      "name": "Object_23",
+      "vertices": "mesh-18-vertices.bin",
+      "indices": "mesh-18-indices.bin",
+      "vertexCount": 186,
+      "indexCount": 558,
+      "material": 16
+    }
+  ],
+  "materials": [
+    {
+      "name": "Anodized_aluminum",
+      "color": [
+        0.800387321127829,
+        0.800387321127829,
+        0.800387321127829,
+        1.0
+      ],
+      "metalness": 0.27242422392874055,
+      "roughness": 0.239178,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "Plastic_antena",
+      "color": [
+        0.7068906629744954,
+        0.7068906629744954,
+        0.7068906629744954,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.5,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "Plastic_port",
+      "color": [
+        0.000918352,
+        0.000918352,
+        0.000918352,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.413636,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "Camera_filter",
+      "color": [
+        0.0,
+        0.0,
+        0.0185015,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.559091,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "material",
+      "color": [
+        1.0,
+        0.943701,
+        0.58047,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.5,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "Glass_tint",
+      "color": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metalness": 0.0,
+      "roughness": 0.04212119362571023,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "Metal_Screw",
+      "color": [
+        0.8,
+        0.8,
+        0.8,
+        1.0
+      ],
+      "metalness": 0.9996969512014678,
+      "roughness": 0.14515149665601326,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "Plastic_LED",
+      "color": [
+        1.0,
+        1.0,
+        1.0,
+        0.6057575572620738
+      ],
+      "metalness": 0.0,
+      "roughness": 0.109091,
+      "alphaMode": "BLEND"
+    },
+    {
+      "name": "Display_Frame",
+      "color": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "metalness": 0.0181818,
+      "roughness": 0.05,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "Camera_sapphire_miror",
+      "color": [
+        0.0,
+        0.0,
+        0.0,
+        0.25
+      ],
+      "metalness": 0.0,
+      "roughness": 0.01,
+      "alphaMode": "BLEND"
+    },
+    {
+      "name": "Camera_mirror_filter",
+      "color": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.5,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "Camera_Lens",
+      "color": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.0090909,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "Metal_mesh",
+      "color": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metalness": 1,
+      "roughness": 0.12090907241358902,
+      "alphaMode": "BLEND",
+      "texture": "texture-05.png"
+    },
+    {
+      "name": "Frosted_glass",
+      "color": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metalness": 0.0,
+      "roughness": 0.21181816332267991,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "Glass",
+      "color": [
+        0.0,
+        0.0,
+        0.0,
+        0.25
+      ],
+      "metalness": 1,
+      "roughness": 0.0,
+      "alphaMode": "BLEND"
+    },
+    {
+      "name": "OLED_off",
+      "color": [
+        0.0201105,
+        0.0201105,
+        0.0201105,
+        1.0
+      ],
+      "metalness": 0.0,
+      "roughness": 0.0590909,
+      "alphaMode": "OPAQUE"
+    },
+    {
+      "name": "OLED",
+      "color": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "metalness": 0.0,
+      "roughness": 0.0568182,
+      "alphaMode": "OPAQUE",
+      "texture": "texture-07.jpg"
+    }
+  ],
+  "screenMaterial": "OLED",
+  "upstreamRootRotation": [
+    0,
+    3.141592653589793,
+    0
+  ],
+  "upstreamScreenMirrorX": true
+}

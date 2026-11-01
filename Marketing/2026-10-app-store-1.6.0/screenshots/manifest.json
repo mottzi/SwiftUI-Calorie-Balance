@@ -1,0 +1,402 @@
+[
+  {
+    "locale": "en-US",
+    "order": 1,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/en-US/01-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/en-US/01-balance.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Your day.\nIn balance.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ]
+  },
+  {
+    "locale": "en-US",
+    "order": 2,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/en-US/02-now-and-midnight.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/en-US/02-now-and-midnight.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Now.\nAnd at midnight.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-calorie-card/stills/calorie-card-theme-01-dark-now-transparent.png",
+      "Marketing/2026-10-calorie-card/stills/calorie-card-theme-01-dark-midnight-transparent.png"
+    ]
+  },
+  {
+    "locale": "en-US",
+    "order": 3,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/en-US/03-macros.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/en-US/03-macros.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Macros.\nAt a glance.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-app-store-1.6.0/screenshots/source/progress-capture.png"
+    ]
+  },
+  {
+    "locale": "en-US",
+    "order": 4,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/en-US/04-weekly-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/en-US/04-weekly-balance.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Your week.\nIn one view.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ]
+  },
+  {
+    "locale": "en-US",
+    "order": 5,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/en-US/05-progress.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/en-US/05-progress.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Progress.\nDay by day.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-app-store-1.6.0/screenshots/source/progress-capture.png",
+      "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png"
+    ]
+  },
+  {
+    "locale": "en-US",
+    "order": 6,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/en-US/06-themes.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/en-US/06-themes.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Your colors.\nYour choice.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png"
+    ]
+  },
+  {
+    "locale": "de-DE",
+    "order": 1,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/de-DE/01-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/de-DE/01-balance.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Dein Tag.\nIn Balance.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ]
+  },
+  {
+    "locale": "de-DE",
+    "order": 2,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/de-DE/02-now-and-midnight.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/de-DE/02-now-and-midnight.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Jetzt.\nUnd um Mitternacht.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-calorie-card/stills/calorie-card-theme-01-dark-now-transparent.png",
+      "Marketing/2026-10-calorie-card/stills/calorie-card-theme-01-dark-midnight-transparent.png"
+    ]
+  },
+  {
+    "locale": "de-DE",
+    "order": 3,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/de-DE/03-macros.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/de-DE/03-macros.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Deine Makros.\nAuf einen Blick.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-app-store-1.6.0/screenshots/source/progress-capture.png"
+    ]
+  },
+  {
+    "locale": "de-DE",
+    "order": 4,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/de-DE/04-weekly-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/de-DE/04-weekly-balance.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Deine Woche.\nIm Überblick.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ]
+  },
+  {
+    "locale": "de-DE",
+    "order": 5,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/de-DE/05-progress.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/de-DE/05-progress.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Dein Fortschritt.\nTag für Tag.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-app-store-1.6.0/screenshots/source/progress-capture.png",
+      "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png"
+    ]
+  },
+  {
+    "locale": "de-DE",
+    "order": 6,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/de-DE/06-themes.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/de-DE/06-themes.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Deine Farben.\nDein Stil.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png"
+    ]
+  },
+  {
+    "locale": "fr-FR",
+    "order": 1,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/fr-FR/01-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/fr-FR/01-balance.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Votre journée.\nEn équilibre.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ]
+  },
+  {
+    "locale": "fr-FR",
+    "order": 2,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/fr-FR/02-now-and-midnight.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/fr-FR/02-now-and-midnight.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Maintenant.\nEt à minuit.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-calorie-card/stills/calorie-card-theme-01-dark-now-transparent.png",
+      "Marketing/2026-10-calorie-card/stills/calorie-card-theme-01-dark-midnight-transparent.png"
+    ]
+  },
+  {
+    "locale": "fr-FR",
+    "order": 3,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/fr-FR/03-macros.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/fr-FR/03-macros.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Vos macros.\nEn un coup d'œil.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-app-store-1.6.0/screenshots/source/progress-capture.png"
+    ]
+  },
+  {
+    "locale": "fr-FR",
+    "order": 4,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/fr-FR/04-weekly-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/fr-FR/04-weekly-balance.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Votre semaine.\nD'un seul regard.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ]
+  },
+  {
+    "locale": "fr-FR",
+    "order": 5,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/fr-FR/05-progress.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/fr-FR/05-progress.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Vos progrès.\nJour après jour.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-app-store-1.6.0/screenshots/source/progress-capture.png",
+      "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png"
+    ]
+  },
+  {
+    "locale": "fr-FR",
+    "order": 6,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/fr-FR/06-themes.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/fr-FR/06-themes.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Vos couleurs.\nVotre style.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png"
+    ]
+  },
+  {
+    "locale": "es-ES",
+    "order": 1,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/es-ES/01-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/es-ES/01-balance.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Tu día.\nEn equilibrio.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ]
+  },
+  {
+    "locale": "es-ES",
+    "order": 2,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/es-ES/02-now-and-midnight.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/es-ES/02-now-and-midnight.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Ahora.\nY a medianoche.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-calorie-card/stills/calorie-card-theme-01-dark-now-transparent.png",
+      "Marketing/2026-10-calorie-card/stills/calorie-card-theme-01-dark-midnight-transparent.png"
+    ]
+  },
+  {
+    "locale": "es-ES",
+    "order": 3,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/es-ES/03-macros.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/es-ES/03-macros.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Tus macros.\nDe un vistazo.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-app-store-1.6.0/screenshots/source/progress-capture.png"
+    ]
+  },
+  {
+    "locale": "es-ES",
+    "order": 4,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/es-ES/04-weekly-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/es-ES/04-weekly-balance.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Tu semana.\nDe un vistazo.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ]
+  },
+  {
+    "locale": "es-ES",
+    "order": 5,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/es-ES/05-progress.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/es-ES/05-progress.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Tu progreso.\nDía a día.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-app-store-1.6.0/screenshots/source/progress-capture.png",
+      "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png"
+    ]
+  },
+  {
+    "locale": "es-ES",
+    "order": 6,
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots/es-ES/06-themes.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "large_file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/es-ES/06-themes.png",
+    "large_width": 1320,
+    "large_height": 2868,
+    "header": "Tus colores.\nTu estilo.",
+    "header_font_size": 100,
+    "sources": [
+      "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+      "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png"
+    ]
+  }
+]

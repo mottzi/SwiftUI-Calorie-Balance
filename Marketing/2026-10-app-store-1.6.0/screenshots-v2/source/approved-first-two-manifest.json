@@ -1,0 +1,482 @@
+[
+  {
+    "locale": "en-US",
+    "scene": 1,
+    "title": "Calorie balance",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/01-calorie-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "source_paths": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ],
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_width": 633.0,
+    "device_width": 1160,
+    "device_position": [
+      23,
+      255
+    ],
+    "device_aspect_ratio_preserved": true,
+    "approved_sha256": "fe36cb0f685b369c8aa6bb28abea120a469a5c4c42a726bf67e7886195e21737",
+    "approved_source": "screenshots-v2/source/approved-first-two/en-US/01-calorie-balance.png"
+  },
+  {
+    "locale": "en-US",
+    "title": "Custom colors",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/02-custom-colors.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "original_hardware": "Marketing/archive/legacy-app-store/iphone-65/exports/iphone-65-02-customize.png",
+    "sources": [
+      {
+        "theme": 1,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "plane": [
+          [
+            192,
+            440
+          ],
+          [
+            1070,
+            596
+          ],
+          [
+            1070,
+            2486
+          ],
+          [
+            192,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-1.png"
+      },
+      {
+        "theme": 2,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "plane": [
+          [
+            596,
+            440
+          ],
+          [
+            1474,
+            596
+          ],
+          [
+            1474,
+            2486
+          ],
+          [
+            596,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-2.png"
+      },
+      {
+        "theme": 4,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "plane": [
+          [
+            1000,
+            440
+          ],
+          [
+            1878,
+            596
+          ],
+          [
+            1878,
+            2486
+          ],
+          [
+            1000,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-3.png"
+      }
+    ],
+    "hardware_pixels_unchanged_before_final_resize": true,
+    "composition_scale": 1.03,
+    "composition_size": [
+      1323,
+      2861
+    ],
+    "composition_position": [
+      -59,
+      -154
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_top": 104,
+    "scene": 2,
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "approved_sha256": "a4176ef477344575b35aa79107085c665be4f2502ca1d30cd010e96d12a5a51d",
+    "approved_source": "screenshots-v2/source/approved-first-two/en-US/02-custom-colors.png"
+  },
+  {
+    "locale": "de-DE",
+    "scene": 1,
+    "title": "Kalorienbilanz",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/01-calorie-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "source_paths": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ],
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_width": 574.0,
+    "device_width": 1160,
+    "device_position": [
+      23,
+      255
+    ],
+    "device_aspect_ratio_preserved": true,
+    "approved_sha256": "cec6d2a8b8f92c146119a6e493401a8f8ea218f41ff06f4240390fb2edab6fbb",
+    "approved_source": "screenshots-v2/source/approved-first-two/de-DE/01-calorie-balance.png"
+  },
+  {
+    "locale": "de-DE",
+    "title": "Eigene Farben",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/02-custom-colors.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "original_hardware": "Marketing/archive/legacy-app-store/iphone-65/exports/iphone-65-02-customize.png",
+    "sources": [
+      {
+        "theme": 1,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "plane": [
+          [
+            192,
+            440
+          ],
+          [
+            1070,
+            596
+          ],
+          [
+            1070,
+            2486
+          ],
+          [
+            192,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-1.png"
+      },
+      {
+        "theme": 2,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "plane": [
+          [
+            596,
+            440
+          ],
+          [
+            1474,
+            596
+          ],
+          [
+            1474,
+            2486
+          ],
+          [
+            596,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-2.png"
+      },
+      {
+        "theme": 4,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "plane": [
+          [
+            1000,
+            440
+          ],
+          [
+            1878,
+            596
+          ],
+          [
+            1878,
+            2486
+          ],
+          [
+            1000,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-3.png"
+      }
+    ],
+    "hardware_pixels_unchanged_before_final_resize": true,
+    "composition_scale": 1.03,
+    "composition_size": [
+      1323,
+      2861
+    ],
+    "composition_position": [
+      -59,
+      -154
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_top": 104,
+    "scene": 2,
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "approved_sha256": "9d3916f5b9289627a51e7f19da1f424b3805079ba8e83ea0d96f23f56f04521d",
+    "approved_source": "screenshots-v2/source/approved-first-two/de-DE/02-custom-colors.png"
+  },
+  {
+    "locale": "fr-FR",
+    "scene": 1,
+    "title": "Bilan calorique",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/01-calorie-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "source_paths": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ],
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_width": 597.0,
+    "device_width": 1160,
+    "device_position": [
+      23,
+      255
+    ],
+    "device_aspect_ratio_preserved": true,
+    "approved_sha256": "5b270cb0aec955b58e2df431ba03b606a83055973b573b109517b570c21ef0cb",
+    "approved_source": "screenshots-v2/source/approved-first-two/fr-FR/01-calorie-balance.png"
+  },
+  {
+    "locale": "fr-FR",
+    "title": "Vos couleurs",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/02-custom-colors.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "original_hardware": "Marketing/archive/legacy-app-store/iphone-65/exports/iphone-65-02-customize.png",
+    "sources": [
+      {
+        "theme": 1,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "plane": [
+          [
+            192,
+            440
+          ],
+          [
+            1070,
+            596
+          ],
+          [
+            1070,
+            2486
+          ],
+          [
+            192,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-1.png"
+      },
+      {
+        "theme": 2,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "plane": [
+          [
+            596,
+            440
+          ],
+          [
+            1474,
+            596
+          ],
+          [
+            1474,
+            2486
+          ],
+          [
+            596,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-2.png"
+      },
+      {
+        "theme": 4,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "plane": [
+          [
+            1000,
+            440
+          ],
+          [
+            1878,
+            596
+          ],
+          [
+            1878,
+            2486
+          ],
+          [
+            1000,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-3.png"
+      }
+    ],
+    "hardware_pixels_unchanged_before_final_resize": true,
+    "composition_scale": 1.03,
+    "composition_size": [
+      1323,
+      2861
+    ],
+    "composition_position": [
+      -59,
+      -154
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_top": 104,
+    "scene": 2,
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "approved_sha256": "9fec9babf8f4ff7c62f8e2220b28fab546c91faa7cbcf9de5627e859baddc8dc",
+    "approved_source": "screenshots-v2/source/approved-first-two/fr-FR/02-custom-colors.png"
+  },
+  {
+    "locale": "es-ES",
+    "scene": 1,
+    "title": "Balance calórico",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/01-calorie-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "source_paths": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ],
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_width": 671.0,
+    "device_width": 1160,
+    "device_position": [
+      23,
+      255
+    ],
+    "device_aspect_ratio_preserved": true,
+    "approved_sha256": "85c4767adf73932da773dab4a3be53dc87962dbf0e70da958bb7ff88728db4fa",
+    "approved_source": "screenshots-v2/source/approved-first-two/es-ES/01-calorie-balance.png"
+  },
+  {
+    "locale": "es-ES",
+    "title": "Tus colores",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/02-custom-colors.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "original_hardware": "Marketing/archive/legacy-app-store/iphone-65/exports/iphone-65-02-customize.png",
+    "sources": [
+      {
+        "theme": 1,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "plane": [
+          [
+            192,
+            440
+          ],
+          [
+            1070,
+            596
+          ],
+          [
+            1070,
+            2486
+          ],
+          [
+            192,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-1.png"
+      },
+      {
+        "theme": 2,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "plane": [
+          [
+            596,
+            440
+          ],
+          [
+            1474,
+            596
+          ],
+          [
+            1474,
+            2486
+          ],
+          [
+            596,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-2.png"
+      },
+      {
+        "theme": 4,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "plane": [
+          [
+            1000,
+            440
+          ],
+          [
+            1878,
+            596
+          ],
+          [
+            1878,
+            2486
+          ],
+          [
+            1000,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-3.png"
+      }
+    ],
+    "hardware_pixels_unchanged_before_final_resize": true,
+    "composition_scale": 1.03,
+    "composition_size": [
+      1323,
+      2861
+    ],
+    "composition_position": [
+      -59,
+      -154
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_top": 104,
+    "scene": 2,
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "approved_sha256": "25aef8f7c200fe9c8b4365fa1c6c0dca1f390b35569dc57a40b9c83da0f7487b",
+    "approved_source": "screenshots-v2/source/approved-first-two/es-ES/02-custom-colors.png"
+  }
+]

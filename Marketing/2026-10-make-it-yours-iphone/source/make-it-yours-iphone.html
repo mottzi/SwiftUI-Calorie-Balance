@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Count.kcal · Make it yours · iPhone</title>
+<style>
+:root{color-scheme:dark;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0c1016;color:#f5f7fb}*{box-sizing:border-box}body{margin:0;padding:40px 16px;min-height:100vh}main{max-width:1000px;margin:auto}#composition{width:100%;max-width:390px;margin:0 auto}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}.stage{position:relative;aspect-ratio:886/1920}canvas{display:block;width:100%;height:100%}.hotspots{position:absolute;inset:0;pointer-events:none}.palette{position:absolute;left:9.93%;top:87.76%;width:19.19%;height:5.73%;border:0;background:transparent;border-radius:16px;pointer-events:auto;cursor:pointer;min-height:36px}.palette:nth-child(2){left:30.25%}.palette:nth-child(3){left:50.56%}.palette:nth-child(4){left:70.88%}.palette:focus-visible{outline:3px solid #f5f7fb;outline-offset:2px}.controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;max-width:390px;margin:22px auto 0;padding:16px 0;border-top:1px solid #ffffff20;font-size:13px;color:#a4adbb}.controls button,.controls select{font:inherit;color:#f5f7fb;background:#ffffff08;border:1px solid #ffffff28;border-radius:8px;padding:9px 12px;cursor:pointer}.controls input{flex:1;min-width:80px;accent-color:#66d783}.controls output{font-variant-numeric:tabular-nums;min-width:75px}.controls label{display:flex;gap:8px;align-items:center}#note{color:#8792a3;max-width:390px;margin:0 auto;font-size:12px;line-height:1.5}@media(max-width:500px){body{padding:24px 8px}.controls{gap:8px}.controls label{width:100%;justify-content:flex-end}}
+</style></head><body><main>
+<section id="composition" aria-label="Count.kcal color customization">
+<h1 class="sr-only">Count.kcal. Make it yours.</h1>
+<div class="stage"><canvas id="art" width="886" height="1920" role="img" aria-label="Count.kcal. An upright silver iPhone changes between four dark color themes. A solid ribbon travels from each selected palette around the phone, which gently rises and settles as its colors change."></canvas>
+<div class="hotspots" role="group" aria-label="Choose an app color palette"><button class="palette" aria-label="Preview blue and orange" data-time="0"></button><button class="palette" aria-label="Preview indigo and green" data-time="1.4"></button><button class="palette" aria-label="Preview purple and gold" data-time="3.2"></button><button class="palette" aria-label="Preview teal and coral" data-time="5"></button></div></div></section>
+<div class="controls"><button id="play">Pause</button><input id="timeline" aria-label="Animation time" type="range" min="0" max="7.2" step=".01" value="0"><output id="time">0.0 / 7.2 s</output><label>Preview width <select id="size" aria-label="Preview width"><option value="auto">Responsive</option><option value="390">390 px</option><option value="320">320 px</option></select></label></div>
+<p id="note">Select a swatch to pause on a palette. The Count.kcal header is included in the exported videos and stills.</p>
+<script id="motion-config" type="application/json">{
+  "width": 886,
+  "height": 1920,
+  "duration": 7.2,
+  "palettes": [
+    {
+      "name": "Blue & orange",
+      "colors": [
+        "#329CF7",
+        "#FF985C"
+      ]
+    },
+    {
+      "name": "Indigo & green",
+      "colors": [
+        "#9AA0FA",
+        "#66D783"
+      ]
+    },
+    {
+      "name": "Purple & gold",
+      "colors": [
+        "#B38AF5",
+        "#F4C869"
+      ]
+    },
+    {
+      "name": "Teal & coral",
+      "colors": [
+        "#65D4C1",
+        "#F49BA7"
+      ]
+    }
+  ],
+  "states": [
+    {
+      "phone": "../../2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png",
+      "palette": 0,
+      "appearance": "Dark appearance"
+    },
+    {
+      "phone": "../../2026-10-today/stills/iphone-18-pro-silver-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png",
+      "palette": 1,
+      "appearance": "Dark appearance"
+    },
+    {
+      "phone": "../../2026-10-today/stills/iphone-18-pro-silver-theme-08-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png",
+      "palette": 2,
+      "appearance": "Dark appearance"
+    },
+    {
+      "phone": "../../2026-10-today/stills/iphone-18-pro-silver-theme-09-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png",
+      "palette": 3,
+      "appearance": "Dark appearance"
+    }
+  ],
+  "transitions": [
+    {
+      "start": 0.4,
+      "end": 1.0,
+      "from": 0,
+      "to": 1
+    },
+    {
+      "start": 2.2,
+      "end": 2.8,
+      "from": 1,
+      "to": 2
+    },
+    {
+      "start": 4.0,
+      "end": 4.6,
+      "from": 2,
+      "to": 3
+    },
+    {
+      "start": 5.8,
+      "end": 6.4,
+      "from": 3,
+      "to": 0
+    }
+  ],
+  "bounce": {
+    "duration": 0.9,
+    "phoneDelay": 0.15,
+    "phoneLift": 28,
+    "scaleAmount": 0.016,
+    "phoneTilt": 0
+  },
+  "layout": {
+    "phone": {
+      "x": 100.60869565217394,
+      "y": 220,
+      "height": 1400,
+      "rotation": 0
+    },
+    "swatches": {
+      "x": 98,
+      "y": 1710,
+      "width": 150,
+      "height": 62,
+      "gap": 30
+    }
+  },
+  "reveal": {
+    "phoneDelay": 0.12,
+    "duration": 0.34
+  },
+  "wave": {
+    "duration": 1.0,
+    "travel": 0.52,
+    "width": 88,
+    "bodyOpacity": 0.92,
+    "fadeStart": 0.58,
+    "fadeDuration": 0.42
+  },
+  "header": {
+    "text": "Count.kcal",
+    "fontSize": 64,
+    "baseline": 112,
+    "color": "#f5f7fb"
+  }
+}</script><script>"use strict";
+const config=JSON.parse(document.querySelector('#motion-config').textContent);
+const canvas=document.querySelector('#art'),ctx=canvas.getContext('2d',{alpha:true});
+const play=document.querySelector('#play'),timeline=document.querySelector('#timeline'),clock=document.querySelector('#time');
+const params=new URLSearchParams(location.search),reduced=matchMedia('(prefers-reduced-motion: reduce)');
+const images=new Map();
+let time=Number(params.get('t')||0),playing=!params.has('paused')&&!reduced.matches,ready=false,visible=true,last=0,raf=0;
+const smooth=p=>{p=Math.max(0,Math.min(1,p));return p*p*(3-2*p)};
+const softer=p=>{p=Math.max(0,Math.min(1,p));return p*p*p*(p*(p*6-15)+10)};
+function rgba(hex,a){const n=parseInt(hex.slice(1),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`}
+function eventAt(t,duration){return config.transitions.find(tr=>t>=tr.start&&t<tr.start+duration)}
+function stateAt(t){let current=0;for(const tr of config.transitions){if(t<tr.start)return {from:current,to:current,elapsed:0,moving:false};if(t<tr.end)return {from:tr.from,to:tr.to,elapsed:t-tr.start,moving:true};current=tr.to}return {from:current,to:current,elapsed:0,moving:false}}
+function bounce(t,type){for(const tr of config.transitions){const u=(t-tr.start-config.bounce[type+'Delay'])/config.bounce.duration;if(u>=0&&u<1){if(u<.35)return softer(u/.35);if(u<.8)return 1-1.06*softer((u-.35)/.45);return -.06*(1-softer((u-.8)/.2))}}return 0}
+function curve(a,b,c,d,t){const u=1-t;return {x:u*u*u*a.x+3*u*u*t*b.x+3*u*t*t*c.x+t*t*t*d.x,y:u*u*u*a.y+3*u*u*t*b.y+3*u*t*t*c.y+t*t*t*d.y}}
+function wavePoints(index){const s=config.layout.swatches,sx=s.x+index*(s.width+s.gap)+s.width/2,sy=s.y;
+ const a={x:sx,y:sy},b={x:sx,y:1620},c={x:68,y:1720},d={x:68,y:1000},e={x:68,y:-20},f={x:818,y:-20},g={x:818,y:850};
+ const pts=[];let length=0;for(let i=0;i<=200;i++){const p=i<=100?curve(a,b,c,d,i/100):curve(d,e,f,g,(i-100)/100);if(pts.length)length+=Math.hypot(p.x-pts.at(-1).x,p.y-pts.at(-1).y);pts.push({...p,length})}return {pts,length};}
+const paths=config.palettes.map((_,i)=>wavePoints(i));
+function segment(path,start,end){const points=path.pts.filter(p=>p.length>=start&&p.length<=end);if(points.length<2)return false;ctx.beginPath();ctx.moveTo(points[0].x,points[0].y);for(const p of points.slice(1))ctx.lineTo(p.x,p.y);return true}
+function gradient(colors,opacity){const g=ctx.createLinearGradient(98,1710,818,300);g.addColorStop(0,rgba(colors[0],opacity));g.addColorStop(1,rgba(colors[1],opacity));return g}
+const mergeSurfaces=new Map();
+function mergedDevice(type,a,b,p){
+ if(p<=0)return a;if(p>=1)return b;
+ let surface=mergeSurfaces.get(type);if(!surface){surface=document.createElement('canvas');surface.width=a.naturalWidth;surface.height=a.naturalHeight;mergeSurfaces.set(type,surface)}
+ const mc=surface.getContext('2d'),w=surface.width,h=surface.height,cut=Math.round(w*p);
+ mc.clearRect(0,0,w,h);mc.drawImage(a,0,0);mc.clearRect(0,0,cut,h);mc.save();mc.beginPath();mc.rect(0,0,cut,h);mc.clip();mc.drawImage(b,0,0);mc.restore();return surface;
+}
+function draw(t){if(!ready)return;t=((t%config.duration)+config.duration)%config.duration;
+ const state=stateAt(t),active=config.states[state.to],wave=eventAt(t,config.wave.duration);
+ ctx.clearRect(0,0,canvas.width,canvas.height);ctx.save();ctx.scale(canvas.width/config.width,canvas.height/config.height);
+ if(wave){const elapsed=t-wave.start,palette=config.palettes[config.states[wave.to].palette],path=paths[config.states[wave.to].palette];
+  const head=smooth(elapsed/config.wave.travel)*path.length,fade=smooth(elapsed/.1)*(1-smooth((elapsed-config.wave.fadeStart)/config.wave.fadeDuration));ctx.lineCap='round';ctx.lineJoin='round';
+  if(segment(path,0,head)){ctx.lineWidth=config.wave.width;ctx.strokeStyle=gradient(palette.colors,config.wave.bodyOpacity*fade);ctx.stroke()}
+ }
+ function device(type){const box=config.layout[type],a=images.get(config.states[state.from][type]),b=images.get(config.states[state.to][type]);const h=box.height,w=h*a.naturalWidth/a.naturalHeight,lift=bounce(t,type),scale=1+config.bounce.scaleAmount*lift;
+  ctx.save();ctx.translate(box.x+w/2,box.y+h/2-config.bounce[type+'Lift']*lift);ctx.rotate((box.rotation+config.bounce[type+'Tilt']*lift)*Math.PI/180);ctx.scale(scale,scale);
+  function part(img,clip){ctx.save();if(clip){ctx.beginPath();ctx.rect(...clip);ctx.clip()}ctx.shadowColor='rgba(0,0,0,.25)';ctx.shadowBlur=22;ctx.shadowOffsetY=12;ctx.drawImage(img,-w/2,-h/2,w,h);ctx.restore()}
+  const p=state.moving?smooth((state.elapsed-config.reveal[type+'Delay'])/config.reveal.duration):0;
+  part(mergedDevice(type,a,b,p));ctx.restore();
+ }
+ device('phone');
+ ctx.save();ctx.font=`600 ${config.header.fontSize}px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif`;ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.fillStyle=config.header.color;ctx.fillText(config.header.text,config.width/2,config.header.baseline);ctx.restore();
+ const sw=config.layout.swatches;
+ config.palettes.forEach((palette,i)=>{const selected=i===active.palette;let press=0;if(selected&&wave){const e=t-wave.start;if(e<.17)press=-.14*Math.sin(Math.PI*e/.17);else if(e<.4)press=.06*Math.sin(Math.PI*(e-.17)/.23)}
+  const x=sw.x+i*(sw.width+sw.gap),y=sw.y,w=sw.width,h=sw.height;
+  ctx.save();ctx.translate(x+w/2,y+h/2);ctx.scale(1+press,1+press);
+  if(selected){ctx.beginPath();ctx.roundRect(-w/2-8,-h/2-8,w+16,h+16,24);ctx.lineWidth=4;ctx.strokeStyle='#F5F7FB';ctx.stroke()}
+  ctx.beginPath();ctx.roundRect(-w/2,-h/2,w,h,18);ctx.clip();ctx.fillStyle=palette.colors[0];ctx.fillRect(-w/2,-h/2,w,h);
+  ctx.beginPath();ctx.moveTo(w*.08,-h/2);ctx.lineTo(w/2,-h/2);ctx.lineTo(w/2,h/2);ctx.lineTo(-w*.08,h/2);ctx.closePath();ctx.fillStyle=palette.colors[1];ctx.fill();ctx.restore();
+ });ctx.restore();
+ timeline.value=t;clock.value=`${t.toFixed(1)} / ${config.duration} s`;
+ document.querySelectorAll('.palette').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===active.palette)));document.body.dataset.time=t.toFixed(3);document.body.dataset.state=state.to;
+}
+function schedule(){if(!raf&&ready&&playing&&visible&&!document.hidden)raf=requestAnimationFrame(tick)}
+function tick(now){raf=0;if(!playing||!visible||document.hidden){last=0;return}if(last)time=(time+Math.min(.1,(now-last)/1000))%config.duration;last=now;draw(time);schedule()}
+function setPlaying(value){playing=value;last=0;if(raf){cancelAnimationFrame(raf);raf=0}play.textContent=value?'Pause':'Play';play.setAttribute('aria-pressed',String(value));schedule()}
+function seek(t){time=Math.max(0,Math.min(config.duration-.001,t));setPlaying(false);draw(time)}
+play.addEventListener('click',()=>setPlaying(!playing));timeline.addEventListener('input',()=>seek(Number(timeline.value)));
+for(const button of document.querySelectorAll('.palette'))button.addEventListener('click',()=>seek(Number(button.dataset.time)));
+const size=document.querySelector('#size');function setSize(value){document.querySelector('#composition').style.maxWidth=value==='auto'?'390px':value+'px'}size.addEventListener('change',()=>setSize(size.value));if(['320','390'].includes(params.get('width'))){size.value=params.get('width');setSize(size.value)}
+reduced.addEventListener('change',e=>{if(e.matches)seek(0)});document.addEventListener('visibilitychange',()=>{last=0;schedule()});
+new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;last=0;schedule()},{threshold:.35}).observe(canvas);
+async function load(){await Promise.all([...new Set(config.states.map(s=>s.phone))].map(path=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>{images.set(path,img);resolve()};img.onerror=()=>reject(new Error(path));img.src=path})));ready=true;setPlaying(playing);draw(time);document.body.dataset.ready='true'}
+load().catch(error=>{console.error(error);document.querySelector('#note').textContent='Keep this source beside the linked Today collection so the images can load.'});
+</script></main></body></html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="4096" height="4096" viewBox="0 0 4096 4096">
+  <title>Count.kcal color themes, twelve silver iPhone 18 Pro phones in a flower</title>
+  <desc>Six original dashboard palettes, each in light and dark mode. Original images are linked from the canonical Today asset collection. Midnight mode, dark background setting, Steps off, streak light effect mid-sweep.</desc>
+  <defs>
+    <filter id="contact-shadow" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="11" flood-color="#000000" flood-opacity="0.24"/>
+    </filter>
+  </defs>
+  <g transform="translate(2048 2048) rotate(15)">
+    <image x="-452.44565217391306" y="-1820" width="904.8913043478261" height="1850" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2048 2048) rotate(45)">
+    <image x="-452.44565217391306" y="-1820" width="904.8913043478261" height="1850" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-04-light-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2048 2048) rotate(75)">
+    <image x="-452.44565217391306" y="-1820" width="904.8913043478261" height="1850" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2048 2048) rotate(105)">
+    <image x="-452.44565217391306" y="-1820" width="904.8913043478261" height="1850" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-08-light-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2048 2048) rotate(135)">
+    <image x="-452.44565217391306" y="-1820" width="904.8913043478261" height="1850" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-09-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2048 2048) rotate(165)">
+    <image x="-452.44565217391306" y="-1820" width="904.8913043478261" height="1850" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-05-light-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2048 2048) rotate(195)">
+    <image x="-452.44565217391306" y="-1820" width="904.8913043478261" height="1850" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2048 2048) rotate(225)">
+    <image x="-452.44565217391306" y="-1820" width="904.8913043478261" height="1850" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-01-light-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2048 2048) rotate(255)">
+    <image x="-452.44565217391306" y="-1820" width="904.8913043478261" height="1850" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-08-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2048 2048) rotate(285)">
+    <image x="-452.44565217391306" y="-1820" width="904.8913043478261" height="1850" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-02-light-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2048 2048) rotate(315)">
+    <image x="-452.44565217391306" y="-1820" width="904.8913043478261" height="1850" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-05-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2048 2048) rotate(345)">
+    <image x="-452.44565217391306" y="-1820" width="904.8913043478261" height="1850" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-09-light-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+</svg>
+

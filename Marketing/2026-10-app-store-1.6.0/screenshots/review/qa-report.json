@@ -1,0 +1,442 @@
+{
+  "passed": true,
+  "png_count": 48,
+  "locale_count": 4,
+  "scenes_per_locale": 6,
+  "all_outputs_rgb_no_alpha": true,
+  "capture_copy_is_byte_identical": true,
+  "files": [
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/en-US/01-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "db499f3c216a23e95e32023076ab06f683592d1983c05d4c80c97e651a316456"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/en-US/01-balance.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "e266f2658fc281a57c099f4cf3f9bebb43b33cd3d1236555e362cb86627e6cce"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/en-US/02-now-and-midnight.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "2e558ea73d4279ff253ae7966b715c159b511ec496871595e1ac979f438d4683"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/en-US/02-now-and-midnight.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "b6417c714ad54fa8282b6001ef23b150c1345c11c3ccbc7c83e44c22453d6bae"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/en-US/03-macros.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "933667236a96162453700a75786802fba0b3a55aa0891d8e80aff8e410c5b6b8"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/en-US/03-macros.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "33c7e2c00a84e3302907ff48c6689965f9ae8a56f3a6da0fba434bb32cf6dce4"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/en-US/04-weekly-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "553f3f2396d71d056960eab074e67ac5ff3e8947dc056f4b048f69d067fef4ad"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/en-US/04-weekly-balance.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "5903f02635b71974dbd38624f99b4fb16d947be8f8f2543368cc49f7b75fdbab"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/en-US/05-progress.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "bba54aae254b3d504b842d9bfd06b3106e1720f6a87c5d7dc5392ce1c2da0764"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/en-US/05-progress.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "2b0c2cbd19c67998fc2777020b489e186cd652c3bdf1c0df6dc8787344a75169"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/en-US/06-themes.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "168b8e2b5b5b0c5c8a751223228c5e2b1c872aeaa63aebb32cf14c50d6eb271f"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/en-US/06-themes.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "8db932d3d8a73d25c46d2951b227ff7aa35d9853b0d3c5e73fa27d2b9340317e"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/de-DE/01-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "eed981492243d9b32cd6c0d01fb22226e02bf723af56a9da53cb0be772f95cb7"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/de-DE/01-balance.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "76e63d2119c056e090776112b3e3144d3fed1f57f5fbd6ae58d432b5ab2a059d"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/de-DE/02-now-and-midnight.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "bbfe46f40cbacbf784c9784bcbe5ae756f7ea26a09ed7c0323af3e6f9f279ed4"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/de-DE/02-now-and-midnight.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "e76934b9f3025d79bb1380eeb80c01a745794f7345ae9fce984d83f8e827c7e6"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/de-DE/03-macros.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "906b57eddfc2eb09d9f2d4fe5060785540ff39703433e1ce29f765a35c61b67a"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/de-DE/03-macros.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "320d72b7968d63c1ef6e13ca3f898806be210424377f7b105b3ffb3a834f816a"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/de-DE/04-weekly-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "4834981e885e564d79e83246994051600e25ba74cf7f870e8466484c41855f82"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/de-DE/04-weekly-balance.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "f89612bb3f42d6d4c9f3d4c77a3d5b296d911d11a740baaef991853f2b38506f"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/de-DE/05-progress.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "1188d7397d563265147c6265cb6ce77ea2e23c32a3288009217fa86890813ad7"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/de-DE/05-progress.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "4a3622ff53ce8ddff8d7f9530a8c32bb13a9aa041a58318b1dba20e9eb410ce0"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/de-DE/06-themes.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "d498a7f910be7076ff03833bb8704604971be10726123dc51fc0a5868f650d35"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/de-DE/06-themes.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "687896eeb0d993dd4a0ccde48e3edc1ad456bbb40d3a3100c32d21a01329bc53"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/fr-FR/01-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "d047c8c457eed1e51853a17537201a926c903365c1823b077614a381a1e213c8"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/fr-FR/01-balance.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "e4aa898ee4097f90379bd2b6b776ac1fcf883b8fa3f1281781af9fb0ef24a513"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/fr-FR/02-now-and-midnight.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "10fe166b853fe89880fc87ac5170193ab5023d205fa2776be6a431827a31e8ae"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/fr-FR/02-now-and-midnight.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "d25b4addbfd5ea0869c5dd52fac7da78262869b331639d80ee8b27e38df8bd16"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/fr-FR/03-macros.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "de4136411ecc2d6a531b6b97879463ae8b8be67a4b2c26227cca7f0819cf9265"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/fr-FR/03-macros.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "f8849510cb345a02035c238093395d9dddca2d05ebf582a3f1f9ad85127f6ed5"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/fr-FR/04-weekly-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "869a9ecad1df643bd080e7e43313075a76162772611bb5a493c94ed95a411d30"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/fr-FR/04-weekly-balance.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "c137a72dce5f693506b5ca6ace357879c243afad4c601e97fd345187e0c4a0a5"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/fr-FR/05-progress.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "6c53f3b3f64e685df72dab5a6c7d10c81abaeccbe0bbc3dfffb2cd2fcd0341c2"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/fr-FR/05-progress.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "02bdaf756f95dcce189f17518cf454c2d24976316db3da38984054a535f5f5f9"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/fr-FR/06-themes.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "5a9245d426ce5220141e639d988cebd3fe27305ae17e9463ed960736e900ddcc"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/fr-FR/06-themes.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "e510f7f75580fc4bf119b9e165b96d4a2fca9ff515b08016bd75d7470cc08515"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/es-ES/01-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "8fb6f54d77e5142afbcd25ea7e7a409d26f48100fe683f9dcd587178b9ec3f36"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/es-ES/01-balance.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "aca5263f1cfb49bca0a4e912212b81ef1f1860fea37cc1aceb7c8fb1911e26b3"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/es-ES/02-now-and-midnight.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "55f3035069df358d9d3fd1053000669e87d393cb6d6906cea3857c263bfa8054"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/es-ES/02-now-and-midnight.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "d4da7b6d963d6dd4fbc7239ec16679d9e4c28bd03b78cd7cfad895bd3a1778b5"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/es-ES/03-macros.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "3e6ae9d51dbe0947d6329c7fb26a03b69d012c02469eb586878294672c89e9b5"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/es-ES/03-macros.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "93491b0772d1f06730d219875135ad738b828eb94d74e47d02a797d10416b853"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/es-ES/04-weekly-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "0165ac0ac67fdd26e56d5202425bdad9c60ece8cb18094d2a621a0a711e74be2"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/es-ES/04-weekly-balance.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "714d8621e76d7d81e69a5544895ff714018919ecf8e13402892ece1d3f3b239c"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/es-ES/05-progress.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "f51f546dc333da0d7e9832b3ad1ba6cca08991e5c424157f1f418b4503d4deb1"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/es-ES/05-progress.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "458ac989d452b8d6d6dae102d29583948b8f261773c802a90848d400b1d5a97e"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/es-ES/06-themes.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "abaa02ac7e306775973eadbaceea17db8d399d52eb45ffff01790c1325e6dfd2"
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots/iphone-large/es-ES/06-themes.png",
+      "size": [
+        1320,
+        2868
+      ],
+      "mode": "RGB",
+      "sha256": "d1c6bb3d63a0078c1835ca00b4fc1d90cef15ba6f73cc648ad85cad42a1df575"
+    }
+  ]
+}

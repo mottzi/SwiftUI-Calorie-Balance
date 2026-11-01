@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="4096" height="2112" viewBox="0 0 4096 2112">
+  <title>Count.kcal color deck, dark mode, six silver iPhones</title>
+  <desc>Six original framed iPhone 18 Pro screenshots in dark appearance form a layered color sample deck. Theme 09 is the large foreground phone. Behind it, themes 04, 05, 08, 02 and 01 increase in size from left to right. Transparent background. Midnight, Marketing Mode, dark background setting, Steps off, streak highlight mid-sweep.</desc>
+  <defs>
+    <filter id="contact-shadow" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <g transform="translate(780 1780) rotate(-20)">
+    <image x="-264.1304347826087" y="-1080" width="528.2608695652174" height="1080" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(1200 1780) rotate(-15)">
+    <image x="-295.92391304347825" y="-1210" width="591.8478260869565" height="1210" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-05-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(1620 1780) rotate(-10)">
+    <image x="-327.7173913043478" y="-1340" width="655.4347826086956" height="1340" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-08-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2040 1780) rotate(-5)">
+    <image x="-359.5108695652174" y="-1470" width="719.0217391304348" height="1470" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2460 1780) rotate(0)">
+    <image x="-391.30434782608694" y="-1600" width="782.6086956521739" height="1600" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(3000 1980) rotate(10)">
+    <image x="-450" y="-1840" width="900" height="1840" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-09-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+</svg>

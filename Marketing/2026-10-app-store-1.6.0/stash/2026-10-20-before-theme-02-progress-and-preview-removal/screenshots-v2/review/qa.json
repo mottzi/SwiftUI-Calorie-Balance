@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "outputs": [
+    {
+      "path": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/en-US/01-calorie-balance.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "149be7957718b8eafb89a1670b53b44246a2a49a49871bb7e692f70849bb96f1"
+    },
+    {
+      "path": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/en-US/02-your-colors.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "2c5a0e95000e96240ca5b48e696fdd8ad98c4b58d62d29970a1907450b1ec63d"
+    },
+    {
+      "path": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/en-US/03-now-to-midnight.png",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "sha256": "d9c550338cf95e11fcf89b390dc3d9c9df600845ff170ed70d94af43ba9afa08"
+    }
+  ]
+}

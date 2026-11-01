@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Count.kcal · Make it yours</title>
+<style>
+:root{color-scheme:dark;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0c1016;color:#f5f7fb}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-content:center;padding:24px}
+main{width:min(1380px,calc(100vw - 48px))}.stage{position:relative;width:100%;aspect-ratio:9/5}
+canvas{display:block;width:100%;height:100%}
+.hotspots{position:absolute;inset:0;pointer-events:none}
+.palette{position:absolute;top:65.5%;width:6.8%;height:7.5%;border:0;background:transparent;border-radius:18px;pointer-events:auto;cursor:pointer}
+.palette:nth-child(1){left:8.1%}.palette:nth-child(2){left:16.1%}.palette:nth-child(3){left:24.1%}.palette:nth-child(4){left:32.1%}
+.palette:focus-visible{outline:3px solid white;outline-offset:5px}
+.controls{display:flex;align-items:center;gap:16px;padding:18px 5%;border-top:1px solid #ffffff16;color:#a4adbb;font-size:13px}
+.controls button{font:inherit;color:#f5f7fb;border:1px solid #ffffff26;background:#ffffff08;padding:8px 12px;border-radius:8px;cursor:pointer}
+.controls input{flex:1;min-width:60px;accent-color:#65d4c1}.controls output{font-variant-numeric:tabular-nums;min-width:78px}
+.footnote{margin:8px 5% 0;color:#8792a3;font-size:12px}
+@media(max-width:600px){body{padding:8px}main{width:calc(100vw - 16px)}.controls{gap:8px;flex-wrap:wrap;padding:12px 2%}.footnote{margin:8px 2%}.controls input{width:40%}}
+</style>
+</head>
+<body>
+<main aria-label="Count.kcal color customization film">
+<div class="stage">
+<canvas id="art" width="1800" height="1000" role="img" aria-label="Make it yours. An iPhone and Apple Watch reveal four matching dark app themes: blue and orange, indigo and green, purple and gold, and teal and coral. Each device bounces gently as its colors change."></canvas>
+<div class="hotspots" role="group" aria-label="Choose an app color palette">
+<button class="palette" aria-label="Preview blue and orange" data-time="1.6"></button>
+<button class="palette" aria-label="Preview indigo and green" data-time="4"></button>
+<button class="palette" aria-label="Preview purple and gold" data-time="7"></button>
+<button class="palette" aria-label="Preview teal and coral" data-time="9.7"></button>
+</div>
+</div>
+<div class="controls" aria-label="Playback controls">
+<button id="play">Pause</button>
+<input id="timeline" aria-label="Animation time" type="range" min="0" max="12" step="0.01" value="0">
+<output id="time">0.0 / 12 s</output>
+</div>
+<p class="footnote">Choose a swatch to pause on that palette. The animation loops every 12 seconds.</p>
+</main>
+<script id="motion-config" type="application/json">{
+  "width": 1800,
+  "height": 1000,
+  "duration": 12,
+  "palettes": [
+    {
+      "name": "Blue & orange",
+      "colors": [
+        "#329CF7",
+        "#FF985C"
+      ]
+    },
+    {
+      "name": "Indigo & green",
+      "colors": [
+        "#9AA0FA",
+        "#66D783"
+      ]
+    },
+    {
+      "name": "Purple & gold",
+      "colors": [
+        "#B38AF5",
+        "#F4C869"
+      ]
+    },
+    {
+      "name": "Teal & coral",
+      "colors": [
+        "#65D4C1",
+        "#F49BA7"
+      ]
+    }
+  ],
+  "states": [
+    {
+      "phone": "../../2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png",
+      "watch": "../../2026-10-watch/stills/apple-watch-series-11-46mm-jet-black-aluminum-sport-band-black-theme-01-dark-midnight-bg-dark-steps-off-framed.png",
+      "palette": 0,
+      "appearance": "Dark appearance"
+    },
+    {
+      "phone": "../../2026-10-today/stills/iphone-18-pro-silver-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png",
+      "watch": "../../2026-10-watch/stills/apple-watch-series-11-46mm-jet-black-aluminum-sport-band-black-theme-02-dark-midnight-bg-dark-steps-off-framed.png",
+      "palette": 1,
+      "appearance": "Dark appearance"
+    },
+    {
+      "phone": "../../2026-10-today/stills/iphone-18-pro-silver-theme-08-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png",
+      "watch": "../../2026-10-watch/stills/apple-watch-series-11-46mm-jet-black-aluminum-sport-band-black-theme-08-dark-midnight-bg-dark-steps-off-framed.png",
+      "palette": 2,
+      "appearance": "Dark appearance"
+    },
+    {
+      "phone": "../../2026-10-today/stills/iphone-18-pro-silver-theme-09-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png",
+      "watch": "../../2026-10-watch/stills/apple-watch-series-11-46mm-jet-black-aluminum-sport-band-black-theme-09-dark-midnight-bg-dark-steps-off-framed.png",
+      "palette": 3,
+      "appearance": "Dark appearance"
+    }
+  ],
+  "transitions": [
+    {
+      "start": 2,
+      "end": 3.4,
+      "from": 0,
+      "to": 1
+    },
+    {
+      "start": 4.9,
+      "end": 6.3,
+      "from": 1,
+      "to": 2
+    },
+    {
+      "start": 7.8,
+      "end": 9.2,
+      "from": 2,
+      "to": 3
+    },
+    {
+      "start": 10.4,
+      "end": 11.8,
+      "from": 3,
+      "to": 0
+    }
+  ],
+  "bounce": {
+    "duration": 0.64,
+    "phoneDelay": 0.52,
+    "watchDelay": 0.64,
+    "phoneLift": 18,
+    "watchLift": 22,
+    "scaleAmount": 0.012,
+    "phoneTilt": -0.35,
+    "watchTilt": 0.55
+  }
+}</script>
+<script>
+"use strict";
+const config=JSON.parse(document.querySelector("#motion-config").textContent);
+const canvas=document.querySelector("#art"),ctx=canvas.getContext("2d",{alpha:true});
+const play=document.querySelector("#play"),timeline=document.querySelector("#timeline"),timeLabel=document.querySelector("#time");
+const imageCache=new Map();
+const params=new URLSearchParams(location.search);
+const reducedMotion=matchMedia("(prefers-reduced-motion: reduce)");
+let time=Number(params.get("t")||0),playing=!reducedMotion.matches&&!params.has("paused"),last=0,ready=false;
+const smooth=p=>{p=Math.max(0,Math.min(1,p));return p*p*(3-2*p)};
+const alpha=(hex,a)=>{const n=parseInt(hex.slice(1),16);return "rgba("+(n>>16&255)+","+(n>>8&255)+","+(n&255)+","+a+")"};
+function stateAt(t){let current=0;for(const tr of config.transitions){if(t<tr.start)return{from:current,to:current,p:0,moving:false};if(t<tr.end)return{from:tr.from,to:tr.to,p:smooth((t-tr.start)/(tr.end-tr.start)),moving:true};current=tr.to}return{from:current,to:current,p:0,moving:false}}
+// Pulse starts when the reveal reaches each device, then settles before looping.
+function deviceBounce(t,type){
+ const delay=config.bounce[type+"Delay"];
+ for(const tr of config.transitions){
+  const u=(t-tr.start-(tr.end-tr.start)*delay)/config.bounce.duration;
+  if(u>=0&&u<1){
+   if(u<.26)return smooth(u/.26);
+   if(u<.62)return 1-1.18*smooth((u-.26)/.36);
+   return -.18*(1-smooth((u-.62)/.38));
+  }
+ }
+ return 0;
+}
+function rounded(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+function text(str,x,y,size,bold,color,kern=0){ctx.save();ctx.fillStyle=color;ctx.font=(bold?600:400)+" "+size+'px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif';ctx.letterSpacing=kern+"px";ctx.fillText(str,x,y);ctx.restore()}
+function ribbonPath(palette){ctx.beginPath();ctx.moveTo(210+palette*144,692);ctx.bezierCurveTo(710,1030,940,250,1680,570)}
+function draw(t){
+ if(!ready)return;
+ t=((t%config.duration)+config.duration)%config.duration;
+ const {from,to,p,moving}=stateAt(t),active=config.states[to],palette=config.palettes[active.palette];
+ const waveX=-220+2240*p;
+ ctx.clearRect(0,0,canvas.width,canvas.height);ctx.save();ctx.scale(canvas.width/config.width,canvas.height/config.height);
+ if(moving){
+  const opacity=Math.sin(p*Math.PI);
+  let gradient=ctx.createLinearGradient(150,0,1720,0);gradient.addColorStop(0,alpha(palette.colors[0],.12*opacity));gradient.addColorStop(1,alpha(palette.colors[1],.18*opacity));
+  ctx.lineCap="round";ctx.lineWidth=56;ctx.strokeStyle=gradient;ribbonPath(active.palette);ctx.stroke();
+  ctx.save();ctx.beginPath();ctx.rect(waveX-90,0,180,1000);ctx.clip();
+  gradient=ctx.createLinearGradient(150,0,1720,0);gradient.addColorStop(0,alpha(palette.colors[0],.8*opacity));gradient.addColorStop(1,alpha(palette.colors[1],.8*opacity));
+  ctx.lineWidth=8;ctx.strokeStyle=gradient;ribbonPath(active.palette);ctx.stroke();ctx.restore();
+ }
+ text("Count.kcal",154,252,25,true,"#C9D0DA",.2);
+ text("Make it",148,394,118,true,"#F5F7FB",-4);
+ text("yours.",148,516,118,true,"#F5F7FB",-4);
+ text("Your colors. On both screens.",154,587,28,false,"#A4ADBB",-.1);
+ config.palettes.forEach((pal,i)=>{
+  const x=154+i*144,selected=i===active.palette,e=selected&&moving?Math.sin(p*Math.PI)*2:0;
+  const box={x:x-e,y:662-e,w:108+e*2,h:58+e*2};
+  if(selected){ctx.strokeStyle="rgba(245,247,251,.9)";ctx.lineWidth=2;rounded(box.x-7,box.y-7,box.w+14,box.h+14,23);ctx.stroke()}
+  ctx.save();rounded(box.x,box.y,box.w,box.h,18);ctx.clip();ctx.fillStyle=pal.colors[0];ctx.fillRect(box.x,box.y,box.w,box.h);
+  ctx.beginPath();ctx.moveTo(box.x+box.w*.58,box.y);ctx.lineTo(box.x+box.w,box.y);ctx.lineTo(box.x+box.w,box.y+box.h);ctx.lineTo(box.x+box.w*.42,box.y+box.h);ctx.closePath();ctx.fillStyle=pal.colors[1];ctx.fill();ctx.restore();
+ });
+ text(palette.name,154,779,24,true,"#E2E7EF");text(active.appearance,154,816,19,false,"#A4ADBB");
+ const bob=3*Math.cos(2*Math.PI*t/config.duration);
+ function device(type,x,y,h,rotation){
+  const a=imageCache.get(config.states[from][type]),b=imageCache.get(config.states[to][type]),w=h*a.naturalWidth/a.naturalHeight;
+  const lift=deviceBounce(t,type),pop=1+config.bounce.scaleAmount*lift;
+  function part(img,clip){
+   ctx.save();if(clip){ctx.beginPath();ctx.rect(...clip);ctx.clip()}
+   ctx.translate(x+w/2,y+h/2-config.bounce[type+"Lift"]*lift);ctx.rotate((rotation+config.bounce[type+"Tilt"]*lift)*Math.PI/180);ctx.scale(pop,pop);
+   ctx.shadowColor="rgba(0,0,0,.25)";ctx.shadowBlur=28;ctx.shadowOffsetY=18;ctx.drawImage(img,-w/2,-h/2,w,h);ctx.restore();
+  }
+  if(moving){const edge=Math.max(0,Math.min(1800,waveX));part(a,[edge,0,1800-edge,1000]);part(b,[0,0,edge,1000])}else part(a);
+ }
+ device("phone",1060,74+bob,820,-3);device("watch",1388,460-bob*.6,425,6);
+ if(t>.25&&t<1.45){
+  const progress=smooth((t-.25)/1.2),w=820*1350/2760;
+  ctx.save();ctx.translate(1060+w/2,74+bob+410);ctx.rotate(-3*Math.PI/180);ctx.translate(-w/2,-410);ctx.beginPath();ctx.rect(40,173,320,52);ctx.clip();
+  const gx=22+360*progress,g=ctx.createLinearGradient(gx-22,173,gx+22,225);
+  g.addColorStop(0,"rgba(255,255,255,0)");g.addColorStop(.5,"rgba(255,255,255,"+(.13*Math.sin(Math.PI*progress))+")");g.addColorStop(1,"rgba(255,255,255,0)");ctx.fillStyle=g;ctx.fillRect(40,173,320,52);ctx.restore();
+ }
+ ctx.restore();
+ timeLabel.value=t.toFixed(1)+" / 12 s";timeline.value=t;
+ document.querySelectorAll(".palette").forEach((b,i)=>b.setAttribute("aria-pressed",String(i===active.palette)));
+ document.body.dataset.state=String(to);document.body.dataset.time=t.toFixed(3);
+}
+function setPlaying(value){playing=value;last=0;play.textContent=playing?"Pause":"Play";play.setAttribute("aria-pressed",String(playing))}
+function seek(t){time=Math.max(0,Math.min(config.duration-.001,t));setPlaying(false);draw(time)}
+play.addEventListener("click",()=>setPlaying(!playing));
+timeline.addEventListener("input",()=>seek(Number(timeline.value)));
+document.querySelectorAll(".palette").forEach(button=>button.addEventListener("click",()=>seek(Number(button.dataset.time))));
+reducedMotion.addEventListener("change",event=>{if(event.matches)seek(1.6)});
+document.addEventListener("visibilitychange",()=>{last=0});
+function tick(now){if(playing&&!document.hidden){if(last)time=(time+Math.min(.1,(now-last)/1000))%config.duration;draw(time)}last=now;requestAnimationFrame(tick)}
+async function load(){
+ const paths=[...new Set(config.states.flatMap(s=>[s.phone,s.watch]))];
+ await Promise.all(paths.map(path=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>{imageCache.set(path,img);resolve()};img.onerror=()=>reject(new Error("Unable to load "+path));img.src=path})));
+ ready=true;if(reducedMotion.matches&&!params.has("t"))time=1.6;
+ setPlaying(playing);draw(time);document.body.dataset.ready="true";requestAnimationFrame(tick);
+}
+load().catch(error=>{console.error(error);document.querySelector(".footnote").textContent="The source images could not be loaded. Keep this file beside the linked Marketing collections.";document.body.dataset.error="true"});
+</script>
+</body>
+</html>
+

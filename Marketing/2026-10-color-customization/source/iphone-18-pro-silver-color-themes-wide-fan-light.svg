@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="4096" height="1536" viewBox="0 0 4096 1536">
+  <title>Count.kcal color themes, light mode, wide iPhone fan</title>
+  <desc>Six original silver iPhone 18 Pro screenshots in an 8:3 website composition. All calorie cards remain visible. Midnight, Marketing Mode, dark background, Steps off, streak highlight mid-sweep. Transparent background.</desc>
+  <defs>
+    <filter id="contact-shadow" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <g transform="translate(680 1390) rotate(-13)">
+    <image x="-305.70652173913044" y="-1250" width="611.4130434782609" height="1250" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-01-light-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(3416 1390) rotate(13)">
+    <image x="-305.70652173913044" y="-1250" width="611.4130434782609" height="1250" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-04-light-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(1225 1390) rotate(-8)">
+    <image x="-305.70652173913044" y="-1250" width="611.4130434782609" height="1250" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-02-light-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2871 1390) rotate(8)">
+    <image x="-305.70652173913044" y="-1250" width="611.4130434782609" height="1250" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-05-light-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(1770 1390) rotate(-3)">
+    <image x="-305.70652173913044" y="-1250" width="611.4130434782609" height="1250" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-08-light-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+  <g transform="translate(2326 1390) rotate(3)">
+    <image x="-305.70652173913044" y="-1250" width="611.4130434782609" height="1250" xlink:href="../../2026-10-today/stills/iphone-18-pro-silver-theme-09-light-midnight-bg-dark-steps-off-sheen-mid-framed.png" filter="url(#contact-shadow)"/>
+  </g>
+</svg>

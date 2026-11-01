@@ -1,0 +1,210 @@
+{
+  "passed": true,
+  "review_only": true,
+  "image_count": 8,
+  "scene_count": 2,
+  "locale_count": 4,
+  "files": [
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/en-US/01-visual-customization.png",
+      "sha256": "56216cc77606bf3899cd25f7f366f5b224e71461b9d0f4a96146570debf7c27e",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "measured_device_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "heading_width": 546.0,
+      "heading_fragment_baselines": [
+        172,
+        172
+      ]
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/en-US/02-home-screen-widgets.png",
+      "sha256": "13dd34e11a549ade1f6da1ea5e168928c4995ddf7a3dfc688c357edb4a88ab27",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "measured_device_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "heading_width": 454.0,
+      "heading_fragment_baselines": [
+        172,
+        172
+      ]
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/de-DE/01-visual-customization.png",
+      "sha256": "f443761a054c6dd1d64766d91157ed901ca0b1044927b9d8befd84698b32f900",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "measured_device_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "heading_width": 558.0,
+      "heading_fragment_baselines": [
+        173,
+        173
+      ]
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/de-DE/02-home-screen-widgets.png",
+      "sha256": "b019a057c3208b129387fed13287c902de18ae57222f4529f51550550ef50134",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "measured_device_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "heading_width": 603.0,
+      "heading_fragment_baselines": [
+        173,
+        173
+      ]
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/fr-FR/01-visual-customization.png",
+      "sha256": "19d3e32f9cc4562dfd4680aa21e015025dbd233bfe1c53c9accd4ca21100df4f",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "measured_device_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "heading_width": 562.0,
+      "heading_fragment_baselines": [
+        191,
+        191
+      ]
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/fr-FR/02-home-screen-widgets.png",
+      "sha256": "44f469f750325d3ad05bd303ce0ad5862cace4f271f1a4ff93b178f7073e8a37",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "measured_device_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "heading_width": 680.0,
+      "heading_fragment_baselines": [
+        172,
+        172
+      ]
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/es-ES/01-visual-customization.png",
+      "sha256": "61516bc1e96b0f3db94b263bab843f6bfc408a1b6a964be98e898a85ae9affc9",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "measured_device_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "heading_width": 414.0,
+      "heading_fragment_baselines": [
+        172,
+        172
+      ]
+    },
+    {
+      "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/es-ES/02-home-screen-widgets.png",
+      "sha256": "5f18fa4bddb317712f6477d57124bf29f1cb80b4aaca89bcad746c785e719427",
+      "size": [
+        1206,
+        2622
+      ],
+      "mode": "RGB",
+      "measured_device_bounds_exclusive": [
+        60,
+        323,
+        1146,
+        2562
+      ],
+      "heading_width": 546.0,
+      "heading_fragment_baselines": [
+        172,
+        172
+      ]
+    }
+  ],
+  "all_sizes": [
+    1206,
+    2622
+  ],
+  "all_RGB_without_alpha": true,
+  "device_bounds_exclusive": [
+    60,
+    323,
+    1146,
+    2562
+  ],
+  "minimum_visible_margin": 60,
+  "native_capture_files_unchanged": true,
+  "native_pixels_preserved_before_frame_and_scale": true,
+  "localized_device_bodies_identical": true,
+  "source_capture_hashes": {
+    "Marketing/2026-10-app-store-1.6.0/captures/2026-10-22-customization-native-polished.png": "77bebfd192040b49a763b45920542f0584cf089e507d08774bf5aa42799c278d",
+    "Marketing/2026-10-app-store-1.6.0/captures/2026-10-22-widgets-native.png": "a4311486e4b91dc10e8c54bd52bd17f9374e49daa5f5af8bb178b4a31b95e548"
+  },
+  "shared_baselines": true,
+  "native_customization_viewport_notes": [
+    "The Body weight row is partially clipped beneath the native toolbar.",
+    "All nine theme samples are visible; the native viewport hides the footer laurels.",
+    "These native viewport details are preserved without retouching."
+  ],
+  "active_final_files_unchanged": true,
+  "active_final_hashes": {
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/01-calorie-balance.png": "9989050e554515365301f5149ceb49e9d3e3d765a005322592f554cf2baf407e",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/02-custom-colors.png": "4c891cfbcfc0dafb7d756cadd5cea3936cd375d9df967402c2e4f6ef8ed07ad0",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/03-progress.png": "fd61e3df0e2eb73aad1698999b0677fccceaa87be842d1340f9bda3285e9e494",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/01-calorie-balance.png": "12499386799eb19dc23f9fa0e83f89e430402725ccb090da7a159d2c14529f7a",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/02-custom-colors.png": "362c30b15cc0eca647da076cc8da249e955b56ffadb32b8df66408e3d154e015",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/03-progress.png": "65f4b974444a9ffbed82fed317e15fc095c0f56786b3e22e2a6e155acf8e048b",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/01-calorie-balance.png": "d451b347bf1fe42f4e28f9ca5bb9097f66e5a72300c480b759e94d3fb464d023",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/02-custom-colors.png": "575f4f5b08dba52107fa5ebdf611a09d11a99eeab1821822bc690c87e59bc4e1",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/03-progress.png": "94abb1a42b365756017c17fe7f7c9e21851bf5519e1f2ba46cb5ebfdae913b3c",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/01-calorie-balance.png": "9f2099534e14347edf780f97f27f7d20320d0bec98e017c56f1f45db54c9fc14",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/02-custom-colors.png": "793043301f2858f3f58414ec6311b8d2554fe5f9788c96a23bdf2d12549a2bdd",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/03-progress.png": "a38013da726a0fd53dd6f03d5800476598e01191564e38594cbb469129a33fa0",
+    "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/manifest.json": "aa0b09dbd1e815b3cc734091e18f2991b2323fdd2367ae795cfe8e8a2528954a"
+  }
+}

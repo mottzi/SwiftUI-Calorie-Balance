@@ -1,0 +1,966 @@
+[
+  {
+    "locale": "en-US",
+    "scene": 1,
+    "title": "Calorie balance",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/01-calorie-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "hardware_height": 2239,
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "device_position": [
+      60,
+      323
+    ],
+    "device_size_before_canvas_clip": [
+      1086,
+      2239
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_pixels_preserved_from_approved": true,
+    "theme": 1,
+    "source_paths": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ],
+    "source_sha256": [
+      "7c2a36a4a294579c9de82590abb2dbb3704bfe85cd02ba45bb52034aaecef007"
+    ],
+    "framed_source_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ]
+  },
+  {
+    "locale": "en-US",
+    "scene": 2,
+    "title": "Custom colors",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/02-custom-colors.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1206,
+      2562
+    ],
+    "hardware_height": 2239,
+    "device_margins": {
+      "left": 60,
+      "right": 0,
+      "bottom": 60
+    },
+    "device_position": [
+      60,
+      323
+    ],
+    "device_size_before_canvas_clip": [
+      1189,
+      2239
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_pixels_preserved_from_approved": true,
+    "original_hardware": "Marketing/archive/legacy-app-store/iphone-65/exports/iphone-65-02-customize.png",
+    "original_hardware_sha256": "de75cc28ea949fb022f5b932483449a96ea20b669549f65fc67c8854e48f4e96",
+    "sources": [
+      {
+        "theme": 1,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "capture_sha256": "6fc879562d8ab85d252f0464dc0db1ebb84bfb51004fb20f78a25fdb807ad8c6",
+        "plane": [
+          [
+            192,
+            440
+          ],
+          [
+            1070,
+            596
+          ],
+          [
+            1070,
+            2486
+          ],
+          [
+            192,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-1.png",
+        "mask_sha256": "ccfba12aa162ee794ca6649b6832925b80f1c59784790b3f925580ab77a2df83"
+      },
+      {
+        "theme": 2,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "capture_sha256": "efe705af1914d322fda6b0150594cdd47a29de11c6ae63b78fba7654845b3b8f",
+        "plane": [
+          [
+            596,
+            440
+          ],
+          [
+            1474,
+            596
+          ],
+          [
+            1474,
+            2486
+          ],
+          [
+            596,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-2.png",
+        "mask_sha256": "89fd3e55a607112e351e315238c6a0ba0e5235f7208e39381ea048d258a49121"
+      },
+      {
+        "theme": 4,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "capture_sha256": "49fa1b2584e7c0ee0a71d387caabd85e12823db5ca403a54cce72c8ea3d3c635",
+        "plane": [
+          [
+            1000,
+            440
+          ],
+          [
+            1878,
+            596
+          ],
+          [
+            1878,
+            2486
+          ],
+          [
+            1000,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-3.png",
+        "mask_sha256": "40c017f6aa66da1d13da423af30d22d16af8455dea9f96741f7dd4571a1870ce"
+      }
+    ],
+    "source_body_crop": [
+      82,
+      424,
+      1284,
+      2687
+    ],
+    "composition_scale": 0.9893946089262041,
+    "hardware_pixels_unchanged_before_uniform_resize": true,
+    "intentional_right_bleed": true,
+    "right_bleed_reason": "Original Affinity export crops the third phone. Keep that edge outside the canvas to avoid an exposed square cut.",
+    "right_canvas_clip_pixels": 43
+  },
+  {
+    "locale": "en-US",
+    "scene": 3,
+    "title": "Your progress",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/en-US/03-progress.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "hardware_height": 2239,
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "device_position": [
+      60,
+      323
+    ],
+    "device_size_before_canvas_clip": [
+      1086,
+      2239
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_anchor": "ls",
+    "heading_geometry": {
+      "width": 573.0,
+      "baseline": 172,
+      "fragment_baselines": [
+        172,
+        172
+      ],
+      "fragment_tops": [
+        104,
+        122
+      ]
+    },
+    "heading_accent": "#b1a8ed",
+    "theme": 2,
+    "source_paths": [
+      "Marketing/2026-10-app-store-1.6.0/captures/progress-theme-02-calendar-en-US.png",
+      "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png"
+    ],
+    "source_sha256": [
+      "0ee099c5349f56832e1a5e909aefc7587a85c8f297d1a1ddaa97518e1f82be1d",
+      "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16"
+    ],
+    "framed_source_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ],
+    "capture_ui_order": [
+      "Calendar",
+      "Progress",
+      "Calories"
+    ],
+    "source_capture_sha256": "0ee099c5349f56832e1a5e909aefc7587a85c8f297d1a1ddaa97518e1f82be1d",
+    "framed_source": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/current-progress-theme-02-calendar-framed.png",
+    "calendar_candidate_approved": true
+  },
+  {
+    "locale": "de-DE",
+    "scene": 1,
+    "title": "Kalorienbilanz",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/01-calorie-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "hardware_height": 2239,
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "device_position": [
+      60,
+      323
+    ],
+    "device_size_before_canvas_clip": [
+      1086,
+      2239
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_pixels_preserved_from_approved": true,
+    "theme": 1,
+    "source_paths": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ],
+    "source_sha256": [
+      "7c2a36a4a294579c9de82590abb2dbb3704bfe85cd02ba45bb52034aaecef007"
+    ],
+    "framed_source_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ]
+  },
+  {
+    "locale": "de-DE",
+    "scene": 2,
+    "title": "Eigene Farben",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/02-custom-colors.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1206,
+      2562
+    ],
+    "hardware_height": 2239,
+    "device_margins": {
+      "left": 60,
+      "right": 0,
+      "bottom": 60
+    },
+    "device_position": [
+      60,
+      323
+    ],
+    "device_size_before_canvas_clip": [
+      1189,
+      2239
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_pixels_preserved_from_approved": true,
+    "original_hardware": "Marketing/archive/legacy-app-store/iphone-65/exports/iphone-65-02-customize.png",
+    "original_hardware_sha256": "de75cc28ea949fb022f5b932483449a96ea20b669549f65fc67c8854e48f4e96",
+    "sources": [
+      {
+        "theme": 1,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "capture_sha256": "6fc879562d8ab85d252f0464dc0db1ebb84bfb51004fb20f78a25fdb807ad8c6",
+        "plane": [
+          [
+            192,
+            440
+          ],
+          [
+            1070,
+            596
+          ],
+          [
+            1070,
+            2486
+          ],
+          [
+            192,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-1.png",
+        "mask_sha256": "ccfba12aa162ee794ca6649b6832925b80f1c59784790b3f925580ab77a2df83"
+      },
+      {
+        "theme": 2,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "capture_sha256": "efe705af1914d322fda6b0150594cdd47a29de11c6ae63b78fba7654845b3b8f",
+        "plane": [
+          [
+            596,
+            440
+          ],
+          [
+            1474,
+            596
+          ],
+          [
+            1474,
+            2486
+          ],
+          [
+            596,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-2.png",
+        "mask_sha256": "89fd3e55a607112e351e315238c6a0ba0e5235f7208e39381ea048d258a49121"
+      },
+      {
+        "theme": 4,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "capture_sha256": "49fa1b2584e7c0ee0a71d387caabd85e12823db5ca403a54cce72c8ea3d3c635",
+        "plane": [
+          [
+            1000,
+            440
+          ],
+          [
+            1878,
+            596
+          ],
+          [
+            1878,
+            2486
+          ],
+          [
+            1000,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-3.png",
+        "mask_sha256": "40c017f6aa66da1d13da423af30d22d16af8455dea9f96741f7dd4571a1870ce"
+      }
+    ],
+    "source_body_crop": [
+      82,
+      424,
+      1284,
+      2687
+    ],
+    "composition_scale": 0.9893946089262041,
+    "hardware_pixels_unchanged_before_uniform_resize": true,
+    "intentional_right_bleed": true,
+    "right_bleed_reason": "Original Affinity export crops the third phone. Keep that edge outside the canvas to avoid an exposed square cut.",
+    "right_canvas_clip_pixels": 43
+  },
+  {
+    "locale": "de-DE",
+    "scene": 3,
+    "title": "Dein Fortschritt",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/de-DE/03-progress.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "hardware_height": 2239,
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "device_position": [
+      60,
+      323
+    ],
+    "device_size_before_canvas_clip": [
+      1086,
+      2239
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_anchor": "ls",
+    "heading_geometry": {
+      "width": 630.0,
+      "baseline": 172,
+      "fragment_baselines": [
+        172,
+        172
+      ],
+      "fragment_tops": [
+        104,
+        104
+      ]
+    },
+    "heading_accent": "#b1a8ed",
+    "theme": 2,
+    "source_paths": [
+      "Marketing/2026-10-app-store-1.6.0/captures/progress-theme-02-calendar-en-US.png",
+      "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png"
+    ],
+    "source_sha256": [
+      "0ee099c5349f56832e1a5e909aefc7587a85c8f297d1a1ddaa97518e1f82be1d",
+      "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16"
+    ],
+    "framed_source_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ],
+    "capture_ui_order": [
+      "Calendar",
+      "Progress",
+      "Calories"
+    ],
+    "source_capture_sha256": "0ee099c5349f56832e1a5e909aefc7587a85c8f297d1a1ddaa97518e1f82be1d",
+    "framed_source": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/current-progress-theme-02-calendar-framed.png",
+    "calendar_candidate_approved": true
+  },
+  {
+    "locale": "fr-FR",
+    "scene": 1,
+    "title": "Bilan calorique",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/01-calorie-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "hardware_height": 2239,
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "device_position": [
+      60,
+      323
+    ],
+    "device_size_before_canvas_clip": [
+      1086,
+      2239
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_pixels_preserved_from_approved": true,
+    "theme": 1,
+    "source_paths": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ],
+    "source_sha256": [
+      "7c2a36a4a294579c9de82590abb2dbb3704bfe85cd02ba45bb52034aaecef007"
+    ],
+    "framed_source_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ]
+  },
+  {
+    "locale": "fr-FR",
+    "scene": 2,
+    "title": "Vos couleurs",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/02-custom-colors.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1206,
+      2562
+    ],
+    "hardware_height": 2239,
+    "device_margins": {
+      "left": 60,
+      "right": 0,
+      "bottom": 60
+    },
+    "device_position": [
+      60,
+      323
+    ],
+    "device_size_before_canvas_clip": [
+      1189,
+      2239
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_pixels_preserved_from_approved": true,
+    "original_hardware": "Marketing/archive/legacy-app-store/iphone-65/exports/iphone-65-02-customize.png",
+    "original_hardware_sha256": "de75cc28ea949fb022f5b932483449a96ea20b669549f65fc67c8854e48f4e96",
+    "sources": [
+      {
+        "theme": 1,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "capture_sha256": "6fc879562d8ab85d252f0464dc0db1ebb84bfb51004fb20f78a25fdb807ad8c6",
+        "plane": [
+          [
+            192,
+            440
+          ],
+          [
+            1070,
+            596
+          ],
+          [
+            1070,
+            2486
+          ],
+          [
+            192,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-1.png",
+        "mask_sha256": "ccfba12aa162ee794ca6649b6832925b80f1c59784790b3f925580ab77a2df83"
+      },
+      {
+        "theme": 2,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "capture_sha256": "efe705af1914d322fda6b0150594cdd47a29de11c6ae63b78fba7654845b3b8f",
+        "plane": [
+          [
+            596,
+            440
+          ],
+          [
+            1474,
+            596
+          ],
+          [
+            1474,
+            2486
+          ],
+          [
+            596,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-2.png",
+        "mask_sha256": "89fd3e55a607112e351e315238c6a0ba0e5235f7208e39381ea048d258a49121"
+      },
+      {
+        "theme": 4,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "capture_sha256": "49fa1b2584e7c0ee0a71d387caabd85e12823db5ca403a54cce72c8ea3d3c635",
+        "plane": [
+          [
+            1000,
+            440
+          ],
+          [
+            1878,
+            596
+          ],
+          [
+            1878,
+            2486
+          ],
+          [
+            1000,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-3.png",
+        "mask_sha256": "40c017f6aa66da1d13da423af30d22d16af8455dea9f96741f7dd4571a1870ce"
+      }
+    ],
+    "source_body_crop": [
+      82,
+      424,
+      1284,
+      2687
+    ],
+    "composition_scale": 0.9893946089262041,
+    "hardware_pixels_unchanged_before_uniform_resize": true,
+    "intentional_right_bleed": true,
+    "right_bleed_reason": "Original Affinity export crops the third phone. Keep that edge outside the canvas to avoid an exposed square cut.",
+    "right_canvas_clip_pixels": 43
+  },
+  {
+    "locale": "fr-FR",
+    "scene": 3,
+    "title": "Vos progrès",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/fr-FR/03-progress.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "hardware_height": 2239,
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "device_position": [
+      60,
+      323
+    ],
+    "device_size_before_canvas_clip": [
+      1086,
+      2239
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_anchor": "ls",
+    "heading_geometry": {
+      "width": 493.0,
+      "baseline": 173,
+      "fragment_baselines": [
+        173,
+        173
+      ],
+      "fragment_tops": [
+        105,
+        104
+      ]
+    },
+    "heading_accent": "#b1a8ed",
+    "theme": 2,
+    "source_paths": [
+      "Marketing/2026-10-app-store-1.6.0/captures/progress-theme-02-calendar-en-US.png",
+      "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png"
+    ],
+    "source_sha256": [
+      "0ee099c5349f56832e1a5e909aefc7587a85c8f297d1a1ddaa97518e1f82be1d",
+      "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16"
+    ],
+    "framed_source_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ],
+    "capture_ui_order": [
+      "Calendar",
+      "Progress",
+      "Calories"
+    ],
+    "source_capture_sha256": "0ee099c5349f56832e1a5e909aefc7587a85c8f297d1a1ddaa97518e1f82be1d",
+    "framed_source": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/current-progress-theme-02-calendar-framed.png",
+    "calendar_candidate_approved": true
+  },
+  {
+    "locale": "es-ES",
+    "scene": 1,
+    "title": "Balance calórico",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/01-calorie-balance.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "hardware_height": 2239,
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "device_position": [
+      60,
+      323
+    ],
+    "device_size_before_canvas_clip": [
+      1086,
+      2239
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_pixels_preserved_from_approved": true,
+    "theme": 1,
+    "source_paths": [
+      "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png"
+    ],
+    "source_sha256": [
+      "7c2a36a4a294579c9de82590abb2dbb3704bfe85cd02ba45bb52034aaecef007"
+    ],
+    "framed_source_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ]
+  },
+  {
+    "locale": "es-ES",
+    "scene": 2,
+    "title": "Tus colores",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/02-custom-colors.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1206,
+      2562
+    ],
+    "hardware_height": 2239,
+    "device_margins": {
+      "left": 60,
+      "right": 0,
+      "bottom": 60
+    },
+    "device_position": [
+      60,
+      323
+    ],
+    "device_size_before_canvas_clip": [
+      1189,
+      2239
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_pixels_preserved_from_approved": true,
+    "original_hardware": "Marketing/archive/legacy-app-store/iphone-65/exports/iphone-65-02-customize.png",
+    "original_hardware_sha256": "de75cc28ea949fb022f5b932483449a96ea20b669549f65fc67c8854e48f4e96",
+    "sources": [
+      {
+        "theme": 1,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-01-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "capture_sha256": "6fc879562d8ab85d252f0464dc0db1ebb84bfb51004fb20f78a25fdb807ad8c6",
+        "plane": [
+          [
+            192,
+            440
+          ],
+          [
+            1070,
+            596
+          ],
+          [
+            1070,
+            2486
+          ],
+          [
+            192,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-1.png",
+        "mask_sha256": "ccfba12aa162ee794ca6649b6832925b80f1c59784790b3f925580ab77a2df83"
+      },
+      {
+        "theme": 2,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "capture_sha256": "efe705af1914d322fda6b0150594cdd47a29de11c6ae63b78fba7654845b3b8f",
+        "plane": [
+          [
+            596,
+            440
+          ],
+          [
+            1474,
+            596
+          ],
+          [
+            1474,
+            2486
+          ],
+          [
+            596,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-2.png",
+        "mask_sha256": "89fd3e55a607112e351e315238c6a0ba0e5235f7208e39381ea048d258a49121"
+      },
+      {
+        "theme": 4,
+        "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-04-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+        "capture_sha256": "49fa1b2584e7c0ee0a71d387caabd85e12823db5ca403a54cce72c8ea3d3c635",
+        "plane": [
+          [
+            1000,
+            440
+          ],
+          [
+            1878,
+            596
+          ],
+          [
+            1878,
+            2486
+          ],
+          [
+            1000,
+            2663
+          ]
+        ],
+        "mask": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/legacy-aperture-3.png",
+        "mask_sha256": "40c017f6aa66da1d13da423af30d22d16af8455dea9f96741f7dd4571a1870ce"
+      }
+    ],
+    "source_body_crop": [
+      82,
+      424,
+      1284,
+      2687
+    ],
+    "composition_scale": 0.9893946089262041,
+    "hardware_pixels_unchanged_before_uniform_resize": true,
+    "intentional_right_bleed": true,
+    "right_bleed_reason": "Original Affinity export crops the third phone. Keep that edge outside the canvas to avoid an exposed square cut.",
+    "right_canvas_clip_pixels": 43
+  },
+  {
+    "locale": "es-ES",
+    "scene": 3,
+    "title": "Tu progreso",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/final/es-ES/03-progress.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "app_ui_locale": "en-US",
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "hardware_height": 2239,
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "device_position": [
+      60,
+      323
+    ],
+    "device_size_before_canvas_clip": [
+      1086,
+      2239
+    ],
+    "device_aspect_ratio_preserved": true,
+    "heading_anchor": "ls",
+    "heading_geometry": {
+      "width": 493.0,
+      "baseline": 172,
+      "fragment_baselines": [
+        172,
+        172
+      ],
+      "fragment_tops": [
+        104,
+        122
+      ]
+    },
+    "heading_accent": "#b1a8ed",
+    "theme": 2,
+    "source_paths": [
+      "Marketing/2026-10-app-store-1.6.0/captures/progress-theme-02-calendar-en-US.png",
+      "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png"
+    ],
+    "source_sha256": [
+      "0ee099c5349f56832e1a5e909aefc7587a85c8f297d1a1ddaa97518e1f82be1d",
+      "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16"
+    ],
+    "framed_source_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ],
+    "capture_ui_order": [
+      "Calendar",
+      "Progress",
+      "Calories"
+    ],
+    "source_capture_sha256": "0ee099c5349f56832e1a5e909aefc7587a85c8f297d1a1ddaa97518e1f82be1d",
+    "framed_source": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/source/current-progress-theme-02-calendar-framed.png",
+    "calendar_candidate_approved": true
+  }
+]

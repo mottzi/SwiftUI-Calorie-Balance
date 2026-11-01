@@ -1,0 +1,562 @@
+[
+  {
+    "locale": "en-US",
+    "review_only": true,
+    "scene": 1,
+    "title": "Make it yours",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/en-US/01-visual-customization.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "source_capture": "Marketing/2026-10-app-store-1.6.0/captures/2026-10-22-customization-native-polished.png",
+    "source_capture_sha256": "77bebfd192040b49a763b45920542f0584cf089e507d08774bf5aa42799c278d",
+    "frame": "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png",
+    "frame_sha256": "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16",
+    "source_frame_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ],
+    "device_size": [
+      1086,
+      2239
+    ],
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "heading_anchor": "ls",
+    "heading_geometry": {
+      "width": 546.0,
+      "baseline": 172,
+      "fragment_baselines": [
+        172,
+        172
+      ],
+      "fragment_tops": [
+        104,
+        122
+      ]
+    },
+    "heading_accent": "#b1a8ed",
+    "native_ui_retouching": false,
+    "app_ui_locale": "en-US",
+    "native_viewport_notes": [
+      "The Body weight row is partially clipped beneath the native toolbar.",
+      "All nine theme samples are visible; the native viewport hides the footer laurels.",
+      "These native viewport details are preserved without retouching."
+    ]
+  },
+  {
+    "locale": "en-US",
+    "review_only": true,
+    "scene": 2,
+    "title": "At a glance",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/en-US/02-home-screen-widgets.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "source_capture": "Marketing/2026-10-app-store-1.6.0/captures/2026-10-22-widgets-full-dock-native.png",
+    "source_capture_sha256": "11f38099de4a5e72f706ba50b957357db344fd719102589bded31e2537d5680e",
+    "frame": "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png",
+    "frame_sha256": "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16",
+    "source_frame_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ],
+    "device_size": [
+      1086,
+      2239
+    ],
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "heading_anchor": "ls",
+    "heading_geometry": {
+      "width": 454.0,
+      "baseline": 172,
+      "fragment_baselines": [
+        172,
+        172
+      ],
+      "fragment_tops": [
+        104,
+        104
+      ]
+    },
+    "heading_accent": "#86b6e7",
+    "native_ui_retouching": false,
+    "app_ui_locale": "en-US",
+    "native_widgets": [
+      {
+        "content": "Calorie bar",
+        "family": "systemMedium",
+        "position": "top"
+      },
+      {
+        "content": "Nutrients",
+        "family": "systemMedium",
+        "position": "second"
+      },
+      {
+        "content": "Calorie ring",
+        "family": "systemSmall",
+        "position": "bottom left"
+      }
+    ],
+    "native_home_screen_icons": [
+      "Health",
+      "Fitness",
+      "Count.kcal",
+      "Watch"
+    ],
+    "native_home_screen_dock_apps": [
+      "Safari",
+      "Messages",
+      "Maps",
+      "Photos"
+    ]
+  },
+  {
+    "locale": "de-DE",
+    "review_only": true,
+    "scene": 1,
+    "title": "Ganz dein Stil",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/de-DE/01-visual-customization.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "source_capture": "Marketing/2026-10-app-store-1.6.0/captures/2026-10-22-customization-native-polished.png",
+    "source_capture_sha256": "77bebfd192040b49a763b45920542f0584cf089e507d08774bf5aa42799c278d",
+    "frame": "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png",
+    "frame_sha256": "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16",
+    "source_frame_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ],
+    "device_size": [
+      1086,
+      2239
+    ],
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "heading_anchor": "ls",
+    "heading_geometry": {
+      "width": 558.0,
+      "baseline": 173,
+      "fragment_baselines": [
+        173,
+        173
+      ],
+      "fragment_tops": [
+        104,
+        104
+      ]
+    },
+    "heading_accent": "#b1a8ed",
+    "native_ui_retouching": false,
+    "app_ui_locale": "en-US",
+    "native_viewport_notes": [
+      "The Body weight row is partially clipped beneath the native toolbar.",
+      "All nine theme samples are visible; the native viewport hides the footer laurels.",
+      "These native viewport details are preserved without retouching."
+    ]
+  },
+  {
+    "locale": "de-DE",
+    "review_only": true,
+    "scene": 2,
+    "title": "Auf einen Blick",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/de-DE/02-home-screen-widgets.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "source_capture": "Marketing/2026-10-app-store-1.6.0/captures/2026-10-22-widgets-full-dock-native.png",
+    "source_capture_sha256": "11f38099de4a5e72f706ba50b957357db344fd719102589bded31e2537d5680e",
+    "frame": "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png",
+    "frame_sha256": "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16",
+    "source_frame_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ],
+    "device_size": [
+      1086,
+      2239
+    ],
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "heading_anchor": "ls",
+    "heading_geometry": {
+      "width": 603.0,
+      "baseline": 173,
+      "fragment_baselines": [
+        173,
+        173
+      ],
+      "fragment_tops": [
+        104,
+        105
+      ]
+    },
+    "heading_accent": "#86b6e7",
+    "native_ui_retouching": false,
+    "app_ui_locale": "en-US",
+    "native_widgets": [
+      {
+        "content": "Calorie bar",
+        "family": "systemMedium",
+        "position": "top"
+      },
+      {
+        "content": "Nutrients",
+        "family": "systemMedium",
+        "position": "second"
+      },
+      {
+        "content": "Calorie ring",
+        "family": "systemSmall",
+        "position": "bottom left"
+      }
+    ],
+    "native_home_screen_icons": [
+      "Health",
+      "Fitness",
+      "Count.kcal",
+      "Watch"
+    ],
+    "native_home_screen_dock_apps": [
+      "Safari",
+      "Messages",
+      "Maps",
+      "Photos"
+    ]
+  },
+  {
+    "locale": "fr-FR",
+    "review_only": true,
+    "scene": 1,
+    "title": "À votre image",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/fr-FR/01-visual-customization.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "source_capture": "Marketing/2026-10-app-store-1.6.0/captures/2026-10-22-customization-native-polished.png",
+    "source_capture_sha256": "77bebfd192040b49a763b45920542f0584cf089e507d08774bf5aa42799c278d",
+    "frame": "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png",
+    "frame_sha256": "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16",
+    "source_frame_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ],
+    "device_size": [
+      1086,
+      2239
+    ],
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "heading_anchor": "ls",
+    "heading_geometry": {
+      "width": 562.0,
+      "baseline": 191,
+      "fragment_baselines": [
+        191,
+        191
+      ],
+      "fragment_tops": [
+        104,
+        123
+      ]
+    },
+    "heading_accent": "#b1a8ed",
+    "native_ui_retouching": false,
+    "app_ui_locale": "en-US",
+    "native_viewport_notes": [
+      "The Body weight row is partially clipped beneath the native toolbar.",
+      "All nine theme samples are visible; the native viewport hides the footer laurels.",
+      "These native viewport details are preserved without retouching."
+    ]
+  },
+  {
+    "locale": "fr-FR",
+    "review_only": true,
+    "scene": 2,
+    "title": "En un coup d'œil",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/fr-FR/02-home-screen-widgets.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "source_capture": "Marketing/2026-10-app-store-1.6.0/captures/2026-10-22-widgets-full-dock-native.png",
+    "source_capture_sha256": "11f38099de4a5e72f706ba50b957357db344fd719102589bded31e2537d5680e",
+    "frame": "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png",
+    "frame_sha256": "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16",
+    "source_frame_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ],
+    "device_size": [
+      1086,
+      2239
+    ],
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "heading_anchor": "ls",
+    "heading_geometry": {
+      "width": 680.0,
+      "baseline": 172,
+      "fragment_baselines": [
+        172,
+        172
+      ],
+      "fragment_tops": [
+        104,
+        104
+      ]
+    },
+    "heading_accent": "#86b6e7",
+    "native_ui_retouching": false,
+    "app_ui_locale": "en-US",
+    "native_widgets": [
+      {
+        "content": "Calorie bar",
+        "family": "systemMedium",
+        "position": "top"
+      },
+      {
+        "content": "Nutrients",
+        "family": "systemMedium",
+        "position": "second"
+      },
+      {
+        "content": "Calorie ring",
+        "family": "systemSmall",
+        "position": "bottom left"
+      }
+    ],
+    "native_home_screen_icons": [
+      "Health",
+      "Fitness",
+      "Count.kcal",
+      "Watch"
+    ],
+    "native_home_screen_dock_apps": [
+      "Safari",
+      "Messages",
+      "Maps",
+      "Photos"
+    ]
+  },
+  {
+    "locale": "es-ES",
+    "review_only": true,
+    "scene": 1,
+    "title": "A tu gusto",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/es-ES/01-visual-customization.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "source_capture": "Marketing/2026-10-app-store-1.6.0/captures/2026-10-22-customization-native-polished.png",
+    "source_capture_sha256": "77bebfd192040b49a763b45920542f0584cf089e507d08774bf5aa42799c278d",
+    "frame": "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png",
+    "frame_sha256": "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16",
+    "source_frame_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ],
+    "device_size": [
+      1086,
+      2239
+    ],
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "heading_anchor": "ls",
+    "heading_geometry": {
+      "width": 414.0,
+      "baseline": 172,
+      "fragment_baselines": [
+        172,
+        172
+      ],
+      "fragment_tops": [
+        104,
+        110
+      ]
+    },
+    "heading_accent": "#b1a8ed",
+    "native_ui_retouching": false,
+    "app_ui_locale": "en-US",
+    "native_viewport_notes": [
+      "The Body weight row is partially clipped beneath the native toolbar.",
+      "All nine theme samples are visible; the native viewport hides the footer laurels.",
+      "These native viewport details are preserved without retouching."
+    ]
+  },
+  {
+    "locale": "es-ES",
+    "review_only": true,
+    "scene": 2,
+    "title": "De un vistazo",
+    "file": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/review/new-scenes-2026-10-22/es-ES/02-home-screen-widgets.png",
+    "width": 1206,
+    "height": 2622,
+    "mode": "RGB",
+    "source_capture": "Marketing/2026-10-app-store-1.6.0/captures/2026-10-22-widgets-full-dock-native.png",
+    "source_capture_sha256": "11f38099de4a5e72f706ba50b957357db344fd719102589bded31e2537d5680e",
+    "frame": "Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png",
+    "frame_sha256": "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16",
+    "source_frame_crop": [
+      16,
+      21,
+      1334,
+      2738
+    ],
+    "device_size": [
+      1086,
+      2239
+    ],
+    "device_bounds_exclusive": [
+      60,
+      323,
+      1146,
+      2562
+    ],
+    "device_margins": {
+      "left": 60,
+      "right": 60,
+      "bottom": 60
+    },
+    "heading_font": "SF Pro Display variable, weight450, size96",
+    "heading_top": 104,
+    "heading_anchor": "ls",
+    "heading_geometry": {
+      "width": 546.0,
+      "baseline": 172,
+      "fragment_baselines": [
+        172,
+        172
+      ],
+      "fragment_tops": [
+        104,
+        104
+      ]
+    },
+    "heading_accent": "#86b6e7",
+    "native_ui_retouching": false,
+    "app_ui_locale": "en-US",
+    "native_widgets": [
+      {
+        "content": "Calorie bar",
+        "family": "systemMedium",
+        "position": "top"
+      },
+      {
+        "content": "Nutrients",
+        "family": "systemMedium",
+        "position": "second"
+      },
+      {
+        "content": "Calorie ring",
+        "family": "systemSmall",
+        "position": "bottom left"
+      }
+    ],
+    "native_home_screen_icons": [
+      "Health",
+      "Fitness",
+      "Count.kcal",
+      "Watch"
+    ],
+    "native_home_screen_dock_apps": [
+      "Safari",
+      "Messages",
+      "Maps",
+      "Photos"
+    ]
+  }
+]

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Count.kcal · See where today is heading</title>
+<style>
+:root{color-scheme:dark;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0c1016;color:#f5f7fb}*{box-sizing:border-box}body{margin:0;padding:32px 16px}main{max-width:1200px;margin:auto}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}#composition{width:100%;margin:auto}canvas{display:block;width:100%;height:auto}.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-top:1px solid #ffffff20;padding:18px 0;margin-top:12px;font-size:13px;color:#a8b1bf}.controls button,.controls select{font:inherit;background:#ffffff08;border:1px solid #ffffff30;border-radius:8px;padding:9px 12px;color:#f5f7fb;cursor:pointer}.controls button:focus-visible,.controls select:focus-visible{outline:2px solid #4ba8fc;outline-offset:3px}.controls input{flex:1;min-width:100px;accent-color:#4ba8fc}.controls output{font-variant-numeric:tabular-nums;min-width:60px}.controls label{display:flex;gap:7px;align-items:center}#note{font-size:12px;line-height:1.5;color:#8995a5;margin:0}.controls button[aria-pressed=true]{border-color:#4ba8fc}@media(max-width:600px){body{padding:12px 8px}.controls{gap:8px}.controls label{margin-left:auto}}
+</style></head><body><main>
+<h1 class="sr-only">See where today is heading.</h1>
+<div id="composition"><canvas id="art" width="1800" height="1000" role="img" aria-label="Count.kcal. Your calorie balance now and your projected balance at midnight. The calorie card changes from a 280 kcal deficit to a 600 kcal projected deficit, then returns to Now."></canvas></div>
+<div class="controls"><button id="play" aria-pressed="false">Play</button><button id="now">Now</button><button id="midnight">Midnight</button><input id="timeline" type="range" aria-label="Animation time" min="0" max="8" step=".01" value="0"><output id="time">0.0 / 8 s</output><label>Layout <select id="layout" aria-label="Preview layout"><option value="auto">Responsive</option><option value="wide">Wide</option><option value="mobile">Mobile, 390 px</option></select></label></div>
+<p id="note">The timeline connects the current balance to the midnight projection. Select either state to pause and inspect the card.</p>
+<script id="motion-config" type="application/json">{
+  "duration": 8,
+  "fps": 30,
+  "background": "#0c1016",
+  "blue": "#4ba8fc",
+  "white": "#f5f7fb",
+  "muted": "#a8b1bf",
+  "track": "#354352",
+  "cardAspect": 1.6898550724637682,
+  "forward": [
+    1.4,
+    2.8
+  ],
+  "back": [
+    5.9,
+    6.93
+  ],
+  "layouts": {
+    "wide": {
+      "width": 1800,
+      "height": 1000,
+      "brand": [
+        90,
+        158,
+        30
+      ],
+      "heading": {
+        "x": 90,
+        "y": 310,
+        "size": 84,
+        "leading": 102,
+        "lines": [
+          "See where",
+          "today is",
+          "heading."
+        ]
+      },
+      "caption": [
+        94,
+        650,
+        30,
+        43
+      ],
+      "card": [
+        730,
+        210,
+        1010
+      ],
+      "mode": [
+        760,
+        159,
+        25
+      ],
+      "timeline": [
+        820,
+        1660,
+        878,
+        28
+      ]
+    },
+    "mobile": {
+      "width": 1080,
+      "height": 1440,
+      "brand": [
+        72,
+        110,
+        34
+      ],
+      "heading": {
+        "x": 72,
+        "y": 243,
+        "size": 82,
+        "leading": 96,
+        "lines": [
+          "See where today",
+          "is heading."
+        ]
+      },
+      "caption": [
+        76,
+        430,
+        34,
+        46
+      ],
+      "card": [
+        40,
+        550,
+        1000
+      ],
+      "mode": [
+        78,
+        506,
+        27
+      ],
+      "timeline": [
+        135,
+        945,
+        1245,
+        32
+      ]
+    }
+  },
+  "cardSource": "calorie-card-now-midnight-source.webm",
+  "nowPoster": "../../2026-10-calorie-card/stills/calorie-card-theme-01-dark-now-transparent.png"
+}</script>
+<script>
+"use strict";
+const cfg=JSON.parse(document.querySelector('#motion-config').textContent),canvas=document.querySelector('#art'),ctx=canvas.getContext('2d',{alpha:true}),wrap=document.querySelector('#composition');
+const renderedFallback=/AppleWebKit/.test(navigator.userAgent)&&!/Chrome|Chromium|Edg\//.test(navigator.userAgent);
+const video=document.createElement('video');video.muted=true;video.playsInline=true;video.loop=true;video.preload='auto';
+let mediaLayout='',resumeTime=0,pendingLoad=true;
+if(renderedFallback){video.style.cssText='display:block;width:100%;height:auto';video.setAttribute('aria-label',canvas.getAttribute('aria-label'));canvas.before(video);canvas.style.display='none'}
+const poster=new Image();poster.src=cfg.nowPoster;
+const playButton=document.querySelector('#play'),range=document.querySelector('#timeline'),clock=document.querySelector('#time'),choice=document.querySelector('#layout'),params=new URLSearchParams(location.search),reduced=matchMedia('(prefers-reduced-motion: reduce)');
+let playing=!params.has('paused')&&!reduced.matches,visible=true,ready=false,raf=0,layoutName='wide';resumeTime=Math.min(7.999,Math.max(0,Number(params.get('t')||0)));
+function smooth(p){p=Math.max(0,Math.min(1,p));return p*p*(3-2*p)}
+function progress(t){if(t<cfg.forward[0])return 0;if(t<cfg.forward[1])return smooth((t-cfg.forward[0])/(cfg.forward[1]-cfg.forward[0]));if(t<cfg.back[0])return 1;if(t<cfg.back[1])return 1-smooth((t-cfg.back[0])/(cfg.back[1]-cfg.back[0]));return 0}
+function text(s,x,y,size,weight,col,alpha=1,align='left'){ctx.save();ctx.globalAlpha=alpha;ctx.font=weight+' '+size+'px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif';ctx.textAlign=align;ctx.textBaseline='alphabetic';ctx.fillStyle=col;ctx.fillText(s,x,y);ctx.restore()}
+function dot(x,y,r,color,alpha=1){ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.restore()}
+function line(x1,y1,x2,y2,w,color,alpha=1){ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=color;ctx.lineWidth=w;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore()}
+function draw(){
+ const t=ready?video.currentTime:0,l=cfg.layouts[layoutName],p=progress(t),mix=smooth((t-1.4)/.3)*(1-smooth((t-5.98)/.25));
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ if(renderedFallback){updateControls(t,p);return}
+ text('Count.kcal',l.brand[0],l.brand[1],l.brand[2],600,cfg.white);
+ l.heading.lines.forEach((s,i)=>text(s,l.heading.x,l.heading.y+i*l.heading.leading,l.heading.size,600,cfg.white));
+ const cp=l.caption;
+ for(const projection of [false,true]){
+  const alpha=projection?mix:1-mix;if(alpha<.001)continue;
+  const lines=projection?['Your projected','balance tonight.']:['Your balance','right now.'];
+  if(layoutName==='wide')lines.forEach((s,i)=>text(s,cp[0],cp[1]+i*cp[3],cp[2],400,cfg.muted,alpha));
+  else text(projection?'Your projected balance tonight.':'Your balance right now.',cp[0],cp[1],cp[2],400,cfg.muted,alpha);
+ }
+ const box=l.card;ctx.save();ctx.shadowColor='rgba(0,0,0,.2)';ctx.shadowBlur=24;ctx.shadowOffsetY=14;
+ if(ready&&video.readyState>=2)ctx.drawImage(video,box[0],box[1],box[2],box[2]/cfg.cardAspect);
+ else if(poster.complete&&poster.naturalWidth)ctx.drawImage(poster,box[0],box[1],box[2],box[2]/cfg.cardAspect);
+ ctx.restore();
+ const m=l.mode;dot(m[0]+5,m[1]-8,5,cfg.blue);text('Now',m[0]+25,m[1],m[2],500,cfg.blue,1-mix);text('Midnight projection',m[0]+25,m[1],m[2],500,cfg.blue,mix);
+ const tl=l.timeline,x1=tl[0],x2=tl[1],y=tl[2],mx=x1+(x2-x1)*p;
+ line(x1,y,x2,y,5,cfg.track);if(p>0)line(x1,y,mx,y,5,cfg.blue);
+ for(let k=1;k<8;k++){const x=x1+(x2-x1)*k/8;line(x,y-5,x,y+5,2,'#65717f',.35)}
+ dot(x1,y,6,cfg.blue);dot(x2,y,6,p>.99?cfg.blue:cfg.track);dot(mx,y,25,cfg.blue,.1);dot(mx,y,15,cfg.blue,.24);dot(mx,y,8,cfg.white);
+ text('Now',x1,y+55,tl[3],500,p<.5?cfg.white:cfg.muted);text('Midnight',x2,y+55,tl[3],500,p>=.5?cfg.white:cfg.muted,1,'right');
+ updateControls(t,p);
+}
+function updateControls(t,p){
+ range.value=t;clock.value=t.toFixed(1)+' / 8 s';
+ document.querySelector('#now').setAttribute('aria-pressed',String(p===0));document.querySelector('#midnight').setAttribute('aria-pressed',String(p===1));
+ document.body.dataset.time=t.toFixed(3);document.body.dataset.layout=layoutName;
+}
+function schedule(){if(!raf&&ready&&playing&&visible&&!document.hidden)raf=requestAnimationFrame(tick)}
+function tick(){raf=0;draw();schedule()}
+function syncPlayback(){
+ playButton.textContent=playing?'Pause':'Play';playButton.setAttribute('aria-pressed',String(playing));
+ if(ready&&playing&&visible&&!document.hidden){video.play().then(schedule).catch(()=>{playing=false;syncPlayback()})}
+ else{video.pause();if(raf){cancelAnimationFrame(raf);raf=0}draw()}
+}
+function seek(t){playing=false;syncPlayback();if(ready)video.currentTime=Math.max(0,Math.min(7.999,t))}
+function resize(){
+ const selection=choice.value;layoutName=selection==='auto'?(document.querySelector('main').clientWidth<760?'mobile':'wide'):selection;wrap.style.maxWidth=selection==='mobile'?'390px':'1200px';const l=cfg.layouts[layoutName];canvas.width=l.width;canvas.height=l.height;
+ const requested=renderedFallback?layoutName:'source';
+ if(requested!==mediaLayout){
+  if(ready)resumeTime=video.currentTime;ready=false;pendingLoad=true;mediaLayout=requested;
+  if(renderedFallback)video.poster='../stills/count-kcal-now-midnight-explainer-'+layoutName+'-poster-transparent.png';
+  video.src=renderedFallback?'../videos/count-kcal-now-midnight-explainer-'+layoutName+'-dark-bg.mp4':cfg.cardSource;video.load();
+ }
+ draw();
+}
+playButton.onclick=()=>{playing=!playing;syncPlayback()};range.oninput=()=>seek(Number(range.value));document.querySelector('#now').onclick=()=>seek(0);document.querySelector('#midnight').onclick=()=>seek(3.5);
+choice.onchange=resize;if(['wide','mobile'].includes(params.get('layout')))choice.value=params.get('layout');
+new ResizeObserver(resize).observe(document.querySelector('main'));
+new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;syncPlayback()},{threshold:.25}).observe(renderedFallback?video:canvas);
+document.addEventListener('visibilitychange',syncPlayback);reduced.addEventListener('change',e=>{if(e.matches)seek(0)});
+video.addEventListener('loadeddata',()=>{if(!pendingLoad)return;pendingLoad=false;ready=true;document.body.dataset.ready='true';video.currentTime=resumeTime;syncPlayback();draw()});
+video.addEventListener('seeked',draw);poster.onload=draw;
+video.addEventListener('error',()=>{playing=false;ready=false;syncPlayback();document.querySelector('#note').textContent='This browser could not play the source video. Use the dark-background MP4 exports to view the finished animation.'});
+resize();draw();
+</script></main></body></html>

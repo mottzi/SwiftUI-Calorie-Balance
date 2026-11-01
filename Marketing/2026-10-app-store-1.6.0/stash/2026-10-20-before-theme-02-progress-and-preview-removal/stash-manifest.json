@@ -1,0 +1,1165 @@
+{
+  "reason": "Superseded four-image set and all App Preview production retained before the three-image Theme2 Progress revision.",
+  "files": [
+    {
+      "original": "preview/README.md",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/README.md",
+      "bytes": 4401,
+      "sha256": "5b17d23c7982cbdba741f87a334995d761581499a05e9910a70994e4e0e09619"
+    },
+    {
+      "original": "preview/build-preview.py",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/build-preview.py",
+      "bytes": 5102,
+      "sha256": "ff52b1b87474fd5bd1c793e4e46a71cdcca50179bb00e5bf1e11059f5352b049"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-de-de-886x1920.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-de-de-886x1920.mp4",
+      "bytes": 30548244,
+      "sha256": "a09da146e023be721cee549ea3168234028f4bb4fd59db8d5c5bdc1e861f39e6"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-de-de-contact-sheet.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-de-de-contact-sheet.jpg",
+      "bytes": 137465,
+      "sha256": "fd75cb2d33bf9955a8ce41b511d9c56abe36c5c7fd55460711758eae31ce301f"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-de-de-ffprobe.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-de-de-ffprobe.json",
+      "bytes": 4631,
+      "sha256": "c74bc54f5841dd6cc8571a3125c663f7dcea3471ac5e9b0dbd752756bd467b06"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-de-de-poster-05s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-de-de-poster-05s.png",
+      "bytes": 366764,
+      "sha256": "5d6b92660dd672a71d5eb5f85f02995b2b1395eeed3a9c22f381137975cadc53"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-en-us-886x1920.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-en-us-886x1920.mp4",
+      "bytes": 30548236,
+      "sha256": "cc5096bc6529fbbb7266c5d176dd7dd1accae6723e9e49926a1822e6e6467ebe"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-en-us-contact-sheet.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-en-us-contact-sheet.jpg",
+      "bytes": 136273,
+      "sha256": "7597c755de58699198e962e13c7d24fe835d0e8c80dae7bb0012138fda74d88f"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-en-us-ffprobe.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-en-us-ffprobe.json",
+      "bytes": 4631,
+      "sha256": "2ca082558f4a5dca224fc38eaf8193ab1c87debc4d2eadd68d01ebed057180ea"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-en-us-poster-05s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-en-us-poster-05s.png",
+      "bytes": 372572,
+      "sha256": "4660046c069e77e0462e90697ce4d0112c77a79de600c5294c40cf311a9524e6"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-es-es-886x1920.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-es-es-886x1920.mp4",
+      "bytes": 30548213,
+      "sha256": "bdd6194609737db04f750de880050254cf782fa4573ea0fdfcf1302a00d34fce"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-es-es-contact-sheet.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-es-es-contact-sheet.jpg",
+      "bytes": 136248,
+      "sha256": "04916deb526d55775e1a02e146324dcf215cb4742d758b1e0d08cf51c8bf0991"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-es-es-ffprobe.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-es-es-ffprobe.json",
+      "bytes": 4631,
+      "sha256": "e56343bf0980e0360d924fb905e480bb9411f16e654760b1dd2fd4f250314a5d"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-es-es-poster-05s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-es-es-poster-05s.png",
+      "bytes": 368935,
+      "sha256": "453e3449782ba72c47fc5ce67a2f9b042163c84b931652c8124f8f04b47b4f05"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-fr-fr-886x1920.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-fr-fr-886x1920.mp4",
+      "bytes": 30548225,
+      "sha256": "fd31bc0f408a71b20ba01760c3c51225eae93fec124cdf4f7a99d52e751a04a4"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-fr-fr-contact-sheet.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-fr-fr-contact-sheet.jpg",
+      "bytes": 137660,
+      "sha256": "e1f9dd9d2ae6d3c5e6dec33805ae43ab2b011c4843918111207070f8e433f36f"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-fr-fr-ffprobe.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-fr-fr-ffprobe.json",
+      "bytes": 4631,
+      "sha256": "cbf9ce9d8eebe7c3fa8b4500dde308a21a5aa766d4d35cb0eec0e3aa95f77f60"
+    },
+    {
+      "original": "preview/exports/count-kcal-iphone-app-preview-fr-fr-poster-05s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/exports/count-kcal-iphone-app-preview-fr-fr-poster-05s.png",
+      "bytes": 369645,
+      "sha256": "e9a7f79af2cb8585e0f17858b438f5c61ccd72b9699d651b632d68919c03de60"
+    },
+    {
+      "original": "preview/make-overlays.swift",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/make-overlays.swift",
+      "bytes": 3802,
+      "sha256": "b4d6953c8dc7474ce49313e830500cb7721710b9f25fcf3ec0dcb013ebb69445"
+    },
+    {
+      "original": "preview/validation.md",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/validation.md",
+      "bytes": 2339,
+      "sha256": "3c26a553755ca09431ccac75b3fd7948126d192eba761c15fb2cbec71c05132e"
+    },
+    {
+      "original": "preview/work/dark-native-contact.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/dark-native-contact.jpg",
+      "bytes": 114814,
+      "sha256": "56e89be51eaa8c3082aef44a111b0130437075b5e35adbf0e7a85eaca83f7729"
+    },
+    {
+      "original": "preview/work/dark-take-contact.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/dark-take-contact.jpg",
+      "bytes": 116736,
+      "sha256": "b22ffd55465f71b06c18128415b889ed10098eb127a240511e1e55cf41fa7520"
+    },
+    {
+      "original": "preview/work/de-DE/scene-01.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/de-DE/scene-01.mp4",
+      "bytes": 348250,
+      "sha256": "5e3d7d6707b7b7dbc1015a6fa78c56b4d3183ace42eeb30ad81757c1e5d4b709"
+    },
+    {
+      "original": "preview/work/de-DE/scene-02.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/de-DE/scene-02.mp4",
+      "bytes": 586195,
+      "sha256": "d9ed1a3c9a04d9f55ba21655861625043666e02696ee96608b7045e2defb5d45"
+    },
+    {
+      "original": "preview/work/de-DE/scene-03.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/de-DE/scene-03.mp4",
+      "bytes": 757657,
+      "sha256": "55dfda23db3012fd49b731e7c5e867018f1417814c288b3d6411d2c799ad9b57"
+    },
+    {
+      "original": "preview/work/de-DE/scene-04.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/de-DE/scene-04.mp4",
+      "bytes": 296278,
+      "sha256": "3fe83647038ae5b462e520480b77a576276d414c0d2aae93fdf815aeaad41a69"
+    },
+    {
+      "original": "preview/work/de-DE/scene-05.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/de-DE/scene-05.mp4",
+      "bytes": 211170,
+      "sha256": "85ccc3bc0c51c5738760f1915205d7cb8a9bd9c1c8e3cfcb18b6340654c16714"
+    },
+    {
+      "original": "preview/work/en-US/scene-01.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/en-US/scene-01.mp4",
+      "bytes": 349495,
+      "sha256": "a97f9cfb765ae5d6d4e245d7b0e44a7a1f53dca948fcd5ab093866c827daee62"
+    },
+    {
+      "original": "preview/work/en-US/scene-02.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/en-US/scene-02.mp4",
+      "bytes": 593166,
+      "sha256": "1cd64bb6730c0cb4aa7607a5fb637f02f09e90705e79d97a4f779fd922fd5b0a"
+    },
+    {
+      "original": "preview/work/en-US/scene-03.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/en-US/scene-03.mp4",
+      "bytes": 753311,
+      "sha256": "36a7f449ee522cec44f5e1f919bc0eeeb4aa6a7d6d770f91f8481958bdade1dc"
+    },
+    {
+      "original": "preview/work/en-US/scene-04.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/en-US/scene-04.mp4",
+      "bytes": 293748,
+      "sha256": "057f5d58137dabc5c3f55a90a69b654d8bf3e3b6dab447b5b3ca8ffbf1fdc3d7"
+    },
+    {
+      "original": "preview/work/en-US/scene-05.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/en-US/scene-05.mp4",
+      "bytes": 207258,
+      "sha256": "4dcd9e25a3aa272803b69e75bbf904ba257fa2d88c2352ec93c3a37e52eac3c2"
+    },
+    {
+      "original": "preview/work/en-frame-14.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/en-frame-14.png",
+      "bytes": 348645,
+      "sha256": "f22a4f21647ae88aee5429302ea0026a17f4672793924e1c418dcccfb8de4dbf"
+    },
+    {
+      "original": "preview/work/es-ES/scene-01.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/es-ES/scene-01.mp4",
+      "bytes": 346726,
+      "sha256": "62ecbf96fc3d4c4ba2cc3a7c993ac0c1341ea9ab7a8753cb56482f8e75b46c5f"
+    },
+    {
+      "original": "preview/work/es-ES/scene-02.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/es-ES/scene-02.mp4",
+      "bytes": 590903,
+      "sha256": "2eef6d1c3d70fcabdc8383d4112f136d869c88ad1e857280b60c2b378b1c2733"
+    },
+    {
+      "original": "preview/work/es-ES/scene-03.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/es-ES/scene-03.mp4",
+      "bytes": 757343,
+      "sha256": "fb9d2330a4bdd83ead65fcbc7ba55611cc04c9af2ad51498c84bd3398612613b"
+    },
+    {
+      "original": "preview/work/es-ES/scene-04.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/es-ES/scene-04.mp4",
+      "bytes": 293606,
+      "sha256": "c8cdabd81e9a8044fb7a409e35a4d5564dfb315db9880d1f1ba76afafbe55b36"
+    },
+    {
+      "original": "preview/work/es-ES/scene-05.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/es-ES/scene-05.mp4",
+      "bytes": 207337,
+      "sha256": "45cbeb90775a47f7bdfa2707cc73aeff4c783e6c7231b38fd5757b6f2073d035"
+    },
+    {
+      "original": "preview/work/fr-FR/scene-01.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/fr-FR/scene-01.mp4",
+      "bytes": 357933,
+      "sha256": "1063efeba7372ea6a78a258161b56b30ecae05112f5e2412c49dba5d91701a0c"
+    },
+    {
+      "original": "preview/work/fr-FR/scene-02.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/fr-FR/scene-02.mp4",
+      "bytes": 588862,
+      "sha256": "f3d7ccb06070dc5fff48a7bb20ece9d4b28572d7f1f02eb006abb8592a5e9e0a"
+    },
+    {
+      "original": "preview/work/fr-FR/scene-03.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/fr-FR/scene-03.mp4",
+      "bytes": 757023,
+      "sha256": "867fc54df2fb0ca7e9e2c46057ca5557cab8d4dbb73006f64516d244ed5f4bee"
+    },
+    {
+      "original": "preview/work/fr-FR/scene-04.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/fr-FR/scene-04.mp4",
+      "bytes": 297860,
+      "sha256": "6f9478fdb268685c0e53032528e488c0b825f712f6acb9bac76adfe69ec2a626"
+    },
+    {
+      "original": "preview/work/fr-FR/scene-05.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/fr-FR/scene-05.mp4",
+      "bytes": 208505,
+      "sha256": "1017b664b21e0da7092e39ef86377d3a5f04d7da9d3c2ffd4cd52be442211c6d"
+    },
+    {
+      "original": "preview/work/fr-frame-14.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/fr-frame-14.png",
+      "bytes": 350165,
+      "sha256": "8d694bdc6c3fdd495d92d97002e74ef60657c65caab667878b737c81c39c1b31"
+    },
+    {
+      "original": "preview/work/frame06.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/frame06.png",
+      "bytes": 471009,
+      "sha256": "43b3c6c9a67bcce126b673760f2d1acc7b5abba1186fd909920f71c3305d459c"
+    },
+    {
+      "original": "preview/work/hero-draft.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/hero-draft.png",
+      "bytes": 351857,
+      "sha256": "c71529d529365ec1de4589e4b24f050cda6e10e35cf8be16f35e398ada21731a"
+    },
+    {
+      "original": "preview/work/overlays/de-DE/caption-01.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/de-DE/caption-01.png",
+      "bytes": 17512,
+      "sha256": "cfd7e4580f34dd922fce93fd91ddd71aaf69e0f24c4cf8c92194e9aaea2d59ad"
+    },
+    {
+      "original": "preview/work/overlays/de-DE/caption-02.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/de-DE/caption-02.png",
+      "bytes": 22336,
+      "sha256": "a7e377bbe782734dda9037b465571a97934f3fc52921b33db273ae612c35eb05"
+    },
+    {
+      "original": "preview/work/overlays/de-DE/caption-03.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/de-DE/caption-03.png",
+      "bytes": 26379,
+      "sha256": "18b7f03d925bdd1a1296c3e11999c245645e0b2006e20347cb6eb2bd8f10aa9c"
+    },
+    {
+      "original": "preview/work/overlays/de-DE/caption-04.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/de-DE/caption-04.png",
+      "bytes": 20264,
+      "sha256": "8829763a4c4dd47c8bc29c1c3f744b534ef8f13dc3187ab2f95d9143e03b7aa5"
+    },
+    {
+      "original": "preview/work/overlays/de-DE/caption-05.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/de-DE/caption-05.png",
+      "bytes": 21214,
+      "sha256": "8494d146982aea08c1c9c32d77aa907991c244291952ee2fcd2ea7e40666e522"
+    },
+    {
+      "original": "preview/work/overlays/en-US/caption-01.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/en-US/caption-01.png",
+      "bytes": 18780,
+      "sha256": "d7ca533afbb03eed1e876d02210fff0e5ef94c2d83131edff031d927ec85a704"
+    },
+    {
+      "original": "preview/work/overlays/en-US/caption-02.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/en-US/caption-02.png",
+      "bytes": 25940,
+      "sha256": "d54b75c509f2c9a62717d4ff5c59cd5ffa34c2c9336fc6db9ec8618ada2d01ed"
+    },
+    {
+      "original": "preview/work/overlays/en-US/caption-03.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/en-US/caption-03.png",
+      "bytes": 26001,
+      "sha256": "8020c52145bc6c2bdb20bfa3191fc2e6e8ebf862dc4c0db05c06d31fcca5c73e"
+    },
+    {
+      "original": "preview/work/overlays/en-US/caption-04.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/en-US/caption-04.png",
+      "bytes": 18971,
+      "sha256": "95f6eee36dd7047ac3ed6a269c4a55fee8493cadafc6039a8b76f18ee8d4ec90"
+    },
+    {
+      "original": "preview/work/overlays/en-US/caption-05.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/en-US/caption-05.png",
+      "bytes": 19239,
+      "sha256": "177932a84ae4ed38244612e468f878c08ad17ddb8a4e24a19ab87c1b0a1142e9"
+    },
+    {
+      "original": "preview/work/overlays/es-ES/caption-01.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/es-ES/caption-01.png",
+      "bytes": 16232,
+      "sha256": "9a60ba4a0af031c3d2fa86e950d1d8aef948ccb57b74166931779e8e10fc632e"
+    },
+    {
+      "original": "preview/work/overlays/es-ES/caption-02.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/es-ES/caption-02.png",
+      "bytes": 22600,
+      "sha256": "4277de2fffd9d66bc104f255e5a453047687a67d96f9abc77a62ad65d5f0a02a"
+    },
+    {
+      "original": "preview/work/overlays/es-ES/caption-03.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/es-ES/caption-03.png",
+      "bytes": 27032,
+      "sha256": "12b26befa5a207bf991104179822e3237dc556534201ae9cdbff4f8873973604"
+    },
+    {
+      "original": "preview/work/overlays/es-ES/caption-04.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/es-ES/caption-04.png",
+      "bytes": 18741,
+      "sha256": "40bfcd65a3cf7efc56e4428447fc313d99daee9e33f576a745dda30f60533f26"
+    },
+    {
+      "original": "preview/work/overlays/es-ES/caption-05.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/es-ES/caption-05.png",
+      "bytes": 19249,
+      "sha256": "03b2a41683918a770817328a2cca0e7bc92411a552071b6583a634c6ff376d50"
+    },
+    {
+      "original": "preview/work/overlays/fr-FR/caption-01.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/fr-FR/caption-01.png",
+      "bytes": 21757,
+      "sha256": "f389a5f1fba3eb8ebb84c27271a84e7ce0a795f1010e05d38639ebe20f87e30b"
+    },
+    {
+      "original": "preview/work/overlays/fr-FR/caption-02.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/fr-FR/caption-02.png",
+      "bytes": 23071,
+      "sha256": "0795cd21359af0c9587084258c224048d0eb1dac850642a4a70e03e459ab9328"
+    },
+    {
+      "original": "preview/work/overlays/fr-FR/caption-03.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/fr-FR/caption-03.png",
+      "bytes": 26013,
+      "sha256": "ea3c6934dae5e9a302b0f2462278af86c2d9e299434384a1ea87f8f69a063276"
+    },
+    {
+      "original": "preview/work/overlays/fr-FR/caption-04.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/fr-FR/caption-04.png",
+      "bytes": 21619,
+      "sha256": "0c88040ff933c973649ed343843a624c223eece083eebbde8eb9ebf8af4fab17"
+    },
+    {
+      "original": "preview/work/overlays/fr-FR/caption-05.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/overlays/fr-FR/caption-05.png",
+      "bytes": 21519,
+      "sha256": "5a2d3a1cfdc31dff1fee5aee6066f909c812db853a51319b14d95e3e2e01dbb9"
+    },
+    {
+      "original": "preview/work/scroll-contact.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/scroll-contact.jpg",
+      "bytes": 148880,
+      "sha256": "3af3e1d5c5e31753e5754b7cb551afe632bbed682280dd74e4d6794c7e874a40"
+    },
+    {
+      "original": "preview/work/source-contact.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/source-contact.jpg",
+      "bytes": 162395,
+      "sha256": "158c78cf02cbea7e804d2231abd637eea74bf36f7c21525254c349a28d695ad0"
+    },
+    {
+      "original": "preview/work/transition-contact.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview/work/transition-contact.jpg",
+      "bytes": 171381,
+      "sha256": "129e8a0a7101a57dfd6123d9b2d18bc791d57217079c97b8816c01776511bc35"
+    },
+    {
+      "original": "preview-v2/README.md",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/README.md",
+      "bytes": 4625,
+      "sha256": "6da3fe2b25eb4fb13f73ac2f65ac41d4f14dd7bb35c63a85a71a44fefec5f402"
+    },
+    {
+      "original": "preview-v2/exports/count-kcal-iphone-app-preview-v2-de-de-886x1920.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/count-kcal-iphone-app-preview-v2-de-de-886x1920.mp4",
+      "bytes": 27981874,
+      "sha256": "31031a4b40e1d87004f1d7e3ab2ff935d51337e525e0421906d20264bc79c0c7"
+    },
+    {
+      "original": "preview-v2/exports/count-kcal-iphone-app-preview-v2-de-de-ffprobe.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/count-kcal-iphone-app-preview-v2-de-de-ffprobe.json",
+      "bytes": 4627,
+      "sha256": "18b14df8bf7afd864fd8269f5ec77bbadd5e1c69877ce8dd8ffe682712ac638e"
+    },
+    {
+      "original": "preview-v2/exports/count-kcal-iphone-app-preview-v2-de-de-poster-05s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/count-kcal-iphone-app-preview-v2-de-de-poster-05s.png",
+      "bytes": 366717,
+      "sha256": "3d0e6a5b758f4a09f068c2283c4f72c09191c57c59b9aedd112e96e798a15ad8"
+    },
+    {
+      "original": "preview-v2/exports/count-kcal-iphone-app-preview-v2-en-us-886x1920.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/count-kcal-iphone-app-preview-v2-en-us-886x1920.mp4",
+      "bytes": 27981872,
+      "sha256": "84e6c9b767ff7599745cdfbabdccef6fdb223fe342e19048b622aa3b344c52b4"
+    },
+    {
+      "original": "preview-v2/exports/count-kcal-iphone-app-preview-v2-en-us-ffprobe.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/count-kcal-iphone-app-preview-v2-en-us-ffprobe.json",
+      "bytes": 4627,
+      "sha256": "af5c7c566e1061060f65ffaad971f7ccafab1c43f0384097392af09e4c40293f"
+    },
+    {
+      "original": "preview-v2/exports/count-kcal-iphone-app-preview-v2-en-us-poster-05s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/count-kcal-iphone-app-preview-v2-en-us-poster-05s.png",
+      "bytes": 370074,
+      "sha256": "870b1bc6098f0df61fdb02c4c54a4dc4f5fdbb70c6148fa96b02f72e1b8653cc"
+    },
+    {
+      "original": "preview-v2/exports/count-kcal-iphone-app-preview-v2-es-es-886x1920.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/count-kcal-iphone-app-preview-v2-es-es-886x1920.mp4",
+      "bytes": 27981867,
+      "sha256": "bdbc3182e530c4ec296c64de15657f176598f84abd39494f3bfe1089d6330433"
+    },
+    {
+      "original": "preview-v2/exports/count-kcal-iphone-app-preview-v2-es-es-ffprobe.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/count-kcal-iphone-app-preview-v2-es-es-ffprobe.json",
+      "bytes": 4627,
+      "sha256": "6bc2163f3268c5235b600fca95a348d9895bf5c0896d19e6bdb8fd9c441c554b"
+    },
+    {
+      "original": "preview-v2/exports/count-kcal-iphone-app-preview-v2-es-es-poster-05s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/count-kcal-iphone-app-preview-v2-es-es-poster-05s.png",
+      "bytes": 371351,
+      "sha256": "8a32c8642a19daffe5e9d461f0df4af7d0f21dd54a0f95d6950728aab93b32df"
+    },
+    {
+      "original": "preview-v2/exports/count-kcal-iphone-app-preview-v2-fr-fr-886x1920.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/count-kcal-iphone-app-preview-v2-fr-fr-886x1920.mp4",
+      "bytes": 27981882,
+      "sha256": "a7ffe0c6e5901ba6aac3a18282f28c8bb99b96dac8ca20bd557da36b74adcc8c"
+    },
+    {
+      "original": "preview-v2/exports/count-kcal-iphone-app-preview-v2-fr-fr-ffprobe.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/count-kcal-iphone-app-preview-v2-fr-fr-ffprobe.json",
+      "bytes": 4627,
+      "sha256": "a8e24a14b234e71921d9fad305559a9f259d859b5330bc08f5f72e70a5c69ff9"
+    },
+    {
+      "original": "preview-v2/exports/count-kcal-iphone-app-preview-v2-fr-fr-poster-05s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/count-kcal-iphone-app-preview-v2-fr-fr-poster-05s.png",
+      "bytes": 368785,
+      "sha256": "65d3bd1066f21ac87618f5e6f00e0fda642100e7180f30b2bd346a6bf6d0e525"
+    },
+    {
+      "original": "preview-v2/exports/manifest.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/exports/manifest.json",
+      "bytes": 2123,
+      "sha256": "7f3092230e9cdd58b4d1cf2e6014d96c4025e978cb6ee56159c0372c8d5261fb"
+    },
+    {
+      "original": "preview-v2/review/calorie-balance-midnight-opening-concept-886x1920.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/calorie-balance-midnight-opening-concept-886x1920.png",
+      "bytes": 381797,
+      "sha256": "2d5ece8295fc382d845b2d8d09ab9a49befec3e45f047797973085bec4b45d16"
+    },
+    {
+      "original": "preview-v2/review/count-kcal-iphone-app-preview-v2-de-de-contact-sheet.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/count-kcal-iphone-app-preview-v2-de-de-contact-sheet.png",
+      "bytes": 513538,
+      "sha256": "66e4fd5d838659f1e1a576d9c447e30648785b3e262bdcb38537be5902ee651e"
+    },
+    {
+      "original": "preview-v2/review/count-kcal-iphone-app-preview-v2-en-us-contact-sheet.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/count-kcal-iphone-app-preview-v2-en-us-contact-sheet.png",
+      "bytes": 515060,
+      "sha256": "1f9cdc8c9538acb90f68ade1d071f183a89b73381aaa1874412ef0e605b71cfa"
+    },
+    {
+      "original": "preview-v2/review/count-kcal-iphone-app-preview-v2-es-es-contact-sheet.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/count-kcal-iphone-app-preview-v2-es-es-contact-sheet.png",
+      "bytes": 514001,
+      "sha256": "f1c61c6a1891d26a6736f204288fb4193f1928ee4a95de9440a67cac7bc305e4"
+    },
+    {
+      "original": "preview-v2/review/count-kcal-iphone-app-preview-v2-fr-fr-contact-sheet.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/count-kcal-iphone-app-preview-v2-fr-fr-contact-sheet.png",
+      "bytes": 512832,
+      "sha256": "ffddefbfc294dd5ecf642834d17fc8cafd0ab18a5839aaaf8dce852bf85e1b7a"
+    },
+    {
+      "original": "preview-v2/review/de-DE/frame-00s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/de-DE/frame-00s.png",
+      "bytes": 358286,
+      "sha256": "6376f0730a3971aa8e6f89f92ae7bc50b6957a4342cad998b90f6166416b7e9e"
+    },
+    {
+      "original": "preview-v2/review/de-DE/frame-05s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/de-DE/frame-05s.png",
+      "bytes": 366717,
+      "sha256": "3d0e6a5b758f4a09f068c2283c4f72c09191c57c59b9aedd112e96e798a15ad8"
+    },
+    {
+      "original": "preview-v2/review/de-DE/frame-11s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/de-DE/frame-11s.png",
+      "bytes": 426037,
+      "sha256": "7c95f74b8f8a8c334eb58c7d46d6b3bc08ed93ffd163d751023a8106de96a61d"
+    },
+    {
+      "original": "preview-v2/review/de-DE/frame-16s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/de-DE/frame-16s.png",
+      "bytes": 364767,
+      "sha256": "c3dab583b218a50665ff568af123f24595a1e9e5cb896c3390ee0ba091b0c8f8"
+    },
+    {
+      "original": "preview-v2/review/de-DE/frame-21s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/de-DE/frame-21s.png",
+      "bytes": 366098,
+      "sha256": "aa42e9517e992a9e70c0e113bb532e9afe42533ccc74be1658320a7f300f8750"
+    },
+    {
+      "original": "preview-v2/review/es-ES/frame-00s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/es-ES/frame-00s.png",
+      "bytes": 363334,
+      "sha256": "dd0ca9c83ab1c7358f8723d10db53310262fd7ce24c18c12b8cc69310ca48807"
+    },
+    {
+      "original": "preview-v2/review/es-ES/frame-05s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/es-ES/frame-05s.png",
+      "bytes": 371351,
+      "sha256": "8a32c8642a19daffe5e9d461f0df4af7d0f21dd54a0f95d6950728aab93b32df"
+    },
+    {
+      "original": "preview-v2/review/es-ES/frame-11s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/es-ES/frame-11s.png",
+      "bytes": 424247,
+      "sha256": "f1170c04299c6627e78b1852644742518cf8945af803af1ccd0b6536a1de00d3"
+    },
+    {
+      "original": "preview-v2/review/es-ES/frame-16s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/es-ES/frame-16s.png",
+      "bytes": 363523,
+      "sha256": "6cfa2bdabe0f47fbecbb227b9b0ed188b67eceb8da63ead99213e206237e299b"
+    },
+    {
+      "original": "preview-v2/review/es-ES/frame-21s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/es-ES/frame-21s.png",
+      "bytes": 365660,
+      "sha256": "882f39db5364be5e5f73209e8d79307fbc4df4c88dae1fa9198744261c2dc8b4"
+    },
+    {
+      "original": "preview-v2/review/fr-FR/frame-00s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/fr-FR/frame-00s.png",
+      "bytes": 360900,
+      "sha256": "7235a0205757c314b85e8acfc570b2dd8bcf4c1d9956679cf306817c42f48482"
+    },
+    {
+      "original": "preview-v2/review/fr-FR/frame-05s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/fr-FR/frame-05s.png",
+      "bytes": 368785,
+      "sha256": "65d3bd1066f21ac87618f5e6f00e0fda642100e7180f30b2bd346a6bf6d0e525"
+    },
+    {
+      "original": "preview-v2/review/fr-FR/frame-11s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/fr-FR/frame-11s.png",
+      "bytes": 426501,
+      "sha256": "ba124c8d1f08994e9196a635b9d0380973888a509190834cfce63616e59e8549"
+    },
+    {
+      "original": "preview-v2/review/fr-FR/frame-16s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/fr-FR/frame-16s.png",
+      "bytes": 365697,
+      "sha256": "388cc8e8d99548839631e72f21aacb9bd1cf0f46e15cf24a8626a47b890d3c68"
+    },
+    {
+      "original": "preview-v2/review/fr-FR/frame-21s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/fr-FR/frame-21s.png",
+      "bytes": 367619,
+      "sha256": "947a444fb7a09e8151685e20fec53e4002b66bf03fb00dc58d778264c3b4b320"
+    },
+    {
+      "original": "preview-v2/review/frame-00s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/frame-00s.png",
+      "bytes": 361439,
+      "sha256": "ea1d687c7c45877c49595028ecd4d925cd4f25e667180465cf2156387d44d0b8"
+    },
+    {
+      "original": "preview-v2/review/frame-05s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/frame-05s.png",
+      "bytes": 370074,
+      "sha256": "870b1bc6098f0df61fdb02c4c54a4dc4f5fdbb70c6148fa96b02f72e1b8653cc"
+    },
+    {
+      "original": "preview-v2/review/frame-11s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/frame-11s.png",
+      "bytes": 426406,
+      "sha256": "58f56b2907f7846a0c6d672f54fe7192d363059e2d926a755fdf64079b2b84b0"
+    },
+    {
+      "original": "preview-v2/review/frame-16s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/frame-16s.png",
+      "bytes": 366457,
+      "sha256": "6629339d6421468883569760fc018f9ae0385505d5e27e622442c205da83f5a0"
+    },
+    {
+      "original": "preview-v2/review/frame-21s.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/frame-21s.png",
+      "bytes": 367748,
+      "sha256": "a8d229e895912a44414753bb5f26df76f0fabc9ddb67f03457e1e3464db679b6"
+    },
+    {
+      "original": "preview-v2/review/opening-source-timing.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/review/opening-source-timing.jpg",
+      "bytes": 153431,
+      "sha256": "0405b3755aca726595c1f8130aa3f8b07788fb69f271493f797e7a9ac0234fae"
+    },
+    {
+      "original": "preview-v2/source/build-preview.py",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/source/build-preview.py",
+      "bytes": 6031,
+      "sha256": "eb12f5add0ce7f6e665f0628b384bbb7edc21fa063a1c2dd7729a718562c7005"
+    },
+    {
+      "original": "preview-v2/source/caption.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/source/caption.png",
+      "bytes": 10722,
+      "sha256": "cd51fa1ed0504af2f627334a9ab0dfa95af57f9381ce5a99f84a697e65d02602"
+    },
+    {
+      "original": "preview-v2/source/make-concept-caption.swift",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/source/make-concept-caption.swift",
+      "bytes": 1251,
+      "sha256": "62e23a3bc5e71e50ef86018a7060ff02ace18b350495fa11e47d2a70458952ea"
+    },
+    {
+      "original": "preview-v2/source/make-video-captions.swift",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/source/make-video-captions.swift",
+      "bytes": 2349,
+      "sha256": "cfa1a0561e145ad8d7e3fa098994da243e96af10ca4bc65a0af08e069eff2bb6"
+    },
+    {
+      "original": "preview-v2/validation.md",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/validation.md",
+      "bytes": 3077,
+      "sha256": "d409b18d47f8ba4a2d2d41820a1fd916eca37fa21699a6d032145021cb555ce2"
+    },
+    {
+      "original": "preview-v2/work/captions/caption-01.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/caption-01.png",
+      "bytes": 11106,
+      "sha256": "fa1887e5674f2baf16723a944bb1239f7f30bd0f04e1f81a6ed1318aa31fea61"
+    },
+    {
+      "original": "preview-v2/work/captions/caption-02.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/caption-02.png",
+      "bytes": 10156,
+      "sha256": "112bb8ed5e8dd57ae54865788cafb923e88bdb289b239633629ba29a9225f4e6"
+    },
+    {
+      "original": "preview-v2/work/captions/caption-03.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/caption-03.png",
+      "bytes": 8200,
+      "sha256": "1fb947992051a2b002154dfea57fb1d3e82ce410d43bd318db2e201501552e17"
+    },
+    {
+      "original": "preview-v2/work/captions/caption-04.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/caption-04.png",
+      "bytes": 8200,
+      "sha256": "1fb947992051a2b002154dfea57fb1d3e82ce410d43bd318db2e201501552e17"
+    },
+    {
+      "original": "preview-v2/work/captions/de-DE/caption-01.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/de-DE/caption-01.png",
+      "bytes": 9765,
+      "sha256": "86d987ea228358b842beffa122eba848a8978c700cb06ade2da3a41b2828dafb"
+    },
+    {
+      "original": "preview-v2/work/captions/de-DE/caption-02.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/de-DE/caption-02.png",
+      "bytes": 9378,
+      "sha256": "595ad23d3a5ea8a7d6cdbbb73032db5a65a09f0baf4f8c4ada925f91b95a945b"
+    },
+    {
+      "original": "preview-v2/work/captions/de-DE/caption-03.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/de-DE/caption-03.png",
+      "bytes": 9133,
+      "sha256": "84ac405ce48ab23c4b35310b886c54d4f3169b4e7557992f35d0366c82863529"
+    },
+    {
+      "original": "preview-v2/work/captions/de-DE/caption-04.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/de-DE/caption-04.png",
+      "bytes": 9133,
+      "sha256": "84ac405ce48ab23c4b35310b886c54d4f3169b4e7557992f35d0366c82863529"
+    },
+    {
+      "original": "preview-v2/work/captions/en-US/caption-01.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/en-US/caption-01.png",
+      "bytes": 10978,
+      "sha256": "a4a596692e7bf2edbfa7cebd50f0695edd3a062779f5e304b7155d86757ce35d"
+    },
+    {
+      "original": "preview-v2/work/captions/en-US/caption-02.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/en-US/caption-02.png",
+      "bytes": 9994,
+      "sha256": "911839350cd10ac419025b7736ab47bb4e94d44b71609faee7f00d9a93aeb37d"
+    },
+    {
+      "original": "preview-v2/work/captions/en-US/caption-03.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/en-US/caption-03.png",
+      "bytes": 10256,
+      "sha256": "fd5eef079da2cb88e05aece6b5cb0572d683879ff61641214478f78efcdbda81"
+    },
+    {
+      "original": "preview-v2/work/captions/en-US/caption-04.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/en-US/caption-04.png",
+      "bytes": 10256,
+      "sha256": "fd5eef079da2cb88e05aece6b5cb0572d683879ff61641214478f78efcdbda81"
+    },
+    {
+      "original": "preview-v2/work/captions/es-ES/caption-01.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/es-ES/caption-01.png",
+      "bytes": 10612,
+      "sha256": "ec1e432b9395984691c2ebb986b8e316e616a954345bd346c6ba3412b3dcd88f"
+    },
+    {
+      "original": "preview-v2/work/captions/es-ES/caption-02.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/es-ES/caption-02.png",
+      "bytes": 8352,
+      "sha256": "9edf9efc1096fe71a3a57fb58cb0caf61ea187887fef260cbeb76bd31fab86bb"
+    },
+    {
+      "original": "preview-v2/work/captions/es-ES/caption-03.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/es-ES/caption-03.png",
+      "bytes": 8284,
+      "sha256": "50a2b4d3bf37785fc08f479f22fa1ac0155208fce5397e7563a954bbea2a784a"
+    },
+    {
+      "original": "preview-v2/work/captions/es-ES/caption-04.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/es-ES/caption-04.png",
+      "bytes": 8284,
+      "sha256": "50a2b4d3bf37785fc08f479f22fa1ac0155208fce5397e7563a954bbea2a784a"
+    },
+    {
+      "original": "preview-v2/work/captions/fr-FR/caption-01.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/fr-FR/caption-01.png",
+      "bytes": 10029,
+      "sha256": "55ce109474b02ae514dbc32e747f00b991416579ef6cb2736c9045f492673ae2"
+    },
+    {
+      "original": "preview-v2/work/captions/fr-FR/caption-02.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/fr-FR/caption-02.png",
+      "bytes": 10689,
+      "sha256": "dfeb5d328fad7fc8a28ba488117e2183379d952bdc1d7ed6d9ecec1924512a08"
+    },
+    {
+      "original": "preview-v2/work/captions/fr-FR/caption-03.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/fr-FR/caption-03.png",
+      "bytes": 9947,
+      "sha256": "7d87fbfd165214747cb5d946c58cfdc03cfaaa29ca3fedb79de3ff341be6b83f"
+    },
+    {
+      "original": "preview-v2/work/captions/fr-FR/caption-04.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/captions/fr-FR/caption-04.png",
+      "bytes": 9947,
+      "sha256": "7d87fbfd165214747cb5d946c58cfdc03cfaaa29ca3fedb79de3ff341be6b83f"
+    },
+    {
+      "original": "preview-v2/work/de-DE/scene-01.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/de-DE/scene-01.mp4",
+      "bytes": 758494,
+      "sha256": "7c7e2380d6452b5afda4820b61a590d577e6ddd02d340865904dd899f0c651eb"
+    },
+    {
+      "original": "preview-v2/work/de-DE/scene-02.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/de-DE/scene-02.mp4",
+      "bytes": 935393,
+      "sha256": "c2abe41df7c8d45a28dcde9c3779f80ec97beee21c474c993a82bf2a99ee8995"
+    },
+    {
+      "original": "preview-v2/work/de-DE/scene-03.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/de-DE/scene-03.mp4",
+      "bytes": 299334,
+      "sha256": "d6e93e467d106f096c0515c0d5722a90fdb80937e7e54e1513c04a889e484a62"
+    },
+    {
+      "original": "preview-v2/work/de-DE/scene-04.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/de-DE/scene-04.mp4",
+      "bytes": 211894,
+      "sha256": "4035965375b363dd0d5b93bde1110f3f31e5b1a7cfc867eee8f5cf3ea94d9087"
+    },
+    {
+      "original": "preview-v2/work/en-US/scene-01.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/en-US/scene-01.mp4",
+      "bytes": 764115,
+      "sha256": "288f57596ecdaa2215f14c6f5c0556b05f511dd336e3342817ceb363ea376d82"
+    },
+    {
+      "original": "preview-v2/work/en-US/scene-02.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/en-US/scene-02.mp4",
+      "bytes": 940410,
+      "sha256": "082883c4c0575f48cc44e9622a6a43a00c941a5622f16ed8e37ba5d5fb3b8e17"
+    },
+    {
+      "original": "preview-v2/work/en-US/scene-03.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/en-US/scene-03.mp4",
+      "bytes": 301230,
+      "sha256": "c9deeed63d71b0ff6f83f3b73389c7ef4e3c2956ef80e0944e3e67b62424d17e"
+    },
+    {
+      "original": "preview-v2/work/en-US/scene-04.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/en-US/scene-04.mp4",
+      "bytes": 213289,
+      "sha256": "4b254133bf8e25b076125b0766beb8149f45725f8a414da207496c23843d4194"
+    },
+    {
+      "original": "preview-v2/work/es-ES/scene-01.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/es-ES/scene-01.mp4",
+      "bytes": 766783,
+      "sha256": "8bfc1918696b6778f513674e57da418b605046937429d54775e37814ced9cb94"
+    },
+    {
+      "original": "preview-v2/work/es-ES/scene-02.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/es-ES/scene-02.mp4",
+      "bytes": 933292,
+      "sha256": "f2d87bfcaa84331dbe3bf1bbc7dadf9d7d98f95e5d8c29680e399f2a01111213"
+    },
+    {
+      "original": "preview-v2/work/es-ES/scene-03.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/es-ES/scene-03.mp4",
+      "bytes": 298381,
+      "sha256": "492f2703b515e35023f60fb2e0a76ff913319c265fbe1be74171ab50cab8e608"
+    },
+    {
+      "original": "preview-v2/work/es-ES/scene-04.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/es-ES/scene-04.mp4",
+      "bytes": 211785,
+      "sha256": "2542aa102df847293d2ee8564ea2ca5c959d5b5c447814d044a401c010aeaa78"
+    },
+    {
+      "original": "preview-v2/work/fr-FR/scene-01.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/fr-FR/scene-01.mp4",
+      "bytes": 762622,
+      "sha256": "478e79c7a5e22cb34c8d5eb9f553386ae32c16123fa82212e0becca50d08b4ee"
+    },
+    {
+      "original": "preview-v2/work/fr-FR/scene-02.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/fr-FR/scene-02.mp4",
+      "bytes": 933980,
+      "sha256": "03118e0109fcf9104e76052ef75439a7d486d41933e6cb205dca0706f2c64901"
+    },
+    {
+      "original": "preview-v2/work/fr-FR/scene-03.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/fr-FR/scene-03.mp4",
+      "bytes": 300618,
+      "sha256": "1b3becf9002955a6cb8b6e36b0d9f3661a25e00256a43d64ef6914b19e7cb083"
+    },
+    {
+      "original": "preview-v2/work/fr-FR/scene-04.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/fr-FR/scene-04.mp4",
+      "bytes": 212653,
+      "sha256": "79dc27f82201e028353515e974cc616a89d20c8aef685cecf08311269927c76c"
+    },
+    {
+      "original": "preview-v2/work/scene-01.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/scene-01.mp4",
+      "bytes": 766217,
+      "sha256": "b43e388101c7af39d094d75a640487efd06720c159bfb906512927e00792be6d"
+    },
+    {
+      "original": "preview-v2/work/scene-02.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/scene-02.mp4",
+      "bytes": 937140,
+      "sha256": "5ea466c7ea183bd4d135171cb62ae704fa26765608a374306ebde62c09240259"
+    },
+    {
+      "original": "preview-v2/work/scene-03.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/scene-03.mp4",
+      "bytes": 297979,
+      "sha256": "66dbe93ad85eabc7b322d7bd5441eff3e64017ef713a74b90d8753cf2ac3d033"
+    },
+    {
+      "original": "preview-v2/work/scene-04.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/preview-v2/work/scene-04.mp4",
+      "bytes": 210838,
+      "sha256": "7cdf52973d6fe9bfa4690aeb24ea46873a985a2fef973fb8674be932eb525dff"
+    },
+    {
+      "original": "captures/progress-en-US.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/captures/progress-en-US.png",
+      "bytes": 886874,
+      "sha256": "40a7fa3132890daa4504be06e8a9bb2a3c9f19344acd98956a5b7f8d6886bdc2"
+    },
+    {
+      "original": "captures/dashboard-scroll-en-US.mp4",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/captures/dashboard-scroll-en-US.mp4",
+      "bytes": 6439726,
+      "sha256": "33430de59aa2c7aa6a8d8fd6ff9e720b65ae49546cd1866ab6280ea66db502a3"
+    },
+    {
+      "original": "screenshots-v2/source/current-progress-framed.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/source/current-progress-framed.png",
+      "bytes": 954509,
+      "sha256": "d2604a2a0e141a64cf2d1364d495c17445998ca7dfbf33ad82d7ac2de3c23a38"
+    },
+    {
+      "original": "screenshots-v2/source/manifest.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/source/manifest.json",
+      "bytes": 1854,
+      "sha256": "29a86f7b11647dc7506423a66a4bd84d3d743b5cac63631baa6f799bee18a652"
+    },
+    {
+      "original": "screenshots-v2/review/colors-scale-qa.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/colors-scale-qa.json",
+      "bytes": 482,
+      "sha256": "45b5b80bd4dcb6fcfeb79d63cbec1eed0123884d0376cb3933617c7e4b5143dc"
+    },
+    {
+      "original": "screenshots-v2/review/contact-sheet-en-US.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/contact-sheet-en-US.jpg",
+      "bytes": 305925,
+      "sha256": "397176d788afa33d49fe4cfb51dd124854b9437c0aad458014e42886da220995"
+    },
+    {
+      "original": "screenshots-v2/review/final-colors-four-locales.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/final-colors-four-locales.jpg",
+      "bytes": 432075,
+      "sha256": "fbf90f96a6c6fbadb67dc0152135b6b36004e2a187b095c3e50ba2303a374593"
+    },
+    {
+      "original": "screenshots-v2/review/final-set-de-DE.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/final-set-de-DE.jpg",
+      "bytes": 386001,
+      "sha256": "d9285e01e52ca6f5f453f5b18be25ff283df24dd3ba35260a52cca3a508d149b"
+    },
+    {
+      "original": "screenshots-v2/review/final-set-en-US.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/final-set-en-US.jpg",
+      "bytes": 384720,
+      "sha256": "b963b3380ec07e73c40cf2c51dffa6e39a45be75c6c2a76ddda95d616046a4cc"
+    },
+    {
+      "original": "screenshots-v2/review/final-set-es-ES.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/final-set-es-ES.jpg",
+      "bytes": 383455,
+      "sha256": "7d76e06e919532722c65e1b4891db959435a4bc3d287f35511e2c30c50df0302"
+    },
+    {
+      "original": "screenshots-v2/review/final-set-fr-FR.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/final-set-fr-FR.jpg",
+      "bytes": 384955,
+      "sha256": "e1f463f8484d44655c959d82032abe856e82b57ba84a7f37c750a630fb25bdc4"
+    },
+    {
+      "original": "screenshots-v2/review/final-set-qa.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/final-set-qa.json",
+      "bytes": 4457,
+      "sha256": "8fee81c4b95a65ff7e41dffc4fe0510b28dfba6a09823983ff387e426f3d5706"
+    },
+    {
+      "original": "screenshots-v2/review/legacy-aperture-overlay.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/legacy-aperture-overlay.png",
+      "bytes": 255266,
+      "sha256": "13b16a042682c11b1fc62b4ee1bfc07650c836b0c3d4cf5027a3e91f69fb2df6"
+    },
+    {
+      "original": "screenshots-v2/review/legacy-bottom.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/legacy-bottom.png",
+      "bytes": 187246,
+      "sha256": "1c3fea2e41f19d7d2228a0cb8d82093b0657e34026d5b8b03f18e907ce6d82ad"
+    },
+    {
+      "original": "screenshots-v2/review/legacy-middle.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/legacy-middle.png",
+      "bytes": 191832,
+      "sha256": "dc97ad5739edc393a3ce6b3ac6178a9631bed67219f6dafdeff7c954b8363136"
+    },
+    {
+      "original": "screenshots-v2/review/legacy-top.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/legacy-top.png",
+      "bytes": 187011,
+      "sha256": "bd12df2d199a535fda515da2b56d3ac9cd347df2d2859775e8c74667fdb7d35f"
+    },
+    {
+      "original": "screenshots-v2/review/original-hardware-comparison.jpg",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/original-hardware-comparison.jpg",
+      "bytes": 384025,
+      "sha256": "49eb5dadbebcfeef325aa323a7ffb336821871d4b6f6347a00bcddc4d64c6549"
+    },
+    {
+      "original": "screenshots-v2/review/qa.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/qa.json",
+      "bytes": 827,
+      "sha256": "7ac95cadefeaba1ea7e594ca2f44a5b8b64232f11980dd2aab2e34f71a1f2949"
+    },
+    {
+      "original": "screenshots-v2/review/restored-bottom.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/restored-bottom.png",
+      "bytes": 85899,
+      "sha256": "1168939aa4c34e5b835f2b37d0aadd8c657f497ee296e5790b2ff84e009bca4f"
+    },
+    {
+      "original": "screenshots-v2/review/restored-middle.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/restored-middle.png",
+      "bytes": 59244,
+      "sha256": "75538d80437e5f53bda8d5803cb7f487f0a7ec0a422c050cd4a061e7ffd7b156"
+    },
+    {
+      "original": "screenshots-v2/review/restored-top.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/review/restored-top.png",
+      "bytes": 90885,
+      "sha256": "05764c2d0ef74026d26f7855155108c78e667387c52cd43f03a5bcab17987a02"
+    },
+    {
+      "original": "screenshots-v2/final/manifest.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/final/manifest.json",
+      "bytes": 17246,
+      "sha256": "2ba39ee6fe5a7928254e5e7c738bd225f0d1b95f5f1eece45f813b56ae667696"
+    },
+    {
+      "original": "screenshots-v2/alternatives/02-your-colors-original-hardware-1206x2622.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/alternatives/02-your-colors-original-hardware-1206x2622.png",
+      "bytes": 850135,
+      "sha256": "13ef11c7b766656c0146586e3de059a4b7f5f1c8d9c7bbc07a2181bd5d43146e"
+    },
+    {
+      "original": "screenshots-v2/alternatives/02-your-colors-original-hardware-1284x2778.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/alternatives/02-your-colors-original-hardware-1284x2778.png",
+      "bytes": 597986,
+      "sha256": "b503138bd69537b9c12bf01da36265e32228985b8ecb803560e5380d08270542"
+    },
+    {
+      "original": "screenshots-v2/alternatives/original-hardware-manifest.json",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/alternatives/original-hardware-manifest.json",
+      "bytes": 1876,
+      "sha256": "b84e2a7677d900e9d317f90788b72cf39a92bba1d3020cd5adf4af26781eee5e"
+    },
+    {
+      "original": "screenshots-v2/en-US/01-calorie-balance.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/en-US/01-calorie-balance.png",
+      "bytes": 696098,
+      "sha256": "149be7957718b8eafb89a1670b53b44246a2a49a49871bb7e692f70849bb96f1"
+    },
+    {
+      "original": "screenshots-v2/en-US/02-your-colors.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/en-US/02-your-colors.png",
+      "bytes": 887129,
+      "sha256": "2c5a0e95000e96240ca5b48e696fdd8ad98c4b58d62d29970a1907450b1ec63d"
+    },
+    {
+      "original": "screenshots-v2/en-US/03-now-to-midnight.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/en-US/03-now-to-midnight.png",
+      "bytes": 796899,
+      "sha256": "d9c550338cf95e11fcf89b390dc3d9c9df600845ff170ed70d94af43ba9afa08"
+    },
+    {
+      "original": "screenshots-v2/final/en-US/03-progress.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/final/en-US/03-progress.png",
+      "bytes": 855767,
+      "sha256": "4603bb5cd18225970dbcd9f3613e5c2286fa731dc3acb75eb50eada4130e9dc2"
+    },
+    {
+      "original": "screenshots-v2/final/en-US/04-your-week.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/final/en-US/04-your-week.png",
+      "bytes": 692259,
+      "sha256": "a0a6fb0d7aafe887cf45e8b726e942cbea7f4bcc35f624b1e42073a430c83fac"
+    },
+    {
+      "original": "screenshots-v2/final/de-DE/03-progress.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/final/de-DE/03-progress.png",
+      "bytes": 853178,
+      "sha256": "c6169f18f88bd0be6074bd0f8c22de7aa44176ffae1bbf13061ea4b3f3a2d138"
+    },
+    {
+      "original": "screenshots-v2/final/de-DE/04-your-week.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/final/de-DE/04-your-week.png",
+      "bytes": 695453,
+      "sha256": "e55dbc34694f40ed95a52cad48bdc80e4e25c59aceb841f901714399b18f3786"
+    },
+    {
+      "original": "screenshots-v2/final/fr-FR/03-progress.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/final/fr-FR/03-progress.png",
+      "bytes": 856772,
+      "sha256": "153b03897a13653fa8db3bec4435afdfa6314041acba2c2398df088f69ce3ddf"
+    },
+    {
+      "original": "screenshots-v2/final/fr-FR/04-your-week.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/final/fr-FR/04-your-week.png",
+      "bytes": 695608,
+      "sha256": "06e571135663c8b40d18df90e180541b996720d3bf0ef5f878e7712656d5d978"
+    },
+    {
+      "original": "screenshots-v2/final/es-ES/03-progress.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/final/es-ES/03-progress.png",
+      "bytes": 852262,
+      "sha256": "61e8bde39f7784e19da060e460b6e01ffe6bd5539d26a9cc805abada6caf99d7"
+    },
+    {
+      "original": "screenshots-v2/final/es-ES/04-your-week.png",
+      "stashed": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/final/es-ES/04-your-week.png",
+      "bytes": 690891,
+      "sha256": "86c704894a74c02a9a82ca073c08db1e4a21787f98fee1027fea2f7f2465f296"
+    }
+  ],
+  "readme_snapshots": [
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/readme.txt",
+      "snapshot": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/readme-before-three-scene-change.txt",
+      "bytes": 2752,
+      "sha256": "53099cf8a53cbf259dba60bcf0ce9d44ec938073cb0a0c0bf542f69d56913153"
+    },
+    {
+      "original": "Marketing/2026-10-app-store-1.6.0/screenshots-v2/readme.txt",
+      "snapshot": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/screenshots-v2/readme-before-three-scene-change.txt",
+      "bytes": 3654,
+      "sha256": "3fb8204eb81d19b4e9ca6ddd4fd8c461cfa81d1569ca54b22e2df1b7a97ae6ca"
+    },
+    {
+      "original": "Marketing/readme.txt",
+      "snapshot": "stash/2026-10-20-before-theme-02-progress-and-preview-removal/marketing-root-readme-before-three-scene-change.txt",
+      "bytes": 2398,
+      "sha256": "73c2c52bc9b32c44d4c2a4c086eb8961d5659c57ac109638c4bfb57c2e96aae3"
+    }
+  ]
+}

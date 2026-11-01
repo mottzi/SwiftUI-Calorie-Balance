@@ -1,0 +1,208 @@
+{
+  "title": "Your day, brought together.",
+  "duration": 10,
+  "fps": 30,
+  "background": "#060709",
+  "colors": {
+    "white": "#eeeeef",
+    "muted": "#a3a3ae",
+    "purple": "#a09afb",
+    "green": "#61dc88",
+    "weight": "#c8c4e8"
+  },
+  "sourceAssets": {
+    "phone": "Marketing/2026-10-today/stills/iphone-18-pro-silver-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-framed.png",
+    "capture": "Marketing/2026-10-today/captures/iphone-18-pro-theme-02-dark-midnight-bg-dark-steps-off-sheen-mid-capture.png",
+    "health": "Assets.xcassets/Health.imageset/Icon - Apple Health.png"
+  },
+  "assets": {
+    "phone": "source/assets/native-dashboard-framed.png",
+    "capture": "source/assets/native-dashboard.png",
+    "health": "source/assets/health.png",
+    "posePattern": "source/assets/phone-pose-%03d.png",
+    "poseCount": 61,
+    "poseWidth": 1080,
+    "poseHeight": 2240
+  },
+  "readingData": [
+    {
+      "name": "Activity",
+      "value": "2,600",
+      "unit": "kcal burned",
+      "color": "#a09afb",
+      "pulseStart": 2.0,
+      "cardFraction": 0.43
+    },
+    {
+      "name": "Nutrition",
+      "value": "2,000",
+      "unit": "kcal eaten",
+      "color": "#61dc88",
+      "pulseStart": 2.85,
+      "cardFraction": 0.68
+    },
+    {
+      "name": "Weight",
+      "value": "79.7",
+      "unit": "kg",
+      "color": "#c8c4e8",
+      "pulseStart": 3.7,
+      "cardFraction": 0.88
+    }
+  ],
+  "timing": {
+    "readingsFadeStart": 4.95,
+    "readingsFadeEnd": 5.25,
+    "forwardStart": 5.25,
+    "forwardEnd": 6.0,
+    "holdStart": 6.0,
+    "holdEnd": 9.2,
+    "resetEnd": 10.0,
+    "poster": 3.6,
+    "finalPoster": 7.0,
+    "headingFadeStart": 4.95,
+    "headingFadeEnd": 5.25,
+    "healthFadeStart": 4.85,
+    "healthFadeEnd": 5.15,
+    "finalHeadingStart": 5.36,
+    "finalHeadingEnd": 5.95
+  },
+  "layouts": {
+    "wide": {
+      "width": 1800,
+      "height": 1100,
+      "phone": {
+        "centerX": 1480,
+        "centerY": 550,
+        "height": 1020,
+        "finalCenterX": 1480,
+        "finalCenterY": 550,
+        "finalHeight": 1020
+      },
+      "brand": {
+        "x": 120,
+        "y": 132,
+        "size": 24
+      },
+      "earlyHeading": {
+        "x": 116,
+        "firstBaseline": 245,
+        "secondBaseline": 350,
+        "size": 92
+      },
+      "finalHeading": {
+        "x": 116,
+        "firstBaseline": 450,
+        "secondBaseline": 560,
+        "size": 96
+      },
+      "readings": [
+        {
+          "x": 122,
+          "labelY": 496,
+          "valueY": 562,
+          "unitX": 342,
+          "unitY": 559,
+          "startX": 520,
+          "startY": 545
+        },
+        {
+          "x": 122,
+          "labelY": 646,
+          "valueY": 712,
+          "unitX": 342,
+          "unitY": 709,
+          "startX": 500,
+          "startY": 695
+        },
+        {
+          "x": 122,
+          "labelY": 796,
+          "valueY": 862,
+          "unitX": 306,
+          "unitY": 859,
+          "startX": 390,
+          "startY": 845
+        }
+      ],
+      "labelSize": 23,
+      "valueSize": 64,
+      "unitSize": 24,
+      "health": {
+        "x": 1034,
+        "y": 650,
+        "size": 74,
+        "captionSize": 18
+      },
+      "phoneEntryX": 1240
+    },
+    "portrait": {
+      "width": 1080,
+      "height": 1920,
+      "phone": {
+        "centerX": 540,
+        "centerY": 1315,
+        "height": 1050,
+        "finalCenterX": 540,
+        "finalCenterY": 1125,
+        "finalHeight": 1450
+      },
+      "brand": {
+        "x": 66,
+        "y": 88,
+        "size": 28
+      },
+      "earlyHeading": {
+        "x": 62,
+        "firstBaseline": 192,
+        "secondBaseline": 278,
+        "size": 72
+      },
+      "finalHeading": {
+        "x": 62,
+        "firstBaseline": 186,
+        "secondBaseline": 278,
+        "size": 76
+      },
+      "readings": [
+        {
+          "x": 72,
+          "labelY": 392,
+          "valueY": 456,
+          "unitX": 72,
+          "unitY": 493,
+          "startX": 210,
+          "startY": 518
+        },
+        {
+          "x": 402,
+          "labelY": 392,
+          "valueY": 456,
+          "unitX": 402,
+          "unitY": 493,
+          "startX": 540,
+          "startY": 518
+        },
+        {
+          "x": 732,
+          "labelY": 392,
+          "valueY": 456,
+          "unitX": 732,
+          "unitY": 493,
+          "startX": 870,
+          "startY": 518
+        }
+      ],
+      "labelSize": 28,
+      "valueSize": 60,
+      "unitSize": 26,
+      "health": {
+        "x": 540,
+        "y": 644,
+        "size": 84,
+        "captionSize": 24
+      },
+      "phoneEntryX": 540
+    }
+  }
+}

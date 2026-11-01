@@ -1,0 +1,64 @@
+Count.kcal: Your day, brought together
+
+3D IPHONE MODEL
+
+"iPhone 17 Pro" by Ranguel
+Author: https://sketchfab.com/Ranguel
+Original: https://sketchfab.com/3d-models/iphone-17-pro-4541aa8a28324b33a2baaf81d263aaec
+License: Creative Commons Attribution 4.0 International
+https://creativecommons.org/licenses/by/4.0/
+
+Obtained from Phone Mockup Studio by Quentin PLA:
+https://github.com/quentin-pla/phone-mockup-studio
+Repository revision: 9908f2c321787779b6e028cba1ab67cd29a6a6dd
+Original file: source/iphone_17_pro.glb
+The model file itself contains its author, source and CC BY 4.0 license.
+
+Modifications for this collection: Count.kcal's native dashboard replaces the
+display texture. Materials, lighting, camera position and animation are set
+for this film. The mesh is rendered as a silver phone with a transparent
+background and composited with the typography and data connections.
+
+Suggested attribution for the website credits or a social video description:
+
+3D iPhone 17 Pro by Ranguel, CC BY 4.0. Display, materials and animation modified.
+https://sketchfab.com/3d-models/iphone-17-pro-4541aa8a28324b33a2baaf81d263aaec
+https://creativecommons.org/licenses/by/4.0/
+
+Keep this credit with shared copies and include it in the destination's
+credits or description when publishing the exported video or posters.
+This fan-made model is not an official Apple asset.
+
+REFERENCE RENDERING CODE
+
+Screen orientation and material setup were informed by Phone Mockup Studio.
+Its application code uses the following license. Its models have separate
+licenses as described above.
+
+MIT License
+
+Copyright (c) 2026 Quentin PLA
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+OTHER ARTWORK
+
+The dashboard is a native Count.kcal simulator capture using sample data.
+Apple Health artwork comes from the project's existing asset catalog.
+iPhone and Apple Health are trademarks of Apple Inc.
