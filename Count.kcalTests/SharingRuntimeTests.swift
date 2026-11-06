@@ -18,6 +18,45 @@ struct SharingRuntimeTests {
     }
 
     @Test
+    func pendingDraftPreservesRequestedScopesWhenAddingAnotherOption() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        let id = try await session.connect(scopes: [.history])
+        try await session.alice.changeScopes(connectionID: id, to: [.today, .history])
+        let connection = try #require(session.alice.connections.first)
+        var draft = SharingPermissionDraft(connection: connection, accountID: SharingFixtures.alice.id)
+        #expect(draft.today && draft.history && !draft.streaks)
+        #expect(!draft.isEdited)
+        draft.streaks = true
+        #expect(draft.isEdited)
+        #expect(draft.matches(connection))
+        try await session.alice.changeScopes(connectionID: id, to: draft.scopes)
+        #expect(session.server.connections[id]?.proposal?.scopes == [.today, .history, .streaks])
+        #expect(session.alice.connections.first?.scopes == [.history])
+        #expect(!draft.matches(try #require(session.alice.connections.first)))
+    }
+
+    @Test
+    func permissionDraftDetectsAcceptanceAndKeepsImmediateReductions() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        let id = try await session.connect(scopes: [.today, .history])
+        try await session.alice.changeScopes(connectionID: id, to: [.today, .history, .streaks])
+        let connection = try #require(session.alice.connections.first)
+        var draft = SharingPermissionDraft(connection: connection, accountID: SharingFixtures.alice.id)
+        draft.history = false
+        #expect(draft.reductions == [.history])
+        #expect(draft.scopes == [.today, .streaks])
+        await session.bob.refresh()
+        try await session.bob.accept(connectionID: id, proposalID: try #require(connection.proposal).id)
+        await session.alice.refresh()
+        #expect(!draft.matches(try #require(session.alice.connections.first)))
+        let current = SharingPermissionDraft(connection: try #require(session.alice.connections.first), accountID: SharingFixtures.alice.id)
+        #expect(!current.isEdited)
+        #expect(current.acceptedScopes == [.today, .history, .streaks])
+    }
+
+    @Test
     func senderStreakUsesFullHistoryAndExcludedDaysAndClearsWhenHidden() async throws {
         let settings = Settings.shared
         let original = (settings.hideCalorieStatusIcons, settings.balanceGoal, settings.weightGoal,

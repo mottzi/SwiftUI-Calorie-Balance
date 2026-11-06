@@ -288,10 +288,7 @@ private struct SharingPermissionsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    @State private var today: Bool
-    @State private var history: Bool
-    @State private var streaks: Bool
-    @State private var originalScopes: Set<SharingScope>
+    @State private var draft: SharingPermissionDraft
     @State private var showsDisclosure = false
     @State private var confirmsChanges = false
     @State private var contentHeight: CGFloat = 300
@@ -307,35 +304,38 @@ private struct SharingPermissionsView: View {
         self.coordinator = coordinator
         connectionID = connection.id
         peerName = connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? ""
-        _today = State(initialValue: connection.scopes.contains(.today))
-        _history = State(initialValue: connection.scopes.contains(.history))
-        _streaks = State(initialValue: connection.scopes.contains(.streaks))
-        _originalScopes = State(initialValue: connection.scopes)
+        _draft = State(initialValue: SharingPermissionDraft(connection: connection, accountID: coordinator.identity?.id))
     }
 
-    private var scopes: Set<SharingScope> {
-        Set((today ? [SharingScope.today] : []) + (history ? [.history] : []) + (streaks ? [.streaks] : []))
-    }
-
-    private var additions: Set<SharingScope> { scopes.subtracting(originalScopes) }
-    private var reductions: Set<SharingScope> { originalScopes.subtracting(scopes) }
-    private var actionIsDisabled: Bool { runtime.isWorking || scopes == originalScopes }
+    private var scopes: Set<SharingScope> { draft.scopes }
+    private var originalScopes: Set<SharingScope> { draft.acceptedScopes }
+    private var additions: Set<SharingScope> { draft.additions }
+    private var reductions: Set<SharingScope> { draft.reductions }
     private var connection: SharingConnection? { coordinator.connections.first { $0.id == connectionID } }
+    private var hasOutgoingRequest: Bool { draft.proposal?.proposerID == coordinator.identity?.id }
+    private var isStale: Bool { connection.map { !draft.matches($0) } ?? true }
+    private var actionIsDisabled: Bool { runtime.isWorking || !draft.isEdited || isStale }
 
     private var actionTitle: LocalizedStringResource {
+        if hasOutgoingRequest && scopes == originalScopes { return "Cancel request" }
         if scopes.isEmpty { return "Pause sharing" }
+        if hasOutgoingRequest && !additions.isEmpty { return "Update request" }
         if originalScopes.isEmpty { return "Request to resume" }
         if !additions.isEmpty { return reductions.isEmpty ? "Send request" : "Save and send request" }
         return "Save changes"
     }
 
     private var confirmationTitle: LocalizedStringResource {
+        if hasOutgoingRequest && scopes == originalScopes { return "Cancel request?" }
         if scopes.isEmpty { return "Pause sharing with \(peerName)?" }
+        if hasOutgoingRequest && !additions.isEmpty { return "Update request?" }
         if !additions.isEmpty { return "Send a request to \(peerName)?" }
         return "Reduce sharing with \(peerName)?"
     }
 
     private var confirmationActionTitle: LocalizedStringResource {
+        if hasOutgoingRequest && scopes == originalScopes { return "Cancel request" }
+        if hasOutgoingRequest && !additions.isEmpty { return "Update request" }
         if scopes.isEmpty { return "Pause sharing" }
         if !additions.isEmpty { return reductions.isEmpty ? "Send request" : "Save and send request" }
         return "Reduce sharing"
@@ -354,7 +354,8 @@ private struct SharingPermissionsView: View {
                        proposal.recipientID != coordinator.identity?.id {
                         SharingPendingRequestSettings(
                             runtime: runtime, coordinator: coordinator, connection: connection,
-                            proposal: proposal, peerName: peerName
+                            proposal: proposal, peerName: peerName,
+                            onCancelled: resetDraft
                         )
                     }
                     VStack(alignment: .leading, spacing: 8) {
@@ -364,15 +365,15 @@ private struct SharingPermissionsView: View {
                             .padding(.horizontal, 16)
                             .accessibilityAddTraits(.isHeader)
                         VStack(spacing: 0) {
-                            Toggle("Today", isOn: $today)
+                            Toggle(isOn: $draft.today) { permissionLabel("Today", scope: .today) }
                                 .padding(.horizontal, 16)
                                 .frame(minHeight: 44)
                             Divider().padding(.leading, 16)
-                            Toggle("Previous 6 Days", isOn: $history)
+                            Toggle(isOn: $draft.history) { permissionLabel("Previous 6 Days", scope: .history) }
                                 .padding(.horizontal, 16)
                                 .frame(minHeight: 44)
                             Divider().padding(.leading, 16)
-                            Toggle("Streak", isOn: $streaks)
+                            Toggle(isOn: $draft.streaks) { permissionLabel("Streak", scope: .streaks) }
                                 .padding(.horizontal, 16)
                                 .frame(minHeight: 44)
                         }
@@ -395,7 +396,11 @@ private struct SharingPermissionsView: View {
                         .font(.subheadline)
                         .frame(maxWidth: .infinity, minHeight: 44)
                         .buttonStyle(.borderless)
-                    if let error = runtime.actionError ?? coordinator.lastError {
+                    if isStale {
+                        Button("Use current settings", action: resetDraft)
+                            .frame(minHeight: 44)
+                    }
+                    if let error = runtime.actionError {
                         Text(error)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
@@ -416,9 +421,9 @@ private struct SharingPermissionsView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     if #available(iOS 26, *) {
-                        Button(role: .cancel) { dismiss() }
+                        Button(role: .cancel) { dismiss() }.disabled(runtime.isWorking)
                     } else {
-                        Button("Cancel", role: .cancel) { dismiss() }
+                        Button("Cancel", role: .cancel) { dismiss() }.disabled(runtime.isWorking)
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
@@ -440,7 +445,9 @@ private struct SharingPermissionsView: View {
                             .keyboardShortcut(.defaultAction)
                         Button("Cancel", role: .cancel) { }
                     } message: {
-                        if scopes.isEmpty {
+                        if hasOutgoingRequest && scopes == originalScopes {
+                            Text(originalScopes.sharingDescription)
+                        } else if scopes.isEmpty {
                             Text("Sharing pauses for both of you. Resuming requires \(peerName)'s approval.")
                         } else if originalScopes.isEmpty {
                             Text("Ask \(peerName) to resume sharing \(Text(scopes.sharingDescription)). Sharing stays paused until the request is accepted.")
@@ -460,6 +467,25 @@ private struct SharingPermissionsView: View {
         .presentationDetents([.height(contentHeight + navigationHeight)])
         .presentationDragIndicator(.visible)
         .onAppear { runtime.clearError() }
+        .onChange(of: connection) {
+            if !draft.isEdited { resetDraft() }
+        }
+    }
+
+    private func permissionLabel(_ title: LocalizedStringResource, scope: SharingScope) -> some View {
+        HStack {
+            Text(title)
+            if hasOutgoingRequest, draft.proposal?.scopes.contains(scope) == true,
+               !originalScopes.contains(scope) {
+                Text("Requested").font(.caption).foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func resetDraft() {
+        guard let connection else { return }
+        draft = SharingPermissionDraft(connection: connection, accountID: coordinator.identity?.id)
+        runtime.clearError()
     }
 
 }
@@ -472,6 +498,7 @@ private struct SharingPendingRequestSettings: View {
     let connection: SharingConnection
     let proposal: SharingProposal
     let peerName: String
+    let onCancelled: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -493,9 +520,9 @@ private struct SharingPendingRequestSettings: View {
                 Divider().padding(.horizontal, 16)
                 Button(role: .destructive) {
                     Task {
-                        await runtime.perform(on: coordinator) {
+                        if await runtime.perform(on: coordinator, {
                             try await coordinator.cancel(connectionID: connection.id, proposalID: proposal.id)
-                        }
+                        }) { onCancelled() }
                     }
                 } label: {
                     Text("Cancel request")
@@ -528,16 +555,20 @@ extension SharingPermissionsView {
 
     /// Keeps a failed draft unless its reduction was already committed locally.
     private func apply() {
-        let requested = scopes
+        let submitted = draft
         Task {
             let saved = await runtime.perform(on: coordinator) {
-                guard coordinator.connections.first(where: { $0.id == connectionID })?.scopes == originalScopes
+                guard let current = connection, submitted.matches(current)
                 else { throw SharingError.staleRevision }
-                try await coordinator.changeScopes(connectionID: connectionID, to: requested)
+                if submitted.scopes == submitted.acceptedScopes,
+                   let proposal = submitted.proposal, proposal.proposerID == coordinator.identity?.id {
+                    try await coordinator.cancel(connectionID: connectionID, proposalID: proposal.id)
+                } else {
+                    try await coordinator.changeScopes(connectionID: connectionID, to: submitted.scopes)
+                }
             }
-            let retained = originalScopes.intersection(requested)
-            let reduced = !reductions.isEmpty
-                && coordinator.connections.first(where: { $0.id == connectionID })?.scopes == retained
+            let retained = submitted.acceptedScopes.intersection(submitted.scopes)
+            let reduced = !submitted.reductions.isEmpty && connection?.scopes == retained
             if saved || reduced { dismiss() }
         }
     }
