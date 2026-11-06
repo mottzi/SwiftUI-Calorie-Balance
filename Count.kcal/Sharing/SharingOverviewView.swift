@@ -644,6 +644,7 @@ private struct SharingCardSummary: View {
     @EnvironmentObject private var settings: Settings
     // Preserve the original two-line summary's visible arc height.
     @ScaledMetric(relativeTo: .body) private var ringVisibleHeight: CGFloat = 49
+    @ScaledMetric(relativeTo: .body) private var goalSymbolSize: CGFloat = 10
     // Keep the row stable while centering only the text that is actually shown.
     @ScaledMetric(relativeTo: .body) private var minimumContentHeight: CGFloat = 58
 
@@ -658,6 +659,8 @@ private struct SharingCardSummary: View {
 
     var body: some View {
         let values = mode == .midnight ? snapshot?.midnight ?? snapshot?.now : snapshot?.now
+        let goalReached = snapshot?.isSupported == true && !settings.hideCalorieStatusIcons
+            && values?.energy.isEmpty == false ? values?.visibleGoalReached : nil
         HStack(alignment: .center, spacing: 12) {
             SharingPersonLayout(layoutDirection: layoutDirection, ringVisibleHeight: ringVisibleHeight) {
                 if let snapshot, let values, snapshot.isSupported, !dynamicType.isAccessibilitySize {
@@ -670,6 +673,15 @@ private struct SharingCardSummary: View {
                             empty: snapshot.color(snapshot.appearance.graphEmpty, scheme: scheme)
                         )
                     )
+                    .overlay {
+                        if let goalReached {
+                            Image(systemName: goalReached ? "checkmark" : "xmark")
+                                .font(.system(size: goalSymbolSize, weight: .semibold))
+                                .foregroundStyle(.secondary)
+                                .offset(y: 2)
+                                .contentTransition(reduceMotion ? .identity : .symbolEffect(.replace))
+                        }
+                    }
                     .accessibilityHidden(true)
                 } else if !dynamicType.isAccessibilitySize {
                     CalorieCircleGraph(
@@ -719,6 +731,7 @@ private struct SharingCardSummary: View {
         .animation(reduceMotion ? nil : .smooth(duration: CalorieGraphAnimation.defaultDuration), value: mode)
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: isMissingToday)
         .accessibilityElement(children: .combine)
+        .accessibilityValue(goalReached.map { $0 ? Text("Goal reached") : Text("Goal not reached") } ?? Text(""))
     }
 
     private var nameColor: Color {
@@ -851,7 +864,9 @@ extension SharingConnection {
 struct SharingRowStatesGallery: View {
     @EnvironmentObject private var settings: Settings
     @State private var page = ProcessInfo.processInfo.arguments.contains("--sharing-row-updates") ? 1
-        : ProcessInfo.processInfo.arguments.contains("--sharing-row-me") ? 2 : 0
+        : ProcessInfo.processInfo.arguments.contains("--sharing-row-me") ? 2
+        : ProcessInfo.processInfo.arguments.contains("--sharing-row-goals") ? 3 : 0
+    @State private var goalMode = GraphMode.now
     @State private var coordinator: SharingCoordinator?
     @State private var examples: [Example] = []
     @State private var errorMessage: String?
@@ -871,14 +886,26 @@ struct SharingRowStatesGallery: View {
                     Text("People").tag(0)
                     Text("Updates").tag(1)
                     Text("Me").tag(2)
+                    Text("Goals").tag(3)
                 }
                 .pickerStyle(.segmented)
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
             } footer: { Text("Sample data · Production sharing rows") }
 
+            if page == 3 {
+                Section {
+                    Toggle("Hide goal status icons", isOn: $settings.hideCalorieStatusIcons)
+                    Picker("Mode", selection: $goalMode) {
+                        Text("Now").tag(GraphMode.now)
+                        Text("Midnight").tag(GraphMode.midnight)
+                    }
+                    .pickerStyle(.segmented)
+                }
+            }
+
             if page == 2 {
-                localExample("Available", snapshot: card(), status: "Loading calories…")
+                localExample("Available", snapshot: card(goalReached: true), status: "Loading calories…")
                 localExample("Loading", snapshot: nil, status: "Loading calories…")
                 localExample("Unavailable", snapshot: nil, status: "Card unavailable")
                 localExample("Unsupported snapshot", snapshot: card(version: 999), status: "Card unavailable")
@@ -888,7 +915,8 @@ struct SharingRowStatesGallery: View {
                         NavigationLink {
                             Text("Sample row")
                         } label: {
-                            SharingPersonRow(connection: example.connection, coordinator: coordinator)
+                            SharingPersonRow(connection: example.connection, coordinator: coordinator,
+                                             mode: page == 3 ? goalMode : .now)
                         }
                         .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
                     } header: { Text(verbatim: example.title).textCase(nil) }
@@ -916,15 +944,19 @@ struct SharingRowStatesGallery: View {
         } header: { Text(verbatim: title).textCase(nil) }
     }
 
-    private func card(version: Int = CalorieCardSnapshot.currentSchemaVersion, streakOnly: Bool = false) -> CalorieCardSnapshot {
-        let sample = SharingFixtures.snapshot(day: now, capturedAt: now, timeZone: .current)
+    private func card(version: Int = CalorieCardSnapshot.currentSchemaVersion, streakOnly: Bool = false,
+                      goalReached: Bool? = nil, reversesProjectedGoal: Bool = false) -> CalorieCardSnapshot {
+        let sample = SharingFixtures.snapshot(day: now, capturedAt: now, timeZone: .current, goalReached: goalReached)
         var result = CalorieCardSnapshot(
             schemaVersion: version, senderLocalDate: sample.senderLocalDate,
             timeZoneIdentifier: sample.timeZoneIdentifier, dayStart: sample.dayStart, dayEnd: sample.dayEnd,
             capturedAt: now,
             now: streakOnly ? .init(energy: EnergyBalance(active: 0, resting: 0, restingRemaining: 0, consumed: 0),
                                    visibleGoalReached: nil) : sample.now,
-            midnight: streakOnly ? nil : sample.midnight, energyUnit: .kcal,
+            midnight: streakOnly ? nil : sample.midnight.map {
+                .init(energy: $0.energy,
+                      visibleGoalReached: reversesProjectedGoal ? goalReached.map { !$0 } : goalReached)
+            }, energyUnit: .kcal,
             appearance: CalorieCardSnapshotBuilder.appearance(settings: settings)
         )
         if streakOnly { result.streak = .init(days: 8, color: result.appearance.burned) }
@@ -942,7 +974,9 @@ struct SharingRowStatesGallery: View {
                 ("Available", 0, [.today]), ("Paused", 0, []),
                 ("Streak only", 0, [.streaks]), ("Empty history", 0, [.history]),
                 ("Available", 1, [.today]), ("Connecting", 1, [.history]),
-                ("Today's update missing", 1, [.today]), ("First update pending", 1, [.today])
+                ("Today's update missing", 1, [.today]), ("First update pending", 1, [.today]),
+                ("Goal reached now", 3, [.today]), ("Goal not reached now", 3, [.today]),
+                ("Goal status hidden by sender", 3, [.today]), ("Today's update missing", 3, [.today])
             ]
             for (title, page, scopes) in configurations {
                 let peer = SharingIdentity(id: UUID().uuidString, displayName: "Ommtzi")
@@ -967,11 +1001,15 @@ struct SharingRowStatesGallery: View {
                         nameColor: card().appearance.burned
                     )
                 }
-                if title == "Available" || title == "Streak only", let grant = connection.grants.first {
+                if title == "Available" || title == "Streak only" || title.hasPrefix("Goal "),
+                   let grant = connection.grants.first {
+                    let goalReached: Bool? = title == "Goal reached now" ? true
+                        : title == "Goal not reached now" ? false : nil
                     state.snapshots.append(SharedSnapshotEnvelope(
                         connectionID: connection.id, senderID: peer.id, scope: grant.scope,
                         consentGeneration: grant.generation, publisherGeneration: publisher,
-                        snapshot: card(streakOnly: title == "Streak only")
+                        snapshot: card(streakOnly: title == "Streak only", goalReached: goalReached,
+                                       reversesProjectedGoal: page == 3)
                     ))
                 }
             }
