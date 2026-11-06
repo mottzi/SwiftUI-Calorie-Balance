@@ -51,7 +51,7 @@ struct SharingPersonDetail: View {
                         }
                     } else if snapshots.isEmpty {
                         ContentUnavailableView {
-                            Label(connection.sharingStatus(coordinator: coordinator), systemImage: "person.crop.circle.badge.clock")
+                            Label(connection.sharingStatus, systemImage: "person.crop.circle.badge.clock")
                         } description: {
                             Text(waitingGuidance(connection))
                         } actions: {
@@ -180,7 +180,7 @@ extension SharingPersonDetail {
         let presentation = snapshots + coordinator.snapshots(connectionID: connectionID, scope: .goals)
         guard let latest = presentation.max(by: { $0.snapshot.capturedAt < $1.snapshot.capturedAt })?.snapshot,
               let background = latest.appearance.pageBackground else { return settings.AppBackground }
-        return latest.color(background, scheme: scheme)
+        return background.color(in: scheme)
     }
 
     private var updatedAt: Date? {

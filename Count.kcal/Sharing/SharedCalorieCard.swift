@@ -24,12 +24,12 @@ struct SharedCalorieCard: View {
             CalorieCardContent(
                 energy: values.energy,
                 energyUnit: snapshot.energyUnit.rawValue,
-                burnedColor: snapshot.color(snapshot.appearance.burned, scheme: scheme),
-                consumedColor: snapshot.color(snapshot.appearance.consumed, scheme: scheme),
-                graphEmptyColor: snapshot.color(snapshot.appearance.graphEmpty, scheme: scheme),
-                cardBackground: snapshot.color(snapshot.appearance.cardBackground, scheme: scheme),
+                burnedColor: snapshot.appearance.burned.color(in: scheme),
+                consumedColor: snapshot.appearance.consumed.color(in: scheme),
+                graphEmptyColor: snapshot.appearance.graphEmpty.color(in: scheme),
+                cardBackground: snapshot.appearance.cardBackground.color(in: scheme),
                 visibleGoalReached: hidesGoalStatus ? nil : values.visibleGoalReached,
-                labelBackground: snapshot.appearance.labelBackground.map { snapshot.color($0, scheme: scheme) },
+                labelBackground: snapshot.appearance.labelBackground?.color(in: scheme),
                 animateNumericValues: animateNumericValues
             )
         } else {
@@ -66,7 +66,7 @@ struct SharedTodayCalorieCard: View {
                 .contentShape(.rect(cornerRadius: 10))
         }
         .buttonStyle(RecessedCardStyle(
-            background: snapshot.color(snapshot.appearance.cardBackground, scheme: scheme),
+            background: snapshot.appearance.cardBackground.color(in: scheme),
             feedback: feedback,
             pulse: 0
         ))
@@ -111,9 +111,13 @@ extension CalorieCardSnapshot {
         return LocalizedStringResource("sharing.card.date", defaultValue: "\(date)", locale: locale)
     }
 
+}
+
+extension CalorieCardSnapshot.AdaptiveColor {
+
     /// Resolves the sender's color for the active appearance.
-    func color(_ adaptive: AdaptiveColor, scheme: ColorScheme) -> Color {
-        let rgba = scheme == .dark ? adaptive.dark : adaptive.light
+    func color(in scheme: ColorScheme) -> Color {
+        let rgba = scheme == .dark ? dark : light
         return Color(.sRGB, red: rgba.red, green: rgba.green, blue: rgba.blue, opacity: rgba.opacity)
     }
 
@@ -174,8 +178,8 @@ struct SharedWeekBalanceChart: View {
                     color: WeekBalanceChartContent.VBarBalanceGraph.barColor(
                         energy: energy, isToday: isToday, goalReached: values?.visibleGoalReached == true,
                         isExcluded: snapshot?.isExcluded == true,
-                        burned: snapshot.map { $0.color($0.appearance.burned, scheme: scheme) } ?? .secondary,
-                        consumed: snapshot.map { $0.color($0.appearance.consumed, scheme: scheme) } ?? .secondary
+                        burned: snapshot?.appearance.burned.color(in: scheme) ?? .secondary,
+                        consumed: snapshot?.appearance.consumed.color(in: scheme) ?? .secondary
                     ),
                     isInCurrentStreak: day.isInCurrentStreak,
                     isLoaded: snapshot != nil

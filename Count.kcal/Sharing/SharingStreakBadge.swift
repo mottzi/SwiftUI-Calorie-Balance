@@ -31,7 +31,7 @@ struct SharingStreakBadge: View {
     }
 
     private var flame: some View {
-        StreakFlameIcon(color: streak.days > 0 ? color : .secondary, isAnimating: streak.days > 0)
+        StreakFlameIcon(color: streak.days > 0 ? streak.color.color(in: scheme) : .secondary, isAnimating: streak.days > 0)
     }
 
     private var count: some View {
@@ -41,8 +41,4 @@ struct SharingStreakBadge: View {
             .offset(y: countOffset)
     }
 
-    private var color: Color {
-        let rgba = scheme == .dark ? streak.color.dark : streak.color.light
-        return Color(.sRGB, red: rgba.red, green: rgba.green, blue: rgba.blue, opacity: rgba.opacity)
-    }
 }

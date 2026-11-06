@@ -229,8 +229,7 @@ private struct SharingRequestsSection: View {
         let snapshot = coordinator.snapshots(connectionID: connection.id, scope: scope).first?.snapshot
         guard let color = snapshot?.appearance.resolvedNameColor
                 ?? coordinator.senderNameColor(connectionID: connection.id) else { return .primary }
-        let rgba = scheme == .dark ? color.dark : color.light
-        return Color(.sRGB, red: rgba.red, green: rgba.green, blue: rgba.blue, opacity: rgba.opacity)
+        return color.color(in: scheme)
     }
 
 }
@@ -622,14 +621,11 @@ struct SharingPersonRow: View {
             name: connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "",
             snapshot: snapshot,
             mode: connection.scopes.contains(.today) ? mode : .now,
-            status: isMissingToday ? "No update yet today" : connection.sharingStatus(coordinator: coordinator),
+            status: isMissingToday ? "No update yet today" : connection.sharingStatus,
             streak: coordinator.streak(connectionID: connection.id),
             isMissingToday: isMissingToday,
             senderMetadata: coordinator.senderMetadata(connectionID: connection.id),
-            placeholderNameColor: coordinator.senderNameColor(connectionID: connection.id).map { color in
-                let rgba = scheme == .dark ? color.dark : color.light
-                return Color(.sRGB, red: rgba.red, green: rgba.green, blue: rgba.blue, opacity: rgba.opacity)
-            }
+            placeholderNameColor: coordinator.senderNameColor(connectionID: connection.id)?.color(in: scheme)
         )
     }
 
@@ -674,9 +670,9 @@ private struct SharingCardSummary: View {
                         energy: values.energy,
                         configuration: CalorieCircleConfiguration(lineWidth: 6, ringSpacing: 2, segmentGap: 2),
                         palette: CalorieGraphPalette(
-                            burned: snapshot.color(snapshot.appearance.burned, scheme: scheme),
-                            consumed: snapshot.color(snapshot.appearance.consumed, scheme: scheme),
-                            empty: snapshot.color(snapshot.appearance.graphEmpty, scheme: scheme)
+                            burned: snapshot.appearance.burned.color(in: scheme),
+                            consumed: snapshot.appearance.consumed.color(in: scheme),
+                            empty: snapshot.appearance.graphEmpty.color(in: scheme)
                         )
                     )
                     .overlay {
@@ -744,7 +740,7 @@ private struct SharingCardSummary: View {
 
     private var nameColor: Color {
         if let snapshot, snapshot.isSupported {
-            return snapshot.color(snapshot.appearance.resolvedNameColor, scheme: scheme)
+            return snapshot.appearance.resolvedNameColor.color(in: scheme)
         }
         return placeholderNameColor ?? .primary
     }
@@ -864,9 +860,8 @@ extension SharingConnection {
         }
     }
 
-    @MainActor
     /// Returns the visible state without implying that a refresh wakes the sender.
-    func sharingStatus(coordinator: SharingCoordinator) -> LocalizedStringResource {
+    var sharingStatus: LocalizedStringResource {
         if scopes.isEmpty { return "Sharing paused" }
         if grants.contains(where: { !isReady($0.scope) }) { return "Connecting" }
         if scopes.isDisjoint(with: [.today, .history]) { return "No calorie cards shared" }
