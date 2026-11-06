@@ -101,6 +101,47 @@ struct SharingRuntimeTests {
     }
 
     @Test
+    func dismissedInvitationCannotCreateOrPresentALateRequest() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        await session.alice.verifyAccount()
+        let runtime = SharingRuntime(coordinator: session.alice, store: try SharingStore(),
+                                     repository: session.repository, defaults: session.defaults, isFixture: true)
+        session.server.pauseNextPublisherClaim = true
+        let invitation = Task { await runtime.invite(scopes: [.today]) }
+        await session.server.publisherGate.waitUntilSuspended()
+        #expect(runtime.isManagingInvitations)
+        runtime.clearInvitation()
+        session.server.publisherGate.resume()
+        #expect(!(await invitation.value))
+        #expect(!runtime.isManagingInvitations)
+        #expect(!runtime.invitationCreated && runtime.invitation == nil)
+        #expect(session.server.connections.isEmpty)
+        #expect(await runtime.invite(scopes: [.today]))
+    }
+
+    @Test
+    func publisherChangeDoesNotBlockNameSaveOrPermissionChanges() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        let id = try await session.connect(scopes: [.today])
+        session.server.pauseNextPublisherClaim = true
+        let change = Task { await session.runtime.useThisPublisher(on: session.alice) }
+        await session.server.publisherGate.waitUntilSuspended()
+        #expect(session.runtime.isChangingPublisher)
+        #expect(await session.runtime.saveName("New Name"))
+        #expect(session.runtime.applyPermissionChange(on: session.alice) {
+            try session.alice.enqueueScopeChange(connectionID: id, to: [])
+        })
+        #expect(session.alice.connections.first?.scopes.isEmpty == true)
+        #expect(session.runtime.displayName == "New Name")
+        session.server.publisherGate.resume()
+        #expect(await change.value)
+        #expect(!session.runtime.isChangingPublisher)
+        await session.runtime.syncProfileName()
+    }
+
+    @Test
     func permissionRequestDoesNotLockTheSheetWhileSyncIsHeld() async throws {
         let session = try RuntimeSession()
         defer { session.cleanUp() }

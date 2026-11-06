@@ -22,7 +22,7 @@ struct SharingInvitationView: View {
         Set((today ? [SharingScope.today] : []) + (history ? [.history] : []) + (goals ? [.goals] : []))
     }
 
-    private var isLocked: Bool { isCreating || runtime.isWorking }
+    private var actionsAreBusy: Bool { isCreating || runtime.isManagingInvitations || runtime.isChangingPublisher }
 
     /// Retains scope choices after errors and lets the system choose the recipient.
     var body: some View {
@@ -64,7 +64,7 @@ struct SharingInvitationView: View {
                     }
                     .padding(.vertical, 4)
                     .background(.background.secondary, in: .rect(cornerRadius: 24))
-                    .disabled(isLocked || runtime.invitationCreated)
+                    .disabled(actionsAreBusy || runtime.invitationCreated)
                     Group {
                         if scopes.isEmpty {
                             Text("Choose at least one option to continue.")
@@ -79,7 +79,7 @@ struct SharingInvitationView: View {
                     .padding(.horizontal, 16)
                 }
                 SharingDetailsButton(alignment: .center) { showsDisclosure = true }
-                if isCreating { ProgressView("Preparing invitation…") }
+                if isCreating { Text("Preparing invitation…").foregroundStyle(.secondary) }
                 if runtime.isFixture, runtime.invitationCreated { Text("Sample invitation created") }
                 if runtime.publisherNeedsConfirmation, let coordinator = runtime.coordinator {
                     SharingPublisherChoice(runtime: runtime, coordinator: coordinator)
@@ -93,7 +93,7 @@ struct SharingInvitationView: View {
                         .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .modifier(SharingPrimaryActionAppearance())
-                .disabled(isLocked || scopes.isEmpty || runtime.invitationCreated)
+                .disabled(actionsAreBusy || scopes.isEmpty || runtime.invitationCreated)
             }
             .softTopScrollEdge()
             .navigationTitle("Invite someone")
@@ -101,9 +101,9 @@ struct SharingInvitationView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     if #available(iOS 26, *) {
-                        Button(role: .close) { dismiss() }.disabled(isLocked)
+                        Button(role: .close) { dismiss() }
                     } else {
-                        Button("Done") { dismiss() }.disabled(isLocked)
+                        Button("Done") { dismiss() }
                     }
                 }
             }
@@ -121,12 +121,11 @@ struct SharingInvitationView: View {
                     nativeInvitation = nil
                 }
             }
-            .interactiveDismissDisabled(isLocked)
         }
     }
 
     private func sendInvitation() {
-        guard !isLocked, !scopes.isEmpty, runtime.hasDisplayName else { return }
+        guard !actionsAreBusy, !scopes.isEmpty, runtime.hasDisplayName else { return }
         isCreating = true
         invitationErrorMessage = nil
         Task {
@@ -410,12 +409,12 @@ struct SharingRequestConsentView: View {
                         Text("Accept").frame(maxWidth: .infinity, minHeight: 44)
                     }
                     .modifier(SharingPrimaryActionAppearance())
-                    .disabled(runtime.isWorking || isSubmitting)
+                    .disabled(isSubmitting)
                     Button(role: .destructive, action: decline) {
                         Text("Decline").frame(maxWidth: .infinity, minHeight: 44)
                     }
                     .buttonStyle(.borderless)
-                    .disabled(runtime.isWorking || isSubmitting)
+                    .disabled(isSubmitting)
                 }
             }
             .softTopScrollEdge()
@@ -471,7 +470,7 @@ struct SharingRequestConsentView: View {
     }
 
     private func accept() {
-        guard !runtime.isWorking, !isSubmitting, let proposal = displayedConnection?.proposal else { return }
+        guard !isSubmitting, let proposal = displayedConnection?.proposal else { return }
         guard runtime.hasDisplayName else {
             showsNameSetup = true
             return
@@ -485,7 +484,7 @@ struct SharingRequestConsentView: View {
     }
 
     private func decline() {
-        guard !runtime.isWorking, !isSubmitting, let proposal = displayedConnection?.proposal else { return }
+        guard !isSubmitting, let proposal = displayedConnection?.proposal else { return }
         reviewedConnection = connection
         isSubmitting = true
         let declined = runtime.applyPermissionChange(on: coordinator) {

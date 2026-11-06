@@ -45,7 +45,7 @@ struct SharingSentInvitationsView: View {
                 }
             }
             .buttonStyle(.borderless)
-            .disabled(runtime.isWorking)
+            .disabled(runtime.isManagingInvitations || runtime.isChangingPublisher)
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(.background.secondary, in: .rect(cornerRadius: 24))

@@ -31,6 +31,12 @@ final class SharingRuntime {
     /// Whether one or more sharing actions are active.
     private(set) var isWorking = false
 
+    /// Invitation operations share one native delivery sheet, but never block leaving it.
+    private(set) var isManagingInvitations = false
+
+    /// Prevents duplicate publisher changes without disabling other sharing actions.
+    private(set) var isChangingPublisher = false
+
     /// Whether the first foreground account refresh has finished.
     private(set) var hasLoaded = false
 
@@ -146,9 +152,6 @@ final class SharingRuntime {
 
     /// Number of active user actions.
     @ObservationIgnored private var outstandingActions = 0
-
-    /// Whether an invitation request is already running.
-    @ObservationIgnored private var creatingInvitation = false
 
     /// Pending debounce task for a publication request.
     @ObservationIgnored private var scheduledPublicationTask: Task<Void, Never>?
@@ -420,20 +423,25 @@ final class SharingRuntime {
     @discardableResult
     func invite(scopes: Set<SharingScope>) async -> Bool {
 
-        guard hasDisplayName, !scopes.isEmpty, !creatingInvitation,
+        guard hasDisplayName, !scopes.isEmpty, !isManagingInvitations, !isChangingPublisher,
               !invitationCreated, invitation == nil else { return false }
-        creatingInvitation = true
-        defer { creatingInvitation = false }
+        isManagingInvitations = true
+        defer { isManagingInvitations = false }
         let session = invitationSession
-        return await perform {
+        let prepared = await perform {
             #if DEBUG
             if self.isFixture && ProcessInfo.processInfo.arguments.contains("--sharing-qa-slow-invite") {
                 try await Task.sleep(for: .seconds(5))
             }
             #endif
-            guard session == self.invitationSession else { throw CancellationError() }
+            guard session == self.invitationSession else { return }
             guard let coordinator = self.coordinator else { throw SharingError.accountUnavailable }
-            try await coordinator.preparePublisher()
+            do { try await coordinator.preparePublisher() }
+            catch {
+                guard session == self.invitationSession else { return }
+                throw error
+            }
+            guard session == self.invitationSession else { return }
             if self.isFixture {
                 _ = try await coordinator.propose(to: SharingFixtures.bob, scopes: scopes)
             } else {
@@ -445,6 +453,7 @@ final class SharingRuntime {
             guard session == self.invitationSession else { return }
             self.invitationCreated = self.isFixture
         }
+        return prepared && session == invitationSession
     }
 
     /// Clears the invitation and invalidates any pending invitation session.
@@ -456,13 +465,20 @@ final class SharingRuntime {
 
     /// Reloads a pending invitation for native recipient selection and delivery.
     func resumeInvitation(id: UUID) async -> SharingCloudInvitation? {
-
+        guard !isManagingInvitations, !isChangingPublisher else { return nil }
+        isManagingInvitations = true
+        defer { isManagingInvitations = false }
+        let session = invitationSession
         var invitation: SharingCloudInvitation?
         await perform {
             guard let cloud = self.cloud else { throw SharingError.unavailable }
-            invitation = try await cloud.invitation(for: id)
+            do { invitation = try await cloud.invitation(for: id) }
+            catch {
+                guard session == self.invitationSession else { return }
+                throw error
+            }
         }
-        return invitation
+        return session == invitationSession ? invitation : nil
     }
 
     /// Refreshes the selected recipient after the system sheet completes.
@@ -485,12 +501,27 @@ final class SharingRuntime {
     /// Cancels a pending invitation and refreshes the overview.
     @discardableResult
     func cancelPendingInvitation(id: UUID) async -> Bool {
+        guard !isManagingInvitations else { return false }
+        isManagingInvitations = true
+        defer { isManagingInvitations = false }
         let cancelled = await perform { try await self.cloud?.cancelPendingInvitation(id: id) }
         if cancelled {
             if invitation?.id == id { clearInvitation() }
             await start(refresh: .changed)
         }
         return cancelled
+    }
+
+    /// Cloud confirmation is needed for ownership, but only this action stays busy.
+    @discardableResult
+    func useThisPublisher(on coordinator: SharingCoordinator) async -> Bool {
+        guard !isChangingPublisher, !isManagingInvitations else { return false }
+        isChangingPublisher = true
+        defer { isChangingPublisher = false }
+        return await perform(on: coordinator) {
+            try await coordinator.takeOverPublisher()
+            await coordinator.refresh(.changed)
+        }
     }
 
     @discardableResult

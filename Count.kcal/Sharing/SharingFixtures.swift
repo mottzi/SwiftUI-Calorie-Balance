@@ -117,6 +117,10 @@ final class SharingFakeServer {
     /// Current publisher lease keyed by account ID.
     var leases: [String: SharingPublisherLease] = [:]
 
+    /// Holds publisher setup to verify dismissal and unrelated actions during network work.
+    var pauseNextPublisherClaim = false
+    let publisherGate = SharingFakeGate()
+
     /// Results keyed by consent mutation ID for idempotent replay.
     var committed: [UUID: SharingConnection] = [:]
 
@@ -343,6 +347,11 @@ final class FakeSharingTransport: SharingTransport {
                         policy: SharingPublisherClaim = .replaceExisting) async throws -> SharingPublisherLease {
 
         try authenticate(account.id)
+        if server.pauseNextPublisherClaim {
+            server.pauseNextPublisherClaim = false
+            await server.publisherGate.suspend()
+            try authenticate(account.id)
+        }
         let old = server.leases[account.id]
         if policy == .ifUnclaimed, let old, old.deviceID != deviceID { throw SharingError.publisherNotOwned }
         let lease = old.flatMap { $0.deviceID == deviceID ? $0 : nil }

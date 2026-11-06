@@ -595,11 +595,11 @@ struct SharingPublisherChoice: View {
     var body: some View {
         Button("Use this iPhone", systemImage: "iphone.and.arrow.forward") { confirmsTakeover = true }
             .frame(minHeight: 44)
-            .disabled(runtime.isWorking)
+            .disabled(runtime.isChangingPublisher || runtime.isManagingInvitations)
             .confirmationDialog("Use this iPhone for updates?", isPresented: $confirmsTakeover,
                                 titleVisibility: .visible) {
                 Button("Use this iPhone") {
-                    Task { await runtime.perform { try await coordinator.takeOverPublisher() } }
+                    Task { await runtime.useThisPublisher(on: coordinator) }
                 }
             } message: {
                 Text("Your other iPhone will stop sending calorie-card updates for this Apple Account.")
