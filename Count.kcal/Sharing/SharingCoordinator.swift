@@ -313,6 +313,15 @@ final class SharingCoordinator {
         return state.senderCalendars[sender.id]
     }
 
+    /// A known person's color remains recognizable when sharing is paused.
+    func senderNameColor(connectionID: UUID) -> CalorieCardSnapshot.AdaptiveColor? {
+        guard let identity,
+              let connection = connections.first(where: { $0.id == connectionID }),
+              connection.hasAcceptedSharing,
+              let sender = connection.peer(of: identity.id) else { return nil }
+        return state.senderNameColors[sender.id] ?? state.senderCalendars[sender.id]?.nameColor
+    }
+
     /// Wake exactly at known sender midnight/request expiry, with a minute cap
     /// so wall-clock changes while foregrounded cannot leave stale dates visible.
     func nextExpiryDate() -> Date {
@@ -350,6 +359,14 @@ final class SharingCoordinator {
             default: return false
             }
         }
+        // Older caches kept the name color only beside the sender's calendar.
+        for (sender, metadata) in state.senderCalendars where state.senderNameColors[sender] == nil {
+            if let color = metadata.nameColor { state.senderNameColors[sender] = color }
+        }
+        let knownSenders = Set(connections.filter(\.hasAcceptedSharing).compactMap { connection in
+            identity.flatMap { connection.peer(of: $0.id)?.id }
+        })
+        state.senderNameColors = state.senderNameColors.filter { knownSenders.contains($0.key) }
         let permittedSenders = Set(state.connections.filter { !$0.removed && !$0.scopes.isEmpty }.compactMap { connection in
             identity.flatMap { connection.peer(of: $0.id)?.id }
         })
@@ -810,6 +827,7 @@ extension SharingCoordinator {
             snapshotID: envelope.snapshot.id,
             nameColor: envelope.snapshot.appearance.burned
         )
+        state.senderNameColors[envelope.senderID] = envelope.snapshot.appearance.burned
     }
 
     /// Replaces a cached envelope unless the existing copy is newer.

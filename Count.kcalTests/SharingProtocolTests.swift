@@ -7,6 +7,33 @@ import Testing
 struct SharingProtocolTests {
 
     @Test
+    func pausedPersonRetainsNameColorWithoutRetainingSharedValues() async throws {
+        let pair = try SharingTestPair()
+        let id = try await pair.connect(scopes: [.today])
+        try await pair.alice.takeOverPublisher()
+        let card = pair.snapshot()
+        try await pair.alice.publish(snapshot: card)
+        await pair.bob.refresh()
+        #expect(pair.bob.senderNameColor(connectionID: id) == card.appearance.burned)
+
+        try await pair.bob.changeScopes(connectionID: id, to: [])
+        #expect(pair.bob.cachedSnapshots.isEmpty)
+        #expect(pair.bob.state.senderCalendars.isEmpty)
+        #expect(pair.bob.senderMetadata(connectionID: id) == nil)
+        #expect(pair.bob.senderNameColor(connectionID: id) == card.appearance.burned)
+
+        let restored = SharingCoordinator(
+            store: pair.bobStore, transport: pair.bobTransport, clock: { pair.time.now }
+        )
+        await restored.verifyAccount()
+        #expect(restored.senderNameColor(connectionID: id) == card.appearance.burned)
+        #expect(restored.cachedSnapshots.isEmpty)
+        try await restored.remove(connectionID: id)
+        #expect(restored.senderNameColor(connectionID: id) == nil)
+        #expect(try pair.bobStore.load(accountID: SharingFixtures.bob.id).senderNameColors.isEmpty)
+    }
+
+    @Test
     func fullStreakRequiresItsOwnAcceptedGrantAndNeverCarriesCalories() async throws {
         let pair = try SharingTestPair()
         let id = try await pair.connect(scopes: [.today, .history])
@@ -895,6 +922,7 @@ struct SharingProtocolTests {
         let retained = try pair.aliceStore.load(accountID: SharingFixtures.alice.id)
         #expect(retained.snapshots.isEmpty)
         #expect(retained.senderCalendars.isEmpty)
+        #expect(retained.senderNameColors.isEmpty)
         #expect(retained.publisherLease == nil)
         #expect(!retained.cleanupPending)
         #expect(retained.connections.map(\.id) == [id])

@@ -30,6 +30,9 @@ struct CountApp: App {
                 if NSClassFromString("XCTestCase") != nil {
                     // Hosted unit tests supply their own databases and runtimes.
                     Color.clear
+                } else if ProcessInfo.processInfo.arguments.contains("--sharing-row-states") {
+                    NavigationStack { SharingRowStatesGallery() }
+                        .environmentObject(AppSettings)
                 } else if ProcessInfo.processInfo.arguments.contains("--sharing-qa") {
                     NavigationStack { SharingOverviewView(runtime: .shared) }
                         .sheet(isPresented: Binding(

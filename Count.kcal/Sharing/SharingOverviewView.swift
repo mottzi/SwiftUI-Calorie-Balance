@@ -243,7 +243,8 @@ private struct SharingMeSection: View {
                     snapshot: card.snapshot(settings: settings),
                     mode: mode,
                     status: card.day.sample.isUnavailable ? "Card unavailable" : "Loading calories…",
-                    streak: card.streak
+                    streak: card.streak,
+                    placeholderNameColor: settings.burnedColor
                 )
             }
             .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
@@ -602,6 +603,8 @@ struct SharingPublisherChoice: View {
 /// A person's latest balance, paired with the same energy rings as their full card.
 struct SharingPersonRow: View {
 
+    @Environment(\.colorScheme) private var scheme
+
     let connection: SharingConnection
     let coordinator: SharingCoordinator
     var mode: GraphMode = .now
@@ -616,7 +619,11 @@ struct SharingPersonRow: View {
             status: isMissingToday ? "No update yet today" : connection.sharingStatus(coordinator: coordinator),
             streak: coordinator.streak(connectionID: connection.id),
             isMissingToday: isMissingToday,
-            senderMetadata: coordinator.senderMetadata(connectionID: connection.id)
+            senderMetadata: coordinator.senderMetadata(connectionID: connection.id),
+            placeholderNameColor: coordinator.senderNameColor(connectionID: connection.id).map { color in
+                let rgba = scheme == .dark ? color.dark : color.light
+                return Color(.sRGB, red: rgba.red, green: rgba.green, blue: rgba.blue, opacity: rgba.opacity)
+            }
         )
     }
 
@@ -637,6 +644,8 @@ private struct SharingCardSummary: View {
     @EnvironmentObject private var settings: Settings
     // Preserve the original two-line summary's visible arc height.
     @ScaledMetric(relativeTo: .body) private var ringVisibleHeight: CGFloat = 49
+    // Keep the row stable while centering only the text that is actually shown.
+    @ScaledMetric(relativeTo: .body) private var minimumContentHeight: CGFloat = 58
 
     let name: String
     let snapshot: CalorieCardSnapshot?
@@ -645,6 +654,7 @@ private struct SharingCardSummary: View {
     var streak: CalorieCardSnapshot.StreakSummary? = nil
     var isMissingToday = false
     var senderMetadata: SharingSenderCalendar? = nil
+    var placeholderNameColor: Color? = nil
 
     var body: some View {
         let values = mode == .midnight ? snapshot?.midnight ?? snapshot?.now : snapshot?.now
@@ -661,7 +671,7 @@ private struct SharingCardSummary: View {
                         )
                     )
                     .accessibilityHidden(true)
-                } else if isMissingToday, !dynamicType.isAccessibilitySize {
+                } else if !dynamicType.isAccessibilitySize {
                     CalorieCircleGraph(
                         energy: EnergyBalance(active: 0, resting: 0, restingRemaining: 0, consumed: 0),
                         configuration: CalorieCircleConfiguration(lineWidth: 6, ringSpacing: 2, segmentGap: 2),
@@ -677,39 +687,33 @@ private struct SharingCardSummary: View {
                     Text(name)
                         .font(.body.weight(.semibold))
                         .foregroundStyle(nameColor)
-                        .brightness(scheme == .dark && (snapshot?.isSupported == true || (isMissingToday && senderMetadata?.nameColor != nil))
+                        .brightness(scheme == .dark && (snapshot?.isSupported == true || placeholderNameColor != nil)
                             ? BrightnessLevel.secondary.amount(in: .circlegraphMidnight) : 0)
                     if let snapshot {
                         if snapshot.isSupported, let values {
                             SharingPersonBalance(balance: values.balance, unit: snapshot.energyUnit.rawValue)
                                 .font(.body.weight(.regular).monospacedDigit())
                         } else {
-                            Text("Card unavailable").font(.subheadline).foregroundStyle(.secondary)
+                            Text("Card unavailable").font(.body).foregroundStyle(.secondary)
                         }
                     } else {
                         Text(status)
-                            .font(isMissingToday ? .body : .subheadline)
+                            .font(.body)
                             .foregroundStyle(.secondary)
                     }
-                    if let snapshot {
+                    if let snapshot, snapshot.isSupported {
                         Text("Updated \(Text(snapshot.capturedAt, format: .relative(presentation: .named)))")
                             .font(.caption.weight(.regular))
                             .foregroundStyle(.secondary)
-                    } else if isMissingToday {
-                        if let lastShared = senderMetadata?.capturedAt {
-                            Text("Last shared \(Text(lastShared, format: .relative(presentation: .named)))")
-                                .font(.caption.weight(.regular))
-                                .foregroundStyle(.red)
-                        } else {
-                            // Reserve the normal caption height without inventing a timestamp.
-                            Text(" ").font(.caption.weight(.regular))
-                                .hidden().accessibilityHidden(true)
-                        }
+                    } else if isMissingToday, let lastShared = senderMetadata?.capturedAt {
+                        Text("Last shared \(Text(lastShared, format: .relative(presentation: .named)))")
+                            .font(.caption.weight(.regular))
+                            .foregroundStyle(.red)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, minHeight: minimumContentHeight, alignment: .leading)
             if let streak { SharingStreakBadge(streak: streak, placement: .overview) }
         }
         .animation(reduceMotion ? nil : .smooth(duration: CalorieGraphAnimation.defaultDuration), value: mode)
@@ -721,9 +725,7 @@ private struct SharingCardSummary: View {
         if let snapshot, snapshot.isSupported {
             return snapshot.color(snapshot.appearance.burned, scheme: scheme)
         }
-        guard isMissingToday, let color = senderMetadata?.nameColor else { return .primary }
-        let rgba = scheme == .dark ? color.dark : color.light
-        return Color(.sRGB, red: rgba.red, green: rgba.green, blue: rgba.blue, opacity: rgba.opacity)
+        return placeholderNameColor ?? .primary
     }
 
 }
@@ -838,8 +840,147 @@ extension SharingConnection {
     func sharingStatus(coordinator: SharingCoordinator) -> LocalizedStringResource {
         if scopes.isEmpty { return "Sharing paused" }
         if grants.contains(where: { !isReady($0.scope) }) { return "Connecting" }
-        if scopes == [.streaks] { return "No calorie cards shared" }
+        if scopes == [.streaks] { return "Sharing streak only" }
         return scopes.contains(.today) ? "No update yet today" : "No shared days yet"
     }
 
 }
+
+#if DEBUG && targetEnvironment(simulator)
+/// Isolated screenshot fixtures using the production rows and no live sharing store.
+struct SharingRowStatesGallery: View {
+    @EnvironmentObject private var settings: Settings
+    @State private var page = ProcessInfo.processInfo.arguments.contains("--sharing-row-updates") ? 1
+        : ProcessInfo.processInfo.arguments.contains("--sharing-row-me") ? 2 : 0
+    @State private var coordinator: SharingCoordinator?
+    @State private var examples: [Example] = []
+    @State private var errorMessage: String?
+    private let now = Date.now
+
+    private struct Example: Identifiable {
+        let title: String
+        let page: Int
+        let connection: SharingConnection
+        var id: UUID { connection.id }
+    }
+
+    var body: some View {
+        List {
+            Section {
+                Picker("Examples", selection: $page) {
+                    Text("People").tag(0)
+                    Text("Updates").tag(1)
+                    Text("Me").tag(2)
+                }
+                .pickerStyle(.segmented)
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+            } footer: { Text("Sample data · Production sharing rows") }
+
+            if page == 2 {
+                localExample("Available", snapshot: card(), status: "Loading calories…")
+                localExample("Loading", snapshot: nil, status: "Loading calories…")
+                localExample("Unavailable", snapshot: nil, status: "Card unavailable")
+                localExample("Unsupported snapshot", snapshot: card(version: 999), status: "Card unavailable")
+            } else if let coordinator {
+                ForEach(examples.filter { $0.page == page }) { example in
+                    Section {
+                        NavigationLink {
+                            Text("Sample row")
+                        } label: {
+                            SharingPersonRow(connection: example.connection, coordinator: coordinator)
+                        }
+                        .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
+                    } header: { Text(verbatim: example.title).textCase(nil) }
+                }
+            }
+            if let errorMessage { Text(verbatim: errorMessage) }
+        }
+        .listSectionSpacing(20)
+        .navigationTitle("Sharing row states")
+        .navigationBarTitleDisplayMode(.inline)
+        .preferredColorScheme(ProcessInfo.processInfo.arguments.contains("--sharing-row-light") ? .light : .dark)
+        .modifier(StreakAnimationScope())
+        .task { await loadExamples() }
+    }
+
+    private func localExample(_ title: String, snapshot: CalorieCardSnapshot?, status: LocalizedStringResource) -> some View {
+        Section {
+            NavigationLink {
+                Text("Sample row")
+            } label: {
+                SharingCardSummary(name: "Berken", snapshot: snapshot, status: status,
+                                   placeholderNameColor: settings.burnedColor)
+            }
+            .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
+        } header: { Text(verbatim: title).textCase(nil) }
+    }
+
+    private func card(version: Int = CalorieCardSnapshot.currentSchemaVersion, streakOnly: Bool = false) -> CalorieCardSnapshot {
+        let sample = SharingFixtures.snapshot(day: now, capturedAt: now, timeZone: .current)
+        var result = CalorieCardSnapshot(
+            schemaVersion: version, senderLocalDate: sample.senderLocalDate,
+            timeZoneIdentifier: sample.timeZoneIdentifier, dayStart: sample.dayStart, dayEnd: sample.dayEnd,
+            capturedAt: now,
+            now: streakOnly ? .init(energy: EnergyBalance(active: 0, resting: 0, restingRemaining: 0, consumed: 0),
+                                   visibleGoalReached: nil) : sample.now,
+            midnight: streakOnly ? nil : sample.midnight, energyUnit: .kcal,
+            appearance: CalorieCardSnapshotBuilder.appearance(settings: settings)
+        )
+        if streakOnly { result.streak = .init(days: 8, color: result.appearance.burned) }
+        return result
+    }
+
+    private func loadExamples() async {
+        guard coordinator == nil else { return }
+        do {
+            let store = try SharingStore()
+            let server = SharingFakeServer(clock: { now })
+            var state = SharingLocalState()
+            var examples: [Example] = []
+            let configurations: [(String, Int, Set<SharingScope>)] = [
+                ("Available", 0, [.today]), ("Paused", 0, []),
+                ("Streak only", 0, [.streaks]), ("Empty history", 0, [.history]),
+                ("Available", 1, [.today]), ("Connecting", 1, [.history]),
+                ("Today's update missing", 1, [.today]), ("First update pending", 1, [.today])
+            ]
+            for (title, page, scopes) in configurations {
+                let peer = SharingIdentity(id: UUID().uuidString, displayName: "Ommtzi")
+                let publisher = UUID()
+                let connection = SharingConnection(
+                    id: UUID(), containerIdentifier: SharingFixtures.containerIdentifier,
+                    inviter: SharingFixtures.alice, invitee: peer,
+                    grants: scopes.map { SharingGrant(scope: $0, generation: UUID(),
+                        readyAccountIDs: title == "Connecting" ? [] : [SharingFixtures.alice.id, peer.id]) },
+                    firstAcceptedAt: now.addingTimeInterval(-7 * 86400),
+                    publisherGenerations: [peer.id: publisher]
+                )
+                state.connections.append(connection)
+                examples.append(Example(title: title, page: page, connection: connection))
+                if title != "First update pending" {
+                    state.senderNameColors[peer.id] = card().appearance.burned
+                }
+                if title == "Today's update missing" {
+                    state.senderCalendars[peer.id] = SharingSenderCalendar(
+                        timeZoneIdentifier: TimeZone.current.identifier,
+                        capturedAt: now.addingTimeInterval(-4 * 86400), snapshotID: UUID(),
+                        nameColor: card().appearance.burned
+                    )
+                }
+                if title == "Available" || title == "Streak only", let grant = connection.grants.first {
+                    state.snapshots.append(SharedSnapshotEnvelope(
+                        connectionID: connection.id, senderID: peer.id, scope: grant.scope,
+                        consentGeneration: grant.generation, publisherGeneration: publisher,
+                        snapshot: card(streakOnly: title == "Streak only")
+                    ))
+                }
+            }
+            try store.save(state, accountID: SharingFixtures.alice.id)
+            let coordinator = SharingCoordinator(store: store, transport: server.transport(for: SharingFixtures.alice), clock: { now })
+            await coordinator.verifyAccount()
+            self.examples = examples
+            self.coordinator = coordinator
+        } catch { errorMessage = error.localizedDescription }
+    }
+}
+#endif

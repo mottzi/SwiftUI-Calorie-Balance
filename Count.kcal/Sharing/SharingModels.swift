@@ -341,6 +341,9 @@ struct SharingLocalState: Codable, Equatable, Sendable {
     /// Last trusted time zone observed for each sender.
     var senderCalendars: [String: SharingSenderCalendar] = [:]
 
+    /// Identity appearance survives a pause without retaining calorie data or update times.
+    var senderNameColors: [String: CalorieCardSnapshot.AdaptiveColor] = [:]
+
     /// Property names used by the persisted account record.
     private enum CodingKeys: String, CodingKey {
 
@@ -368,6 +371,8 @@ struct SharingLocalState: Codable, Equatable, Sendable {
         /// Trusted sender calendar state.
         case senderCalendars
 
+        case senderNameColors
+
     }
 }
 
@@ -385,6 +390,7 @@ extension SharingLocalState {
         publisherLease = try values.decodeIfPresent(SharingPublisherLease.self, forKey: .publisherLease)
         cleanupPending = try values.decodeIfPresent(Bool.self, forKey: .cleanupPending) ?? false
         senderCalendars = try values.decodeIfPresent([String: SharingSenderCalendar].self, forKey: .senderCalendars) ?? [:]
+        senderNameColors = try values.decodeIfPresent([String: CalorieCardSnapshot.AdaptiveColor].self, forKey: .senderNameColors) ?? [:]
     }
 
 }

@@ -11903,6 +11903,41 @@
         }
       }
     },
+    "Sharing streak only": {
+      "comment": "Sharing row status when the person shares their streak but no calorie cards.",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur Serie wird geteilt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sharing streak only"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo se comparte la racha"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partage de la série uniquement"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仅共享连续达标记录"
+          }
+        }
+      }
+    },
     "Sharing was reduced or stopped on this iPhone." : {
       "comment" : "Calorie card sharing interface and consent.",
       "localizations" : {
