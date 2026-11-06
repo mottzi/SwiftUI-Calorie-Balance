@@ -374,3 +374,25 @@ A remaining publication retry banner was traced to `zoneNotFound` on an old Mott
 The existing 52 SharingProtocolTests passed. Simulator and physical-device Debug builds succeeded. This test covers acceptance of an existing expansion and reciprocal card delivery, not a fresh invitation or Production/TestFlight. No account reset or app-data deletion was performed.
 
 Final retest: the old relationship persisted as removed, the current iPhone relationship remained at revision 4, and the simulator retry banner cleared after publication completed. The final build was installed on the physical iPhone and both simulators. The phone and Sharing Cloud B were left on each other's historical feeds with no retry banner. The 18 Pro was left on Sharing; its previously locked Apple Account still prevents iCloud checks there. All 52 protocol tests passed again after the cleanup fix, and owned debugger/log sessions were closed.
+
+
+## Goal status and streak consent, 6 November 2026
+
+Goal results now have a separate consent scope and payload. Calorie-only publication and old received calorie caches omit goal results, streaks and exclusions. Daily goal records reference the permitted calorie grant generation; display also requires the same snapshot identity and capture time. Goal uploads include both permission roots in the atomic CloudKit save. Names keep the sender’s goal accent regardless of goal consent.
+
+The six Sharing test suites passed 131 tests. After tightening the atomic upload and adding the queued-goal revocation regression, the final protocol run passed all 62 tests. Coverage includes legacy consent, sanitized caches, goal-only count publication, both date scopes, stale captures, revoked and replaced grants, persistent legacy privacy, icon rendering and sample people.
+
+Sharing Cloud B UI verification used isolated in-memory fixtures. The German permission sheet retained legacy “Nur Serie”, offered “Zielstatus hinzufügen”, and marked the sent addition “Angefragt”. With new goal consent, overview and detail showed the expected symbols. Hide goal status icons removed overview accessibility goal values and detail symbols while keeping the authorized streak. Removing goal consent retained calories and names while removing goal results and the count. One untranslated streak-only footer was found and localized in all five languages.
+
+This pass did not change the live B/iPhone connection’s consent or repeat new-scope provisioning between two live CloudKit accounts. Both phones need the updated app to accept the new scope. Direct simulator captures were used under the user’s existing fallback authorization because the in-app browser was unavailable.
+
+The final build was installed and launched on Sharing Cloud B, left open on the normal Sharing overview with the stream running. The corrected German streak-only footer was rechecked, the original icon preference was restored, and the live accounts and sharing connection were preserved.
+
+
+### Removal of the development streak-only mode
+
+The user rejected the legacy mode and approved stopping old streak grants until fresh combined-goal consent. The old publishing path, icon-preference migration, settings control and upgrade prompts were removed. A retired scope token remains readable only for control-history replay and durable revocation. It is not a supported sharing option.
+
+All six Sharing suites passed 130 tests, including old-grant removal with a failed incoming revocation and retry. On the real Sharing Cloud B connection, Today and Previous 6 Days remained enabled, the single Goal status & streak switch was off, and no legacy control or upgrade button remained. The peer row retained its name and 50 kcal balance with no unauthorized streak or goal result. The permission sheet was cancelled without making a new request.
+
+The final build was installed and launched on Sharing Cloud B and the physical iPhone. B remains on the normal Sharing overview with its stream open; accounts and the existing connection were preserved.

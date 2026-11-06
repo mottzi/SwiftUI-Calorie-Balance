@@ -19,7 +19,7 @@ struct OtherSettingsCard: View {
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(Color("TextColor"))
 
-                        Text("Checkmark or cross on calorie cards")
+                        Text("Hide checkmarks and crosses on this device. This does not change what you share.")
                             .font(.caption)
                             .foregroundStyle(Color("SecondaryTextColor"))
                             .fixedSize(horizontal: false, vertical: true)

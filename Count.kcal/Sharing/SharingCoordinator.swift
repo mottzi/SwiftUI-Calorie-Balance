@@ -144,6 +144,7 @@ final class SharingCoordinator {
                 guard lease == nil || (lease?.accountID == account.id && lease?.deviceID == deviceID)
                     else { throw SharingError.wrongAccount }
                 if publisher == publisherSequence { state.publisherLease = lease }
+                _ = try retireObsoleteGrants(account: account)
                 purgeExpiredCache()
             }
             lastError = nil
@@ -162,7 +163,7 @@ final class SharingCoordinator {
     func propose(to peer: SharingIdentity, scopes: Set<SharingScope> = [.today]) async throws -> UUID {
 
         guard let account = verifiedAccount else { throw SharingError.accountUnavailable }
-        guard peer.id != account.id, !peer.id.isEmpty, !scopes.isEmpty,
+        guard peer.id != account.id, !peer.id.isEmpty, !scopes.isEmpty, scopes.isSubset(of: Set(SharingScope.allCases)),
               !connections.contains(where: { $0.peer(of: account.id)?.id == peer.id && $0.blocksNewInvitation })
             else { throw SharingError.invalidConnection }
         let connection = SharingConnection(
@@ -180,6 +181,8 @@ final class SharingCoordinator {
     /// Queues the recipient's acceptance of a proposal.
     func accept(connectionID: UUID, proposalID: UUID) async throws {
         let (connection, account) = try context(connectionID)
+        guard let proposal = connection.proposal, proposal.scopes.isSubset(of: Set(SharingScope.allCases))
+            else { throw SharingError.invalidProposal }
         try enqueue(connection: connection, action: .accept(proposalID: proposalID), account: account)
         await refresh(.changed)
     }
@@ -201,6 +204,7 @@ final class SharingCoordinator {
     /// Remove first, then request additions against the reduced revision.
     func changeScopes(connectionID: UUID, to scopes: Set<SharingScope>) async throws {
 
+        guard scopes.isSubset(of: Set(SharingScope.allCases)) else { throw SharingError.invalidProposal }
         var (connection, account) = try context(connectionID)
         let retained = connection.scopes.intersection(scopes)
         if retained != connection.scopes || (connection.proposal != nil && scopes.isSubset(of: connection.scopes)) {
@@ -249,17 +253,20 @@ final class SharingCoordinator {
 
         let (account, lease, epoch) = try publicationContext()
         var firstError: Error?
-        for snapshot in snapshots {
+        for var snapshot in snapshots {
+            if let streakSnapshot { snapshot.streak = streakSnapshot.streak }
             do { try await publish(snapshot, account: account, lease: lease, epoch: epoch,
-                                   scopes: streakSnapshot == nil ? Set(SharingScope.allCases) : [.today, .history]) }
+                                   scopes: Set(SharingScope.allCases)) }
             catch {
                 try requirePublicationAuthority(account: account, lease: lease, epoch: epoch)
                 if Self.isAuthorityFailure(error) { throw error }
                 firstError = firstError ?? error
             }
         }
-        if let streakSnapshot {
-            do { try await publish(streakSnapshot, account: account, lease: lease, epoch: epoch, scopes: [.streaks]) }
+        if let streakSnapshot, !snapshots.contains(where: {
+            SharingDateWindow.permits($0.withoutGoalInformation(), scope: .today, now: clock())
+        }) {
+            do { try await publish(streakSnapshot, account: account, lease: lease, epoch: epoch, scopes: [.goals]) }
             catch {
                 try requirePublicationAuthority(account: account, lease: lease, epoch: epoch)
                 if Self.isAuthorityFailure(error) { throw error }
@@ -292,8 +299,20 @@ final class SharingCoordinator {
     /// Returns snapshots that remain valid for the connection and scope.
     func snapshots(connectionID: UUID, scope: SharingScope) -> [SharedSnapshotEnvelope] {
 
-        let snapshots = cachedSnapshots.filter { $0.connectionID == connectionID && $0.scope == scope }
-        if scope == .today || scope == .streaks {
+        let raw = cachedSnapshots.filter { $0.connectionID == connectionID && $0.scope == scope }
+        let snapshots = raw.map { envelope in
+            guard scope == .today || scope == .history else { return envelope }
+            var display = envelope
+            display.snapshot = envelope.snapshot.withoutGoalInformation()
+            if let goal = cachedSnapshots.first(where: {
+                $0.connectionID == connectionID && $0.scope == .goals
+                    && $0.snapshot.senderLocalDate == envelope.snapshot.senderLocalDate
+            }) {
+                display.snapshot = display.snapshot.displayingGoalInformation(from: goal.snapshot)
+            }
+            return display
+        }
+        if scope == .today {
             return Array(snapshots.sorted { $0.snapshot.capturedAt > $1.snapshot.capturedAt }.prefix(1))
         }
         return snapshots.sorted { $0.snapshot.senderLocalDate > $1.snapshot.senderLocalDate }
@@ -301,7 +320,13 @@ final class SharingCoordinator {
 
     /// Full sender count is available only through its own current consent grant.
     func streak(connectionID: UUID) -> CalorieCardSnapshot.StreakSummary? {
-        snapshots(connectionID: connectionID, scope: .streaks).first?.snapshot.streak
+        snapshots(connectionID: connectionID, scope: .goals).first {
+            let zone = senderMetadata(connectionID: connectionID).flatMap { TimeZone(identifier: $0.timeZoneIdentifier) }
+                ?? $0.snapshot.senderCalendar.timeZone
+            var calendar = Calendar(identifier: .gregorian)
+            calendar.timeZone = zone
+            return $0.snapshot.senderLocalDate == CalorieCardSnapshot.localDate(for: clock(), calendar: calendar)
+        }?.snapshot.streak
     }
 
     /// Last trusted update metadata remains available while sharing is active.
@@ -373,7 +398,13 @@ final class SharingCoordinator {
         let calendars = state.senderCalendars.filter { permittedSenders.contains($0.key) }
         state.senderCalendars = calendars
         let permittedSnapshots = state.snapshots.filter { canDisplay($0) }
-        state.snapshots = permittedSnapshots
+        state.snapshots = permittedSnapshots.map { envelope in
+            var clean = envelope
+            if envelope.scope == .today || envelope.scope == .history {
+                clean.snapshot = envelope.snapshot.withoutGoalInformation()
+            }
+            return clean
+        }
         try? persist()
     }
 
@@ -414,6 +445,7 @@ extension SharingCoordinator {
             let remote = try await transport.fetchConnections(for: account)
             guard isCurrent(account, epoch: epoch) else { return }
             mergeVerified(remote, account: account)
+            if try retireObsoleteGrants(account: account) { refreshAgain = true }
             try persist()
             var attemptedProvision = false
             for connection in state.connections where !connection.removed {
@@ -451,13 +483,17 @@ extension SharingCoordinator {
                 let provisioned = try await transport.fetchConnections(for: account)
                 guard isCurrent(account, epoch: epoch) else { return }
                 mergeVerified(provisioned, account: account)
+                if try retireObsoleteGrants(account: account) { refreshAgain = true }
             }
             for connection in state.connections
                 where !connection.removed && connection.grants.contains(where: { connection.isReady($0.scope) }) {
                 do {
                     let incoming = try await transport.fetchSnapshots(connection: connection, as: account)
                     guard isCurrent(account, epoch: epoch) else { return }
-                    if let verified = incoming.connection { mergeVerified([verified], account: account) }
+                    if let verified = incoming.connection {
+                        mergeVerified([verified], account: account)
+                        if try retireObsoleteGrants(account: account) { refreshAgain = true }
+                    }
                     for envelope in incoming.snapshots { observeSenderCalendar(envelope) }
                     for envelope in incoming.snapshots where canDisplay(envelope) { replaceCached(envelope) }
                 } catch SharingError.scopeRevoked(let connectionID, let scope) {
@@ -509,7 +545,12 @@ extension SharingCoordinator {
         var firstError: Error?
         for connection in state.connections where !connection.removed {
         for grant in connection.grants where scopes.contains(grant.scope) && connection.isReady(grant.scope) {
-            let payload = snapshot.payload(for: grant.scope)
+            let calorieGrant = connection.grants.first {
+                ($0.scope == .today || $0.scope == .history) && connection.isReady($0.scope)
+                    && SharingDateWindow.permits(snapshot.withoutGoalInformation(), scope: $0.scope, now: clock())
+            }
+            var payload = snapshot.payload(for: grant.scope, calorieGrant: calorieGrant)
+            if grant.scope == .goals && calorieGrant?.scope == .history { payload.streak = nil }
             guard SharingDateWindow.permits(
                 payload,
                 scope: grant.scope,
@@ -521,6 +562,8 @@ extension SharingCoordinator {
                   current.grants.contains(
                     where: { $0.scope == grant.scope && $0.generation == grant.generation }
                   ) else { continue }
+            if let calorieGrant, grant.scope == .goals,
+               !current.grants.contains(where: { $0 == calorieGrant }) { continue }
             guard current.publisherGenerations[account.id] == lease.generation
                 else { throw SharingError.publisherNotOwned }
             let envelope = SharedSnapshotEnvelope(
@@ -615,6 +658,20 @@ extension SharingCoordinator {
             createdAt: createdAt,
             expiresAt: createdAt.addingTimeInterval(SharingConsent.requestLifetime)
         )
+    }
+
+    /// Stop the removed development scope through the normal durable revocation path.
+    private func retireObsoleteGrants(account: SharingIdentity) throws -> Bool {
+        let supported = Set(SharingScope.allCases)
+        var retired = false
+        for connection in state.connections where !connection.removed {
+            guard !connection.scopes.isSubset(of: supported)
+                    || connection.proposal.map({ !$0.scopes.isSubset(of: supported) }) == true else { continue }
+            try enqueueReduction(connection: connection, to: connection.scopes.intersection(supported),
+                                 account: account, removing: false)
+            retired = true
+        }
+        return retired
     }
 
     /// Applies a consent action locally and saves it for retry.
@@ -791,12 +848,14 @@ extension SharingCoordinator {
         guard let account = identity,
               let connection = state.connections.first(where: { $0.id == envelope.connectionID }),
               connection.peer(of: account.id)?.id == envelope.senderID,
+              SharingScope.allCases.contains(envelope.scope),
               connection.isReady(envelope.scope),
               connection.grants.contains(
                 where: { $0.scope == envelope.scope && $0.generation == envelope.consentGeneration }
               ),
               connection.publisherGenerations[envelope.senderID] == envelope.publisherGeneration,
               envelope.snapshot.isSupported, envelope.snapshot.capturedAt <= clock(),
+              envelope.hasPermittedGoalDate(in: connection),
               envelope.scope != .history || envelope.snapshot.midnight == nil else { return false }
         return true
     }

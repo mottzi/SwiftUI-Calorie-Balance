@@ -84,13 +84,19 @@ extension SharingFixtures {
         calendar.timeZone = timeZone
         let cards = (-SharingDateWindow.historyDayCount...0).compactMap { offset -> CalorieCardSnapshot? in
             guard let day = calendar.date(byAdding: .day, value: offset, to: now) else { return nil }
-            return snapshot(
+            var card = snapshot(
                 day: day,
                 capturedAt: now,
                 timeZone: timeZone,
                 consumed: 1750 + offset * 55,
-                includeProjection: offset == 0
+                includeProjection: offset == 0,
+                goalReached: offset != 0 && offset != -3
             )
+            if offset == 0 {
+                card.midnight = card.midnight.map { .init(energy: $0.energy, visibleGoalReached: true) }
+                card.streak = .init(days: 2, color: card.appearance.burned)
+            }
+            return card
         }
         try await peer.publish(snapshots: cards)
         await recipient.refresh()
@@ -366,6 +372,7 @@ final class FakeSharingTransport: SharingTransport {
             || server.failPublicationDates.contains(envelope.snapshot.senderLocalDate)
         { throw SharingError.unavailable }
         guard let connection = server.connections[envelope.connectionID], connection.isReady(envelope.scope),
+              envelope.hasValidPublicationPayload, envelope.hasPermittedGoalDate(in: connection),
               connection.grants.contains(where: { grant in
                   grant.scope == envelope.scope && grant.generation == envelope.consentGeneration
               }),
@@ -415,6 +422,7 @@ final class FakeSharingTransport: SharingTransport {
                     grant.scope == envelope.scope && grant.generation == envelope.consentGeneration
                 })
                 && current.publisherGenerations[peer.id] == envelope.publisherGeneration && !server.isRevoked(envelope)
+                && envelope.hasPermittedGoalDate(in: current)
         }
         return (current, snapshots)
     }
@@ -440,12 +448,13 @@ final class FakeSharingTransport: SharingTransport {
         guard revision == server.publisherRevisions[account.id, default: 0] else { throw SharingError.unavailable }
         server.snapshots = server.snapshots.filter { _, envelope in
             envelope.senderID != account.id
-                || SharingDateWindow.permits(
+                || (server.connections[envelope.connectionID].map { envelope.hasPermittedGoalDate(in: $0) } == true
+                && SharingDateWindow.permits(
                     envelope.snapshot,
                     scope: envelope.scope,
                     now: now,
                     latestSenderTimeZone: zone
-                )
+                ))
         }
     }
 

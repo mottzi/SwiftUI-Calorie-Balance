@@ -8,7 +8,7 @@ struct SharingInvitationView: View {
 
     @State private var today = true
     @State private var history = false
-    @State private var streaks = false
+    @State private var goals = false
     @State private var isCreating = false
     @State private var showsDisclosure = false
     @State private var nativeInvitation: SharingCloudInvitation?
@@ -19,7 +19,7 @@ struct SharingInvitationView: View {
     let runtime: SharingRuntime
 
     private var scopes: Set<SharingScope> {
-        Set((today ? [SharingScope.today] : []) + (history ? [.history] : []) + (streaks ? [.streaks] : []))
+        Set((today ? [SharingScope.today] : []) + (history ? [.history] : []) + (goals ? [.goals] : []))
     }
 
     private var isLocked: Bool { isCreating || runtime.isWorking }
@@ -58,7 +58,7 @@ struct SharingInvitationView: View {
                             .padding(.horizontal, 16)
                             .frame(minHeight: 44)
                         Divider().padding(.leading, 16)
-                        Toggle("Streak", isOn: $streaks)
+                        Toggle("Goal status & streak", isOn: $goals)
                             .padding(.horizontal, 16)
                             .frame(minHeight: 44)
                     }
@@ -68,8 +68,10 @@ struct SharingInvitationView: View {
                     Group {
                         if scopes.isEmpty {
                             Text("Choose at least one option to continue.")
-                        } else if streaks {
-                            Text("The full streak can extend beyond Previous 6 Days.")
+                        } else if goals && !today && !history {
+                            Text("Only your full streak is shared.")
+                        } else {
+                            Text("Include goal results for shared days and your full streak. Your numeric goal target stays private.")
                         }
                     }
                     .font(.footnote)
@@ -263,14 +265,14 @@ struct SharingDisclosureText: View {
         Section {
             Label("Calorie cards", systemImage: "rectangle.on.rectangle")
         } footer: {
-            Text("Raw Health samples, meals, weight, steps and hidden goal targets are not shared.")
+            Text("Raw Health samples, meals, weight, steps and numeric goal targets are not shared.")
         }
         Section {
             DisclosureGroup(isExpanded: $showsSharedInformation) {
                 details {
-                    Text("You both share daily calorie cards with burned and eaten energy, active and resting calories, balance, and any visible goal result.")
+                    Text("You both share daily calorie cards with burned and eaten energy, active and resting calories, and balance.")
                     Text("Today can include a midnight estimate. Each card keeps its sender's units and colors.")
-                    Text("Streak is optional. It shares the full consecutive completed-day count, which can extend beyond the six shared days. Hidden goal status also hides the streak.")
+                    Text("Goal status & streak is optional. It shares goal results for the calorie days you share and the full consecutive completed-day count. The count can extend beyond six days. Your numeric goal target stays private.")
                 }
             } label: {
                 Label("Shared information", systemImage: "rectangle.stack")
@@ -371,18 +373,19 @@ struct SharingRequestConsentView: View {
                             if proposal.scopes.contains(.history) {
                                 scopeRow("Previous 6 Days", alreadyShared: connection.scopes.contains(.history))
                             }
-                            if proposal.scopes.contains(.streaks) {
+                            if proposal.scopes.contains(.goals) {
                                 if !proposal.scopes.intersection([.today, .history]).isEmpty { Divider().padding(.leading, 16) }
-                                scopeRow("Streak", alreadyShared: connection.scopes.contains(.streaks))
+                                scopeRow("Goal status & streak", alreadyShared: connection.scopes.contains(.goals))
                             }
                         }
                         .padding(.vertical, 4)
                         .background(.background.secondary, in: .rect(cornerRadius: 24))
-                        if proposal.scopes.contains(.streaks) {
-                            Text("The full streak can extend beyond Previous 6 Days.")
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                                .padding(.horizontal, 16)
+                        if proposal.scopes.contains(.goals) && proposal.scopes.isDisjoint(with: [.today, .history]) {
+                            Text("Only your full streak is shared.")
+                                .font(.footnote).foregroundStyle(.secondary).padding(.horizontal, 16)
+                        } else if proposal.scopes.contains(.goals) {
+                            Text("Include goal results for shared days and your full streak. Your numeric goal target stays private.")
+                                .font(.footnote).foregroundStyle(.secondary).padding(.horizontal, 16)
                         }
                         if connection.scopes.isEmpty, !connection.isInitialRequest {
                             Text("Sharing stays paused until you accept.")

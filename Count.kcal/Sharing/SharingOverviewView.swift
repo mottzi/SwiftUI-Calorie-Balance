@@ -301,7 +301,6 @@ private final class SharingOwnCard {
             streakTracker.reset()
             return
         }
-        guard !settings.hideCalorieStatusIcons else { streakTracker.reset(); return }
         streakTracker.updateDayChoices(AppDatabase.choices(choices, sampleData: day.sample.isSampleData))
         await streakTracker.updateStreaks()
     }
@@ -836,13 +835,13 @@ extension Set where Element == SharingScope {
     /// Localized label for the selected sharing scopes.
     var sharingDescription: LocalizedStringResource {
         switch self {
+            case [.goals]: "Goal status & streak"
+            case [.today, .goals]: "Today and Goal status & streak"
+            case [.history, .goals]: "Previous 6 Days and Goal status & streak"
+            case [.today, .history, .goals]: "Today, Previous 6 Days and Goal status & streak"
             case [.today]: "Today"
             case [.history]: "Previous 6 Days"
             case [.today, .history]: "Today and Previous 6 Days"
-            case [.streaks]: "Streak"
-            case [.today, .streaks]: "Today and Streak"
-            case [.history, .streaks]: "Previous 6 Days and Streak"
-            case [.today, .history, .streaks]: "Today, Previous 6 Days and Streak"
             default: "Sharing paused"
         }
     }
@@ -858,13 +857,13 @@ extension SharingConnection {
     var requestTitle: LocalizedStringResource {
         guard let proposal else { return "Sharing request" }
         if scopes.isEmpty {
-            if isInitialRequest && proposal.scopes == [.streaks] { return "Share streaks" }
+            if isInitialRequest && proposal.scopes == [.goals] { return "Share goal status & streak" }
             return isInitialRequest ? "Share calorie cards" : "Resume sharing"
         }
         switch proposal.scopes.subtracting(scopes) {
         case [.history]: return "Add Previous 6 Days?"
         case [.today]: return "Add Today?"
-        case [.streaks]: return "Share streaks?"
+        case [.goals]: return "Share goal status & streak?"
         default: return "Add sharing options?"
         }
     }
@@ -874,7 +873,7 @@ extension SharingConnection {
     func sharingStatus(coordinator: SharingCoordinator) -> LocalizedStringResource {
         if scopes.isEmpty { return "Sharing paused" }
         if grants.contains(where: { !isReady($0.scope) }) { return "Connecting" }
-        if scopes == [.streaks] { return "Sharing streak only" }
+        if scopes.isDisjoint(with: [.today, .history]) { return "No calorie cards shared" }
         return scopes.contains(.today) ? "No update yet today" : "No shared days yet"
     }
 
@@ -1012,10 +1011,10 @@ struct SharingRowStatesGallery: View {
             var examples: [Example] = []
             let configurations: [(String, Int, Set<SharingScope>)] = [
                 ("Available", 0, [.today]), ("Paused", 0, []),
-                ("Streak only", 0, [.streaks]), ("Empty history", 0, [.history]),
+                ("Goal sharing without calorie days", 0, [.goals]), ("Empty history", 0, [.history]),
                 ("Available", 1, [.today]), ("Connecting", 1, [.history]),
                 ("Today's update missing", 1, [.today]), ("First update pending", 1, [.today]),
-                ("Goal reached now", 3, [.today]), ("Goal not reached now", 3, [.today]),
+                ("Goal reached now", 3, [.today, .goals]), ("Goal not reached now", 3, [.today, .goals]),
                 ("Goal status hidden by sender", 3, [.today]), ("Today's update missing", 3, [.today])
             ]
             for (title, page, scopes) in configurations {
@@ -1041,16 +1040,19 @@ struct SharingRowStatesGallery: View {
                         nameColor: card().appearance.resolvedNameColor
                     )
                 }
-                if title == "Available" || title == "Streak only" || title.hasPrefix("Goal "),
-                   let grant = connection.grants.first {
+                if title == "Available" || title == "Goal sharing without calorie days" || title.hasPrefix("Goal ") {
                     let goalReached: Bool? = title == "Goal reached now" ? true
                         : title == "Goal not reached now" ? false : nil
-                    state.snapshots.append(SharedSnapshotEnvelope(
-                        connectionID: connection.id, senderID: peer.id, scope: grant.scope,
-                        consentGeneration: grant.generation, publisherGeneration: publisher,
-                        snapshot: card(streakOnly: title == "Streak only", goalReached: goalReached,
-                                       reversesProjectedGoal: page == 3)
-                    ))
+                    let snapshot = card(streakOnly: title == "Goal sharing without calorie days", goalReached: goalReached,
+                                        reversesProjectedGoal: page == 3)
+                    for grant in connection.grants {
+                        state.snapshots.append(SharedSnapshotEnvelope(
+                            connectionID: connection.id, senderID: peer.id, scope: grant.scope,
+                            consentGeneration: grant.generation, publisherGeneration: publisher,
+                            snapshot: snapshot.payload(for: grant.scope,
+                                calorieGrant: connection.grants.first { $0.scope == .today })
+                        ))
+                    }
                 }
             }
             server.connections = Dictionary(uniqueKeysWithValues: state.connections.map { ($0.id, $0) })
@@ -1071,19 +1073,22 @@ struct SharingRowStatesGallery: View {
             refreshVersion += 1
             for example in examples where example.page == 3 {
                 guard let peer = example.connection.peer(of: SharingFixtures.alice.id),
-                      let grant = example.connection.grants.first,
                       let publisher = example.connection.publisherGenerations[peer.id] else { continue }
                 let originalGoal: Bool? = example.title == "Goal reached now" ? true
                     : example.title == "Goal not reached now" ? false : nil
                 let originalValues = refreshVersion.isMultiple(of: 2)
                 let goalReached = originalGoal.map { originalValues ? $0 : !$0 }
                 let consumed = originalValues ? 1700 : originalGoal == true ? 2000 : 1200
-                let envelope = SharedSnapshotEnvelope(
-                    connectionID: example.connection.id, senderID: peer.id, scope: grant.scope,
-                    consentGeneration: grant.generation, publisherGeneration: publisher,
-                    snapshot: card(goalReached: goalReached, reversesProjectedGoal: true, consumed: consumed)
-                )
-                fixtureServer.snapshots[envelope.id] = envelope
+                let snapshot = card(goalReached: goalReached, reversesProjectedGoal: true, consumed: consumed)
+                for grant in example.connection.grants {
+                    let envelope = SharedSnapshotEnvelope(
+                        connectionID: example.connection.id, senderID: peer.id, scope: grant.scope,
+                        consentGeneration: grant.generation, publisherGeneration: publisher,
+                        snapshot: snapshot.payload(for: grant.scope,
+                            calorieGrant: example.connection.grants.first { $0.scope == .today })
+                    )
+                    fixtureServer.snapshots[envelope.id] = envelope
+                }
             }
         }
         await coordinator.refresh(.changed)

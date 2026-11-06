@@ -4999,6 +4999,41 @@
         }
       }
     },
+    "Enable Today or Previous 6 Days to share daily goal results." : {
+      "comment" : "Calorie sharing with the combined goal permission.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktiviere Heute oder Letzte 6 Tage, um tägliche Zielergebnisse zu teilen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable Today or Previous 6 Days to share daily goal results."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activa Hoy o 6 días anteriores para compartir los resultados diarios del objetivo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activez Aujourd’hui ou 6 jours précédents pour partager les résultats quotidiens de l’objectif."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启用今天或前6天以共享每日目标达成情况。"
+          }
+        }
+      }
+    },
     "Energy" : {
       "localizations" : {
         "de" : {
@@ -5935,6 +5970,76 @@
         }
       }
     },
+    "Goal status & streak" : {
+      "comment" : "Calorie card sharing. Goal consent and local display preferences.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zielstatus & Serie"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goal status & streak"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado del objetivo y racha"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif et série"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目标状态与连续达标"
+          }
+        }
+      }
+    },
+    "Goal status & streak is optional. It shares goal results for the calorie days you share and the full consecutive completed-day count. The count can extend beyond six days. Your numeric goal target stays private." : {
+      "comment" : "Calorie card sharing. Goal consent and local display preferences.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zielstatus & Serie ist optional. Geteilt werden die Zielergebnisse für freigegebene Kalorientage und die vollständige Anzahl aufeinanderfolgender abgeschlossener Zieltage. Die Serie kann länger als sechs Tage sein. Dein genauer Zielwert bleibt privat."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Goal status & streak is optional. It shares goal results for the calorie days you share and the full consecutive completed-day count. The count can extend beyond six days. Your numeric goal target stays private."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estado del objetivo y racha es opcional. Comparte los resultados del objetivo de los días compartidos y el total de días completos consecutivos en que lo has cumplido. La racha puede superar los seis días. Tu meta numérica sigue siendo privada."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif et série est facultatif. Cette option partage les résultats de l’objectif des jours partagés et le nombre total de jours complets consécutifs où l’objectif a été atteint. La série peut dépasser six jours. Votre valeur cible reste privée."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目标状态与连续达标为可选项。它共享已共享热量日期的目标达成情况，以及连续达标的完整天数。连续天数可超过六天。具体目标数值仍保持私密。"
+          }
+        }
+      }
+    },
     "Gray" : {
       "localizations" : {
         "de" : {
@@ -5987,6 +6092,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "健康数据不可用"
+          }
+        }
+      }
+    },
+    "Hide checkmarks and crosses on this device. This does not change what you share." : {
+      "comment" : "Calorie card sharing. Goal consent and local display preferences.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blende Häkchen und Kreuze auf diesem Gerät aus. Deine Freigaben ändern sich dadurch nicht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide checkmarks and crosses on this device. This does not change what you share."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oculta las marcas de verificación y las cruces en este dispositivo. Esto no cambia lo que compartes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masquez les coches et les croix sur cet appareil. Cela ne change pas ce que vous partagez."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在此设备上隐藏勾号和叉号。这不会改变你共享的内容。"
           }
         }
       }
@@ -6114,6 +6254,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "我想..."
+          }
+        }
+      }
+    },
+    "Include goal results for shared days and your full streak. Your numeric goal target stays private." : {
+      "comment" : "Calorie card sharing. Goal consent and local display preferences.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teile die Zielergebnisse für geteilte Tage und deine vollständige Serie. Dein genauer Zielwert bleibt privat."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Include goal results for shared days and your full streak. Your numeric goal target stays private."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluye los resultados del objetivo de los días compartidos y tu racha completa. Tu meta numérica sigue siendo privada."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incluez les résultats de l’objectif des jours partagés et votre série complète. Votre valeur cible reste privée."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "包含共享日期的目标达成情况和完整连续达标天数。具体目标数值仍保持私密。"
           }
         }
       }
@@ -7527,6 +7702,41 @@
         }
       }
     },
+    "No calorie cards shared" : {
+      "comment" : "Calorie sharing with the combined goal permission.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Kalorienkarten geteilt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No calorie cards shared"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se comparten tarjetas de calorías"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune carte de calories partagée"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未共享热量卡片"
+          }
+        }
+      }
+    },
     "No energy data" : {
       "localizations" : {
         "de" : {
@@ -8041,6 +8251,41 @@
         }
       }
     },
+    "Only your full streak is shared." : {
+      "comment" : "Calorie card sharing. Goal consent and local display preferences.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es wird nur deine vollständige Serie geteilt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only your full streak is shared."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo se comparte tu racha completa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seule votre série complète est partagée."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅共享你的完整连续达标天数。"
+          }
+        }
+      }
+    },
     "Open Settings" : {
       "comment" : "Calorie card sharing interface and consent.",
       "localizations" : {
@@ -8523,37 +8768,37 @@
         }
       }
     },
-    "Previous 6 Days and Streak" : {
-      "comment" : "Calorie card sharing scope selection.",
+    "Previous 6 Days and Goal status & streak" : {
+      "comment" : "Calorie card sharing. Goal consent and local display preferences.",
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Previous 6 Days and Streak"
-          }
-        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vorherige 6 Tage und Serie"
+            "value" : "Letzte 6 Tage und Zielstatus & Serie"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous 6 Days and Goal status & streak"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "6 días anteriores y racha"
+            "value" : "6 días anteriores y estado del objetivo y racha"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "6 jours précédents et série"
+            "value" : "6 jours précédents et objectif et série"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "前6天和连续达标天数"
+            "value" : "前6天及目标状态与连续达标"
           }
         }
       }
@@ -9017,6 +9262,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "原始健康数据、餐食、体重、步数和隐藏的目标值不会共享。"
+          }
+        }
+      }
+    },
+    "Raw Health samples, meals, weight, steps and numeric goal targets are not shared." : {
+      "comment" : "Calorie card sharing. Goal consent and local display preferences.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Health-Rohdaten, Mahlzeiten, Gewicht, Schritte und genaue Zielwerte werden nicht geteilt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raw Health samples, meals, weight, steps and numeric goal targets are not shared."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se comparten las muestras de Salud, comidas, peso, pasos ni metas numéricas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les données brutes de Santé, les repas, le poids, les pas et les valeurs cibles ne sont pas partagés."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不会共享原始健康样本、餐食、体重、步数或具体目标数值。"
           }
         }
       }
@@ -10806,6 +11086,76 @@
         }
       }
     },
+    "Share goal status & streak" : {
+      "comment" : "Calorie sharing with the combined goal permission.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zielstatus & Serie teilen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share goal status & streak"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir estado del objetivo y racha"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager l’objectif et la série"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "共享目标状态与连续达标"
+          }
+        }
+      }
+    },
+    "Share goal status & streak?" : {
+      "comment" : "Calorie card sharing. Goal consent and local display preferences.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zielstatus und Serie teilen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share goal status & streak?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Compartir estado del objetivo y racha?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager l’objectif et la série ?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "共享目标状态与连续达标？"
+          }
+        }
+      }
+    },
     "Share invitation…" : {
       "comment" : "Sharing invitation and consent clarity.",
       "localizations" : {
@@ -10837,76 +11187,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "分享邀请…"
-          }
-        }
-      }
-    },
-    "Share streaks" : {
-      "comment" : "Calorie card sharing scope selection.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Share streaks"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Serie teilen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compartir rachas"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Partager les séries"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "共享连续达标天数"
-          }
-        }
-      }
-    },
-    "Share streaks?" : {
-      "comment" : "Calorie card sharing scope selection.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Share streaks?"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Serie teilen?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Compartir rachas?"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Partager les séries ?"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "共享连续达标天数？"
           }
         }
       }
@@ -11899,41 +12179,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你接受之前，共享保持暂停。"
-          }
-        }
-      }
-    },
-    "Sharing streak only": {
-      "comment": "Sharing row status when the person shares their streak but no calorie cards.",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nur Serie wird geteilt"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sharing streak only"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Solo se comparte la racha"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partage de la série uniquement"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "仅共享连续达标记录"
           }
         }
       }
@@ -13622,6 +13867,41 @@
         }
       }
     },
+    "Today and Goal status & streak" : {
+      "comment" : "Calorie card sharing. Goal consent and local display preferences.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute und Zielstatus & Serie"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today and Goal status & streak"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoy y estado del objetivo y racha"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd’hui et objectif et série"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天及目标状态与连续达标"
+          }
+        }
+      }
+    },
     "Today and Previous 6 Days" : {
       "comment" : "Calorie card sharing.",
       "localizations" : {
@@ -13653,41 +13933,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "今天和此前 6 天"
-          }
-        }
-      }
-    },
-    "Today and Streak" : {
-      "comment" : "Calorie card sharing scope selection.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Today and Streak"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Heute und Serie"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hoy y racha"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aujourd'hui et série"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今天和连续达标天数"
           }
         }
       }
@@ -13855,37 +14100,37 @@
         }
       }
     },
-    "Today, Previous 6 Days and Streak" : {
-      "comment" : "Calorie card sharing scope selection.",
+    "Today, Previous 6 Days and Goal status & streak" : {
+      "comment" : "Calorie card sharing. Goal consent and local display preferences.",
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Today, Previous 6 Days and Streak"
-          }
-        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Heute, Vorherige 6 Tage und Serie"
+            "value" : "Heute, letzte 6 Tage und Zielstatus & Serie"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today, Previous 6 Days and Goal status & streak"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hoy, 6 días anteriores y racha"
+            "value" : "Hoy, 6 días anteriores y estado del objetivo y racha"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aujourd'hui, 6 jours précédents et série"
+            "value" : "Aujourd’hui, 6 jours précédents et objectif et série"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "今天、前6天和连续达标天数"
+            "value" : "今天、前6天及目标状态与连续达标"
           }
         }
       }
@@ -15304,6 +15549,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你们通过 iCloud 私密地互相共享热量卡片。"
+          }
+        }
+      }
+    },
+    "You both share daily calorie cards with burned and eaten energy, active and resting calories, and balance." : {
+      "comment" : "Calorie card sharing. Goal consent and local display preferences.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ihr teilt beide tägliche Kalorienkarten mit verbrannter und aufgenommener Energie, Aktivitäts- und Ruhekalorien sowie der Bilanz."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You both share daily calorie cards with burned and eaten energy, active and resting calories, and balance."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambos compartís tarjetas diarias con la energía quemada e ingerida, las calorías activas y en reposo, y el balance."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous partagez tous les deux des cartes quotidiennes avec l’énergie dépensée et consommée, les calories actives et au repos, et le bilan."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "双方共享每日热量卡片，包含消耗和摄入的能量、活动和静息热量，以及热量差额。"
           }
         }
       }

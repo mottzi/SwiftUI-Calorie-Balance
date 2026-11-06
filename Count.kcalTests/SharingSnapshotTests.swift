@@ -20,10 +20,10 @@ struct SharingSnapshotTests {
         #expect(received.isSupported)
         #expect(received.payload(for: .today).streak == nil)
         #expect(received.payload(for: .history).streak == nil)
-        let summaryOnly = received.payload(for: .streaks)
+        let summaryOnly = received.payload(for: .goals)
         #expect(summaryOnly.streak?.days == 123)
         #expect(summaryOnly.now.energy.isEmpty)
-        #expect(SharingDateWindow.permits(summaryOnly, scope: .streaks, now: now))
+        #expect(SharingDateWindow.permits(summaryOnly, scope: .goals, now: now))
         for invalid in [-1, 201] {
             snapshot.streak = .init(days: invalid, color: snapshot.appearance.burned)
             #expect(!snapshot.isSupported)
@@ -128,7 +128,7 @@ struct SharingSnapshotTests {
         let capturedAt = date("2026-10-24T10:00:00Z")
         var sample = HealthData.example(for: capturedAt)
         sample.lastDataSync = capturedAt
-        let snapshot = try #require(build(sample, hidesGoalStatus: true))
+        let snapshot = try #require(build(sample)).withoutGoalInformation()
         #expect(snapshot.now.energy == sample.now)
         #expect(snapshot.midnight?.energy == sample.midnight)
         #expect(snapshot.now.visibleGoalReached == nil)
@@ -155,7 +155,6 @@ struct SharingSnapshotTests {
         let snapshot = try #require(CalorieCardSnapshotBuilder.build(
             sample: sample,
             policy: policy,
-            hidesGoalStatus: false,
             appearance: appearance,
             calendar: calendar("Europe/Zurich")
         ))
@@ -238,7 +237,7 @@ struct SharingSnapshotTests {
                         size: size
                     )
                     // no Settings or HealthInterface is injected into the shared renderer
-                    let shared = try pixels(SharedCalorieCard(snapshot: snapshot, mode: mode), scheme: scheme, size: size)
+                    let shared = try pixels(SharedCalorieCard(hidesGoalStatus: settings.hideCalorieStatusIcons, snapshot: snapshot, mode: mode), scheme: scheme, size: size)
                     #expect(local.count == shared.count)
                     let mismatch = zip(local, shared).filter { abs(Int($0) - Int($1)) > 3 }.count
                     #expect(Double(mismatch) / Double(max(1, local.count)) < 0.003)
@@ -280,6 +279,7 @@ struct SharingSnapshotTests {
         var object = try #require(JSONSerialization.jsonObject(with: JSONEncoder().encode(snapshot)) as? [String: Any])
         object.removeValue(forKey: "isExcluded")
         object.removeValue(forKey: "streak")
+        object.removeValue(forKey: "goalResult")
         var appearance = try #require(object["appearance"] as? [String: Any])
         appearance.removeValue(forKey: "labelBackground")
         appearance.removeValue(forKey: "pageBackground")
@@ -293,6 +293,7 @@ struct SharingSnapshotTests {
         #expect(decoded.appearance.resolvedNameColor == decoded.appearance.burned)
         #expect(decoded.isExcluded == nil)
         #expect(decoded.streak == nil)
+        #expect(decoded.goalResult == nil)
     }
 
     @MainActor @Test
@@ -366,16 +367,45 @@ struct SharingSnapshotTests {
         #expect(before == after)
     }
 
+    @MainActor @Test
+    func viewerIconsOnlyChangeRenderingAndNeverPublicationValues() throws {
+        let settings = Settings.shared
+        let original = settings.hideCalorieStatusIcons
+        defer { settings.hideCalorieStatusIcons = original }
+        let now = date("2026-11-06T12:00:00Z")
+        var sample = HealthData.example(for: now)
+        sample.lastDataSync = now
+        settings.hideCalorieStatusIcons = false
+        let visible = try #require(CalorieCardSnapshotBuilder.build(sample: sample, settings: settings))
+        settings.hideCalorieStatusIcons = true
+        let hidden = try #require(CalorieCardSnapshotBuilder.build(sample: sample, settings: settings))
+        #expect(visible.now == hidden.now && visible.midnight == hidden.midnight)
+        #expect(hidden.now.visibleGoalReached != nil)
+        let renderedHidden = try pixels(SharedCalorieCard(hidesGoalStatus: true, snapshot: visible, mode: .now),
+                                        scheme: .dark, size: .large)
+        let noPermission = try pixels(SharedCalorieCard(snapshot: visible.withoutGoalInformation(), mode: .now),
+                                     scheme: .dark, size: .large)
+        let renderedVisible = try pixels(SharedCalorieCard(snapshot: visible, mode: .now), scheme: .dark, size: .large)
+        #expect(renderedHidden == noPermission)
+        #expect(renderedHidden != renderedVisible)
+        let grant = SharingGrant(scope: .today, generation: UUID())
+        let wire = visible.payload(for: .goals, calorieGrant: grant)
+        let encoded = try JSONEncoder().encode(wire)
+        let json = try #require(String(data: encoded, encoding: .utf8))
+        #expect(wire.goalResult?.now == visible.now.visibleGoalReached)
+        #expect(wire.now.energy.isEmpty && wire.midnight == nil)
+        for forbidden in ["balanceGoal", "weightGoal", "goalTarget"] { #expect(!json.contains(forbidden)) }
+        #expect(try JSONDecoder().decode(CalorieCardSnapshot.self, from: encoded) == wire)
+    }
+
     /// Builds a snapshot using the test appearance and optional sender calendar.
     private func build(
         _ sample: HealthData,
-        hidesGoalStatus: Bool = false,
         calendar: Calendar? = nil
     ) -> CalorieCardSnapshot? {
         CalorieCardSnapshotBuilder.build(
             sample: sample,
             policy: HealthSnapshotPolicy(),
-            hidesGoalStatus: hidesGoalStatus,
             appearance: appearance,
             calendar: calendar ?? self.calendar("Europe/Zurich")
         )

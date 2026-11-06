@@ -56,7 +56,7 @@ final class SharingSamplePeople {
             guard let identity = peer.identity,
                   !coordinator.connections.contains(where: { $0.peer(of: Self.identity.id)?.id == identity.id })
             else { continue }
-            _ = try await coordinator.propose(to: identity, scopes: [.today, .history, .streaks])
+            _ = try await coordinator.propose(to: identity, scopes: [.today, .history, .goals])
         }
         for (index, peer) in peers.enumerated() {
             await peer.refresh()

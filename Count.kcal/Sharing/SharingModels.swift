@@ -52,8 +52,13 @@ enum SharingScope: String, Codable, CaseIterable, Sendable, Identifiable {
     /// Recorded snapshots for the six prior sender-local days.
     case history
 
-    /// Current full streak summary, calculated on the sender's iPhone.
-    case streaks
+    /// Decoded only to revoke obsolete development grants and replay their control history.
+    case retiredStreak = "streaks"
+
+    /// Goal results for permitted calorie days and the full streak summary.
+    case goals
+
+    static let allCases: [Self] = [.today, .history, .goals]
 
     /// String identity used by scope controls.
     var id: String { rawValue }
@@ -298,6 +303,20 @@ struct SharedSnapshotEnvelope: Codable, Equatable, Sendable, Identifiable {
 
     /// Stable record identity for this sender-local day.
     var id: String { "\(connectionID)/\(senderID)/\(scope.rawValue)/\(snapshot.senderLocalDate)" }
+
+    /// New publications cannot smuggle goal results through calorie-only scopes.
+    var hasValidPublicationPayload: Bool {
+        scope != .today && scope != .history || snapshot == snapshot.withoutGoalInformation()
+    }
+
+    /// Goal-day permission cannot outlive the calorie grant that authorized its date.
+    func hasPermittedGoalDate(in connection: SharingConnection) -> Bool {
+        guard scope == .goals, let result = snapshot.goalResult else { return true }
+        return connection.isReady(result.calorieScope) && connection.grants.contains {
+            $0.scope == result.calorieScope && $0.generation == result.calorieGeneration
+        }
+    }
+
 }
 
 /// Latest trusted sender metadata, retained without expired calorie values.
@@ -563,16 +582,24 @@ enum SharingDateWindow {
         // compare captured labels instead of regrouping old values after sender travel
         switch scope {
         case .today:
-            return snapshot.streak == nil && snapshot.senderLocalDate == todayLabel
+            return snapshot.streak == nil && snapshot.goalResult == nil && snapshot.senderLocalDate == todayLabel
         case .history:
-            guard snapshot.streak == nil, snapshot.midnight == nil,
+            guard snapshot.streak == nil, snapshot.goalResult == nil, snapshot.midnight == nil,
                   let oldest = calendar.date(byAdding: .day, value: -historyDayCount, to: today) else { return false }
             let oldestLabel = CalorieCardSnapshot.localDate(for: oldest, calendar: calendar)
             return snapshot.senderLocalDate >= oldestLabel && snapshot.senderLocalDate < todayLabel
-        case .streaks:
-            return snapshot.senderLocalDate == todayLabel
-                && snapshot.now.energy.isEmpty && snapshot.now.visibleGoalReached == nil
-                && snapshot.midnight == nil && snapshot.isExcluded == nil
+        case .retiredStreak:
+            return false
+        case .goals:
+            guard snapshot.now.energy.isEmpty, snapshot.now.visibleGoalReached == nil,
+                  snapshot.midnight == nil, snapshot.isExcluded == nil else { return false }
+            if snapshot.senderLocalDate == todayLabel {
+                return snapshot.goalResult == nil || snapshot.goalResult?.calorieScope == .today
+            }
+            guard snapshot.streak == nil, snapshot.goalResult?.calorieScope == .history,
+                  let oldest = calendar.date(byAdding: .day, value: -historyDayCount, to: today) else { return false }
+            return snapshot.senderLocalDate >= CalorieCardSnapshot.localDate(for: oldest, calendar: calendar)
+                && snapshot.senderLocalDate < todayLabel
         }
     }
 

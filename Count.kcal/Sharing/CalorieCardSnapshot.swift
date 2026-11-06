@@ -24,22 +24,25 @@ struct CalorieCardSnapshot: Codable, Equatable, Sendable, Identifiable {
     let capturedAt: Date
 
     /// Recorded values at capture time.
-    let now: ModeValues
+    var now: ModeValues
 
     /// Projected values for the end of the day, if still valid at capture time.
-    let midnight: ModeValues?
+    var midnight: ModeValues?
 
     /// Unit used for every energy value.
     let energyUnit: EnergyUnit
 
     /// Sender colors needed to reproduce the card.
-    let appearance: Appearance
+    var appearance: Appearance
 
     /// Sender exclusion used by the shared week, absent in older snapshots.
     var isExcluded: Bool?
 
-    /// Optional full streak, published only through a separately accepted Streak scope.
+    /// Optional full streak, published only through the Goal status & streak scope.
     var streak: StreakSummary? = nil
+
+    /// Goal results travel only under the separately accepted goal scope.
+    var goalResult: GoalResult? = nil
 
     init(
         id: UUID = UUID(),
@@ -80,6 +83,7 @@ struct CalorieCardSnapshot: Codable, Equatable, Sendable, Identifiable {
               now.isValid, now.restingRemaining == 0,
               midnight?.isValid ?? true,
               streak?.isValid ?? true,
+              goalResult?.isValid ?? true,
               appearance.isValid else { return false }
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = zone
@@ -121,7 +125,7 @@ struct CalorieCardSnapshot: Codable, Equatable, Sendable, Identifiable {
         /// Burned energy minus consumed energy.
         let balance: Int
 
-        /// Goal result, or `nil` if the sender hides goal status.
+        /// Local goal result, or a separately permitted received result.
         let visibleGoalReached: Bool?
 
         init(energy: EnergyBalance, visibleGoalReached: Bool?) {
@@ -236,21 +240,58 @@ extension CalorieCardSnapshot {
         var isValid: Bool { (0...200).contains(days) && color.isValid }
     }
 
-    /// Keeps streaks out of calorie grants and calories out of streak grants.
-    func payload(for scope: SharingScope) -> Self {
-        var result = self
-        guard scope == .streaks else {
-            result.streak = nil
-            return result
+    /// The calorie grant binds each goal result to the same permitted date range.
+    struct GoalResult: Codable, Equatable, Sendable {
+        let calorieScope: SharingScope
+        let calorieGeneration: UUID
+        let now: Bool?
+        let midnight: Bool?
+        let isExcluded: Bool?
+
+        var isValid: Bool {
+            (calorieScope == .today || calorieScope == .history)
+                && (calorieScope != .history || midnight == nil)
         }
-        result = Self(
+    }
+
+    /// Calorie permissions never carry goal information, regardless of sender encoding.
+    func withoutGoalInformation() -> Self {
+        var result = self
+        result.now = .init(energy: now.energy, visibleGoalReached: nil)
+        result.midnight = midnight.map { .init(energy: $0.energy, visibleGoalReached: nil) }
+        result.streak = nil
+        result.goalResult = nil
+        result.isExcluded = nil
+        return result
+    }
+
+    /// Scope-specific wire payload, with no numeric goal target in any scope.
+    func payload(for scope: SharingScope, calorieGrant: SharingGrant? = nil) -> Self {
+        if scope == .today || scope == .history { return withoutGoalInformation() }
+        var result = Self(
             id: id, senderLocalDate: senderLocalDate, timeZoneIdentifier: timeZoneIdentifier,
             dayStart: dayStart, dayEnd: dayEnd, capturedAt: capturedAt,
-            now: .init(energy: EnergyBalance(active: 0, resting: 0, restingRemaining: 0, consumed: 0),
-                       visibleGoalReached: nil),
+            now: .init(energy: EnergyBalance(active: 0, resting: 0, consumed: 0), visibleGoalReached: nil),
             midnight: nil, energyUnit: energyUnit, appearance: appearance
         )
         result.streak = streak
+        if scope == .goals, let calorieGrant {
+            result.goalResult = .init(calorieScope: calorieGrant.scope,
+                calorieGeneration: calorieGrant.generation, now: now.visibleGoalReached,
+                midnight: calorieGrant.scope == .today ? midnight?.visibleGoalReached : nil,
+                isExcluded: isExcluded)
+        }
+        return result
+    }
+
+    /// Adds only separately permitted goal results to an already sanitized calorie card.
+    func displayingGoalInformation(from goal: Self) -> Self {
+        var result = self
+        if let status = goal.goalResult, goal.id == id, goal.capturedAt == capturedAt {
+            result.now = .init(energy: now.energy, visibleGoalReached: status.now)
+            result.midnight = midnight.map { .init(energy: $0.energy, visibleGoalReached: status.midnight) }
+            result.isExcluded = status.isExcluded
+        }
         return result
     }
 

@@ -175,7 +175,7 @@ extension SharingPersonDetail {
     }
 
     private var pageBackground: Color {
-        let presentation = snapshots + coordinator.snapshots(connectionID: connectionID, scope: .streaks)
+        let presentation = snapshots + coordinator.snapshots(connectionID: connectionID, scope: .goals)
         guard let latest = presentation.max(by: { $0.snapshot.capturedAt < $1.snapshot.capturedAt })?.snapshot,
               let background = latest.appearance.pageBackground else { return settings.AppBackground }
         return latest.color(background, scheme: scheme)
@@ -185,7 +185,7 @@ extension SharingPersonDetail {
         if isMissingToday, let lastShared = coordinator.senderMetadata(connectionID: connectionID)?.capturedAt {
             return lastShared
         }
-        return (snapshots + coordinator.snapshots(connectionID: connectionID, scope: .streaks)).map(\.snapshot.capturedAt).max()
+        return (snapshots + coordinator.snapshots(connectionID: connectionID, scope: .goals)).map(\.snapshot.capturedAt).max()
     }
 
     private var isMissingToday: Bool {
@@ -195,7 +195,7 @@ extension SharingPersonDetail {
 
     private func waitingGuidance(_ connection: SharingConnection) -> LocalizedStringResource {
         if connection.scopes.isEmpty { return "Cards stay hidden until both people agree to share." }
-        if connection.scopes == [.streaks] { return "Only the current streak is shared." }
+        if !connection.scopes.isEmpty && connection.scopes.isDisjoint(with: [.today, .history]) { return "Enable Today or Previous 6 Days to share daily goal results." }
         if connection.grants.contains(where: { !connection.isReady($0.scope) }) {
             return "Cards appear when both iPhones finish setting up sharing."
         }
@@ -206,6 +206,8 @@ extension SharingPersonDetail {
 
 /// One sender day with the existing calorie card and its capture time.
 struct SharingCardSection: View {
+
+    @EnvironmentObject private var settings: Settings
 
     @Environment(\.locale) private var locale
 
@@ -228,9 +230,9 @@ struct SharingCardSection: View {
             )
             .accessibilityAddTraits(.isHeader)
             if isToday && snapshot.midnight != nil && snapshot.isSupported {
-                SharedTodayCalorieCard(mode: $mode, snapshot: snapshot)
+                SharedTodayCalorieCard(hidesGoalStatus: settings.hideCalorieStatusIcons, mode: $mode, snapshot: snapshot)
             } else {
-                SharedCalorieCard(snapshot: snapshot, mode: .now)
+                SharedCalorieCard(hidesGoalStatus: settings.hideCalorieStatusIcons, snapshot: snapshot, mode: .now)
                     .padding(.bottom, RecessedCardStyle.rimDepth)
             }
             if snapshot.timeZoneIdentifier != TimeZone.current.identifier {
@@ -365,13 +367,22 @@ private struct SharingPermissionsView: View {
                                 .padding(.horizontal, 16)
                                 .frame(minHeight: 44)
                             Divider().padding(.leading, 16)
-                            Toggle(isOn: $draft.streaks) { permissionLabel("Streak", scope: .streaks) }
+                            Toggle(isOn: $draft.goals) {
+                                permissionLabel("Goal status & streak", scope: .goals)
+                            }
                                 .padding(.horizontal, 16)
                                 .frame(minHeight: 44)
                         }
                         .padding(.vertical, 4)
                         .background(.background.secondary, in: .rect(cornerRadius: 24))
                         .disabled(runtime.isWorking)
+                        if draft.goals && !draft.today && !draft.history {
+                            Text("Only your full streak is shared.")
+                                .font(.footnote).foregroundStyle(.secondary).padding(.horizontal, 16)
+                        } else {
+                            Text("Include goal results for shared days and your full streak. Your numeric goal target stays private.")
+                                .font(.footnote).foregroundStyle(.secondary).padding(.horizontal, 16)
+                        }
                         Group {
                             if originalScopes.isEmpty {
                                 Text("Sharing is paused")

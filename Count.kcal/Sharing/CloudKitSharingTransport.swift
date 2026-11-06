@@ -595,6 +595,8 @@ final class CloudKitSharingTransport: SharingTransport {
               let directory = directories[envelope.connectionID],
               let connection = try await resolve(directory, account: account),
               connection.isReady(envelope.scope),
+              envelope.hasValidPublicationPayload,
+              envelope.hasPermittedGoalDate(in: connection),
               connection.grants.contains(where: {
                   $0.scope == envelope.scope && $0.generation == envelope.consentGeneration
               }),
@@ -626,6 +628,15 @@ final class CloudKitSharingTransport: SharingTransport {
         )
         let root = try await container.privateCloudDatabase.record(for: rootID)
         guard root.share != nil else { throw SharingError.staleGeneration }
+        var permissionRoots = [root]
+        if envelope.scope == .goals, let result = envelope.snapshot.goalResult {
+            let calorieRoot = try await container.privateCloudDatabase.record(for: scopeRootID(
+                connectionID: envelope.connectionID, scope: result.calorieScope,
+                generation: result.calorieGeneration
+            ))
+            guard calorieRoot.share != nil else { throw SharingError.staleGeneration }
+            permissionRoots.append(calorieRoot)
+        }
         let id = CKRecord.ID(
             recordName: "card-\(envelope.connectionID)-\(envelope.scope.rawValue)-"
                 + "\(envelope.consentGeneration)-\(envelope.snapshot.senderLocalDate)",
@@ -648,7 +659,9 @@ final class CloudKitSharingTransport: SharingTransport {
         // an old change tag cannot win after publisher takeover
         publisher["lastPublication"] = clock()
         publisher["senderTimeZone"] = TimeZone.current.identifier
-        try await save([publisher, root, record], database: container.privateCloudDatabase)
+        // A daily goal upload also depends on the calorie grant's root. Revoking
+        // that scope during this upload must fail the same atomic save.
+        try await save([publisher, record] + permissionRoots, database: container.privateCloudDatabase)
     }
 
     /// Fetches peer cards for matching ready grants and filters them by the sender's date window.
@@ -680,7 +693,7 @@ final class CloudKitSharingTransport: SharingTransport {
         let setup = try await database(for: directory).record(for: directory.setupID)
         var result: [SharedSnapshotEnvelope] = []
         var recordsByZone: [CKRecordZone.ID: [CKRecord]] = [:]
-        for grant in verified.grants where verified.isReady(grant.scope)
+        for grant in verified.grants where SharingScope.allCases.contains(grant.scope) && verified.isReady(grant.scope)
             && connection.grants.contains(where: { $0.scope == grant.scope && $0.generation == grant.generation }) {
             let key = scopeField(accountID: peer.id, connection: verified, scope: grant.scope)
             guard let raw = setup[key] as? String, let url = URL(string: raw) else { continue }
@@ -713,7 +726,8 @@ final class CloudKitSharingTransport: SharingTransport {
                 let envelope: SharedSnapshotEnvelope = try decode(record, key: "payload")
                 guard envelope.connectionID == verified.id, envelope.senderID == peer.id,
                       envelope.scope == grant.scope, envelope.consentGeneration == grant.generation,
-                      envelope.publisherGeneration == verified.publisherGenerations[peer.id] else { continue }
+                      envelope.publisherGeneration == verified.publisherGenerations[peer.id],
+                      envelope.hasPermittedGoalDate(in: verified) else { continue }
                 guard envelope.snapshot.isSupported else { throw SharingError.unsupportedSchema }
                 guard envelope.snapshot.capturedAt <= clock() else { continue }
                 result.append(envelope)
@@ -739,9 +753,12 @@ final class CloudKitSharingTransport: SharingTransport {
         var publisher = try await verifiedPublisher(account: account, lease: lease)
         guard let zoneName = publisher["senderTimeZone"] as? String,
               let senderZone = TimeZone(identifier: zoneName) else { throw SharingError.unavailable }
+        let connections = try await fetchConnections(for: account)
         let expired = try await allRecords(in: zoneID, database: container.privateCloudDatabase).filter { record in
             guard record.recordType == RecordType.card,
                   let envelope: SharedSnapshotEnvelope = try? decode(record, key: "payload") else { return false }
+            if envelope.scope == .goals, let connection = connections.first(where: { $0.id == envelope.connectionID }),
+               !envelope.hasPermittedGoalDate(in: connection) { return true }
             return !SharingDateWindow.permits(
                 envelope.snapshot,
                 scope: envelope.scope,

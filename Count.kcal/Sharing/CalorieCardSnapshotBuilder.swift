@@ -17,7 +17,6 @@ enum CalorieCardSnapshotBuilder {
         build(
             sample: sample,
             policy: HealthSnapshotPolicy(settings: settings),
-            hidesGoalStatus: settings.hideCalorieStatusIcons,
             appearance: appearance(settings: settings),
             calendar: calendar
         )
@@ -27,7 +26,6 @@ enum CalorieCardSnapshotBuilder {
     static func build(
         sample: HealthData,
         policy: HealthSnapshotPolicy,
-        hidesGoalStatus: Bool,
         appearance: CalorieCardSnapshot.Appearance,
         calendar sourceCalendar: Calendar
     ) -> CalorieCardSnapshot? {
@@ -41,7 +39,7 @@ enum CalorieCardSnapshotBuilder {
         func values(_ energy: EnergyBalance) -> CalorieCardSnapshot.ModeValues {
             .init(
                 energy: energy,
-                visibleGoalReached: hidesGoalStatus || energy.isEmpty ? nil
+                visibleGoalReached: energy.isEmpty ? nil
                     : energy.meetsGoal(policy.balanceGoal, isLoss: policy.isLoss)
             )
         }

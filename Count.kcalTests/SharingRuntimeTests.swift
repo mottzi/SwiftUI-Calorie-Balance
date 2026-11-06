@@ -25,13 +25,13 @@ struct SharingRuntimeTests {
         try await session.alice.changeScopes(connectionID: id, to: [.today, .history])
         let connection = try #require(session.alice.connections.first)
         var draft = SharingPermissionDraft(connection: connection, accountID: SharingFixtures.alice.id)
-        #expect(draft.today && draft.history && !draft.streaks)
+        #expect(draft.today && draft.history && !draft.goals)
         #expect(!draft.isEdited)
-        draft.streaks = true
+        draft.goals = true
         #expect(draft.isEdited)
         #expect(draft.matches(connection))
         try await session.alice.changeScopes(connectionID: id, to: draft.scopes)
-        #expect(session.server.connections[id]?.proposal?.scopes == [.today, .history, .streaks])
+        #expect(session.server.connections[id]?.proposal?.scopes == [.today, .history, .goals])
         #expect(session.alice.connections.first?.scopes == [.history])
         #expect(!draft.matches(try #require(session.alice.connections.first)))
     }
@@ -41,19 +41,19 @@ struct SharingRuntimeTests {
         let session = try RuntimeSession()
         defer { session.cleanUp() }
         let id = try await session.connect(scopes: [.today, .history])
-        try await session.alice.changeScopes(connectionID: id, to: [.today, .history, .streaks])
+        try await session.alice.changeScopes(connectionID: id, to: [.today, .history, .goals])
         let connection = try #require(session.alice.connections.first)
         var draft = SharingPermissionDraft(connection: connection, accountID: SharingFixtures.alice.id)
         draft.history = false
         #expect(draft.reductions == [.history])
-        #expect(draft.scopes == [.today, .streaks])
+        #expect(draft.scopes == [.today, .goals])
         await session.bob.refresh()
         try await session.bob.accept(connectionID: id, proposalID: try #require(connection.proposal).id)
         await session.alice.refresh()
         #expect(!draft.matches(try #require(session.alice.connections.first)))
         let current = SharingPermissionDraft(connection: try #require(session.alice.connections.first), accountID: SharingFixtures.alice.id)
         #expect(!current.isEdited)
-        #expect(current.acceptedScopes == [.today, .history, .streaks])
+        #expect(current.acceptedScopes == [.today, .history, .goals])
     }
 
     @Test
@@ -132,7 +132,7 @@ struct SharingRuntimeTests {
     }
 
     @Test
-    func senderStreakUsesFullHistoryAndExcludedDaysAndClearsWhenHidden() async throws {
+    func senderStreakUsesFullHistoryAndExcludedDaysIndependentlyOfViewerIcons() async throws {
         let settings = Settings.shared
         let original = (settings.hideCalorieStatusIcons, settings.balanceGoal, settings.weightGoal,
                         settings.dataSource, settings.energyUnit)
@@ -150,7 +150,7 @@ struct SharingRuntimeTests {
         settings.energyUnit = .kcal
         let session = try RuntimeSession(source: ConsistentStreakHealthSource())
         defer { session.cleanUp() }
-        let id = try await session.connect(scopes: [.streaks])
+        let id = try await session.connect(scopes: [.goals])
         try await session.alice.takeOverPublisher()
         let full = try #require(await SharingStreakBuilder.build(repository: session.repository, settings: settings,
                                                                 choices: [], sampleData: false))
@@ -164,14 +164,14 @@ struct SharingRuntimeTests {
         await session.runtime.publishCurrentWindow(settings: settings)
         await session.bob.refresh()
         #expect(session.bob.streak(connectionID: id)?.days == 200)
-        #expect(session.server.publicationAttempts.allSatisfy { $0.scope == .streaks && $0.snapshot.now.energy.isEmpty })
+        #expect(session.server.publicationAttempts.allSatisfy { $0.scope == .goals && $0.snapshot.now.energy.isEmpty })
         settings.hideCalorieStatusIcons = true
         await session.runtime.publishCurrentWindow(settings: settings)
         await session.bob.refresh()
-        #expect(session.bob.streak(connectionID: id) == nil)
-        let cleared = try #require(session.bob.snapshots(connectionID: id, scope: .streaks).first)
-        #expect(cleared.snapshot.streak == nil)
-        #expect(cleared.snapshot.now.energy.isEmpty)
+        #expect(session.bob.streak(connectionID: id)?.days == 200)
+        let summary = try #require(session.bob.snapshots(connectionID: id, scope: .goals).first)
+        #expect(summary.snapshot.goalResult == nil)
+        #expect(summary.snapshot.now.energy.isEmpty)
     }
 
     @Test
@@ -205,7 +205,7 @@ struct SharingRuntimeTests {
             let normalAppearance = CalorieCardSnapshotBuilder.appearance(settings: .shared, background: background)
             #expect(snapshot.appearance.graphEmpty == normalAppearance.graphEmpty)
             #expect(snapshot.appearance.labelBackground == normalAppearance.labelBackground)
-            #expect(person.connection.scopes == [.today, .history, .streaks])
+            #expect(person.connection.scopes == [.today, .history, .goals])
             #expect(person.coordinator.streak(connectionID: person.id) != nil)
             #expect(snapshot.streak == nil)
             #expect(person.coordinator.snapshots(connectionID: person.id, scope: .today).count == 1)
@@ -628,7 +628,7 @@ struct SharingRuntimeTests {
         await session.server.publicationGate.waitUntilSuspended()
         print("Publication regression: latest-policy upload held")
         #expect(session.server.publicationAttempts.count == 2)
-        #expect(session.server.publicationAttempts.first?.snapshot.now.visibleGoalReached != nil)
+        #expect(session.server.publicationAttempts.first?.snapshot.now.visibleGoalReached == nil)
         #expect(session.server.publicationAttempts.last?.snapshot.now.visibleGoalReached == nil)
         #expect(!firstFinished && !secondFinished)
         session.server.publicationGate.resume()

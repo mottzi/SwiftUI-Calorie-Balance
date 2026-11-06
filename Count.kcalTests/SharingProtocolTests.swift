@@ -6,6 +6,221 @@ import Testing
 /// Coordinator and fake transport protocol tests.
 struct SharingProtocolTests {
 
+    @Test(arguments: [false, true])
+    func removedStreakGrantIsRevokedWithoutLosingCalorieConsent(_ failsRevocation: Bool) async throws {
+        let pair = try SharingTestPair()
+        let id = try await pair.connect(scopes: [.today, .history])
+        try await pair.alice.takeOverPublisher()
+        let card = pair.snapshot()
+        try await pair.alice.publish(snapshot: card)
+        await pair.bob.refresh()
+        let oldGrant = SharingGrant(scope: .retiredStreak, generation: UUID(),
+                                    readyAccountIDs: [SharingFixtures.alice.id, SharingFixtures.bob.id])
+        pair.server.connections[id]?.grants.append(oldGrant)
+        pair.server.connections[id]?.revision += 1
+        let oldConnection = try #require(pair.server.connections[id])
+        var summary = card.payload(for: .goals)
+        summary.streak = .init(days: 20, color: card.appearance.burned)
+        let envelope = SharedSnapshotEnvelope(connectionID: id, senderID: SharingFixtures.alice.id,
+            scope: .retiredStreak, consentGeneration: oldGrant.generation,
+            publisherGeneration: try #require(oldConnection.publisherGenerations[SharingFixtures.alice.id]),
+            snapshot: summary)
+        pair.server.snapshots[envelope.id] = envelope
+        var saved = try pair.bobStore.load(accountID: SharingFixtures.bob.id)
+        saved.connections = [oldConnection]
+        saved.snapshots.append(envelope)
+        try pair.bobStore.save(saved, accountID: SharingFixtures.bob.id)
+        if failsRevocation { pair.server.failRevocationDirections = [.incoming] }
+        let reopened = SharingCoordinator(store: pair.bobStore, transport: pair.bobTransport, clock: { pair.time.now })
+        await reopened.verifyAccount()
+        #expect(reopened.connections.first?.scopes == [.today, .history])
+        #expect(reopened.streak(connectionID: id) == nil)
+        #expect(!reopened.cachedSnapshots.contains { $0.scope == .retiredStreak })
+        #expect(reopened.snapshots(connectionID: id, scope: .today).first?.snapshot == card.withoutGoalInformation())
+        await reopened.refresh()
+        #expect(reopened.connections.first?.id == id)
+        #expect(reopened.connections.first?.scopes == [.today, .history])
+        #expect(!reopened.connections.first!.removed)
+        if failsRevocation {
+            #expect(reopened.pendingRevocations.contains { $0.scope == .retiredStreak })
+            pair.server.failRevocationDirections = []
+            await reopened.refresh()
+        }
+        #expect(reopened.pendingRevocations.isEmpty)
+        #expect(pair.server.connections[id]?.scopes == [.today, .history])
+        #expect(pair.server.snapshots[envelope.id] == nil)
+        var draft = SharingPermissionDraft(connection: try #require(reopened.connections.first), accountID: SharingFixtures.bob.id)
+        #expect(!draft.goals && !draft.isEdited)
+        draft.goals = true
+        try await reopened.changeScopes(connectionID: id, to: draft.scopes)
+        #expect(pair.server.connections[id]?.scopes == [.today, .history])
+        #expect(pair.server.connections[id]?.proposal?.scopes == [.today, .history, .goals])
+        #expect(reopened.streak(connectionID: id) == nil)
+    }
+
+    @Test(arguments: [SharingScope.today, .history])
+    func queuedGoalUploadCannotOutliveItsCalorieDateGrant(_ scope: SharingScope) async throws {
+        let pair = try SharingTestPair()
+        let id = try await pair.connect(scopes: [scope, .goals])
+        try await pair.alice.takeOverPublisher()
+        let day = scope == .today ? pair.time.now : pair.time.now.addingTimeInterval(-86400)
+        let card = SharingFixtures.snapshot(day: day, capturedAt: pair.time.now,
+                                           includeProjection: scope == .today, goalReached: true)
+        try await pair.alice.publish(snapshot: card)
+        let envelope = try #require(pair.server.snapshots.values.first { $0.scope == .goals })
+        pair.server.pauseNextPublication = true
+        let queued = Task { () -> SharingError? in
+            do { try await pair.aliceTransport.publish(envelope); return nil }
+            catch let error as SharingError { return error }
+            catch { Issue.record("Unexpected goal upload error"); return .unavailable }
+        }
+        await pair.server.publicationGate.waitUntilSuspended()
+        try await pair.bob.changeScopes(connectionID: id, to: [.goals])
+        pair.server.publicationGate.resume()
+        #expect(await queued.value == .staleGeneration)
+        #expect(pair.bob.snapshots(connectionID: id, scope: .goals).isEmpty)
+        await pair.alice.refresh()
+        try await pair.alice.cleanupPublishedWindow()
+        #expect(pair.server.snapshots[envelope.id] == nil)
+    }
+
+    @Test
+    func dailyGoalsRequireNewConsentAndRevocationKeepsCaloriesAndNameColor() async throws {
+        let pair = try SharingTestPair()
+        let id = try await pair.connect(scopes: [.today, .history])
+        try await pair.alice.takeOverPublisher()
+        let accent = CalorieCardSnapshot.AdaptiveColor(
+            light: .init(red: 1, green: 0.5, blue: 0), dark: .init(red: 1, green: 0.6, blue: 0.2))
+        var card = SharingFixtures.snapshot(day: pair.time.now, capturedAt: pair.time.now,
+                                           goalReached: true, isExcluded: false, nameColor: accent)
+        card.midnight = card.midnight.map { .init(energy: $0.energy, visibleGoalReached: false) }
+        card.streak = .init(days: 24, color: accent)
+        try await pair.alice.publish(snapshot: card)
+        await pair.bob.refresh()
+        #expect(pair.bob.snapshots(connectionID: id, scope: .today).first?.snapshot.now.visibleGoalReached == nil)
+        #expect(pair.bob.streak(connectionID: id) == nil)
+        #expect(pair.bob.senderNameColor(connectionID: id) == accent)
+
+        try await pair.alice.changeScopes(connectionID: id, to: [.today, .history, .goals])
+        try await pair.alice.publish(snapshot: card)
+        #expect(pair.server.snapshots.values.allSatisfy { $0.scope != .goals })
+        await pair.bob.refresh()
+        let proposal = try #require(pair.bob.connections.first?.proposal)
+        try await pair.bob.accept(connectionID: id, proposalID: proposal.id)
+        await pair.alice.refresh()
+        await pair.bob.refresh()
+        try await pair.alice.publish(snapshot: card)
+        await pair.bob.refresh()
+        let displayed = try #require(pair.bob.snapshots(connectionID: id, scope: .today).first?.snapshot)
+        #expect(displayed.now.visibleGoalReached == true)
+        #expect(displayed.midnight?.visibleGoalReached == false)
+        #expect(displayed.isExcluded == false)
+        let raw = try #require(pair.server.snapshots.values.first { $0.scope == .today }?.snapshot)
+        #expect(raw == card.withoutGoalInformation())
+        #expect(pair.bob.state.snapshots.first { $0.scope == .today }?.snapshot == raw)
+        let goal = try #require(pair.server.snapshots.values.first { $0.scope == .goals }?.snapshot)
+        #expect(goal.now.energy.isEmpty && goal.midnight == nil)
+        #expect(goal.goalResult?.now == true && goal.goalResult?.midnight == false)
+        #expect(goal.streak?.days == 24)
+
+        try await pair.bob.changeScopes(connectionID: id, to: [.today, .history])
+        #expect(pair.bob.streak(connectionID: id) == nil)
+        #expect(pair.bob.snapshots(connectionID: id, scope: .today).first?.snapshot == raw)
+        #expect(pair.bob.senderNameColor(connectionID: id) == accent)
+        #expect(pair.bob.state.snapshots.allSatisfy { $0.scope == .today || $0.scope == .history })
+        let restored = SharingCoordinator(store: pair.bobStore, transport: pair.bobTransport, clock: { pair.time.now })
+        await restored.verifyAccount()
+        #expect(restored.snapshots(connectionID: id, scope: .today).first?.snapshot.now.visibleGoalReached == nil)
+        #expect(restored.streak(connectionID: id) == nil)
+    }
+
+    @Test
+    func unauthorizedCalorieGoalBitsAreRemovedFromReceivedCache() async throws {
+        let pair = try SharingTestPair()
+        let id = try await pair.connect(scopes: [.today])
+        try await pair.alice.takeOverPublisher()
+        let card = SharingFixtures.snapshot(day: pair.time.now, capturedAt: pair.time.now,
+                                           goalReached: true, isExcluded: true)
+        try await pair.alice.publish(snapshot: card)
+        let key = try #require(pair.server.snapshots.keys.first)
+        // A calorie record cannot authorize goal results embedded by a sender.
+        pair.server.snapshots[key]?.snapshot = card
+        await pair.bob.refresh()
+        #expect(pair.bob.snapshots(connectionID: id, scope: .today).first?.snapshot == card.withoutGoalInformation())
+        #expect(try pair.bobStore.load(accountID: SharingFixtures.bob.id).snapshots.first?.snapshot == card.withoutGoalInformation())
+    }
+
+    @Test
+    func goalsWithoutCalorieDatesShareOnlyTheFullCount() async throws {
+        let pair = try SharingTestPair()
+        let id = try await pair.connect(scopes: [.goals])
+        try await pair.alice.takeOverPublisher()
+        var card = SharingFixtures.snapshot(day: pair.time.now, capturedAt: pair.time.now,
+                                           goalReached: true, isExcluded: true)
+        card.streak = .init(days: 50, color: card.appearance.burned)
+        try await pair.alice.publish(snapshot: card)
+        await pair.bob.refresh()
+        let received = try #require(pair.bob.snapshots(connectionID: id, scope: .goals).first?.snapshot)
+        #expect(received.streak?.days == 50)
+        #expect(received.goalResult == nil && received.now.visibleGoalReached == nil)
+        #expect(received.now.energy.isEmpty && received.midnight == nil && received.isExcluded == nil)
+        #expect(pair.bob.snapshots(connectionID: id, scope: .today).isEmpty)
+        #expect(pair.bob.streak(connectionID: id)?.days == 50)
+        pair.time.now = card.dayEnd
+        #expect(pair.bob.streak(connectionID: id) == nil)
+    }
+
+    @Test(arguments: [SharingScope.today, .history])
+    func goalDatesCannotSurviveCalorieRevocationOrAReplacementGrant(_ scope: SharingScope) async throws {
+        let pair = try SharingTestPair()
+        let id = try await pair.connect(scopes: [scope, .goals])
+        try await pair.alice.takeOverPublisher()
+        let day = scope == .today ? pair.time.now : pair.time.now.addingTimeInterval(-86400)
+        let card = SharingFixtures.snapshot(day: day, capturedAt: pair.time.now,
+                                           includeProjection: scope == .today, goalReached: true)
+        try await pair.alice.publish(snapshot: card)
+        await pair.bob.refresh()
+        #expect(pair.bob.snapshots(connectionID: id, scope: scope).first?.snapshot.now.visibleGoalReached == true)
+        let oldGoal = try #require(pair.server.snapshots.values.first { $0.scope == .goals })
+        if scope == .history { #expect(oldGoal.snapshot.goalResult?.midnight == nil) }
+        try await pair.bob.changeScopes(connectionID: id, to: [.goals])
+        #expect(pair.bob.snapshots(connectionID: id, scope: .goals).isEmpty)
+        await pair.alice.refresh()
+        try await pair.alice.cleanupPublishedWindow()
+        #expect(pair.server.snapshots[oldGoal.id] == nil)
+        // A delayed old goal record must not return after the calorie permission is restored.
+        pair.server.snapshots[oldGoal.id] = oldGoal
+        try await pair.bob.changeScopes(connectionID: id, to: [scope, .goals])
+        await pair.alice.refresh()
+        let proposal = try #require(pair.alice.connections.first?.proposal)
+        try await pair.alice.accept(connectionID: id, proposalID: proposal.id)
+        await pair.bob.refresh()
+        await pair.alice.refresh()
+        #expect(pair.bob.snapshots(connectionID: id, scope: .goals).isEmpty)
+        try await pair.alice.publish(snapshot: card)
+        await pair.bob.refresh()
+        #expect(pair.bob.snapshots(connectionID: id, scope: scope).first?.snapshot.now.visibleGoalReached == true)
+        #expect(pair.server.snapshots[oldGoal.id]?.snapshot.goalResult?.calorieGeneration != oldGoal.snapshot.goalResult?.calorieGeneration)
+    }
+
+    @Test
+    func anOlderGoalResultCannotLabelANewCalorieCapture() async throws {
+        let pair = try SharingTestPair()
+        let id = try await pair.connect(scopes: [.today, .goals])
+        try await pair.alice.takeOverPublisher()
+        let card = SharingFixtures.snapshot(day: pair.time.now, capturedAt: pair.time.now, goalReached: true)
+        try await pair.alice.publish(snapshot: card)
+        let goal = try #require(pair.server.snapshots.values.first { $0.scope == .goals })
+        let newer = SharingFixtures.snapshot(day: pair.time.now, capturedAt: pair.time.now,
+                                            consumed: 2300, goalReached: false)
+        try await pair.alice.publish(snapshot: newer)
+        pair.server.snapshots[goal.id] = goal
+        await pair.bob.refresh()
+        let received = try #require(pair.bob.snapshots(connectionID: id, scope: .today).first?.snapshot)
+        #expect(received.now.energy == newer.now.energy)
+        #expect(received.now.visibleGoalReached == nil)
+    }
+
     @Test
     func pausedPersonRetainsNameColorWithoutRetainingSharedValues() async throws {
         let pair = try SharingTestPair()
@@ -54,7 +269,7 @@ struct SharingProtocolTests {
         #expect(pair.bob.streak(connectionID: id) == nil)
         #expect(pair.server.snapshots.values.allSatisfy { $0.snapshot.streak == nil })
 
-        try await pair.alice.changeScopes(connectionID: id, to: [.today, .history, .streaks])
+        try await pair.alice.changeScopes(connectionID: id, to: [.today, .history, .goals])
         await pair.bob.refresh()
         #expect(pair.bob.connections.first?.scopes == [.today, .history])
         let proposal = try #require(pair.bob.connections.first?.proposal)
@@ -64,12 +279,12 @@ struct SharingProtocolTests {
         try await pair.alice.publish(snapshot: card)
         await pair.bob.refresh()
         #expect(pair.bob.streak(connectionID: id)?.days == 24)
-        let received = try #require(pair.bob.snapshots(connectionID: id, scope: .streaks).first?.snapshot)
+        let received = try #require(pair.bob.snapshots(connectionID: id, scope: .goals).first?.snapshot)
         #expect(received.now.energy.isEmpty)
         #expect(received.now.visibleGoalReached == nil)
         #expect(received.midnight == nil)
         #expect(received.isExcluded == nil)
-        #expect(pair.bob.snapshots(connectionID: id, scope: .today).first?.snapshot.now == card.now)
+        #expect(pair.bob.snapshots(connectionID: id, scope: .today).first?.snapshot.now == card.withoutGoalInformation().now)
         #expect(pair.bob.snapshots(connectionID: id, scope: .today).first?.snapshot.streak == nil)
 
         card.streak = nil
@@ -83,25 +298,6 @@ struct SharingProtocolTests {
         try await pair.bob.changeScopes(connectionID: id, to: [.today, .history])
         #expect(pair.bob.streak(connectionID: id) == nil)
         #expect(pair.bob.snapshots(connectionID: id, scope: .today).count == 1)
-    }
-
-    @Test
-    func streakOnlyConsentPublishesNoCalorieDataAndExpiresAtSenderMidnight() async throws {
-        let pair = try SharingTestPair()
-        let id = try await pair.connect(scopes: [.streaks])
-        try await pair.alice.takeOverPublisher()
-        var card = SharingFixtures.snapshot(day: pair.time.now, capturedAt: pair.time.now)
-        card.streak = .init(days: 80, color: card.appearance.burned)
-        try await pair.alice.publish(snapshot: card)
-        await pair.bob.refresh()
-        #expect(pair.bob.streak(connectionID: id)?.days == 80)
-        #expect(pair.bob.snapshots(connectionID: id, scope: .today).isEmpty)
-        #expect(pair.bob.snapshots(connectionID: id, scope: .history).isEmpty)
-        #expect(pair.server.snapshots.values.allSatisfy { $0.snapshot.now.energy.isEmpty && $0.snapshot.midnight == nil })
-        #expect(!SharingDateWindow.permits(card, scope: .streaks, now: pair.time.now))
-        #expect(!SharingDateWindow.permits(card, scope: .today, now: pair.time.now))
-        pair.time.now = card.dayEnd
-        #expect(pair.bob.streak(connectionID: id) == nil)
     }
 
     @Test

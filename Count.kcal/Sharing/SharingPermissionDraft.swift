@@ -7,7 +7,7 @@ struct SharingPermissionDraft {
     let baselineScopes: Set<SharingScope>
     var today: Bool
     var history: Bool
-    var streaks: Bool
+    var goals: Bool
 
     init(connection: SharingConnection, accountID: String?) {
         acceptedScopes = connection.scopes
@@ -15,11 +15,11 @@ struct SharingPermissionDraft {
         baselineScopes = connection.proposal.flatMap { $0.proposerID == accountID ? $0.scopes : nil } ?? connection.scopes
         today = baselineScopes.contains(.today)
         history = baselineScopes.contains(.history)
-        streaks = baselineScopes.contains(.streaks)
+        goals = baselineScopes.contains(.goals)
     }
 
     var scopes: Set<SharingScope> {
-        Set((today ? [SharingScope.today] : []) + (history ? [.history] : []) + (streaks ? [.streaks] : []))
+        Set((today ? [SharingScope.today] : []) + (history ? [.history] : []) + (goals ? [.goals] : []))
     }
 
     var isEdited: Bool { scopes != baselineScopes }

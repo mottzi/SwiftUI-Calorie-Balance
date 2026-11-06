@@ -3,6 +3,8 @@ import SwiftUI
 /// Sender-calorie card using the local layout and no recipient calorie preferences.
 struct SharedCalorieCard: View {
 
+    var hidesGoalStatus = false
+
     /// Appearance used to resolve the sender's portable colors.
     @Environment(\.colorScheme) private var scheme
 
@@ -26,7 +28,7 @@ struct SharedCalorieCard: View {
                 consumedColor: snapshot.color(snapshot.appearance.consumed, scheme: scheme),
                 graphEmptyColor: snapshot.color(snapshot.appearance.graphEmpty, scheme: scheme),
                 cardBackground: snapshot.color(snapshot.appearance.cardBackground, scheme: scheme),
-                visibleGoalReached: values.visibleGoalReached,
+                visibleGoalReached: hidesGoalStatus ? nil : values.visibleGoalReached,
                 labelBackground: snapshot.appearance.labelBackground.map { snapshot.color($0, scheme: scheme) },
                 animateNumericValues: animateNumericValues
             )
@@ -43,6 +45,8 @@ struct SharedCalorieCard: View {
 /// Today's received card uses the dashboard's recessed mode-switching button.
 struct SharedTodayCalorieCard: View {
 
+    var hidesGoalStatus = false
+
     @Environment(\.colorScheme) private var scheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -57,7 +61,7 @@ struct SharedTodayCalorieCard: View {
             feedback.activate()
             mode = mode == .now ? .midnight : .now
         } label: {
-            SharedCalorieCard(snapshot: snapshot, mode: mode, animateNumericValues: true)
+            SharedCalorieCard(hidesGoalStatus: hidesGoalStatus, snapshot: snapshot, mode: mode, animateNumericValues: true)
                 .animation(reduceMotion ? nil : .smooth(duration: CalorieGraphAnimation.defaultDuration), value: mode)
                 .contentShape(.rect(cornerRadius: 10))
         }

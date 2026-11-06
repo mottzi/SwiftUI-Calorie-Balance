@@ -659,7 +659,7 @@ extension SharingRuntime {
         let now = Date.now
         let needsCards = coordinator.connections.contains { !$0.scopes.intersection([.today, .history]).isEmpty }
         let needsHistory = coordinator.connections.contains { $0.scopes.contains(.history) }
-        let needsStreak = coordinator.connections.contains { $0.scopes.contains(.streaks) }
+        let needsStreak = coordinator.connections.contains { $0.scopes.contains(.goals) }
         let offsets = needsCards ? [0] + (needsHistory ? (1...SharingDateWindow.historyDayCount).map { -$0 } : []) : []
         @Dependency(\.defaultDatabase) var database
         guard let choices = try? await database.read({ try StoredDayChoice.fetchAll($0) }) else { return }
@@ -706,7 +706,6 @@ extension SharingRuntime {
         }
         // ordinary failures do not stop other dates or peers, and every pass tries retention cleanup
         let failureMessage = String(localized: "Sharing could not finish updating. Count.kcal will retry.")
-        if settings.hideCalorieStatusIcons { streakSnapshot?.streak = nil }
         do {
             try await coordinator.publish(snapshots: snapshots, streakSnapshot: streakSnapshot)
             publicationFreshness.succeeded(at: .now)
@@ -812,7 +811,9 @@ extension SharingRuntime {
             }
             var bob = SharingFixtures.bob
             if arguments.contains("--sharing-qa-long-name") { bob.displayName = "Alexandria Charlotte von Winterthur" }
-            let scopes: Set<SharingScope> = arguments.contains("--sharing-qa-outgoing-request") ? [.history]
+            let scopes: Set<SharingScope> = arguments.contains("--sharing-qa-goals") ? [.today, .history, .goals]
+                : arguments.contains("--sharing-qa-goals-only") ? [.goals]
+                : arguments.contains("--sharing-qa-outgoing-request") ? [.history]
                 : arguments.contains("--sharing-qa-expansion-request") ? [.today]
                 : arguments.contains("--sharing-qa-history") ? [.history] : [.today, .history]
             let id = try await coordinator.propose(to: bob, scopes: scopes)
