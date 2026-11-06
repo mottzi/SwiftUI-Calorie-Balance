@@ -184,6 +184,8 @@ private struct SharingPeopleSection: View {
 /// Incoming requests remain reviewable before the recipient sets a display name.
 private struct SharingRequestsSection: View {
 
+    @Environment(\.colorScheme) private var scheme
+
     @Binding var selectedRequest: SharingConnection?
 
     let runtime: SharingRuntime
@@ -205,7 +207,7 @@ private struct SharingRequestsSection: View {
                         HStack(spacing: 12) {
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "")
-                                    .font(.headline).foregroundStyle(Color.primary)
+                                    .font(.headline).foregroundStyle(nameColor(for: connection))
                                 Text(connection.requestTitle).font(.subheadline).foregroundStyle(Color.primary)
                             }
                             Spacer(minLength: 0)
@@ -220,6 +222,15 @@ private struct SharingRequestsSection: View {
                 }
             } header: { Text("Invitations") }
         }
+    }
+
+    private func nameColor(for connection: SharingConnection) -> Color {
+        let scope: SharingScope = connection.scopes.contains(.today) ? .today : .history
+        let snapshot = coordinator.snapshots(connectionID: connection.id, scope: scope).first?.snapshot
+        guard let color = snapshot?.appearance.resolvedNameColor
+                ?? coordinator.senderNameColor(connectionID: connection.id) else { return .primary }
+        let rgba = scheme == .dark ? color.dark : color.light
+        return Color(.sRGB, red: rgba.red, green: rgba.green, blue: rgba.blue, opacity: rgba.opacity)
     }
 
 }
@@ -244,7 +255,7 @@ private struct SharingMeSection: View {
                     mode: mode,
                     status: card.day.sample.isUnavailable ? "Card unavailable" : "Loading calories…",
                     streak: card.streak,
-                    placeholderNameColor: settings.burnedColor
+                    placeholderNameColor: settings.weightGoal == .lose ? settings.burnedColor : settings.consumedColor
                 )
             }
             .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
@@ -738,7 +749,7 @@ private struct SharingCardSummary: View {
 
     private var nameColor: Color {
         if let snapshot, snapshot.isSupported {
-            return snapshot.color(snapshot.appearance.burned, scheme: scheme)
+            return snapshot.color(snapshot.appearance.resolvedNameColor, scheme: scheme)
         }
         return placeholderNameColor ?? .primary
     }
@@ -801,16 +812,20 @@ private struct SharingPersonBalance: View {
     let unit: String
 
     var body: some View {
-        label.contentTransition(.numericText(value: Double(abs(balance))))
+        label
+            .foregroundStyle(.secondary)
+            .contentTransition(.numericText(value: Double(abs(balance))))
     }
 
     private var label: Text {
+        let amount = Text(abs(balance), format: .number).foregroundStyle(Color.primary)
+        let energyUnit = Text(verbatim: unit).foregroundStyle(Color.primary)
         if balance == 0 {
-            Text("\(abs(balance), format: .number) \(unit) balance")
+            return Text("\(amount) \(energyUnit) balance")
         } else if balance > 0 {
-            Text("\(abs(balance), format: .number) \(unit) deficit")
+            return Text("\(amount) \(energyUnit) deficit")
         } else {
-            Text("\(abs(balance), format: .number) \(unit) surplus")
+            return Text("\(amount) \(energyUnit) surplus")
         }
     }
 
@@ -961,7 +976,7 @@ struct SharingRowStatesGallery: View {
                 Text("Sample row")
             } label: {
                 SharingCardSummary(name: "Berken", snapshot: snapshot, status: status,
-                                   placeholderNameColor: settings.burnedColor)
+                                   placeholderNameColor: settings.weightGoal == .lose ? settings.burnedColor : settings.consumedColor)
             }
             .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
         } header: { Text(verbatim: title).textCase(nil) }
@@ -1017,13 +1032,13 @@ struct SharingRowStatesGallery: View {
                 state.connections.append(connection)
                 examples.append(Example(title: title, page: page, connection: connection))
                 if title != "First update pending" {
-                    state.senderNameColors[peer.id] = card().appearance.burned
+                    state.senderNameColors[peer.id] = card().appearance.resolvedNameColor
                 }
                 if title == "Today's update missing" {
                     state.senderCalendars[peer.id] = SharingSenderCalendar(
                         timeZoneIdentifier: TimeZone.current.identifier,
                         capturedAt: now.addingTimeInterval(-4 * 86400), snapshotID: UUID(),
-                        nameColor: card().appearance.burned
+                        nameColor: card().appearance.resolvedNameColor
                     )
                 }
                 if title == "Available" || title == "Streak only" || title.hasPrefix("Goal "),

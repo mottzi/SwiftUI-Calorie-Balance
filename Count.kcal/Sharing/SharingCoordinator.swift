@@ -820,14 +820,15 @@ extension SharingCoordinator {
         guard isTrustedEnvelope(envelope) else { return }
         if let current = state.senderCalendars[envelope.senderID],
            current.capturedAt > envelope.snapshot.capturedAt
-            || (current.capturedAt == envelope.snapshot.capturedAt && current.nameColor != nil) { return }
+            || (current.capturedAt == envelope.snapshot.capturedAt
+                && current.nameColor == envelope.snapshot.appearance.resolvedNameColor) { return }
         state.senderCalendars[envelope.senderID] = SharingSenderCalendar(
             timeZoneIdentifier: envelope.snapshot.timeZoneIdentifier,
             capturedAt: envelope.snapshot.capturedAt,
             snapshotID: envelope.snapshot.id,
-            nameColor: envelope.snapshot.appearance.burned
+            nameColor: envelope.snapshot.appearance.resolvedNameColor
         )
-        state.senderNameColors[envelope.senderID] = envelope.snapshot.appearance.burned
+        state.senderNameColors[envelope.senderID] = envelope.snapshot.appearance.resolvedNameColor
     }
 
     /// Replaces a cached envelope unless the existing copy is newer.

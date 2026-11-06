@@ -208,11 +208,18 @@ struct CalorieCardSnapshot: Codable, Equatable, Sendable, Identifiable {
         /// Full detail-page background; absent in snapshots from older senders.
         var pageBackground: AdaptiveColor? = nil
 
+        /// Sender's goal accent for their name, independent of Streak permission.
+        var nameColor: AdaptiveColor? = nil
+
+        /// Older senders used the burned-energy color for names.
+        var resolvedNameColor: AdaptiveColor { nameColor ?? burned }
+
         /// Checks each color for both appearances.
         var isValid: Bool {
             burned.isValid && consumed.isValid && cardBackground.isValid && graphEmpty.isValid
                 && (labelBackground?.isValid ?? true)
                 && (pageBackground?.isValid ?? true)
+                && (nameColor?.isValid ?? true)
         }
     }
 

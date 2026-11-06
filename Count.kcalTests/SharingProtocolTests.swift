@@ -16,17 +16,26 @@ struct SharingProtocolTests {
         await pair.bob.refresh()
         #expect(pair.bob.senderNameColor(connectionID: id) == card.appearance.burned)
 
+        let nameColor = CalorieCardSnapshot.AdaptiveColor(
+            light: .init(red: 1, green: 0.5, blue: 0), dark: .init(red: 1, green: 0.6, blue: 0.2)
+        )
+        // Appearance can change without a newer health sample capture time.
+        let updated = SharingFixtures.snapshot(day: pair.time.now, capturedAt: pair.time.now, nameColor: nameColor)
+        try await pair.alice.publish(snapshot: updated)
+        await pair.bob.refresh()
+        #expect(pair.bob.senderNameColor(connectionID: id) == nameColor)
+
         try await pair.bob.changeScopes(connectionID: id, to: [])
         #expect(pair.bob.cachedSnapshots.isEmpty)
         #expect(pair.bob.state.senderCalendars.isEmpty)
         #expect(pair.bob.senderMetadata(connectionID: id) == nil)
-        #expect(pair.bob.senderNameColor(connectionID: id) == card.appearance.burned)
+        #expect(pair.bob.senderNameColor(connectionID: id) == nameColor)
 
         let restored = SharingCoordinator(
             store: pair.bobStore, transport: pair.bobTransport, clock: { pair.time.now }
         )
         await restored.verifyAccount()
-        #expect(restored.senderNameColor(connectionID: id) == card.appearance.burned)
+        #expect(restored.senderNameColor(connectionID: id) == nameColor)
         #expect(restored.cachedSnapshots.isEmpty)
         try await restored.remove(connectionID: id)
         #expect(restored.senderNameColor(connectionID: id) == nil)

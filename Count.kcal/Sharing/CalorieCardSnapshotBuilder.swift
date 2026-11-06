@@ -81,7 +81,8 @@ extension CalorieCardSnapshotBuilder {
             ),
             labelBackground: settings.showCalorieLabelBackgrounds
                 ? adaptive(settings.calorieLabelBackground.labelBackgroundColor) : nil,
-            pageBackground: adaptive(background.pageColor)
+            pageBackground: adaptive(background.pageColor),
+            nameColor: adaptive(settings.weightGoal == .lose ? settings.burnedColor : settings.consumedColor)
         )
     }
 

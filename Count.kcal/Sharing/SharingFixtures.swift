@@ -6,7 +6,8 @@ enum SharingFixtures {
     /// Builds a deterministic card snapshot for a sender-local day.
     static func snapshot(day: Date, capturedAt: Date, timeZone: TimeZone = TimeZone(identifier: "Europe/Zurich")!,
                          consumed: Int = 1700, includeProjection: Bool = true,
-                         goalReached: Bool? = nil, isExcluded: Bool? = nil) -> CalorieCardSnapshot {
+                         goalReached: Bool? = nil, isExcluded: Bool? = nil,
+                         nameColor: CalorieCardSnapshot.AdaptiveColor? = nil) -> CalorieCardSnapshot {
 
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone
@@ -48,7 +49,8 @@ enum SharingFixtures {
                 burned: color,
                 consumed: color,
                 cardBackground: background,
-                graphEmpty: background
+                graphEmpty: background,
+                nameColor: nameColor
             ),
             isExcluded: isExcluded
         )

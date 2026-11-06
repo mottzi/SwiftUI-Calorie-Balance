@@ -283,13 +283,42 @@ struct SharingSnapshotTests {
         var appearance = try #require(object["appearance"] as? [String: Any])
         appearance.removeValue(forKey: "labelBackground")
         appearance.removeValue(forKey: "pageBackground")
+        appearance.removeValue(forKey: "nameColor")
         object["appearance"] = appearance
         let decoded = try JSONDecoder().decode(CalorieCardSnapshot.self, from: JSONSerialization.data(withJSONObject: object))
         #expect(decoded.isSupported)
         #expect(decoded.appearance.labelBackground == nil)
         #expect(decoded.appearance.pageBackground == nil)
+        #expect(decoded.appearance.nameColor == nil)
+        #expect(decoded.appearance.resolvedNameColor == decoded.appearance.burned)
         #expect(decoded.isExcluded == nil)
         #expect(decoded.streak == nil)
+    }
+
+    @MainActor @Test
+    func senderNameColorUsesGoalAccentAndSurvivesTransfer() throws {
+        let now = date("2026-11-06T12:00:00Z")
+        let jonas = try #require(SharingSamplePeople.snapshots(profile: .lowActivity, now: now).first)
+        let maya = try #require(SharingSamplePeople.snapshots(profile: .active, now: now).first)
+        #expect(jonas.appearance.resolvedNameColor == jonas.appearance.consumed)
+        #expect(jonas.appearance.resolvedNameColor != jonas.appearance.burned)
+        #expect(maya.appearance.resolvedNameColor == maya.appearance.burned)
+        let settings = Settings.shared
+        let localAppearance = CalorieCardSnapshotBuilder.appearance(settings: settings)
+        #expect(localAppearance.resolvedNameColor == (settings.weightGoal == .lose
+            ? localAppearance.burned : localAppearance.consumed))
+
+        // Name appearance travels with calorie permissions, without requiring Streak.
+        let received = try JSONDecoder().decode(
+            CalorieCardSnapshot.self, from: JSONEncoder().encode(jonas.payload(for: .today))
+        )
+        #expect(received.isSupported)
+        #expect(received.streak == nil)
+        #expect(received.appearance.resolvedNameColor == jonas.appearance.consumed)
+        var invalid = received.appearance
+        invalid.nameColor = .init(light: .init(red: .nan, green: 0, blue: 0),
+                                 dark: .init(red: 0, green: 0, blue: 0))
+        #expect(!invalid.isValid)
     }
 
     @MainActor @Test

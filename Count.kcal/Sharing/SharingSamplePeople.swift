@@ -84,7 +84,8 @@ final class SharingSamplePeople {
             burned: CalorieCardSnapshotBuilder.adaptive(theme.burned),
             consumed: CalorieCardSnapshotBuilder.adaptive(theme.consumed),
             cardBackground: base.cardBackground, graphEmpty: base.graphEmpty,
-            labelBackground: base.labelBackground, pageBackground: base.pageBackground
+            labelBackground: base.labelBackground, pageBackground: base.pageBackground,
+            nameColor: CalorieCardSnapshotBuilder.adaptive(persona.isLoss ? theme.burned : theme.consumed)
         )
         let completed = (1..<SampleHealthDay.historyDays).compactMap { daysAgo -> SampleHealthDay? in
             guard let date = calendar.date(byAdding: .day, value: -daysAgo, to: now) else { return nil }
