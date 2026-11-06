@@ -28,9 +28,6 @@ final class SharingRuntime {
     /// Whether the current invitation request completed.
     private(set) var invitationCreated = false
 
-    /// Whether one or more sharing actions are active.
-    private(set) var isWorking = false
-
     /// Invitation operations share one native delivery sheet, but never block leaving it.
     private(set) var isManagingInvitations = false
 
@@ -149,9 +146,6 @@ final class SharingRuntime {
 
     /// Whether the runtime completed its first startup pass.
     @ObservationIgnored private var hasStarted = false
-
-    /// Number of active user actions.
-    @ObservationIgnored private var outstandingActions = 0
 
     /// Pending debounce task for a publication request.
     @ObservationIgnored private var scheduledPublicationTask: Task<Void, Never>?
@@ -379,7 +373,7 @@ final class SharingRuntime {
 
     @discardableResult
     /// Saves the latest name locally; its pending cloud update survives relaunch.
-    func saveName(_ draft: String) async -> Bool {
+    func saveName(_ draft: String) -> Bool {
 
         let name = draft.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty, name.count <= 80 else { return false }
@@ -528,11 +522,8 @@ final class SharingRuntime {
     /// Reports local action completion and keeps failed forms available for retry.
     func perform(on actionCoordinator: SharingCoordinator? = nil, _ action: () async throws -> Void) async -> Bool {
 
-        outstandingActions += 1
-        isWorking = true; actionError = nil
+        actionError = nil
         defer {
-            outstandingActions -= 1
-            isWorking = outstandingActions > 0
             pendingInvitations = cloud?.pendingInvitations ?? []
         }
         do {

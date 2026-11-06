@@ -22,15 +22,11 @@ struct SharingRuntimeTests {
         let gate = SharingFakeGate()
         let session = try RuntimeSession(profileNameUpdate: { _ in await gate.suspend() })
         defer { session.cleanUp() }
-        var saved = false
-        let submission = Task { saved = await session.runtime.saveName("Alice Updated") }
-        await gate.waitUntilSuspended()
-        #expect(saved)
+        #expect(session.runtime.saveName("Alice Updated"))
         #expect(session.runtime.displayName == "Alice Updated")
         #expect(session.defaults.string(forKey: "sharing.displayName") == "Alice Updated")
-        #expect(!session.runtime.isWorking)
+        await gate.waitUntilSuspended()
         gate.resume()
-        await submission.value
         await session.runtime.syncProfileName()
     }
 
@@ -57,7 +53,11 @@ struct SharingRuntimeTests {
             }
             await session.server.fetchGate.waitUntilSuspended()
             #expect(saved)
-            #expect(!session.runtime.isWorking)
+            switch action {
+            case "pause": #expect(session.alice.connections.first?.scopes.isEmpty == true)
+            case "remove": #expect(session.alice.connections.isEmpty)
+            default: #expect(session.alice.connections.first?.proposal == nil)
+            }
             session.server.fetchGate.resume()
             await session.alice.refresh(.changed)
         }
@@ -67,7 +67,7 @@ struct SharingRuntimeTests {
     func failedProfileUpdateSurvivesRelaunchAndRetriesLatestName() async throws {
         let session = try RuntimeSession(profileNameUpdate: { _ in throw SharingError.unavailable })
         defer { session.cleanUp() }
-        #expect(await session.runtime.saveName("Alice Updated"))
+        #expect(session.runtime.saveName("Alice Updated"))
         await session.runtime.syncProfileName()
         #expect(session.defaults.string(forKey: "sharing.pendingProfileName") == "Alice Updated")
         var uploaded: [String] = []
@@ -75,7 +75,7 @@ struct SharingRuntimeTests {
                                       repository: session.repository, defaults: session.defaults,
                                       profileNameUpdate: { uploaded.append($0) })
         #expect(restored.displayName == "Alice Updated")
-        #expect(await restored.saveName("Latest Name"))
+        #expect(restored.saveName("Latest Name"))
         await restored.syncProfileName()
         #expect(uploaded == ["Latest Name"])
         #expect(session.defaults.string(forKey: "sharing.pendingProfileName") == nil)
@@ -90,9 +90,9 @@ struct SharingRuntimeTests {
             if uploaded.count == 1 { await gate.suspend() }
         })
         defer { session.cleanUp() }
-        #expect(await session.runtime.saveName("First Name"))
+        #expect(session.runtime.saveName("First Name"))
         await gate.waitUntilSuspended()
-        #expect(await session.runtime.saveName("Latest Name"))
+        #expect(session.runtime.saveName("Latest Name"))
         #expect(session.runtime.displayName == "Latest Name")
         gate.resume()
         await session.runtime.syncProfileName()
@@ -129,7 +129,7 @@ struct SharingRuntimeTests {
         let change = Task { await session.runtime.useThisPublisher(on: session.alice) }
         await session.server.publisherGate.waitUntilSuspended()
         #expect(session.runtime.isChangingPublisher)
-        #expect(await session.runtime.saveName("New Name"))
+        #expect(session.runtime.saveName("New Name"))
         #expect(session.runtime.applyPermissionChange(on: session.alice) {
             try session.alice.enqueueScopeChange(connectionID: id, to: [])
         })
@@ -161,14 +161,12 @@ struct SharingRuntimeTests {
         }
         await session.server.fetchGate.waitUntilSuspended()
         #expect(session.alice.connections.first?.proposal?.scopes == scopes)
-        #expect(!session.runtime.isWorking)
         let current = try #require(session.alice.connections.first)
         #expect(!draft.isEdited && draft.matches(current))
         let proposal = try #require(draft.proposal)
         #expect(session.runtime.applyPermissionChange(on: session.alice) {
             try session.alice.enqueueCancellation(connectionID: id, proposalID: proposal.id)
         })
-        #expect(!session.runtime.isWorking)
         #expect(session.alice.connections.first?.proposal == nil)
         #expect(try SharingStore(path: session.database.path).load(accountID: SharingFixtures.alice.id).pendingMutations.contains {
             if case .cancel = $0.action { return true }; return false
@@ -197,7 +195,6 @@ struct SharingRuntimeTests {
         })
         await session.server.fetchGate.waitUntilSuspended()
         #expect(accepted)
-        #expect(!session.runtime.isWorking)
         session.server.fetchGate.resume()
         await session.alice.refresh(.changed)
         #expect(session.alice.isPublisher)
@@ -615,13 +612,12 @@ struct SharingRuntimeTests {
 
     @Test
     /// Returns failure so an action sheet can retain its draft for retry.
-    func failedActionsReportFailureWithoutLeavingTheRuntimeBusy() async throws {
+    func failedActionsReportFailureAndClearTheErrorAfterSuccess() async throws {
 
         let session = try RuntimeSession()
         defer { session.cleanUp() }
         let completed = await session.runtime.perform { throw SharingError.unavailable }
         #expect(!completed)
-        #expect(!session.runtime.isWorking)
         #expect(session.runtime.actionError != nil)
         #expect(await session.runtime.perform { })
         #expect(session.runtime.actionError == nil)
@@ -634,10 +630,10 @@ struct SharingRuntimeTests {
 
         let session = try RuntimeSession()
         defer { session.cleanUp() }
-        #expect(!(await session.runtime.saveName("   ")))
-        #expect(!(await session.runtime.saveName(String(repeating: "a", count: 81))))
+        #expect(!session.runtime.saveName("   "))
+        #expect(!session.runtime.saveName(String(repeating: "a", count: 81)))
         #expect(session.runtime.displayName == "Alice")
-        #expect(await session.runtime.saveName("  Alice Example  "))
+        #expect(session.runtime.saveName("  Alice Example  "))
         #expect(session.runtime.displayName == "Alice Example")
         #expect(session.defaults.string(forKey: "sharing.displayName") == "Alice Example")
         await session.runtime.publishCurrentWindow(settings: .shared)
@@ -661,27 +657,6 @@ struct SharingRuntimeTests {
     }
 
     @Test
-    /// Verifies that distinct actions run at once and keep the busy state active.
-    func distinctActionsRunImmediatelyAndBusyLastsUntilBothFinish() async throws {
-
-        let session = try RuntimeSession()
-        defer { session.cleanUp() }
-        let firstGate = SharingFakeGate(), secondGate = SharingFakeGate()
-        let first = Task { await session.runtime.perform { await firstGate.suspend() } }
-        await firstGate.waitUntilSuspended()
-        #expect(session.runtime.isWorking)
-        let second = Task { await session.runtime.perform { await secondGate.suspend() } }
-        await secondGate.waitUntilSuspended()
-        firstGate.resume()
-        _ = await first.value
-        #expect(session.runtime.isWorking)
-        secondGate.resume()
-        _ = await second.value
-        #expect(!session.runtime.isWorking)
-        await session.runtime.publishCurrentWindow(settings: .shared)
-    }
-
-    @Test
     /// Verifies that removal hides cards and stores revocations during other work.
     func removalHidesCardsAndPersistsBeforeUnrelatedWorkFinishes() async throws {
 
@@ -697,8 +672,7 @@ struct SharingRuntimeTests {
         await gate.waitUntilSuspended()
         session.server.failCommits = true
         session.server.failRevocationDirections = [.outgoing, .incoming]
-        await session.runtime.perform { try await session.alice.remove(connectionID: id) }
-        #expect(session.runtime.isWorking)
+        #expect(await session.runtime.perform { try await session.alice.remove(connectionID: id) })
         #expect(session.alice.cachedSnapshots.isEmpty)
         let restored = try SharingStore(path: session.database.path).load(accountID: SharingFixtures.alice.id)
         #expect(restored.snapshots.isEmpty)
@@ -707,7 +681,6 @@ struct SharingRuntimeTests {
         #expect(Set(restored.pendingRevocations.map(\.direction)) == [.outgoing, .incoming])
         gate.resume()
         _ = await unrelated.value
-        #expect(!session.runtime.isWorking)
         await session.runtime.publishCurrentWindow(settings: .shared)
     }
 
@@ -723,12 +696,10 @@ struct SharingRuntimeTests {
         // invitation import enters the same perform interface; this checks handoff without a real CloudKit import
         var receivedURL: URL?
         let invitation = URL(string: "https://www.icloud.com/share/test-handoff")!
-        await session.runtime.perform { receivedURL = invitation }
+        #expect(await session.runtime.perform { receivedURL = invitation })
         #expect(receivedURL == invitation)
-        #expect(session.runtime.isWorking)
         gate.resume()
         _ = await unrelated.value
-        #expect(!session.runtime.isWorking)
         await session.runtime.publishCurrentWindow(settings: .shared)
     }
 

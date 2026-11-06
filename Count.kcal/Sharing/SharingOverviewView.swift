@@ -575,10 +575,8 @@ struct SharingNameEditor: View {
     private func save() {
         guard !saveIsDisabled else { return }
         isFocused = false
-        Task {
-            if await runtime.saveName(name) {
-                if let onSaved { onSaved() } else { dismiss() }
-            }
+        if runtime.saveName(name) {
+            if let onSaved { onSaved() } else { dismiss() }
         }
     }
 
