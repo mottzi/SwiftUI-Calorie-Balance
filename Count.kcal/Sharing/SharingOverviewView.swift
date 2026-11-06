@@ -728,8 +728,10 @@ private struct SharingCardSummary: View {
             .frame(maxWidth: .infinity, minHeight: minimumContentHeight, alignment: .leading)
             if let streak { SharingStreakBadge(streak: streak, placement: .overview) }
         }
-        .animation(reduceMotion ? nil : .smooth(duration: CalorieGraphAnimation.defaultDuration), value: mode)
-        .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: isMissingToday)
+        .animation(rowAnimation, value: mode)
+        .animation(rowAnimation, value: values)
+        .animation(rowAnimation, value: streak)
+        .animation(rowAnimation, value: isMissingToday)
         .accessibilityElement(children: .combine)
         .accessibilityValue(goalReached.map { $0 ? Text("Goal reached") : Text("Goal not reached") } ?? Text(""))
     }
@@ -739,6 +741,10 @@ private struct SharingCardSummary: View {
             return snapshot.color(snapshot.appearance.burned, scheme: scheme)
         }
         return placeholderNameColor ?? .primary
+    }
+
+    private var rowAnimation: Animation? {
+        reduceMotion ? nil : .smooth(duration: CalorieGraphAnimation.defaultDuration)
     }
 
 }
@@ -868,6 +874,8 @@ struct SharingRowStatesGallery: View {
         : ProcessInfo.processInfo.arguments.contains("--sharing-row-goals") ? 3 : 0
     @State private var goalMode = GraphMode.now
     @State private var coordinator: SharingCoordinator?
+    @State private var fixtureServer: SharingFakeServer?
+    @State private var refreshVersion = 0
     @State private var examples: [Example] = []
     @State private var errorMessage: String?
     private let now = Date.now
@@ -927,6 +935,21 @@ struct SharingRowStatesGallery: View {
         .listSectionSpacing(20)
         .navigationTitle("Sharing row states")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if page == 3 {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu("Sample refresh", systemImage: "arrow.clockwise") {
+                        Button("Refresh with new values") {
+                            Task { await refreshExamples(changesValues: true) }
+                        }
+                        Button("Refresh unchanged values") {
+                            Task { await refreshExamples(changesValues: false) }
+                        }
+                    }
+                    .disabled(coordinator == nil)
+                }
+            }
+        }
         .preferredColorScheme(ProcessInfo.processInfo.arguments.contains("--sharing-row-light") ? .light : .dark)
         .modifier(StreakAnimationScope())
         .task { await loadExamples() }
@@ -945,8 +968,10 @@ struct SharingRowStatesGallery: View {
     }
 
     private func card(version: Int = CalorieCardSnapshot.currentSchemaVersion, streakOnly: Bool = false,
-                      goalReached: Bool? = nil, reversesProjectedGoal: Bool = false) -> CalorieCardSnapshot {
-        let sample = SharingFixtures.snapshot(day: now, capturedAt: now, timeZone: .current, goalReached: goalReached)
+                      goalReached: Bool? = nil, reversesProjectedGoal: Bool = false,
+                      consumed: Int = 1700) -> CalorieCardSnapshot {
+        let sample = SharingFixtures.snapshot(day: now, capturedAt: now, timeZone: .current,
+                                              consumed: consumed, goalReached: goalReached)
         var result = CalorieCardSnapshot(
             schemaVersion: version, senderLocalDate: sample.senderLocalDate,
             timeZoneIdentifier: sample.timeZoneIdentifier, dayStart: sample.dayStart, dayEnd: sample.dayEnd,
@@ -1013,12 +1038,40 @@ struct SharingRowStatesGallery: View {
                     ))
                 }
             }
+            server.connections = Dictionary(uniqueKeysWithValues: state.connections.map { ($0.id, $0) })
+            server.snapshots = Dictionary(uniqueKeysWithValues: state.snapshots.map { ($0.id, $0) })
             try store.save(state, accountID: SharingFixtures.alice.id)
             let coordinator = SharingCoordinator(store: store, transport: server.transport(for: SharingFixtures.alice), clock: { now })
             await coordinator.verifyAccount()
             self.examples = examples
             self.coordinator = coordinator
+            self.fixtureServer = server
         } catch { errorMessage = error.localizedDescription }
+    }
+
+    /// Uses the real refresh path without an explicit animation or live account data.
+    private func refreshExamples(changesValues: Bool) async {
+        guard let coordinator, let fixtureServer else { return }
+        if changesValues {
+            refreshVersion += 1
+            for example in examples where example.page == 3 {
+                guard let peer = example.connection.peer(of: SharingFixtures.alice.id),
+                      let grant = example.connection.grants.first,
+                      let publisher = example.connection.publisherGenerations[peer.id] else { continue }
+                let originalGoal: Bool? = example.title == "Goal reached now" ? true
+                    : example.title == "Goal not reached now" ? false : nil
+                let originalValues = refreshVersion.isMultiple(of: 2)
+                let goalReached = originalGoal.map { originalValues ? $0 : !$0 }
+                let consumed = originalValues ? 1700 : originalGoal == true ? 2000 : 1200
+                let envelope = SharedSnapshotEnvelope(
+                    connectionID: example.connection.id, senderID: peer.id, scope: grant.scope,
+                    consentGeneration: grant.generation, publisherGeneration: publisher,
+                    snapshot: card(goalReached: goalReached, reversesProjectedGoal: true, consumed: consumed)
+                )
+                fixtureServer.snapshots[envelope.id] = envelope
+            }
+        }
+        await coordinator.refresh(.changed)
     }
 }
 #endif
