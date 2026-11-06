@@ -18,6 +18,116 @@ struct SharingRuntimeTests {
     }
 
     @Test
+    func permissionRequestDoesNotLockTheSheetWhileSyncIsHeld() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        let id = try await session.connect(scopes: [.today, .history])
+        var draft = SharingPermissionDraft(connection: try #require(session.alice.connections.first),
+                                           accountID: SharingFixtures.alice.id)
+        draft.goals = true
+        let scopes = draft.scopes
+        session.server.pauseNextFetch = true
+        let saved = session.runtime.applyPermissionChange(on: session.alice) {
+            try session.alice.enqueueScopeChange(connectionID: id, to: scopes)
+        }
+        #expect(saved)
+        if saved {
+            draft = SharingPermissionDraft(connection: try #require(session.alice.connections.first),
+                                           accountID: SharingFixtures.alice.id)
+        }
+        await session.server.fetchGate.waitUntilSuspended()
+        #expect(session.alice.connections.first?.proposal?.scopes == scopes)
+        #expect(!session.runtime.isWorking)
+        let current = try #require(session.alice.connections.first)
+        #expect(!draft.isEdited && draft.matches(current))
+        let proposal = try #require(draft.proposal)
+        #expect(session.runtime.applyPermissionChange(on: session.alice) {
+            try session.alice.enqueueCancellation(connectionID: id, proposalID: proposal.id)
+        })
+        #expect(!session.runtime.isWorking)
+        #expect(session.alice.connections.first?.proposal == nil)
+        #expect(try SharingStore(path: session.database.path).load(accountID: SharingFixtures.alice.id).pendingMutations.contains {
+            if case .cancel = $0.action { return true }; return false
+        })
+        session.server.fetchGate.resume()
+        await session.alice.refresh(.changed)
+        #expect(session.server.connections[id]?.proposal == nil)
+    }
+
+    @Test
+    func acceptingRequestCompletesBeforeNetworkRefresh() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        await session.bob.verifyAccount()
+        let id = try await session.bob.propose(to: SharingFixtures.alice, scopes: [.today, .goals])
+        await session.alice.refresh()
+        let proposal = try #require(session.alice.connections.first?.proposal)
+        session.server.pauseNextFetch = true
+        let accepted = session.runtime.applyPermissionChange(on: session.alice) {
+            try session.alice.enqueueAcceptance(connectionID: id, proposalID: proposal.id)
+        }
+        #expect(accepted)
+        let saved = try SharingStore(path: session.database.path).load(accountID: SharingFixtures.alice.id)
+        #expect(saved.pendingMutations.contains {
+            if case .accept(let id) = $0.action { return id == proposal.id }; return false
+        })
+        await session.server.fetchGate.waitUntilSuspended()
+        #expect(accepted)
+        #expect(!session.runtime.isWorking)
+        session.server.fetchGate.resume()
+        await session.alice.refresh(.changed)
+        #expect(session.alice.isPublisher)
+        #expect(session.server.connections[id]?.scopes == [.today, .goals])
+        #expect(session.alice.state.pendingMutations.isEmpty)
+    }
+
+    @Test
+    func savedAcceptanceRetriesAfterRelaunchAndPreservesThePublisher() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        await session.bob.verifyAccount()
+        let id = try await session.bob.propose(to: SharingFixtures.alice, scopes: [.today])
+        await session.alice.refresh()
+        let proposal = try #require(session.alice.connections.first?.proposal)
+        session.server.failCommits = true
+        try session.alice.enqueueAcceptance(connectionID: id, proposalID: proposal.id)
+        await session.alice.refresh(.changed)
+        #expect(session.alice.state.pendingMutations.count == 1)
+        let lease = try #require(session.server.leases[SharingFixtures.alice.id])
+        let restored = SharingCoordinator(
+            store: try SharingStore(path: session.database.path),
+            transport: session.server.transport(for: SharingFixtures.alice),
+            deviceID: session.alice.deviceID
+        )
+        session.server.failCommits = false
+        await restored.refresh(.changed)
+        #expect(restored.state.pendingMutations.isEmpty)
+        #expect(session.server.connections[id]?.scopes == [.today])
+        #expect(session.server.leases[SharingFixtures.alice.id] == lease)
+    }
+
+    @Test
+    func queuedAcceptanceDoesNotReplaceAnotherPublishingIPhone() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        await session.bob.verifyAccount()
+        let id = try await session.bob.propose(to: SharingFixtures.alice)
+        await session.alice.refresh()
+        let proposal = try #require(session.alice.connections.first?.proposal)
+        let other = SharingCoordinator(store: try SharingStore(),
+                                       transport: session.server.transport(for: SharingFixtures.alice))
+        await other.verifyAccount()
+        try await other.preparePublisher()
+        let lease = try #require(session.server.leases[SharingFixtures.alice.id])
+        try session.alice.enqueueAcceptance(connectionID: id, proposalID: proposal.id)
+        await session.alice.refresh(.changed)
+        #expect(session.alice.refreshFailure as? SharingError == .publisherNotOwned)
+        #expect(session.alice.state.pendingMutations.count == 1)
+        #expect(session.server.connections[id]?.proposal?.id == proposal.id)
+        #expect(session.server.leases[SharingFixtures.alice.id] == lease)
+    }
+
+    @Test
     func pendingDraftPreservesRequestedScopesWhenAddingAnotherOption() async throws {
         let session = try RuntimeSession()
         defer { session.cleanUp() }

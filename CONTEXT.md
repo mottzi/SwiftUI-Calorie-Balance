@@ -10,4 +10,6 @@ Goal results travel separately from calorie records and carry the matching calor
 
 SharingCoordinator owns consent and local permitted data. CloudKitSharingTransport verifies identities, owner-controlled consent, private/shared permissions and atomic publisher authority. SharingRuntime connects these modules to SwiftUI and HealthRepository. The writable discovery hierarchy carries URLs only.
 
+Permission sheets complete after saving the decision to the existing durable mutation queue. Network refresh does not hold a sheet open. Acceptance performs first-use publisher setup while draining that queue, so setup and consent can retry after relaunch without replacing another publishing iPhone.
+
 See `Docs/calorie-card-sharing-spec.md`, `Docs/calorie-card-sharing-verification.md`, and `Docs/adr/0001-bind-email-invitations-after-cloudkit-acceptance.md`. Local implementation issues live in `.scratch/calorie-card-sharing/issues/`.

@@ -265,6 +265,7 @@ final class SharingRuntime {
             schedulePublication(settings: .shared)
         }
         if let error = coordinator?.refreshFailure {
+            if error as? SharingError == .publisherNotOwned { publisherNeedsConfirmation = true }
             freshness.failed(at: .now, serverDelay: (error as? CKError)?.retryAfterSeconds)
         } else if case .available = coordinator?.accountStatus {
             freshness.succeeded(at: .now)
@@ -468,9 +469,6 @@ final class SharingRuntime {
     /// Reports local action completion and keeps failed forms available for retry.
     func perform(on actionCoordinator: SharingCoordinator? = nil, _ action: () async throws -> Void) async -> Bool {
 
-        #if DEBUG
-        let isSampleAction = actionCoordinator != nil && actionCoordinator === samplePeople?.coordinator
-        #endif
         outstandingActions += 1
         isWorking = true; actionError = nil
         defer {
@@ -480,19 +478,7 @@ final class SharingRuntime {
         }
         do {
             try await action()
-            #if DEBUG
-            if isSampleAction {
-                await refreshSamplePeople()
-                return true
-            }
-            #endif
-            await advanceFixturePeer()
-            #if DEBUG
-            await refreshSamplePeople()
-            #endif
-            updateHealthObservation()
-            schedulePublication(settings: .shared)
-            if coordinator?.isPublisher == true { publisherNeedsConfirmation = false }
+            await finishSharingAction(on: actionCoordinator)
             return true
         }
         catch {
@@ -500,6 +486,41 @@ final class SharingRuntime {
             actionError = SharingError.message(for: error)
             return false
         }
+    }
+
+    /// A saved permission decision is usable immediately; iCloud sync owns no sheet lock.
+    @discardableResult
+    func applyPermissionChange(on coordinator: SharingCoordinator, _ change: () throws -> Void) -> Bool {
+        actionError = nil
+        do { try change() }
+        catch {
+            actionError = SharingError.message(for: error)
+            return false
+        }
+        Task {
+            await coordinator.refresh(.changed)
+            if coordinator.refreshFailure as? SharingError == .publisherNotOwned {
+                publisherNeedsConfirmation = true
+            }
+            await finishSharingAction(on: coordinator)
+        }
+        return true
+    }
+
+    private func finishSharingAction(on actionCoordinator: SharingCoordinator?) async {
+        #if DEBUG
+        if actionCoordinator != nil && actionCoordinator === samplePeople?.coordinator {
+            await refreshSamplePeople()
+            return
+        }
+        #endif
+        await advanceFixturePeer()
+        #if DEBUG
+        await refreshSamplePeople()
+        #endif
+        updateHealthObservation()
+        schedulePublication(settings: .shared)
+        if coordinator?.isPublisher == true { publisherNeedsConfirmation = false }
     }
 
     /// Imports CloudKit invitation metadata on iPhone and refreshes connections.

@@ -407,11 +407,7 @@ struct SharingRequestConsentView: View {
             } actions: {
                 if displayedConnection?.proposal != nil {
                     Button(action: accept) {
-                        HStack {
-                            if isSubmitting { ProgressView() }
-                            Text("Accept")
-                        }
-                        .frame(maxWidth: .infinity, minHeight: 44)
+                        Text("Accept").frame(maxWidth: .infinity, minHeight: 44)
                     }
                     .modifier(SharingPrimaryActionAppearance())
                     .disabled(runtime.isWorking || isSubmitting)
@@ -428,9 +424,9 @@ struct SharingRequestConsentView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     if #available(iOS 26, *) {
-                        Button(role: .close) { dismiss() }.disabled(runtime.isWorking || isSubmitting)
+                        Button(role: .close) { dismiss() }
                     } else {
-                        Button("Done") { dismiss() }.disabled(runtime.isWorking || isSubmitting)
+                        Button("Done") { dismiss() }
                     }
                 }
             }
@@ -441,7 +437,6 @@ struct SharingRequestConsentView: View {
                     accept()
                 }
             }
-            .interactiveDismissDisabled(runtime.isWorking || isSubmitting)
         }
         .onAppear { runtime.clearError() }
     }
@@ -483,25 +478,20 @@ struct SharingRequestConsentView: View {
         }
         reviewedConnection = connection
         isSubmitting = true
-        Task {
-            let accepted = await runtime.perform(on: coordinator) {
-                try await coordinator.preparePublisher()
-                try await coordinator.accept(connectionID: connectionID, proposalID: proposal.id)
-            }
-            if accepted { dismiss() } else { isSubmitting = false }
+        let accepted = runtime.applyPermissionChange(on: coordinator) {
+            try coordinator.enqueueAcceptance(connectionID: connectionID, proposalID: proposal.id)
         }
+        if accepted { dismiss() } else { isSubmitting = false }
     }
 
     private func decline() {
         guard !runtime.isWorking, !isSubmitting, let proposal = displayedConnection?.proposal else { return }
         reviewedConnection = connection
         isSubmitting = true
-        Task {
-            let declined = await runtime.perform(on: coordinator) {
-                try await coordinator.decline(connectionID: connectionID, proposalID: proposal.id)
-            }
-            if declined { dismiss() } else { isSubmitting = false }
+        let declined = runtime.applyPermissionChange(on: coordinator) {
+            try coordinator.enqueueDecline(connectionID: connectionID, proposalID: proposal.id)
         }
+        if declined { dismiss() } else { isSubmitting = false }
     }
 
 }

@@ -180,30 +180,50 @@ final class SharingCoordinator {
 
     /// Queues the recipient's acceptance of a proposal.
     func accept(connectionID: UUID, proposalID: UUID) async throws {
+        try enqueueAcceptance(connectionID: connectionID, proposalID: proposalID)
+        await refresh(.changed)
+    }
+
+    /// Persists consent before publisher setup or network work.
+    func enqueueAcceptance(connectionID: UUID, proposalID: UUID) throws {
         let (connection, account) = try context(connectionID)
         guard let proposal = connection.proposal, proposal.scopes.isSubset(of: Set(SharingScope.allCases))
             else { throw SharingError.invalidProposal }
         try enqueue(connection: connection, action: .accept(proposalID: proposalID), account: account)
-        await refresh(.changed)
     }
 
     /// Queues the recipient's rejection of a proposal.
     func decline(connectionID: UUID, proposalID: UUID) async throws {
+        try enqueueDecline(connectionID: connectionID, proposalID: proposalID)
+        await refresh(.changed)
+    }
+
+    /// Persists rejection before any network work.
+    func enqueueDecline(connectionID: UUID, proposalID: UUID) throws {
         let (connection, account) = try context(connectionID)
         try enqueue(connection: connection, action: .decline(proposalID: proposalID), account: account)
-        await refresh(.changed)
     }
 
     /// Queues the inviter's cancellation of a proposal.
     func cancel(connectionID: UUID, proposalID: UUID) async throws {
+        try enqueueCancellation(connectionID: connectionID, proposalID: proposalID)
+        await refresh(.changed)
+    }
+
+    /// Persists cancellation before any network work.
+    func enqueueCancellation(connectionID: UUID, proposalID: UUID) throws {
         let (connection, account) = try context(connectionID)
         try enqueue(connection: connection, action: .cancel(proposalID: proposalID), account: account)
-        await refresh(.changed)
     }
 
     /// Remove first, then request additions against the reduced revision.
     func changeScopes(connectionID: UUID, to scopes: Set<SharingScope>) async throws {
+        try enqueueScopeChange(connectionID: connectionID, to: scopes)
+        await refresh(.changed)
+    }
 
+    /// Persists the reduced grant and requested addition without waiting for iCloud.
+    func enqueueScopeChange(connectionID: UUID, to scopes: Set<SharingScope>) throws {
         guard scopes.isSubset(of: Set(SharingScope.allCases)) else { throw SharingError.invalidProposal }
         var (connection, account) = try context(connectionID)
         let retained = connection.scopes.intersection(scopes)
@@ -218,7 +238,6 @@ final class SharingCoordinator {
                 account: account
             )
         }
-        await refresh(.changed)
     }
 
     /// Hides the connection locally and queues both revocation directions.
@@ -753,6 +772,12 @@ extension SharingCoordinator {
             // a preceding conflict or reentrant reduction may have canceled this request
             guard state.pendingMutations.contains(where: { $0.id == mutation.id }) else { continue }
             do {
+                if case .accept = mutation.action, !isPublisher {
+                    // First-use setup retries with the persisted acceptance, without holding a sheet open.
+                    try await preparePublisher()
+                    guard isCurrent(account, epoch: epoch) else { return firstError }
+                    guard state.pendingMutations.contains(where: { $0.id == mutation.id }) else { continue }
+                }
                 let remote = try await transport.commit(mutation, as: account)
                 guard isCurrent(account, epoch: epoch) else { return firstError }
                 guard valid(remote, account: account), remote.id == mutation.connection.id

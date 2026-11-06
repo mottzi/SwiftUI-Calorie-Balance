@@ -396,3 +396,17 @@ The user rejected the legacy mode and approved stopping old streak grants until 
 All six Sharing suites passed 130 tests, including old-grant removal with a failed incoming revocation and retry. On the real Sharing Cloud B connection, Today and Previous 6 Days remained enabled, the single Goal status & streak switch was off, and no legacy control or upgrade button remained. The peer row retained its name and 50 kcal balance with no unauthorized streak or goal result. The permission sheet was cancelled without making a new request.
 
 The final build was installed and launched on Sharing Cloud B and the physical iPhone. B remains on the normal Sharing overview with its stream open; accounts and the existing connection were preserved.
+
+## Permission-sheet responsiveness, 6 November 2026
+
+A held-network regression reproduced the sender's report. The proposal was already persisted, but `perform` kept the sheet busy until the full refresh finished. The edited draft still referenced the old proposal, which produced the false "Use current settings" conflict. The test failed on both the busy flag and draft revision.
+
+Permission edits and cancellations now return after the existing durable mutation is saved. Refresh continues independently. The sheet immediately rebases its submitted draft and animates the pending card and sheet height together, respecting Reduce Motion. The regression passes, including cancellation while the preceding refresh is held.
+
+The isolated Sharing Cloud B fixture verified send, the immediate Requested label, pending-card insertion, cancellation and Close. Recorded frames showed the content and sheet height transitioning together. No live connection permissions were changed during these checks.
+
+Incoming Accept and Decline use the same saved-decision path and dismiss immediately. Acceptance no longer shows a spinner. Its first-use publisher setup runs inside the existing serialized mutation flush, before sending consent, and cannot replace another iPhone's publisher lease. A pending mutation remains available for retry after setup or network failures. Close and swipe dismissal remain available.
+
+All six Sharing suites passed 134 tests. New coverage holds the acceptance refresh open while asserting immediate local completion, restores failed acceptance from disk for retry, and verifies that another iPhone's publisher lease is preserved. Earlier acceptance test attempts failed to connect to the test runner before executing any tests; an ordinary simulator restart resolved that infrastructure failure without deleting data. The original sender-sheet regression had already been observed failing before its fix.
+
+The final isolated UI check confirmed that Accept and Decline each dismiss the sheet and remove the pending request. The latest build was installed and launched on the physical iPhone and Sharing Cloud B. B was left on the normal Sharing overview with its stream running. Live consent, account sign-in and app data were preserved, and owned debugger and log sessions were closed.

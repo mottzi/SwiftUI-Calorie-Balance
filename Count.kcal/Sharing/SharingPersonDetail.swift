@@ -351,6 +351,7 @@ private struct SharingPermissionsView: View {
                             proposal: proposal, peerName: peerName,
                             onCancelled: resetDraft
                         )
+                        .transition(reduceMotion ? .opacity : .opacity.combined(with: .offset(y: -8)))
                     }
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Share with each other")
@@ -411,9 +412,12 @@ private struct SharingPermissionsView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 16)
+                .animation(reduceMotion ? nil : .smooth(duration: 0.3), value: connection?.proposal?.id)
                 .onGeometryChange(for: CGFloat.self) { geometry in
                     ceil(geometry.size.height)
-                } action: { contentHeight = $0 }
+                } action: { height in
+                    withAnimation(reduceMotion ? nil : .smooth(duration: 0.3)) { contentHeight = height }
+                }
             }
             .onGeometryChange(for: CGFloat.self) { geometry in
                 geometry.safeAreaInsets.top
@@ -424,9 +428,9 @@ private struct SharingPermissionsView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     if #available(iOS 26, *) {
-                        Button(role: .cancel) { dismiss() }.disabled(runtime.isWorking)
+                        Button(role: .cancel) { dismiss() }
                     } else {
-                        Button("Cancel", role: .cancel) { dismiss() }.disabled(runtime.isWorking)
+                        Button("Cancel", role: .cancel) { dismiss() }
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
@@ -465,7 +469,6 @@ private struct SharingPermissionsView: View {
                 }
             }
             .sheet(isPresented: $showsDisclosure) { SharingDisclosureView() }
-            .interactiveDismissDisabled(runtime.isWorking)
         }
         .presentationDetents([.height(contentHeight + navigationHeight)])
         .presentationDragIndicator(.visible)
@@ -522,11 +525,9 @@ private struct SharingPendingRequestSettings: View {
                 .padding(16)
                 Divider().padding(.horizontal, 16)
                 Button(role: .destructive) {
-                    Task {
-                        if await runtime.perform(on: coordinator, {
-                            try await coordinator.cancel(connectionID: connection.id, proposalID: proposal.id)
-                        }) { onCancelled() }
-                    }
+                    if runtime.applyPermissionChange(on: coordinator, {
+                        try coordinator.enqueueCancellation(connectionID: connection.id, proposalID: proposal.id)
+                    }) { onCancelled() }
                 } label: {
                     Text("Cancel request")
                         .frame(maxWidth: .infinity, minHeight: 44)
@@ -556,23 +557,21 @@ private struct SharingPendingRequestSettings: View {
 
 extension SharingPermissionsView {
 
-    /// Keeps a failed draft unless its reduction was already committed locally.
+    /// Rebase the draft with its own persisted edit before the request is rendered.
     private func apply() {
         let submitted = draft
-        Task {
-            let saved = await runtime.perform(on: coordinator) {
+        withAnimation(reduceMotion ? nil : .smooth(duration: 0.3)) {
+            let saved = runtime.applyPermissionChange(on: coordinator) {
                 guard let current = connection, submitted.matches(current)
                 else { throw SharingError.staleRevision }
                 if submitted.scopes == submitted.acceptedScopes,
                    let proposal = submitted.proposal, proposal.proposerID == coordinator.identity?.id {
-                    try await coordinator.cancel(connectionID: connectionID, proposalID: proposal.id)
+                    try coordinator.enqueueCancellation(connectionID: connectionID, proposalID: proposal.id)
                 } else {
-                    try await coordinator.changeScopes(connectionID: connectionID, to: submitted.scopes)
+                    try coordinator.enqueueScopeChange(connectionID: connectionID, to: submitted.scopes)
                 }
             }
-            let retained = submitted.acceptedScopes.intersection(submitted.scopes)
-            let reduced = !submitted.reductions.isEmpty && connection?.scopes == retained
-            if saved || reduced { dismiss() }
+            if saved { resetDraft() }
         }
     }
 
