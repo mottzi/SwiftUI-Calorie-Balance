@@ -505,7 +505,7 @@ struct SharingNameEditor: View {
     }
 
     private var saveIsDisabled: Bool {
-        runtime.isWorking || name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             || name.count > 80 || name == runtime.displayName
     }
 
@@ -522,7 +522,6 @@ struct SharingNameEditor: View {
                             .padding(.horizontal, 16)
                             .frame(minHeight: 52)
                             .background(.background.secondary, in: .rect(cornerRadius: 24))
-                            .disabled(runtime.isWorking)
                         Text("Shown to people you share with.")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
@@ -567,7 +566,6 @@ struct SharingNameEditor: View {
                     }
                 }
             }
-            .interactiveDismissDisabled(runtime.isWorking)
         }
         .presentationDetents([.height(contentHeight + navigationHeight)])
         .presentationDragIndicator(.visible)

@@ -222,8 +222,9 @@ final class CloudKitSharingTransport: SharingTransport {
     func updateProfileName() async throws {
 
         let account = try await authenticated()
-        for directory in directories.values {
-            guard let connection = try await resolve(directory, account: account) else { continue }
+        let currentConnections = try await fetchConnections(for: account)
+        for connection in currentConnections where !connection.removed {
+            guard let directory = directories[connection.id] else { continue }
             let controls = try await controlRecords(directory: directory, connection: connection, account: account)
             if let own = controls.first(where: { $0.ownerID == account.id }) {
                 try await writeControl(own.document, existing: own.record, directory: directory, account: account)

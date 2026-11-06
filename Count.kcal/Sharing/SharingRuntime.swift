@@ -120,6 +120,10 @@ final class SharingRuntime {
     /// Live CloudKit adapter for this account.
     @ObservationIgnored private var cloud: CloudKitSharingTransport?
 
+    /// Optional profile writer for an isolated sharing session.
+    @ObservationIgnored private var profileNameUpdate: (@MainActor (String) async throws -> Void)?
+    @ObservationIgnored private var profileNameTask: Task<Void, Never>?
+
     /// HealthKit observer used by the active publisher.
     @ObservationIgnored private let healthObserver = SharingHealthObserver()
 
@@ -219,13 +223,15 @@ final class SharingRuntime {
         store: SharingStore,
         repository: HealthRepository,
         defaults: UserDefaults,
-        isFixture: Bool = false
+        isFixture: Bool = false,
+        profileNameUpdate: (@MainActor (String) async throws -> Void)? = nil
     ) {
         self.coordinator = coordinator
         notificationStore = store
         self.repository = repository
         self.defaults = defaults
         self.isFixture = isFixture
+        self.profileNameUpdate = profileNameUpdate
         let name = defaults.string(forKey: "sharing.displayName") ?? ""
         displayName = name
         notificationsEnabled = defaults.bool(forKey: "sharing.notifications")
@@ -261,6 +267,7 @@ final class SharingRuntime {
         cloud?.displayName = displayName
         let previousGrants = readyPublicationGrants
         await coordinator?.refresh(request)
+        Task { await syncProfileName() }
         if !readyPublicationGrants.subtracting(previousGrants).isEmpty {
             schedulePublication(settings: .shared)
         }
@@ -368,24 +375,45 @@ final class SharingRuntime {
     var hasDisplayName: Bool { !displayName.isEmpty }
 
     @discardableResult
-    /// Saves a valid name after its live profile metadata update succeeds.
+    /// Saves the latest name locally; its pending cloud update survives relaunch.
     func saveName(_ draft: String) async -> Bool {
 
         let name = draft.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty, name.count <= 80 else { return false }
-        let saved = await perform {
-            if let cloud = self.cloud {
-                cloud.displayName = name
-                try await cloud.updateProfileName()
-            }
-            self.displayName = name
-            if !self.isFixture {
-                self.defaults.set(name, forKey: "sharing.displayName")
-                self.defaults.set(true, forKey: "sharing.used")
+        actionError = nil
+        displayName = name
+        cloud?.displayName = name
+        if !isFixture {
+            defaults.set(name, forKey: "sharing.displayName")
+            defaults.set(true, forKey: "sharing.used")
+            defaults.set(name, forKey: "sharing.pendingProfileName")
+            Task { await syncProfileName() }
+        }
+        return true
+    }
+
+    /// Serializes profile writes and retries the latest saved name on normal refresh/reconnect.
+    func syncProfileName() async {
+        guard !isFixture else { return }
+        if let profileNameTask { await profileNameTask.value; return }
+        guard defaults.string(forKey: "sharing.pendingProfileName") != nil else { return }
+        let task = Task {
+            defer { profileNameTask = nil }
+            while let name = defaults.string(forKey: "sharing.pendingProfileName") {
+                do {
+                    if let profileNameUpdate { try await profileNameUpdate(name) }
+                    else if let cloud {
+                        cloud.displayName = name
+                        try await cloud.updateProfileName()
+                    }
+                } catch { return }
+                if defaults.string(forKey: "sharing.pendingProfileName") == name {
+                    defaults.removeObject(forKey: "sharing.pendingProfileName")
+                }
             }
         }
-        cloud?.displayName = displayName
-        return saved
+        profileNameTask = task
+        await task.value
     }
 
     /// Creates one invitation through the selected sharing service.

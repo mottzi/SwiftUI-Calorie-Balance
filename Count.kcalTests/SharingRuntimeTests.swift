@@ -18,6 +18,60 @@ struct SharingRuntimeTests {
     }
 
     @Test
+    func nameSaveFinishesBeforeCloudProfileWrite() async throws {
+        let gate = SharingFakeGate()
+        let session = try RuntimeSession(profileNameUpdate: { _ in await gate.suspend() })
+        defer { session.cleanUp() }
+        var saved = false
+        let submission = Task { saved = await session.runtime.saveName("Alice Updated") }
+        await gate.waitUntilSuspended()
+        #expect(saved)
+        #expect(session.runtime.displayName == "Alice Updated")
+        #expect(session.defaults.string(forKey: "sharing.displayName") == "Alice Updated")
+        #expect(!session.runtime.isWorking)
+        gate.resume()
+        await submission.value
+        await session.runtime.syncProfileName()
+    }
+
+    @Test
+    func failedProfileUpdateSurvivesRelaunchAndRetriesLatestName() async throws {
+        let session = try RuntimeSession(profileNameUpdate: { _ in throw SharingError.unavailable })
+        defer { session.cleanUp() }
+        #expect(await session.runtime.saveName("Alice Updated"))
+        await session.runtime.syncProfileName()
+        #expect(session.defaults.string(forKey: "sharing.pendingProfileName") == "Alice Updated")
+        var uploaded: [String] = []
+        let restored = SharingRuntime(coordinator: session.alice, store: try SharingStore(path: session.database.path),
+                                      repository: session.repository, defaults: session.defaults,
+                                      profileNameUpdate: { uploaded.append($0) })
+        #expect(restored.displayName == "Alice Updated")
+        #expect(await restored.saveName("Latest Name"))
+        await restored.syncProfileName()
+        #expect(uploaded == ["Latest Name"])
+        #expect(session.defaults.string(forKey: "sharing.pendingProfileName") == nil)
+    }
+
+    @Test
+    func newerNameWinsWhileEarlierProfileWriteIsHeld() async throws {
+        let gate = SharingFakeGate()
+        var uploaded: [String] = []
+        let session = try RuntimeSession(profileNameUpdate: { name in
+            uploaded.append(name)
+            if uploaded.count == 1 { await gate.suspend() }
+        })
+        defer { session.cleanUp() }
+        #expect(await session.runtime.saveName("First Name"))
+        await gate.waitUntilSuspended()
+        #expect(await session.runtime.saveName("Latest Name"))
+        #expect(session.runtime.displayName == "Latest Name")
+        gate.resume()
+        await session.runtime.syncProfileName()
+        #expect(uploaded == ["First Name", "Latest Name"])
+        #expect(session.defaults.string(forKey: "sharing.pendingProfileName") == nil)
+    }
+
+    @Test
     func permissionRequestDoesNotLockTheSheetWhileSyncIsHeld() async throws {
         let session = try RuntimeSession()
         defer { session.cleanUp() }
@@ -807,7 +861,8 @@ private struct RuntimeSession {
     let runtime: SharingRuntime
 
     /// Creates fixture accounts and injects their test dependencies.
-    init(source: any HealthDataSource = SampleHealthDataSource()) throws {
+    init(source: any HealthDataSource = SampleHealthDataSource(),
+         profileNameUpdate: (@MainActor (String) async throws -> Void)? = nil) throws {
 
         directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -822,7 +877,8 @@ private struct RuntimeSession {
         alice = SharingCoordinator(store: store, transport: server.transport(for: SharingFixtures.alice))
         bob = SharingCoordinator(store: try SharingStore(), transport: server.transport(for: SharingFixtures.bob))
         repository = HealthRepository(source: source)
-        runtime = SharingRuntime(coordinator: alice, store: store, repository: repository, defaults: defaults)
+        runtime = SharingRuntime(coordinator: alice, store: store, repository: repository, defaults: defaults,
+                                 profileNameUpdate: profileNameUpdate)
     }
 
     /// Proposes, accepts, and refreshes a connection between the fixture accounts.
