@@ -60,7 +60,7 @@ final class SharingStore {
             )
             guard !verifiedAccountID.isEmpty, proposal.recipientID == verifiedAccountID,
                   proposal.createdAt <= now, proposal.expiresAt > now,
-                  proposal.expiresAt <= proposal.createdAt.addingTimeInterval(7 * 24 * 60 * 60) else { return false }
+                  proposal.expiresAt <= proposal.createdAt.addingTimeInterval(SharingConsent.requestLifetime) else { return false }
             try db.execute(
                 sql: """
                 INSERT OR IGNORE INTO sharingRequestAlerts (accountID, proposalID, expiresAt)
