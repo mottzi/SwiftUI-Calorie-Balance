@@ -6663,6 +6663,41 @@
         }
       }
     },
+    "Last shared %@": {
+      "comment": "Status of a shared person whose update for today is missing.",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zuletzt geteilt %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last shared %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Última vez compartido %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier partage %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上次共享于%@"
+          }
+        }
+      }
+    },
     "Limited history" : {
       "localizations" : {
         "de" : {
@@ -7664,6 +7699,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "尚无共享日期"
+          }
+        }
+      }
+    },
+    "No update yet today": {
+      "comment": "Status of a shared person whose update for today is missing.",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heute noch keine Aktualisierung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No update yet today"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoy aún no hay actualizaciones"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pas encore de mise à jour aujourd'hui"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今天尚无更新"
           }
         }
       }

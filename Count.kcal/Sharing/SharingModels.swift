@@ -300,7 +300,7 @@ struct SharedSnapshotEnvelope: Codable, Equatable, Sendable, Identifiable {
     var id: String { "\(connectionID)/\(senderID)/\(scope.rawValue)/\(snapshot.senderLocalDate)" }
 }
 
-/// Latest trusted sender calendar used to filter cached dates.
+/// Latest trusted sender metadata, retained without expired calorie values.
 struct SharingSenderCalendar: Codable, Equatable, Sendable {
     /// Sender time zone used to label snapshots.
     var timeZoneIdentifier: String
@@ -310,6 +310,9 @@ struct SharingSenderCalendar: Codable, Equatable, Sendable {
 
     /// Snapshot identifier that supplied this calendar.
     var snapshotID: UUID
+
+    /// Name color retained when today's calorie card has expired.
+    var nameColor: CalorieCardSnapshot.AdaptiveColor? = nil
 }
 
 /// Account-scoped cache and durable sharing work.

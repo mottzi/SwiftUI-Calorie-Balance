@@ -304,6 +304,15 @@ final class SharingCoordinator {
         snapshots(connectionID: connectionID, scope: .streaks).first?.snapshot.streak
     }
 
+    /// Last trusted update metadata remains available while sharing is active.
+    func senderMetadata(connectionID: UUID) -> SharingSenderCalendar? {
+        guard let identity,
+              let connection = connections.first(where: { $0.id == connectionID }),
+              !connection.scopes.isEmpty,
+              let sender = connection.peer(of: identity.id) else { return nil }
+        return state.senderCalendars[sender.id]
+    }
+
     /// Wake exactly at known sender midnight/request expiry, with a minute cap
     /// so wall-clock changes while foregrounded cannot leave stale dates visible.
     func nextExpiryDate() -> Date {
@@ -793,11 +802,13 @@ extension SharingCoordinator {
 
         guard isTrustedEnvelope(envelope) else { return }
         if let current = state.senderCalendars[envelope.senderID],
-           current.capturedAt >= envelope.snapshot.capturedAt { return }
+           current.capturedAt > envelope.snapshot.capturedAt
+            || (current.capturedAt == envelope.snapshot.capturedAt && current.nameColor != nil) { return }
         state.senderCalendars[envelope.senderID] = SharingSenderCalendar(
             timeZoneIdentifier: envelope.snapshot.timeZoneIdentifier,
             capturedAt: envelope.snapshot.capturedAt,
-            snapshotID: envelope.snapshot.id
+            snapshotID: envelope.snapshot.id,
+            nameColor: envelope.snapshot.appearance.burned
         )
     }
 

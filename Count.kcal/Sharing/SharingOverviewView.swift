@@ -607,12 +607,16 @@ struct SharingPersonRow: View {
     var mode: GraphMode = .now
 
     var body: some View {
+        let snapshot = snapshot
+        let isMissingToday = connection.scopes.contains(.today) && snapshot == nil
         SharingCardSummary(
             name: connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "",
             snapshot: snapshot,
             mode: connection.scopes.contains(.today) ? mode : .now,
-            status: connection.sharingStatus(coordinator: coordinator),
-            streak: coordinator.streak(connectionID: connection.id)
+            status: isMissingToday ? "No update yet today" : connection.sharingStatus(coordinator: coordinator),
+            streak: coordinator.streak(connectionID: connection.id),
+            isMissingToday: isMissingToday,
+            senderMetadata: coordinator.senderMetadata(connectionID: connection.id)
         )
     }
 
@@ -630,6 +634,7 @@ private struct SharingCardSummary: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.dynamicTypeSize) private var dynamicType
     @Environment(\.layoutDirection) private var layoutDirection
+    @EnvironmentObject private var settings: Settings
     // Preserve the original two-line summary's visible arc height.
     @ScaledMetric(relativeTo: .body) private var ringVisibleHeight: CGFloat = 49
 
@@ -638,6 +643,8 @@ private struct SharingCardSummary: View {
     var mode = GraphMode.now
     let status: LocalizedStringResource
     var streak: CalorieCardSnapshot.StreakSummary? = nil
+    var isMissingToday = false
+    var senderMetadata: SharingSenderCalendar? = nil
 
     var body: some View {
         let values = mode == .midnight ? snapshot?.midnight ?? snapshot?.now : snapshot?.now
@@ -654,12 +661,23 @@ private struct SharingCardSummary: View {
                         )
                     )
                     .accessibilityHidden(true)
+                } else if isMissingToday, !dynamicType.isAccessibilitySize {
+                    CalorieCircleGraph(
+                        energy: EnergyBalance(active: 0, resting: 0, restingRemaining: 0, consumed: 0),
+                        configuration: CalorieCircleConfiguration(lineWidth: 6, ringSpacing: 2, segmentGap: 2),
+                        palette: CalorieGraphPalette(
+                            burned: .clear, consumed: .clear,
+                            empty: settings.getGraphEmptyColor(scheme)
+                        )
+                    )
+                    .opacity(0.65)
+                    .accessibilityHidden(true)
                 }
                 VStack(alignment: .leading, spacing: 1) {
                     Text(name)
                         .font(.body.weight(.semibold))
                         .foregroundStyle(nameColor)
-                        .brightness(scheme == .dark && snapshot?.isSupported == true
+                        .brightness(scheme == .dark && (snapshot?.isSupported == true || (isMissingToday && senderMetadata?.nameColor != nil))
                             ? BrightnessLevel.secondary.amount(in: .circlegraphMidnight) : 0)
                     if let snapshot {
                         if snapshot.isSupported, let values {
@@ -670,12 +688,23 @@ private struct SharingCardSummary: View {
                         }
                     } else {
                         Text(status)
-                            .font(.subheadline).foregroundStyle(.secondary)
+                            .font(isMissingToday ? .body : .subheadline)
+                            .foregroundStyle(.secondary)
                     }
                     if let snapshot {
                         Text("Updated \(Text(snapshot.capturedAt, format: .relative(presentation: .named)))")
                             .font(.caption.weight(.regular))
                             .foregroundStyle(.secondary)
+                    } else if isMissingToday {
+                        if let lastShared = senderMetadata?.capturedAt {
+                            Text("Last shared \(Text(lastShared, format: .relative(presentation: .named)))")
+                                .font(.caption.weight(.regular))
+                                .foregroundStyle(.red)
+                        } else {
+                            // Reserve the normal caption height without inventing a timestamp.
+                            Text(" ").font(.caption.weight(.regular))
+                                .hidden().accessibilityHidden(true)
+                        }
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -684,12 +713,17 @@ private struct SharingCardSummary: View {
             if let streak { SharingStreakBadge(streak: streak, placement: .overview) }
         }
         .animation(reduceMotion ? nil : .smooth(duration: CalorieGraphAnimation.defaultDuration), value: mode)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: isMissingToday)
         .accessibilityElement(children: .combine)
     }
 
     private var nameColor: Color {
-        guard let snapshot, snapshot.isSupported else { return .primary }
-        return snapshot.color(snapshot.appearance.burned, scheme: scheme)
+        if let snapshot, snapshot.isSupported {
+            return snapshot.color(snapshot.appearance.burned, scheme: scheme)
+        }
+        guard isMissingToday, let color = senderMetadata?.nameColor else { return .primary }
+        let rgba = scheme == .dark ? color.dark : color.light
+        return Color(.sRGB, red: rgba.red, green: rgba.green, blue: rgba.blue, opacity: rgba.opacity)
     }
 
 }
@@ -805,7 +839,7 @@ extension SharingConnection {
         if scopes.isEmpty { return "Sharing paused" }
         if grants.contains(where: { !isReady($0.scope) }) { return "Connecting" }
         if scopes == [.streaks] { return "No calorie cards shared" }
-        return scopes.contains(.today) ? "Waiting for today's update" : "No shared days yet"
+        return scopes.contains(.today) ? "No update yet today" : "No shared days yet"
     }
 
 }

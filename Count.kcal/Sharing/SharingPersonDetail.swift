@@ -62,10 +62,6 @@ struct SharingPersonDetail: View {
                             }
                         }
                     } else {
-                        if connection.scopes.contains(.today), !snapshots.contains(where: { $0.scope == .today }) {
-                            Label("Waiting for today's update", systemImage: "clock")
-                                .font(.subheadline).foregroundStyle(.secondary)
-                        }
                         ForEach(snapshots) { envelope in
                             SharingCardSection(
                                 snapshot: envelope.snapshot,
@@ -137,7 +133,9 @@ extension SharingPersonDetail {
                 if let updatedAt {
                     Text(updatedAt, format: .relative(presentation: .named))
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(isMissingToday ? Color.red : Color.secondary)
+                        .accessibilityLabel(Text("Last shared \(Text(updatedAt, format: .relative(presentation: .named)))"))
+                        .accessibilityValue(isMissingToday ? Text("No update yet today") : Text(""))
                 }
             }
             .lineLimit(1)
@@ -184,7 +182,15 @@ extension SharingPersonDetail {
     }
 
     private var updatedAt: Date? {
-        (snapshots + coordinator.snapshots(connectionID: connectionID, scope: .streaks)).map(\.snapshot.capturedAt).max()
+        if isMissingToday, let lastShared = coordinator.senderMetadata(connectionID: connectionID)?.capturedAt {
+            return lastShared
+        }
+        return (snapshots + coordinator.snapshots(connectionID: connectionID, scope: .streaks)).map(\.snapshot.capturedAt).max()
+    }
+
+    private var isMissingToday: Bool {
+        connection?.scopes.contains(.today) == true
+            && coordinator.snapshots(connectionID: connectionID, scope: .today).isEmpty
     }
 
     private func waitingGuidance(_ connection: SharingConnection) -> LocalizedStringResource {
