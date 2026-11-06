@@ -439,10 +439,8 @@ final class CloudKitSharingTransport: SharingTransport {
             url: url,
             expectedOwner: peer.id,
             account: account,
-            permission: .readOnly,
             connectionID: connection.id,
-            scope: request.scope,
-            generation: request.generation
+            expectedRoot: .scope(request.scope, generation: request.generation)
         )
         guard incoming.recordType == RecordType.scope,
               incoming["connectionID"] as? String == connection.id.uuidString,
@@ -704,10 +702,8 @@ final class CloudKitSharingTransport: SharingTransport {
                     url: url,
                     expectedOwner: peer.id,
                     account: account,
-                    permission: .readOnly,
                     connectionID: connection.id,
-                    scope: grant.scope,
-                    generation: grant.generation
+                    expectedRoot: .scope(grant.scope, generation: grant.generation)
                 )
             } catch let error as CKError where [
                 .unknownItem, .zoneNotFound, .userDeletedZone, .permissionFailure
@@ -1095,25 +1091,31 @@ extension CloudKitSharingTransport {
         setup[controlField(accountID: account.id, connection: document.connection)] = url.absoluteString
         try await save([setup], database: database(for: directory))
     }
+    /// The two read-only root kinds, with scope and consent generation kept together.
+    private enum ExpectedRoot {
+        case control
+        case scope(SharingScope, generation: UUID)
+    }
+
     /// Fetches and verifies the current participant and expected share root before returning the record.
     private func verifiedRoot(url: URL, expectedOwner: String, account: SharingIdentity,
-                              permission: CKShare.ParticipantPermission, connectionID: UUID,
-                              scope: SharingScope? = nil, generation: UUID? = nil) async throws -> CKRecord {
+                              connectionID: UUID, expectedRoot: ExpectedRoot) async throws -> CKRecord {
 
         let metadata = try await metadataWithRoot(for: url)
         guard metadata.containerIdentifier == Self.containerIdentifier,
               metadata.ownerIdentity.userRecordID?.recordName == expectedOwner,
               metadata.share.publicPermission == .none,
-              isCurrentParticipant(metadata, account: account, permission: permission)
+              isCurrentParticipant(metadata, account: account, permission: .readOnly)
         else { throw SharingError.wrongAccount }
         guard let preview = metadata.rootRecord,
               preview["connectionID"] as? String == connectionID.uuidString else { throw SharingError.invalidConnection }
-        if let scope, let generation {
+        switch expectedRoot {
+        case .scope(let scope, let generation):
             guard preview.recordType == RecordType.scope,
                   preview["scope"] as? String == scope.rawValue,
                   preview["generation"] as? String == generation.uuidString,
                   preview["senderID"] as? String == expectedOwner else { throw SharingError.staleGeneration }
-        } else {
+        case .control:
             guard preview.recordType == RecordType.control,
                   preview["ownerID"] as? String == expectedOwner else { throw SharingError.invalidConnection }
         }
@@ -1186,8 +1188,8 @@ extension CloudKitSharingTransport {
                     url: url,
                     expectedOwner: identity.id,
                     account: account,
-                    permission: .readOnly,
-                    connectionID: connection.id
+                    connectionID: connection.id,
+                    expectedRoot: .control
                 )
             }
             let doc: SharingControlDocument = try decode(record, key: "payload")
@@ -1219,8 +1221,8 @@ extension CloudKitSharingTransport {
                 url: url,
                 expectedOwner: directory.ownerID,
                 account: account,
-                permission: .readOnly,
-                connectionID: directory.connectionID
+                connectionID: directory.connectionID,
+                expectedRoot: .control
             )
         }
         let initial: SharingControlDocument = try decode(seed, key: "payload")
