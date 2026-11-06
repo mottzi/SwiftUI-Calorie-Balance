@@ -856,7 +856,7 @@ extension CloudKitSharingTransport {
         }
         guard peerID != account.id, peerID != CKCurrentUserDefaultName else { throw SharingError.wrongAccount }
         guard !connections.values.contains(where: {
-            $0.id != original.connectionID && !$0.removed && $0.peer(of: account.id)?.id == peerID
+            $0.id != original.connectionID && $0.blocksNewInvitation && $0.peer(of: account.id)?.id == peerID
         }) else {
             pendingInvitations.append(draft.presentation(id: original.connectionID, url: url))
             throw SharingError.invalidConnection

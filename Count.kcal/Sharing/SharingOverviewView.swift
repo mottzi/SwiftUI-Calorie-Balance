@@ -11,8 +11,7 @@ struct SharingOverviewView: View {
 
     @State private var showsInvite = false
     @State private var mode = GraphMode.now
-    @State private var nativeInvitation: SharingCloudInvitation?
-    @State private var invitationError: Error?
+    @State private var selectedRequest: SharingConnection?
 
     let runtime: SharingRuntime
 
@@ -25,7 +24,6 @@ struct SharingOverviewView: View {
                 }
                 if let coordinator = runtime.coordinator {
                     SharingAccountStatusSection(runtime: runtime, coordinator: coordinator)
-                    SharingRequestsSection(runtime: runtime, coordinator: coordinator)
                     if !coordinator.pendingRevocations.isEmpty {
                         Section {
                             SharingPendingRemovalView(runtime: runtime, coordinator: coordinator)
@@ -35,6 +33,7 @@ struct SharingOverviewView: View {
                 SharingMeSection(runtime: runtime, mode: mode)
                 if let coordinator = runtime.coordinator {
                     SharingPeopleSection(runtime: runtime, mode: mode)
+                    SharingRequestsSection(selectedRequest: $selectedRequest, runtime: runtime, coordinator: coordinator)
                     Section {
                         Button("Invite", systemImage: "plus.circle.fill") { showsInvite = true }
                             .modifier(SharingActionAppearance())
@@ -45,12 +44,6 @@ struct SharingOverviewView: View {
                             .listRowSeparator(.hidden)
                     }
                     .listSectionSpacing(20)
-                    SharingPendingInvitationsSection(
-                        nativeInvitation: $nativeInvitation,
-                        runtime: runtime,
-                        coordinator: coordinator
-                    )
-
                 }
             }
             .modifier(StreakAnimationScope())
@@ -68,14 +61,9 @@ struct SharingOverviewView: View {
                 }
             }
             .sheet(isPresented: $showsInvite) { SharingInvitationView(runtime: runtime) }
-            .sheet(item: $nativeInvitation, onDismiss: {
-                let error = invitationError
-                invitationError = nil
-                Task { await runtime.finishInvitation(error: error) }
-            }) { invitation in
-                SharingNativeInvitationSheet(invitation: invitation) { _, error in
-                    invitationError = error
-                    nativeInvitation = nil
+            .sheet(item: $selectedRequest) { connection in
+                if let coordinator = runtime.coordinator {
+                    SharingRequestConsentView(runtime: runtime, coordinator: coordinator, connectionID: connection.id)
                 }
             }
             .task(id: scenePhase == .active) {
@@ -173,9 +161,6 @@ private struct SharingPeopleSection: View {
                 ForEach(people) { person in
                     let connection = person.connection
                     let coordinator = person.coordinator
-                    let hasPendingRequest = connection.proposal.map {
-                        $0.proposerID == coordinator.identity?.id
-                    } ?? false
                     NavigationLink {
                         SharingPersonDetail(runtime: runtime, coordinator: coordinator, connectionID: connection.id)
                     } label: {
@@ -186,15 +171,8 @@ private struct SharingPeopleSection: View {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
-                            if hasPendingRequest {
-                                Circle()
-                                    .fill(.red)
-                                    .frame(width: 8, height: 8)
-                                    .accessibilityHidden(true)
-                            }
                         }
                     }
-                    .accessibilityValue(hasPendingRequest ? Text("Request awaiting approval") : Text(""))
                     .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
                 }
             }
@@ -203,85 +181,25 @@ private struct SharingPeopleSection: View {
 
 }
 
-/// Metadata invitations and initial outgoing requests that are not yet people.
-private struct SharingPendingInvitationsSection: View {
-
-    @Binding var nativeInvitation: SharingCloudInvitation?
-
-    let runtime: SharingRuntime
-    let coordinator: SharingCoordinator
-
-    var body: some View {
-        let outgoing = coordinator.connections.filter {
-            $0.isInitialRequest && $0.proposal?.proposerID == coordinator.identity?.id
-        }
-        if !runtime.pendingInvitations.isEmpty || !outgoing.isEmpty {
-            Section {
-                ForEach(runtime.pendingInvitations) { invitation in
-                    VStack(alignment: .leading, spacing: 8) {
-                        switch invitation.stage {
-                            case .awaitingRecipient(let name, let scopes, let expiry, _):
-                                Text(name).font(.headline)
-                                Text(scopes.sharingDescription).font(.subheadline)
-                                Text("Invitation ready").foregroundStyle(.secondary)
-                                Text("Expires \(expiry, format: .dateTime.month().day())")
-                                    .font(.caption).foregroundStyle(.secondary)
-                                Button("Continue invitation", systemImage: "square.and.arrow.up") {
-                                    Task { nativeInvitation = await runtime.resumeInvitation(id: invitation.id) }
-                                }
-                                .buttonStyle(.borderedProminent)
-                                .controlSize(.large)
-                                .disabled(runtime.isWorking)
-                                Button("Cancel invitation", role: .destructive) {
-                                    Task { await runtime.cancelPendingInvitation(id: invitation.id) }
-                                }
-                                .frame(minHeight: 44)
-                                .disabled(runtime.isWorking)
-                            case .awaitingInviter:
-                                Label("Finishing invitation", systemImage: "person.crop.circle.badge.clock")
-                                Text("Calorie sharing hasn't started. Waiting for the other iPhone.")
-                                    .font(.subheadline).foregroundStyle(.secondary)
-                        }
-                    }
-                    .padding(.vertical, 6)
-                }
-                ForEach(outgoing) { connection in
-                    if let proposal = connection.proposal {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "")
-                                .font(.headline)
-                            Text(proposal.scopes.sharingDescription)
-                            Text("Waiting for acceptance").foregroundStyle(.secondary)
-                            Button("Cancel request", role: .destructive) {
-                                Task {
-                                    await runtime.perform {
-                                        try await coordinator.cancel(connectionID: connection.id, proposalID: proposal.id)
-                                    }
-                                }
-                            }
-                            .frame(minHeight: 44)
-                            .disabled(runtime.isWorking)
-                        }
-                    }
-                }
-            } header: { Text("Invitations") }
-        }
-    }
-
-}
-
 /// Incoming requests remain reviewable before the recipient sets a display name.
 private struct SharingRequestsSection: View {
 
-    @State private var selectedRequest: SharingConnection?
+    @Binding var selectedRequest: SharingConnection?
 
     let runtime: SharingRuntime
     let coordinator: SharingCoordinator
 
     var body: some View {
         let requests = coordinator.connections.filter { $0.proposal?.recipientID == coordinator.identity?.id }
-        if !requests.isEmpty {
+        let preparing = runtime.pendingInvitations.filter {
+            if case .awaitingInviter = $0.stage { return true }
+            return false
+        }
+        if !requests.isEmpty || !preparing.isEmpty {
             Section {
+                ForEach(preparing) { _ in
+                    ProgressView("Finishing invitation…")
+                }
                 ForEach(requests) { connection in
                     Button { selectedRequest = connection } label: {
                         HStack(spacing: 12) {
@@ -289,11 +207,6 @@ private struct SharingRequestsSection: View {
                                 Text(connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "")
                                     .font(.headline).foregroundStyle(Color.primary)
                                 Text(connection.requestTitle).font(.subheadline).foregroundStyle(Color.primary)
-                                if !connection.scopes.isEmpty {
-                                    Text("Currently sharing \(Text(connection.scopes.sharingDescription))")
-                                        .font(.caption).foregroundStyle(Color.secondary)
-                                }
-                                Text("Review").font(.subheadline).foregroundStyle(Color.accentColor)
                             }
                             Spacer(minLength: 0)
                             Image(systemName: "chevron.right").foregroundStyle(Color.secondary)
@@ -305,10 +218,7 @@ private struct SharingRequestsSection: View {
                     .accessibilityElement(children: .combine)
                     .accessibilityHint("Review the requested change before accepting or declining")
                 }
-            } header: { Text("Requests") }
-            .sheet(item: $selectedRequest) { connection in
-                SharingRequestConsentView(runtime: runtime, coordinator: coordinator, connectionID: connection.id)
-            }
+            } header: { Text("Invitations") }
         }
     }
 
@@ -872,14 +782,14 @@ extension Set where Element == SharingScope {
 extension SharingConnection {
 
     /// The first proposal is the only transition that can produce revision one.
-    var isInitialRequest: Bool { revision == 1 && scopes.isEmpty && proposal != nil }
+    var isInitialRequest: Bool { !hasAcceptedSharing && proposal != nil }
 
     /// Describes the addition without implying that existing permissions changed.
     var requestTitle: LocalizedStringResource {
         guard let proposal else { return "Sharing request" }
         if scopes.isEmpty {
             if isInitialRequest && proposal.scopes == [.streaks] { return "Share streaks" }
-            return isInitialRequest ? "Share calorie cards" : "Sharing request"
+            return isInitialRequest ? "Share calorie cards" : "Resume sharing"
         }
         switch proposal.scopes.subtracting(scopes) {
         case [.history]: return "Add Previous 6 Days?"
@@ -892,7 +802,7 @@ extension SharingConnection {
     @MainActor
     /// Returns the visible state without implying that a refresh wakes the sender.
     func sharingStatus(coordinator: SharingCoordinator) -> LocalizedStringResource {
-        if scopes.isEmpty { return proposal == nil ? "Sharing paused" : "Waiting for acceptance" }
+        if scopes.isEmpty { return "Sharing paused" }
         if grants.contains(where: { !isReady($0.scope) }) { return "Connecting" }
         if scopes == [.streaks] { return "No calorie cards shared" }
         return scopes.contains(.today) ? "Waiting for today's update" : "No shared days yet"

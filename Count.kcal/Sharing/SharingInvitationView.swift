@@ -14,6 +14,7 @@ struct SharingInvitationView: View {
     @State private var nativeInvitation: SharingCloudInvitation?
     @State private var handoffCompleted = false
     @State private var handoffError: Error?
+    @State private var invitationErrorMessage: String?
 
     let runtime: SharingRuntime
 
@@ -39,6 +40,9 @@ struct SharingInvitationView: View {
     private var invitation: some View {
         NavigationStack {
             SharingCompactSheetBody {
+                if let coordinator = runtime.coordinator {
+                    SharingSentInvitationsView(runtime: runtime, coordinator: coordinator, nativeInvitation: $nativeInvitation)
+                }
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Share with each other")
                         .font(.subheadline)
@@ -78,7 +82,7 @@ struct SharingInvitationView: View {
                 if runtime.publisherNeedsConfirmation, let coordinator = runtime.coordinator {
                     SharingPublisherChoice(runtime: runtime, coordinator: coordinator)
                 }
-                if let error = runtime.actionError ?? runtime.coordinator?.lastError {
+                if let error = invitationErrorMessage {
                     Text(error).foregroundStyle(.secondary)
                 }
             } actions: {
@@ -104,7 +108,10 @@ struct SharingInvitationView: View {
             .sheet(isPresented: $showsDisclosure) { SharingDisclosureView() }
             .sheet(item: $nativeInvitation, onDismiss: {
                 if handoffCompleted, handoffError == nil { dismiss() }
-                Task { await runtime.finishInvitation(error: handoffError) }
+                Task {
+                    await runtime.finishInvitation(error: handoffError)
+                    invitationErrorMessage = runtime.actionError
+                }
             }) { invitation in
                 SharingNativeInvitationSheet(invitation: invitation) { completed, error in
                     handoffCompleted = completed
@@ -119,10 +126,14 @@ struct SharingInvitationView: View {
     private func sendInvitation() {
         guard !isLocked, !scopes.isEmpty, runtime.hasDisplayName else { return }
         isCreating = true
+        invitationErrorMessage = nil
         Task {
             defer { isCreating = false }
             if runtime.invitation == nil, !runtime.invitationCreated {
-                _ = await runtime.invite(scopes: scopes)
+                guard await runtime.invite(scopes: scopes) else {
+                    invitationErrorMessage = runtime.actionError
+                    return
+                }
             }
             handoffCompleted = false
             handoffError = nil
@@ -324,15 +335,24 @@ struct SharingRequestConsentView: View {
 
     @State private var showsDisclosure = false
     @State private var showsNameSetup = false
+    @State private var isSubmitting = false
+    @State private var reviewedConnection: SharingConnection?
 
     let runtime: SharingRuntime
     let coordinator: SharingCoordinator
     let connectionID: UUID
 
+    init(runtime: SharingRuntime, coordinator: SharingCoordinator, connectionID: UUID) {
+        self.runtime = runtime
+        self.coordinator = coordinator
+        self.connectionID = connectionID
+        _reviewedConnection = State(initialValue: coordinator.connections.first { $0.id == connectionID })
+    }
+
     var body: some View {
         NavigationStack {
             SharingCompactSheetBody {
-                if let connection, let proposal = connection.proposal {
+                if let connection = displayedConnection, let proposal = connection.proposal {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "")
                             .font(.title3.bold())
@@ -382,29 +402,32 @@ struct SharingRequestConsentView: View {
                     ContentUnavailableView("This request is no longer available", systemImage: "person.crop.circle.badge.clock")
                 }
             } actions: {
-                if let connection, connection.proposal != nil {
+                if displayedConnection?.proposal != nil {
                     Button(action: accept) {
-                        Text("Accept")
-                            .frame(maxWidth: .infinity, minHeight: 44)
+                        HStack {
+                            if isSubmitting { ProgressView() }
+                            Text("Accept")
+                        }
+                        .frame(maxWidth: .infinity, minHeight: 44)
                     }
                     .modifier(SharingPrimaryActionAppearance())
-                    .disabled(runtime.isWorking)
+                    .disabled(runtime.isWorking || isSubmitting)
                     Button(role: .destructive, action: decline) {
                         Text("Decline").frame(maxWidth: .infinity, minHeight: 44)
                     }
                     .buttonStyle(.borderless)
-                    .disabled(runtime.isWorking)
+                    .disabled(runtime.isWorking || isSubmitting)
                 }
             }
             .softTopScrollEdge()
-            .navigationTitle("Sharing request")
+            .navigationTitle(reviewedConnection?.requestTitle ?? "Sharing request")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     if #available(iOS 26, *) {
-                        Button(role: .close) { dismiss() }.disabled(runtime.isWorking)
+                        Button(role: .close) { dismiss() }.disabled(runtime.isWorking || isSubmitting)
                     } else {
-                        Button("Done") { dismiss() }.disabled(runtime.isWorking)
+                        Button("Done") { dismiss() }.disabled(runtime.isWorking || isSubmitting)
                     }
                 }
             }
@@ -415,13 +438,19 @@ struct SharingRequestConsentView: View {
                     accept()
                 }
             }
-            .interactiveDismissDisabled(runtime.isWorking)
+            .interactiveDismissDisabled(runtime.isWorking || isSubmitting)
         }
         .onAppear { runtime.clearError() }
     }
 
     private var connection: SharingConnection? {
         coordinator.connections.first { $0.id == connectionID }
+    }
+
+    private var displayedConnection: SharingConnection? {
+        if isSubmitting { return reviewedConnection }
+        guard let connection, connection.proposal?.id == reviewedConnection?.proposal?.id else { return nil }
+        return connection
     }
 
     private func scopeRow(_ title: LocalizedStringResource, alreadyShared: Bool) -> some View {
@@ -444,27 +473,31 @@ struct SharingRequestConsentView: View {
     }
 
     private func accept() {
-        guard !runtime.isWorking, let proposal = connection?.proposal else { return }
+        guard !runtime.isWorking, !isSubmitting, let proposal = displayedConnection?.proposal else { return }
         guard runtime.hasDisplayName else {
             showsNameSetup = true
             return
         }
+        reviewedConnection = connection
+        isSubmitting = true
         Task {
-            let accepted = await runtime.perform {
+            let accepted = await runtime.perform(on: coordinator) {
                 try await coordinator.preparePublisher()
                 try await coordinator.accept(connectionID: connectionID, proposalID: proposal.id)
             }
-            if accepted { dismiss() }
+            if accepted { dismiss() } else { isSubmitting = false }
         }
     }
 
     private func decline() {
-        guard !runtime.isWorking, let proposal = connection?.proposal else { return }
+        guard !runtime.isWorking, !isSubmitting, let proposal = displayedConnection?.proposal else { return }
+        reviewedConnection = connection
+        isSubmitting = true
         Task {
-            let declined = await runtime.perform {
+            let declined = await runtime.perform(on: coordinator) {
                 try await coordinator.decline(connectionID: connectionID, proposalID: proposal.id)
             }
-            if declined { dismiss() }
+            if declined { dismiss() } else { isSubmitting = false }
         }
     }
 

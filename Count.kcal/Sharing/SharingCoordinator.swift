@@ -163,7 +163,7 @@ final class SharingCoordinator {
 
         guard let account = verifiedAccount else { throw SharingError.accountUnavailable }
         guard peer.id != account.id, !peer.id.isEmpty, !scopes.isEmpty,
-              !connections.contains(where: { $0.peer(of: account.id)?.id == peer.id })
+              !connections.contains(where: { $0.peer(of: account.id)?.id == peer.id && $0.blocksNewInvitation })
             else { throw SharingError.invalidConnection }
         let connection = SharingConnection(
             id: UUID(),

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A01120260000000000000004 /* SharingSentInvitationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01120260000000000000003 /* SharingSentInvitationsView.swift */; };
 		A01120260000000000000002 /* SharingPermissionDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01120260000000000000001 /* SharingPermissionDraft.swift */; };
 		C08E16B50000000000000001 /* StreakAnimationScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08E16B50000000000000002 /* StreakAnimationScope.swift */; };
 		C08E16B40000000000000001 /* SharingStreakBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08E16B40000000000000002 /* SharingStreakBadge.swift */; };
@@ -390,6 +391,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A01120260000000000000003 /* SharingSentInvitationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingSentInvitationsView.swift; sourceTree = "<group>"; };
 		A01120260000000000000001 /* SharingPermissionDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingPermissionDraft.swift; sourceTree = "<group>"; };
 		C08E16B50000000000000002 /* StreakAnimationScope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakAnimationScope.swift; sourceTree = "<group>"; };
 		C08E16B40000000000000002 /* SharingStreakBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingStreakBadge.swift; sourceTree = "<group>"; };
@@ -663,6 +665,7 @@
 				08FF97493DA9D6302C36BF0C /* CloudKitSharingTransport.swift */,
 				2110466D7FAACF14CA3F4B20 /* SharingFreshness.swift */,
 				A01120260000000000000001 /* SharingPermissionDraft.swift */,
+				A01120260000000000000003 /* SharingSentInvitationsView.swift */,
 				2C78DA0A75E46B5EBA5BD72D /* SharingCloudReader.swift */,
 				2D9E154BF7E394C41C8A2BF4 /* SharingCloudCache.swift */,
 				0C7305F87BBE3140200DC937 /* SharedCalorieCard.swift */,
@@ -1426,6 +1429,7 @@
 				B9F1CC440C3E9904B772F286 /* CloudKitSharingTransport.swift in Sources */,
 				AC040AF5BC67B3324E41415C /* SharingFreshness.swift in Sources */,
 				A01120260000000000000002 /* SharingPermissionDraft.swift in Sources */,
+				A01120260000000000000004 /* SharingSentInvitationsView.swift in Sources */,
 				47A74F77A1422804C410DC6C /* SharingCloudReader.swift in Sources */,
 				CEA3603574849BF146FE40B8 /* SharingCloudCache.swift in Sources */,
 				962F400698BF5360DA2AE942 /* SharingFixtures.swift in Sources */,

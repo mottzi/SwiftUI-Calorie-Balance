@@ -18,12 +18,14 @@ struct SharingControlLedgerTests {
         for index in objects.indices {
             var connection = try #require(objects[index]["connection"] as? [String: Any])
             connection.removeValue(forKey: "sharingStartedAt")
+            connection.removeValue(forKey: "firstAcceptedAt")
             objects[index]["connection"] = connection
         }
         let decoded = try JSONDecoder().decode([SharingControlDocument].self, from: JSONSerialization.data(withJSONObject: objects))
         for index in controls.indices { controls[index].document = decoded[index] }
         let resolved = try #require(try scenario.resolve(controls))
         #expect(resolved.sharingStartedAt == scenario.acceptance.createdAt)
+        #expect(resolved.firstAcceptedAt == scenario.acceptance.createdAt)
         #expect(scenario.pending.sharingStartedAt == nil)
         #expect(try JSONDecoder().decode(SharingConnection.self, from: encoder.encode(resolved)).sharingStartedAt == resolved.sharingStartedAt)
     }

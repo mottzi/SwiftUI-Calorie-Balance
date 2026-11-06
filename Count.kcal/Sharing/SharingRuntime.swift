@@ -40,6 +40,30 @@ final class SharingRuntime {
     /// Imported invitation shown for review without dashboard navigation.
     var receivedInvitationID: UUID?
 
+    enum ReceivedInvitationState: Equatable {
+        case pending
+        case request(UUID)
+        case connected(UUID)
+        case unavailable
+    }
+
+    /// Resolves imported links without treating completed consent as unfinished setup.
+    var receivedInvitationState: ReceivedInvitationState {
+        guard let id = receivedInvitationID else { return .unavailable }
+        if let connection = coordinator?.connections.first(where: { $0.id == id }) {
+            if let proposal = connection.proposal, proposal.recipientID == coordinator?.identity?.id {
+                return .request(id)
+            }
+            if connection.hasAcceptedSharing { return .connected(id) }
+            return .unavailable
+        }
+        if coordinator?.isRefreshing == true || pendingInvitations.contains(where: {
+            guard $0.id == id, case .awaitingInviter = $0.stage else { return false }
+            return true
+        }) { return .pending }
+        return .unavailable
+    }
+
     /// Saved name shown to people invited by this account.
     private(set) var displayName: String
 
@@ -80,7 +104,7 @@ final class SharingRuntime {
     /// Real and local sample people use the same screens with their own coordinator.
     var people: [SharingPerson] {
         var result = coordinator.map { coordinator in
-            coordinator.connections.filter { !$0.isInitialRequest }.map {
+            coordinator.connections.filter { $0.hasAcceptedSharing }.map {
                 SharingPerson(connection: $0, coordinator: coordinator)
             }
         } ?? []
@@ -430,9 +454,14 @@ final class SharingRuntime {
     func clearError() { actionError = nil }
 
     /// Cancels a pending invitation and refreshes the overview.
-    func cancelPendingInvitation(id: UUID) async {
-        await perform { try await self.cloud?.cancelPendingInvitation(id: id) }
-        await start(refresh: .changed)
+    @discardableResult
+    func cancelPendingInvitation(id: UUID) async -> Bool {
+        let cancelled = await perform { try await self.cloud?.cancelPendingInvitation(id: id) }
+        if cancelled {
+            if invitation?.id == id { clearInvitation() }
+            await start(refresh: .changed)
+        }
+        return cancelled
     }
 
     @discardableResult
@@ -479,9 +508,12 @@ final class SharingRuntime {
         guard UIDevice.current.userInterfaceIdiom == .phone else { return }
         guard let cloud else { return }
         defaults.set(true, forKey: "sharing.used")
-        await perform { receivedInvitationID = try await cloud.importInvitation(metadata) }
-        await coordinator?.refresh(.changed)
-        pendingInvitations = cloud.pendingInvitations
+        await perform {
+            let id = try await cloud.importInvitation(metadata)
+            await coordinator?.refresh(.changed)
+            pendingInvitations = cloud.pendingInvitations
+            receivedInvitationID = id
+        }
     }
 
     /// Imports an invitation URL on iPhone and refreshes connections.
@@ -490,9 +522,12 @@ final class SharingRuntime {
         guard UIDevice.current.userInterfaceIdiom == .phone else { return }
         guard let cloud else { return }
         defaults.set(true, forKey: "sharing.used")
-        await perform { receivedInvitationID = try await cloud.importInvitation(url: url) }
-        await coordinator?.refresh(.changed)
-        pendingInvitations = cloud.pendingInvitations
+        await perform {
+            let id = try await cloud.importInvitation(url: url)
+            await coordinator?.refresh(.changed)
+            pendingInvitations = cloud.pendingInvitations
+            receivedInvitationID = id
+        }
     }
 
     /// Reads the current system permission when returning from notification settings.
@@ -771,7 +806,10 @@ extension SharingRuntime {
         await peer.verifyAccount()
         do {
             let arguments = ProcessInfo.processInfo.arguments
-            if arguments.contains("--sharing-qa-empty") { return }
+            if arguments.contains("--sharing-qa-empty") {
+                if arguments.contains("--sharing-qa-received-invitation") { receivedInvitationID = UUID() }
+                return
+            }
             var bob = SharingFixtures.bob
             if arguments.contains("--sharing-qa-long-name") { bob.displayName = "Alexandria Charlotte von Winterthur" }
             let scopes: Set<SharingScope> = arguments.contains("--sharing-qa-outgoing-request") ? [.history]
@@ -800,6 +838,7 @@ extension SharingRuntime {
                 try await peer.changeScopes(connectionID: id, to: [.today, .history])
                 await coordinator.refresh()
             }
+            if arguments.contains("--sharing-qa-received-invitation") { receivedInvitationID = id }
         } catch { actionError = String(localized: "Sample sharing could not be loaded.") }
         #endif
     }

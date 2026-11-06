@@ -1264,6 +1264,41 @@
         }
       }
     },
+    "Add sharing options?" : {
+      "comment" : "Calorie card sharing scope selection.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add sharing options?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weitere Freigaben hinzufügen?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Añadir opciones para compartir?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter des options de partage ?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加共享选项？"
+          }
+        }
+      }
+    },
     "Additional for both of you: %@" : {
       "comment" : "Sharing invitation and consent clarity.",
       "extractionState" : "stale",
@@ -8418,6 +8453,41 @@
         }
       }
     },
+    "Previous 6 Days and Streak" : {
+      "comment" : "Calorie card sharing scope selection.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Previous 6 Days and Streak"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorherige 6 Tage und Serie"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 días anteriores y racha"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 jours précédents et série"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前6天和连续达标天数"
+          }
+        }
+      }
+    },
     "Previous 6 Days includes dates before this invitation." : {
       "comment" : "Calorie card sharing.",
       "extractionState" : "stale",
@@ -9679,6 +9749,41 @@
         }
       }
     },
+    "Resume sharing" : {
+      "comment" : "Calorie card sharing request workflow.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume sharing"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen fortsetzen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reanudar el uso compartido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reprendre le partage"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复共享"
+          }
+        }
+      }
+    },
     "Resuming requires the other person's agreement." : {
       "comment" : "Calorie card sharing interface and consent.",
       "extractionState" : "stale",
@@ -10662,6 +10767,76 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "分享邀请…"
+          }
+        }
+      }
+    },
+    "Share streaks" : {
+      "comment" : "Calorie card sharing scope selection.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share streaks"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serie teilen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir rachas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager les séries"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "共享连续达标天数"
+          }
+        }
+      }
+    },
+    "Share streaks?" : {
+      "comment" : "Calorie card sharing scope selection.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share streaks?"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serie teilen?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Compartir rachas?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager les séries ?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "共享连续达标天数？"
           }
         }
       }
@@ -12382,6 +12557,41 @@
     "Switch weight graph period" : {
 
     },
+    "The full streak can extend beyond Previous 6 Days." : {
+      "comment" : "Calorie card sharing scope selection.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The full streak can extend beyond Previous 6 Days."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die vollständige Serie kann über die vorherigen 6 Tage hinausgehen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La racha completa puede abarcar más de los 6 días anteriores."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La série complète peut dépasser les 6 jours précédents."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完整的连续达标天数可能超过前6天。"
+          }
+        }
+      }
+    },
     "The other iPhone must finish preparing this invitation. Pull down to try again. Calorie sharing has not started." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -13342,6 +13552,41 @@
         }
       }
     },
+    "Today and Streak" : {
+      "comment" : "Calorie card sharing scope selection.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today and Streak"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute und Serie"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoy y racha"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd'hui et série"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天和连续达标天数"
+          }
+        }
+      }
+    },
     "Today can include a midnight estimate. Each card keeps its sender's units and colors." : {
       "comment" : "Sharing sheet summary and detailed explanation.",
       "localizations" : {
@@ -13501,6 +13746,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "今天，%@"
+          }
+        }
+      }
+    },
+    "Today, Previous 6 Days and Streak" : {
+      "comment" : "Calorie card sharing scope selection.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today, Previous 6 Days and Streak"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute, Vorherige 6 Tage und Serie"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoy, 6 días anteriores y racha"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aujourd'hui, 6 jours précédents et série"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天、前6天和连续达标天数"
           }
         }
       }

@@ -146,6 +146,14 @@ struct SharingConnection: Codable, Equatable, Sendable, Identifiable {
     /// Acceptance time for the current uninterrupted period with at least one shared scope.
     var sharingStartedAt: Date?
 
+    /// First accepted consent, retained across pauses and reconstructed by ledger replay.
+    var firstAcceptedAt: Date?
+
+    var hasAcceptedSharing: Bool { firstAcceptedAt != nil || sharingStartedAt != nil || !grants.isEmpty }
+
+    /// Established relationships and unanswered requests must use their existing connection.
+    var blocksNewInvitation: Bool { !removed && (hasAcceptedSharing || proposal != nil) }
+
     /// Whether consent has ended for this connection.
     var removed = false
 
@@ -469,7 +477,7 @@ enum SharingConsent {
         }
         var connection = existing ?? mutation.connection
         // Only accepted consent events establish a sharing start, never invitation metadata.
-        if existing == nil { connection.sharingStartedAt = nil }
+        if existing == nil { connection.sharingStartedAt = nil; connection.firstAcceptedAt = nil }
         guard connection.id == mutation.connection.id,
               connection.containerIdentifier == mutation.connection.containerIdentifier,
               connection.inviter.id == mutation.connection.inviter.id,
@@ -495,6 +503,7 @@ enum SharingConsent {
                   proposal.recipientID == mutation.actorID,
                   proposal.baseRevision + 1 == connection.revision else { throw SharingError.invalidProposal }
             guard proposal.expiresAt > now else { throw SharingError.proposalExpired }
+            if connection.firstAcceptedAt == nil { connection.firstAcceptedAt = mutation.createdAt }
             if connection.scopes.isEmpty { connection.sharingStartedAt = mutation.createdAt }
             for scope in proposal.scopes.subtracting(connection.scopes) {
                 connection.grants.append(SharingGrant(scope: scope, generation: proposal.id))

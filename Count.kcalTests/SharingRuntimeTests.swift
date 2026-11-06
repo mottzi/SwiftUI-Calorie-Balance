@@ -57,6 +57,81 @@ struct SharingRuntimeTests {
     }
 
     @Test
+    func neverAcceptedRequestsStayOutOfPeopleAndAllowAnotherInvitation() async throws {
+        for decline in [false, true] {
+            let session = try RuntimeSession()
+            defer { session.cleanUp() }
+            await session.alice.verifyAccount()
+            let id = try await session.alice.propose(to: SharingFixtures.bob)
+            #expect(session.runtime.people.isEmpty)
+            #expect(session.alice.connections.first?.blocksNewInvitation == true)
+            let proposal = try #require(session.alice.connections.first?.proposal)
+            if decline {
+                await session.bob.refresh()
+                try await session.bob.decline(connectionID: id, proposalID: proposal.id)
+                await session.alice.refresh()
+            } else {
+                try await session.alice.cancel(connectionID: id, proposalID: proposal.id)
+            }
+            #expect(session.runtime.people.isEmpty)
+            // The native CloudKit binding and coordinator share this duplicate rule.
+            #expect(session.alice.connections.first?.blocksNewInvitation == false)
+            let next = try await session.alice.propose(to: SharingFixtures.bob)
+            #expect(next != id)
+            #expect(session.runtime.people.isEmpty)
+        }
+    }
+
+    @Test
+    func genuinelyPausedPeopleRemainVisible() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        let id = try await session.connect(scopes: [.today])
+        try await session.alice.changeScopes(connectionID: id, to: [])
+        #expect(session.runtime.people.map(\.id) == [id])
+        #expect(session.alice.connections.first?.firstAcceptedAt != nil)
+        #expect(session.alice.connections.first?.blocksNewInvitation == true)
+        try await session.alice.remove(connectionID: id)
+        #expect(session.server.connections[id]?.blocksNewInvitation == false)
+    }
+
+    @Test
+    func reopenedInvitationRoutesAcceptedPausedAndRemovedConnections() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        let id = try await session.connect(scopes: [.today])
+        session.runtime.receivedInvitationID = id
+        #expect(session.runtime.receivedInvitationState == .connected(id))
+        try await session.alice.changeScopes(connectionID: id, to: [])
+        #expect(session.runtime.receivedInvitationState == .connected(id))
+        await session.bob.refresh()
+        try await session.bob.changeScopes(connectionID: id, to: [.history])
+        await session.alice.refresh()
+        #expect(session.runtime.receivedInvitationState == .request(id))
+        let proposal = try #require(session.alice.connections.first?.proposal)
+        try await session.alice.decline(connectionID: id, proposalID: proposal.id)
+        #expect(session.runtime.receivedInvitationState == .connected(id))
+        try await session.alice.remove(connectionID: id)
+        #expect(session.runtime.receivedInvitationState == .unavailable)
+        session.runtime.receivedInvitationID = UUID()
+        #expect(session.runtime.receivedInvitationState == .unavailable)
+    }
+
+    @Test
+    func reopenedDeclinedInitialInvitationIsUnavailable() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        await session.bob.verifyAccount()
+        let id = try await session.bob.propose(to: SharingFixtures.alice)
+        await session.alice.refresh()
+        session.runtime.receivedInvitationID = id
+        #expect(session.runtime.receivedInvitationState == .request(id))
+        let proposal = try #require(session.alice.connections.first?.proposal)
+        try await session.alice.decline(connectionID: id, proposalID: proposal.id)
+        #expect(session.runtime.receivedInvitationState == .unavailable)
+    }
+
+    @Test
     func senderStreakUsesFullHistoryAndExcludedDaysAndClearsWhenHidden() async throws {
         let settings = Settings.shared
         let original = (settings.hideCalorieStatusIcons, settings.balanceGoal, settings.weightGoal,

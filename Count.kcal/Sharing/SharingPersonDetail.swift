@@ -23,11 +23,6 @@ struct SharingPersonDetail: View {
 
     private var peerName: String { connection?.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "" }
 
-    private var hasPendingOutgoingRequest: Bool {
-        guard let proposal = connection?.proposal, let identityID = coordinator.identity?.id else { return false }
-        return proposal.recipientID != identityID
-    }
-
     private var snapshots: [SharedSnapshotEnvelope] {
         let today = coordinator.snapshots(connectionID: connectionID, scope: .today)
         let history = coordinator.snapshots(connectionID: connectionID, scope: .history)
@@ -42,26 +37,19 @@ struct SharingPersonDetail: View {
                     if coordinator.pendingRevocations.contains(where: { $0.connectionID == connectionID }) {
                         SharingPendingRemovalView(runtime: runtime, coordinator: coordinator, connectionID: connectionID)
                     }
-                    if let proposal = connection.proposal, proposal.recipientID == coordinator.identity?.id {
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text(connection.requestTitle).font(.headline)
-                            if !connection.scopes.isEmpty {
-                                Text("\(Text(connection.scopes.sharingDescription)) stays shared while you wait.")
-                                    .font(.subheadline).foregroundStyle(.secondary)
-                            } else {
-                                Text("Sharing remains paused until the request is accepted.")
-                                    .font(.subheadline).foregroundStyle(.secondary)
-                            }
-                            Button("Review request") { showsRequest = true }
-                                .buttonStyle(.borderedProminent).controlSize(.large)
-                        }
-                    }
-
                     if connection.scopes.isSuperset(of: [.today, .history]), !snapshots.isEmpty {
                         SharedWeekBalanceChart(snapshots: snapshots.map(\.snapshot))
                             .padding(.horizontal, 4)
                     }
-                    if snapshots.isEmpty {
+                    if snapshots.isEmpty, let proposal = connection.proposal,
+                       proposal.recipientID == coordinator.identity?.id {
+                        ContentUnavailableView {
+                            Label(connection.requestTitle, systemImage: "person.crop.circle.badge.clock")
+                        } actions: {
+                            Button("Review request") { showsRequest = true }
+                                .buttonStyle(.borderedProminent)
+                        }
+                    } else if snapshots.isEmpty {
                         ContentUnavailableView {
                             Label(connection.sharingStatus(coordinator: coordinator), systemImage: "person.crop.circle.badge.clock")
                         } description: {
@@ -168,9 +156,9 @@ extension SharingPersonDetail {
                     showsPermissions = true
                 } label: {
                     Label("Settings", systemImage: "slider.horizontal.3")
-                    if hasPendingOutgoingRequest {
-                        Text("Request awaiting approval")
-                    }
+                }
+                if connection?.proposal?.recipientID == coordinator.identity?.id {
+                    Button("Review request", systemImage: "envelope") { showsRequest = true }
                 }
                 if connection?.scopes.isEmpty == false {
                     Button("Pause", systemImage: "pause.circle") { confirmsPause = true }
@@ -183,9 +171,7 @@ extension SharingPersonDetail {
                     .foregroundStyle(Color("TextColor"))
                     .fontWeight(.medium)
             }
-            .badge(hasPendingOutgoingRequest ? Text("") : nil)
             .accessibilityLabel("Settings")
-            .accessibilityValue(hasPendingOutgoingRequest ? Text("Request awaiting approval") : Text(""))
             .disabled(connection == nil || runtime.isWorking)
         }
     }

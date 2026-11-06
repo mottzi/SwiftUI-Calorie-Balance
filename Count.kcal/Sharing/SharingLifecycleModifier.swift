@@ -51,26 +51,52 @@ struct SharingLifecycleModifier: ViewModifier {
 }
 
 /// Shows imported invitation progress and opens consent after the proposal arrives.
-private struct SharingReceivedInvitationView: View {
+struct SharingReceivedInvitationView: View {
 
     @Environment(\.dismiss) private var dismiss
 
     let runtime: SharingRuntime
+    @State private var requestConnectionID: UUID?
+
+    private var incomingConnectionID: UUID? {
+        guard case .request(let id) = runtime.receivedInvitationState else { return nil }
+        return id
+    }
 
     var body: some View {
-        if let coordinator = runtime.coordinator,
-           let connection = coordinator.connections.first(where: { $0.id == runtime.receivedInvitationID }),
-           connection.proposal?.recipientID == coordinator.identity?.id {
-            SharingRequestConsentView(runtime: runtime, coordinator: coordinator, connectionID: connection.id)
-        } else {
-            NavigationStack {
-                SharingOverviewView(runtime: runtime)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Done") { dismiss() }
+        Group {
+            if let coordinator = runtime.coordinator, let requestConnectionID = requestConnectionID ?? incomingConnectionID {
+                SharingRequestConsentView(runtime: runtime, coordinator: coordinator, connectionID: requestConnectionID)
+            } else if let coordinator = runtime.coordinator, case .connected(let id) = runtime.receivedInvitationState {
+                NavigationStack {
+                    SharingPersonDetail(runtime: runtime, coordinator: coordinator, connectionID: id)
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Done") { dismiss() }
+                            }
+                        }
+                }
+            } else {
+                NavigationStack {
+                    Group {
+                        if runtime.receivedInvitationState == .pending {
+                            ProgressView("Finishing invitation…")
+                        } else {
+                            ContentUnavailableView("This request is no longer available", systemImage: "person.crop.circle.badge.clock")
                         }
                     }
+                        .navigationTitle("Sharing request")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Done") { dismiss() }
+                            }
+                        }
+                }
             }
+        }
+        .onChange(of: incomingConnectionID, initial: true) {
+            if requestConnectionID == nil { requestConnectionID = incomingConnectionID }
         }
     }
 

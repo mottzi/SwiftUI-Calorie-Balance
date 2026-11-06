@@ -32,6 +32,12 @@ struct CountApp: App {
                     Color.clear
                 } else if ProcessInfo.processInfo.arguments.contains("--sharing-qa") {
                     NavigationStack { SharingOverviewView(runtime: .shared) }
+                        .sheet(isPresented: Binding(
+                            get: { SharingRuntime.shared.receivedInvitationID != nil },
+                            set: { if !$0 { SharingRuntime.shared.receivedInvitationID = nil } }
+                        )) {
+                            SharingReceivedInvitationView(runtime: .shared)
+                        }
                         .environmentObject(AppSettings)
                 } else if ProcessInfo.processInfo.arguments.contains("--weight-chart-qa") {
                     WeightChartGallery()
