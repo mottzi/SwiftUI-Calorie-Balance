@@ -35,6 +35,35 @@ struct SharingRuntimeTests {
     }
 
     @Test
+    func localPermissionActionsFinishBeforeCloudRefresh() async throws {
+        for action in ["pause", "remove", "cancel"] {
+            let session = try RuntimeSession()
+            defer { session.cleanUp() }
+            let id: UUID
+            if action == "cancel" {
+                await session.alice.verifyAccount()
+                id = try await session.alice.propose(to: SharingFixtures.bob)
+            } else {
+                id = try await session.connect(scopes: [.today])
+            }
+            let proposalID = session.alice.connections.first?.proposal?.id
+            session.server.pauseNextFetch = true
+            let saved = session.runtime.applyPermissionChange(on: session.alice) {
+                switch action {
+                case "pause": try session.alice.enqueueScopeChange(connectionID: id, to: [])
+                case "remove": try session.alice.enqueueRemoval(connectionID: id)
+                default: try session.alice.enqueueCancellation(connectionID: id, proposalID: try #require(proposalID))
+                }
+            }
+            await session.server.fetchGate.waitUntilSuspended()
+            #expect(saved)
+            #expect(!session.runtime.isWorking)
+            session.server.fetchGate.resume()
+            await session.alice.refresh(.changed)
+        }
+    }
+
+    @Test
     func failedProfileUpdateSurvivesRelaunchAndRetriesLatestName() async throws {
         let session = try RuntimeSession(profileNameUpdate: { _ in throw SharingError.unavailable })
         defer { session.cleanUp() }

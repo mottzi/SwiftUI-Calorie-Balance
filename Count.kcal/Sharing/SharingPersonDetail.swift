@@ -99,16 +99,18 @@ struct SharingPersonDetail: View {
         }
         .confirmationDialog("Remove \(peerName)?", isPresented: $confirmsRemoval, titleVisibility: .visible) {
             Button("Remove person", role: .destructive) {
-                Task {
-                    if await runtime.perform(on: coordinator, { try await coordinator.remove(connectionID: connectionID) }) { dismiss() }
-                }
+                if runtime.applyPermissionChange(on: coordinator, {
+                    try coordinator.enqueueRemoval(connectionID: connectionID)
+                }) { dismiss() }
             }
         } message: {
             Text("Sharing ends for both of you. Reconnecting needs a new invitation. Removing iCloud access may take longer. Saved copies cannot be erased.")
         }
         .confirmationDialog("Pause sharing with \(peerName)?", isPresented: $confirmsPause, titleVisibility: .visible) {
             Button("Pause sharing") {
-                Task { await runtime.perform(on: coordinator) { try await coordinator.changeScopes(connectionID: connectionID, to: []) } }
+                runtime.applyPermissionChange(on: coordinator) {
+                    try coordinator.enqueueScopeChange(connectionID: connectionID, to: [])
+                }
             }
         } message: {
             Text("Sharing pauses for both of you. Resuming needs the other person's agreement. Removing iCloud access may take longer. Saved copies cannot be erased.")
@@ -170,7 +172,7 @@ extension SharingPersonDetail {
                     .fontWeight(.medium)
             }
             .accessibilityLabel("Settings")
-            .disabled(connection == nil || runtime.isWorking)
+            .disabled(connection == nil)
         }
     }
 
@@ -308,7 +310,7 @@ private struct SharingPermissionsView: View {
     private var connection: SharingConnection? { coordinator.connections.first { $0.id == connectionID } }
     private var hasOutgoingRequest: Bool { draft.proposal?.proposerID == coordinator.identity?.id }
     private var isStale: Bool { connection.map { !draft.matches($0) } ?? true }
-    private var actionIsDisabled: Bool { runtime.isWorking || !draft.isEdited || isStale }
+    private var actionIsDisabled: Bool { !draft.isEdited || isStale }
 
     private var actionTitle: LocalizedStringResource {
         if hasOutgoingRequest && scopes == originalScopes { return "Cancel request" }
@@ -376,7 +378,6 @@ private struct SharingPermissionsView: View {
                         }
                         .padding(.vertical, 4)
                         .background(.background.secondary, in: .rect(cornerRadius: 24))
-                        .disabled(runtime.isWorking)
                         if draft.goals && !draft.today && !draft.history {
                             Text("Only your full streak is shared.")
                                 .font(.footnote).foregroundStyle(.secondary).padding(.horizontal, 16)
@@ -536,7 +537,6 @@ private struct SharingPendingRequestSettings: View {
                 .buttonStyle(.borderless)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 4)
-                .disabled(runtime.isWorking)
             }
             .background(.background.secondary, in: .rect(cornerRadius: 24))
             Group {

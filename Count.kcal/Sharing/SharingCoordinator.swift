@@ -242,9 +242,14 @@ final class SharingCoordinator {
 
     /// Hides the connection locally and queues both revocation directions.
     func remove(connectionID: UUID) async throws {
+        try enqueueRemoval(connectionID: connectionID)
+        await refresh(.changed)
+    }
+
+    /// Hides the person and persists access removal before any network work.
+    func enqueueRemoval(connectionID: UUID) throws {
         let (connection, account) = try context(connectionID)
         try enqueueReduction(connection: connection, to: [], account: account, removing: true)
-        await refresh(.changed)
     }
 
     /// Retries pending sharing work through a refresh.

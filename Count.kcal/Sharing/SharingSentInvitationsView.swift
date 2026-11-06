@@ -58,17 +58,16 @@ struct SharingSentInvitationsView: View {
                     Text(proposal.scopes.sharingDescription).foregroundStyle(.secondary)
                     Text("Waiting for acceptance").font(.subheadline).foregroundStyle(.secondary)
                     Button("Cancel request", role: .destructive) {
-                        Task {
-                            let cancelled = await runtime.perform(on: coordinator) {
-                                try await coordinator.cancel(connectionID: connection.id, proposalID: proposal.id)
-                            }
-                            showError(for: connection.id, failed: !cancelled)
-                            if cancelled { runtime.clearInvitation() }
+                        let cancelled = runtime.applyPermissionChange(on: coordinator) {
+                            try coordinator.enqueueCancellation(connectionID: connection.id, proposalID: proposal.id)
+                        }
+                        showError(for: connection.id, failed: !cancelled)
+                        if cancelled, runtime.invitation?.id == connection.id || runtime.isFixture {
+                            runtime.clearInvitation()
                         }
                     }
                     .buttonStyle(.borderless)
                     .frame(minHeight: 44)
-                    .disabled(runtime.isWorking)
                 }
                 if failedInvitationID == connection.id, let errorMessage {
                     Text(errorMessage).font(.footnote).foregroundStyle(.secondary)
