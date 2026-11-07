@@ -66,14 +66,17 @@ final class Streak {
         excludedDays = Set(choices.filter { $0.value == .excluded }.keys)
     }
 
+    /// Completed days in the current streak, including saved exclusions.
+    var currentRange: Range<Date>? {
+        guard hasLoadedCount, let result else { return nil }
+        let calendar = Calendar.current
+        let start = calendar.date(byAdding: .day, value: -streaks, to: result.key.today)!
+        return start..<result.key.today
+    }
+
     /// Includes only completed days that contribute to the count.
     func contains(_ date: Date) -> Bool {
-
-        guard hasLoadedCount, let result else { return false }
-        let calendar = Calendar.current
-        let day = calendar.startOfDay(for: date)
-        let start = calendar.date(byAdding: .day, value: -streaks, to: result.key.today)!
-        return (start..<result.key.today).contains(day)
+        currentRange?.contains(Calendar.current.startOfDay(for: date)) ?? false
     }
 
     /// Discards the result and prevents a pending recount from publishing it again.

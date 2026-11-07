@@ -268,6 +268,8 @@ struct WeekBalanceChart: View {
     var excludedDayIDs: Set<String> = []
 
     var body: some View {
+        let streakRange = streak.currentRange
+        let calendar = Calendar.current
         WeekBalanceChartContent(
             dataPoints: dataPoints.map { point in
                 let energy = point.isTodayPage ? point.sample.midnight : point.sample.now
@@ -280,7 +282,7 @@ struct WeekBalanceChart: View {
                         isExcluded: excludedDayIDs.contains(AppDatabase.recordID(for: point.id, sampleData: point.sample.isSampleData)),
                         burned: settings.burnedColor, consumed: settings.consumedColor
                     ),
-                    isInCurrentStreak: streak.contains(point.id),
+                    isInCurrentStreak: streakRange?.contains(calendar.startOfDay(for: point.id)) ?? false,
                     isLoaded: point.hasLoadedSnapshot
                 )
             },
@@ -314,17 +316,17 @@ struct WeekBalanceChartContent: View {
     var selectDay: ((Date) -> Void)? = nil
 
     private var hasLoadedWeek: Bool { dataPoints.allSatisfy(\.isLoaded) }
-    private var energyBalances: [EnergyBalance] { dataPoints.map(\.energy) }
-    private var maxEnergy: Int { energyBalances.map { abs($0.balance) }.max() ?? 0 }
 
     private func isDaySelected(barDay: Date) -> Bool {
         calendar.isDate(barDay, inSameDayAs: selectedDay)
     }
 
     var body: some View {
+        let energyBalances = dataPoints.map(\.energy)
+        let maxEnergy = energyBalances.map { abs($0.balance) }.max() ?? 0
         HStack(spacing: 0) {
             ForEach(dataPoints, id: \.id) { point in
-                dayColumn(point)
+                dayColumn(point, maxEnergy: maxEnergy)
             }
         }
         .background {
@@ -384,16 +386,16 @@ struct WeekBalanceChartContent: View {
     }
 
     @ViewBuilder
-    private func dayColumn(_ point: Day) -> some View {
+    private func dayColumn(_ point: Day, maxEnergy: Int) -> some View {
         if let selectDay {
-            Button { selectDay(point.id) } label: { dayContent(point) }
+            Button { selectDay(point.id) } label: { dayContent(point, maxEnergy: maxEnergy) }
                 .buttonStyle(.plain)
         } else {
-            dayContent(point)
+            dayContent(point, maxEnergy: maxEnergy)
         }
     }
 
-    private func dayContent(_ point: Day) -> some View {
+    private func dayContent(_ point: Day, maxEnergy: Int) -> some View {
         VStack(spacing: 6) {
             WeekDayLabel(
                 date: point.id,
