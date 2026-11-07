@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-07",
+  "status": "finished",
+  "published": false,
+  "content": "Sharing overview with synthetic Alice under Me and five people: Lea, Jonas, Maya, Noah, and Emma. Includes calorie balance rings, streaks, and Invite. Emma uses standard theme 4, blue and gold.",
+  "composition_provenance": "/Users/berken/Development/Swift/Count.kcal/Marketing/2026-11-sharing-app-store/source/composition-provenance.json",
+  "is_single_unmodified_screenshot": false,
+  "title": "Share with friends",
+  "position": 4,
+  "locale": "en-US",
+  "file": "/Users/berken/Development/Swift/Count.kcal/Marketing/2026-11-sharing-app-store/exports/en-US/04-sharing-overview.png",
+  "size": [
+    1206,
+    2622
+  ],
+  "mode": "RGB",
+  "capture": "/Users/berken/Development/Swift/Count.kcal/Marketing/2026-11-sharing-app-store/captures/sharing-overview-composed.png",
+  "capture_size": [
+    1170,
+    2532
+  ],
+  "capture_sha256": "06ea62add1221e903d2400e23cc34fb7b5d24045b4c03e8433026d5083d42bc5",
+  "frame": "/Users/berken/Development/Swift/Count.kcal/Marketing/2026-10-today/source/iphone-18-pro-silver-frame.png",
+  "frame_sha256": "58e2ab0318adbf6dc5bed2e234383ed2bb2fa257ce0c93cea20a86c595fb5f16",
+  "device_bounds_exclusive": [
+    60,
+    323,
+    1146,
+    2562
+  ],
+  "heading_font": "SF Pro Display variable, weight450, size96",
+  "heading_top": 104,
+  "heading_baseline": 173,
+  "operation": "Uniformly fit the supplied screen capture inside the existing silver frame. Match the approved front-phone size, position, margins, and heading typography.",
+  "sha256": "12c38bab1f320e7cdff2e5f9c97bc4699ab89fb42e5a79e4747fc4ab9de2c0f5"
+}

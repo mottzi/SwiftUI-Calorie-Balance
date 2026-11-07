@@ -1,0 +1,54 @@
+{
+  "description": "Native Sharing overview header, synthetic Alice profile and Invite control from Simulator B on 7 November; four synthetic sample rows from the prepared 6 November capture plus Emma, an added marketing row using standard theme 4. The rows replace the fixture empty state. Real account and connection rows are excluded.",
+  "is_single_unmodified_screenshot": false,
+  "sources": [
+    {
+      "path": "/Users/berken/Development/Swift/Count.kcal/Marketing/2026-11-sharing-app-store/captures/sharing-overview-qa-native.png",
+      "sha256": "679deb6d5d952ee4d699eebba967f193e14380aae30328bddc5a0ef1485199ea"
+    },
+    {
+      "path": "/Users/berken/Development/Swift/Count.kcal/Marketing/2026-11-sharing-app-store/captures/sharing-sample-people-2026-11-06.png",
+      "sha256": "ed3856a16fe7e1b2358b9bad14fa66da4eba78fa6eac9c3a50c40be03492de11"
+    }
+  ],
+  "native_header_crop": [
+    0,
+    0,
+    1170,
+    893
+  ],
+  "sample_rows_position": [
+    40,
+    893
+  ],
+  "invite_crop": [
+    400,
+    1740,
+    770,
+    1940
+  ],
+  "invite_position": [
+    400,
+    2258
+  ],
+  "me": "Alice",
+  "people": [
+    "Lea",
+    "Jonas",
+    "Maya",
+    "Noah",
+    "Emma"
+  ],
+  "added_row": {
+    "name": "Emma",
+    "theme_number": 4,
+    "burned_srgb": "#5B9EDB",
+    "consumed_srgb": "#F4B55D",
+    "balance": "320 kcal deficit",
+    "streak_days": 6,
+    "source": "Native Maya row geometry with theme mapping and SF Pro Text labels; composed marketing data, not a new app capture."
+  },
+  "all_people_synthetic": true,
+  "values_and_text_redrawn": "Only the added Emma row name, balance and streak count. Existing rows preserved.",
+  "output": "/Users/berken/Development/Swift/Count.kcal/Marketing/2026-11-sharing-app-store/captures/sharing-overview-composed.png"
+}
