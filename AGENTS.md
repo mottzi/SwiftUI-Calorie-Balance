@@ -8,7 +8,7 @@ The downloads folder is `/Users/berken/Library/Mobile Documents/com~apple~CloudD
 
 ## App verification handoff
 
-After iOS app changes, install and launch the latest build on Sharing Cloud B before finishing the task, so the user can verify it immediately. Leave the app open on the affected screen, preserve its data and Apple Account sign-in, and close owned debugger and log-capture sessions.
+After iOS app changes, install and launch the latest build on both Sharing Cloud B and the user's physical iPhone before finishing the task, so the user can verify it immediately. Leave the simulator app open on the affected screen, preserve both devices' data, Apple Account sign-ins, and existing sharing connection, and close owned debugger and log-capture sessions.
 
 ## Builds
 
