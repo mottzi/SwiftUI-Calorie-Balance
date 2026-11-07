@@ -112,6 +112,7 @@ private struct DashboardSteps: View {
                 consumedValue: day.sample.steps,
                 goalValue: settings.stepsGoal,
                 unit: "",
+                numberFormat: .number,
                 color: settings.burnedColor,
                 graphHeight: 10,
                 isLoading: !day.hasLoadedSnapshot

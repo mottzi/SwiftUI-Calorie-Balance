@@ -13,6 +13,7 @@ struct ReachableView: View {
     private let goalValue: Int
     private let key: LocalizedStringKey
     private let unit: String
+    private let numberFormat: IntegerFormatStyle<Int>
     private let color: Color
     private let graphHeight: CGFloat
     private let isLoading: Bool
@@ -23,6 +24,7 @@ struct ReachableView: View {
         consumedValue: Int,
         goalValue: Int,
         unit: String = "g",
+        numberFormat: IntegerFormatStyle<Int> = .number.grouping(.never),
         color: Color = Color("SecondaryTextColor"),
         graphHeight: CGFloat = 18,
         isLoading: Bool = false
@@ -32,6 +34,7 @@ struct ReachableView: View {
         self.consumedValue = consumedValue
         self.goalValue = goalValue
         self.unit = unit
+        self.numberFormat = numberFormat
         self.color = color
         self.graphHeight = graphHeight
         self.isLoading = isLoading
@@ -44,6 +47,7 @@ struct ReachableView: View {
                 consumedValue: consumedValue,
                 goalValue: goalValue,
                 unit: unit,
+                numberFormat: numberFormat,
                 animatesValues: context != .app,
                 isLoading: isLoading
             )
@@ -70,6 +74,7 @@ private struct ReachableHeader: View {
     let consumedValue: Int
     let goalValue: Int
     let unit: String
+    let numberFormat: IntegerFormatStyle<Int>
     let animatesValues: Bool
     let isLoading: Bool
 
@@ -102,7 +107,7 @@ private struct ReachableHeader: View {
         if isLoading {
             Text(
                 verbatim: goalValue > 0
-                    ? "100 / \(goalValue.formatted(.number.grouping(.never))) \(unit)"
+                    ? "100 / \(goalValue.formatted(numberFormat)) \(unit)"
                     : "100 \(unit)"
             )
                 .foregroundStyle(Color("SecondaryTextColor"))
@@ -110,12 +115,12 @@ private struct ReachableHeader: View {
         } else if goalValue > 0 {
             Text(
                 """
-                \(consumedValue, format: .number.grouping(.never)) / \
-                \(goalValue, format: .number.grouping(.never)) \(unit)
+                \(consumedValue, format: numberFormat) / \
+                \(goalValue, format: numberFormat) \(unit)
                 """
             )
         } else {
-            Text("\(consumedValue, format: .number.grouping(.never)) \(unit)")
+            Text("\(consumedValue, format: numberFormat) \(unit)")
         }
     }
 
