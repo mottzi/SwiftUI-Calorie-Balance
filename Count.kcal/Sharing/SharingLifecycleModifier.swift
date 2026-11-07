@@ -29,7 +29,7 @@ struct SharingLifecycleModifier: ViewModifier {
             }
             .onChange(of: dayChoices) { runtime.schedulePublication(settings: settings) }
             .onChange(of: HealthRepository.shared.revision) { runtime.schedulePublication(settings: settings) }
-            .onReceive(settings.objectWillChange) { _ in runtime.schedulePublication(settings: settings) }
+            .onChange(of: publicationSettings) { runtime.schedulePublication(settings: settings) }
             .onReceive(
                 NotificationCenter.default.publisher(for: .NSSystemTimeZoneDidChange)
             ) { _ in runtime.schedulePublication(settings: settings) }
@@ -48,6 +48,24 @@ struct SharingLifecycleModifier: ViewModifier {
             }
     }
 
+    /// Compare published inputs, not every notification from the settings object.
+    private var publicationSettings: PublicationSettings {
+        PublicationSettings(
+            policy: HealthSnapshotPolicy(settings: settings),
+            burned: settings.burnedColor,
+            consumed: settings.consumedColor,
+            background: settings.appBackground,
+            labelBackground: settings.showCalorieLabelBackgrounds ? settings.calorieLabelBackground : nil
+        )
+    }
+
+    private struct PublicationSettings: Equatable {
+        let policy: HealthSnapshotPolicy
+        let burned: Color
+        let consumed: Color
+        let background: Settings.AppBackgrounds
+        let labelBackground: Settings.AppBackgrounds?
+    }
 }
 
 /// Shows imported invitation progress and opens consent after the proposal arrives.
