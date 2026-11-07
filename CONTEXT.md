@@ -14,4 +14,6 @@ Permission sheets complete after saving the decision to the existing durable mut
 
 Invitation preparation and publisher selection disable only their related actions. Sheets remain dismissible, and an abandoned invitation cannot present a late result. Display names save locally with one pending profile value; writes are serialized, the latest name wins, and ordinary refresh or reconnect retries failures after relaunch.
 
+Apple Watch receives a read-only projection of permitted sharing cards through the existing WatchConnectivity application context. It retains sender units, colors, dates, and goal results, and applies the viewer's icon preference. The watch checks sender date windows locally while disconnected. Invitations, new consent, and resuming sharing stay on iPhone. Pausing creates a persistent watch request; the phone checks account and consent revision, then uses the existing durable reduction queue. The watch distinguishes a requested pause from a saved pause and pending iCloud access removal.
+
 See `Docs/calorie-card-sharing-spec.md`, `Docs/calorie-card-sharing-verification.md`, and `Docs/adr/0001-bind-email-invitations-after-cloudkit-acceptance.md`. Local implementation issues live in `.scratch/calorie-card-sharing/issues/`.

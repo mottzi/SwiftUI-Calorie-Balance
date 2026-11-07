@@ -334,6 +334,7 @@ final class SharingRuntime {
         guard !isFixture, defaults.bool(forKey: "sharing.used") else { return .noData }
         let before = coordinator?.state
         await refreshState(.changed)
+        Connectivity.shared.sendSettingsContext()
         if coordinator?.refreshFailure != nil { return .failed }
         return before == coordinator?.state ? .noData : .newData
     }

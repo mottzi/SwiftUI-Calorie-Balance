@@ -12,6 +12,10 @@ final class Connectivity: NSObject {
     private(set) var lastReceivedSettingsContext: Date? = nil
     private(set) var receivedWeightHistory: WeightHistorySnapshot?
     private var latestWeightHistory: WeightHistorySnapshot?
+    private(set) var receivedSharingData: Data?
+    private(set) var receivedSharingReply: Data?
+    private(set) var isPhoneReachable = false
+    private(set) var isActivated = false
 
     private override init() {
         super.init()
@@ -40,9 +44,20 @@ extension Connectivity: WCSessionDelegate {
     @MainActor
     /// Sends the latest phone settings after a local change or session activation.
     func sendSettingsContext() {
+        #if !WIDGET_EXTENSION
+        // Apply consent changes before deriving any outgoing presentation.
+        WatchSharingPhone.shared.processPending(runtime: .shared)
+        #endif
         guard WCSession.default.activationState == .activated,
               WCSession.default.isWatchAppInstalled else { return }
-        let snapshot = WatchSettingsSnapshot(settings: .shared, weightHistory: latestWeightHistory)
+        var snapshot = WatchSettingsSnapshot(settings: .shared, weightHistory: latestWeightHistory)
+        #if !WIDGET_EXTENSION
+        if let sharing = WatchSharingSnapshot(runtime: .shared, hidesGoalStatus: Settings.shared.hideCalorieStatusIcons) {
+            snapshot.sharing = try? PropertyListEncoder().encode(sharing)
+        } else {
+            snapshot.sharing = WatchSettingsSnapshot(context: WCSession.default.applicationContext)?.sharing
+        }
+        #endif
         guard let context = snapshot.context else { return }
 
         try? WCSession.default.updateApplicationContext(context)
@@ -53,6 +68,30 @@ extension Connectivity: WCSessionDelegate {
 
     nonisolated func sessionWatchStateDidChange(_ session: WCSession) {
         Task { @MainActor in sendSettingsContext() }
+    }
+
+    nonisolated func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
+        receiveWatchMessage(userInfo)
+    }
+
+    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        receiveWatchMessage(message)
+    }
+
+    private nonisolated func receiveWatchMessage(_ message: [String: Any]) {
+        #if !WIDGET_EXTENSION
+        let request = (message["sharingPause"] as? Data).flatMap {
+            try? PropertyListDecoder().decode(WatchSharingPauseRequest.self, from: $0)
+        }
+        let refresh = message["sharingRefresh"] as? Bool == true
+        Task { @MainActor in
+            if let request { WatchSharingPhone.shared.receive(request) }
+            if refresh {
+                await SharingRuntime.shared.refresh()
+                sendSettingsContext()
+            }
+        }
+        #endif
     }
     
     nonisolated func session(
@@ -78,6 +117,7 @@ extension Connectivity: WCSessionDelegate {
             withAnimation(.bouncy(duration: 0.6)) {
                 snapshot.apply(to: .shared)
                 self.receivedWeightHistory = snapshot.weightHistory
+                if let sharing = snapshot.sharing { self.receivedSharingData = sharing }
                 self.lastReceivedSettingsContext = .now
                 WidgetCenter.shared.reloadAllTimelines()
             }
@@ -90,9 +130,47 @@ extension Connectivity: WCSessionDelegate {
         error: Error?
     ) {
         guard activationState == .activated else { return }
+        Task { @MainActor in
+            self.isActivated = true
+            self.isPhoneReachable = session.isReachable
+        }
         let context = session.receivedApplicationContext
         guard !context.isEmpty else { return }
         self.session(session, didReceiveApplicationContext: context)
+    }
+
+    nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
+        let reachable = session.isReachable
+        Task { @MainActor in self.isPhoneReachable = reachable }
+    }
+
+    nonisolated func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
+        receivePhoneMessage(userInfo)
+    }
+
+    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        receivePhoneMessage(message)
+    }
+
+    private nonisolated func receivePhoneMessage(_ message: [String: Any]) {
+        guard let reply = message["sharingPauseReply"] as? Data else { return }
+        Task { @MainActor in self.receivedSharingReply = reply }
+    }
+
+    func requestSharingUpdate() {
+        guard WCSession.default.activationState == .activated, WCSession.default.isReachable else { return }
+        WCSession.default.sendMessage(["sharingRefresh": true], replyHandler: nil, errorHandler: nil)
+    }
+
+    /// Background delivery survives disconnection; reachable phones also get the request immediately.
+    func sendSharingPause(_ data: Data) {
+        let session = WCSession.default
+        guard session.activationState == .activated else { return }
+        let message: [String: Any] = ["sharingPause": data]
+        if !session.outstandingUserInfoTransfers.contains(where: { ($0.userInfo["sharingPause"] as? Data) == data }) {
+            session.transferUserInfo(message)
+        }
+        if session.isReachable { session.sendMessage(message, replyHandler: nil, errorHandler: nil) }
     }
 
 }

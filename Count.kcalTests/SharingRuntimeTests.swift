@@ -18,6 +18,92 @@ struct SharingRuntimeTests {
     }
 
     @Test
+    func pendingWatchPauseChangesObservedInputsBeforeSnapshotIsBuilt() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        let id = try await session.connect(scopes: [.today, .history, .goals])
+        let connection = try #require(session.alice.connections.first)
+        let request = WatchSharingPauseRequest(accountID: SharingFixtures.alice.id, connectionID: id,
+                                              revision: connection.revision)
+        session.defaults.set(try PropertyListEncoder().encode([request]), forKey: "sharing.watchPauses")
+        let phone = WatchSharingPhone(defaults: session.defaults)
+        let before = WatchSharingSource(session.alice)
+        session.server.pauseNextFetch = true
+
+        phone.processPending(runtime: session.runtime)
+        let snapshot = try #require(WatchSharingSnapshot(runtime: session.runtime, hidesGoalStatus: false))
+        let person = try #require(snapshot.people.first { $0.id == id })
+        #expect(person.scopes.isEmpty)
+        #expect(person.today == nil && person.history.isEmpty && person.streak == nil)
+        #expect(person.isRemovingAccess)
+        #expect(WatchSharingSource(session.alice) != before)
+        let after = WatchSharingSource(session.alice)
+        phone.processPending(runtime: session.runtime)
+        #expect(WatchSharingSource(session.alice) == after)
+
+        await session.server.fetchGate.waitUntilSuspended()
+        session.server.fetchGate.resume()
+        await session.alice.refresh(.changed)
+    }
+
+    @Test
+    func watchPauseUsesDurableQueueBeforeCloudReturns() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        let id = try await session.connect(scopes: [.today, .history, .goals])
+        let connection = try #require(session.alice.connections.first)
+        let request = WatchSharingPauseRequest(accountID: SharingFixtures.alice.id, connectionID: id,
+                                              revision: connection.revision)
+        session.server.pauseNextFetch = true
+        #expect(WatchSharingPhone.apply(request, runtime: session.runtime) == .saved)
+        #expect(session.alice.connections.first?.scopes.isEmpty == true)
+        #expect(!session.alice.pendingRevocations.isEmpty)
+        #expect(WatchSharingPhone.apply(request, runtime: session.runtime) == .saved)
+        await session.server.fetchGate.waitUntilSuspended()
+        session.server.fetchGate.resume()
+        await session.alice.refresh(.changed)
+    }
+
+    @Test
+    func watchPauseRejectsWrongAccountAndChangedConsent() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        let id = try await session.connect(scopes: [.today])
+        let revision = try #require(session.alice.connections.first?.revision)
+        let wrongAccount = WatchSharingPauseRequest(accountID: "other", connectionID: id, revision: revision)
+        let oldConsent = WatchSharingPauseRequest(accountID: SharingFixtures.alice.id, connectionID: id,
+                                                 revision: revision - 1)
+        #expect(WatchSharingPhone.apply(wrongAccount, runtime: session.runtime) == .changed)
+        #expect(WatchSharingPhone.apply(oldConsent, runtime: session.runtime) == .changed)
+        #expect(session.alice.connections.first?.scopes == [.today])
+    }
+
+    @Test
+    func watchProjectionUsesOnlyPermittedCardsAndHonorsViewerPreference() async throws {
+        let session = try RuntimeSession()
+        defer { session.cleanUp() }
+        let id = try await session.connect(scopes: [.today])
+        try await session.bob.preparePublisher()
+        let now = Date.now
+        try await session.bob.publish(snapshot: SharingFixtures.snapshot(day: now, capturedAt: now, goalReached: true))
+        await session.alice.refresh()
+        let watch = try #require(WatchSharingSnapshot(runtime: session.runtime, hidesGoalStatus: true))
+        let person = try #require(watch.people.first)
+        #expect(person.id == id)
+        #expect(person.today != nil)
+        #expect(person.today?.now.visibleGoalReached == nil)
+        #expect(person.streak == nil)
+        #expect(watch.hidesGoalStatus)
+        #expect(person.history.isEmpty)
+        try session.alice.enqueueScopeChange(connectionID: id, to: [])
+        let paused = try #require(WatchSharingSnapshot(runtime: session.runtime, hidesGoalStatus: false)?.people.first)
+        #expect(paused.today == nil)
+        #expect(paused.history.isEmpty)
+        #expect(paused.streak == nil)
+        #expect(!paused.canPause)
+    }
+
+    @Test
     func nameSaveFinishesBeforeCloudProfileWrite() async throws {
         let gate = SharingFakeGate()
         let session = try RuntimeSession(profileNameUpdate: { _ in await gate.suspend() })

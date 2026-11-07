@@ -22,6 +22,7 @@ struct SharingLifecycleModifier: ViewModifier {
     /// Routes dashboard lifecycle, settings, calendar, account, and invitation events to sharing.
     func body(content: Content) -> some View {
         content
+            .modifier(WatchSharingSync(runtime: runtime))
             .task(id: scenePhase == .active && hasUsedSharing) {
                 guard scenePhase == .active, hasUsedSharing else { return }
                 await runtime.refreshIfUsed(settings: settings)

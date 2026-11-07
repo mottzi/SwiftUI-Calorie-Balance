@@ -20,6 +20,8 @@ struct WatchSettingsSnapshot: Codable, Equatable, Sendable {
     var usesMarketingData: Bool? = nil
     var sampleProfile: String? = nil
     var weightHistory: WeightHistorySnapshot? = nil
+    /// Opaque to widgets; the watch app decodes its permitted sharing presentation.
+    var sharing: Data? = nil
 
 }
 

@@ -323,13 +323,22 @@ final class SharingCoordinator {
     /// Returns snapshots that remain valid for the connection and scope.
     func snapshots(connectionID: UUID, scope: SharingScope) -> [SharedSnapshotEnvelope] {
 
-        let raw = cachedSnapshots.filter { $0.connectionID == connectionID && $0.scope == scope }
+        // Validate only this connection's requested cards and goal overlays, once
+        // per read. Revalidating the entire cache for every history card makes
+        // watch synchronization and view evaluation grow quadratically.
+        let includesGoals = scope == .today || scope == .history
+        let valid = state.snapshots.filter {
+            $0.connectionID == connectionID
+                && ($0.scope == scope || (includesGoals && $0.scope == .goals))
+                && canDisplay($0)
+        }
+        let raw = valid.filter { $0.scope == scope }
         let snapshots = raw.map { envelope in
             guard scope == .today || scope == .history else { return envelope }
             var display = envelope
             display.snapshot = envelope.snapshot.withoutGoalInformation()
-            if let goal = cachedSnapshots.first(where: {
-                $0.connectionID == connectionID && $0.scope == .goals
+            if let goal = valid.first(where: {
+                $0.scope == .goals
                     && $0.snapshot.senderLocalDate == envelope.snapshot.senderLocalDate
             }) {
                 display.snapshot = display.snapshot.displayingGoalInformation(from: goal.snapshot)

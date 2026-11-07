@@ -44,6 +44,7 @@ struct CaloriesTab: View {
         .minimumScaleFactor(0.5)
         .containerBackground(bgColor.brighten(-0.3).gradient, for: .tabView)
         .padding(.top, 18)
+        .padding(.bottom, 20)
         .scenePadding(.horizontal)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -81,4 +82,5 @@ extension CaloriesTab {
 #Preview {
     ContentView(Interface: HealthInterface(.example(for: .now, balance: .deficit)))
         .environmentObject(Settings.shared)
+        .environment(WatchSharingStore())
 }

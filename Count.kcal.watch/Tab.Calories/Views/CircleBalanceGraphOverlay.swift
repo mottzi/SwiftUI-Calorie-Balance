@@ -39,4 +39,5 @@ struct CircleBalanceGraphOverlay: View {
 #Preview {
     ContentView(Interface: HealthInterface(.example(for: .now, balance: .deficit)))
         .environmentObject(Settings.shared)
+        .environment(WatchSharingStore())
 }

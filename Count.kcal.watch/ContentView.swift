@@ -8,6 +8,7 @@ struct ContentView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
     @State private var Watch = Connectivity.shared
+    @Environment(WatchSharingStore.self) private var sharing
     @State private var Interface: HealthInterface
     @State private var weightHistory = WeightHistory()
 
@@ -42,6 +43,13 @@ struct ContentView: View {
                     .tag(WatchTab.weight)
             }
             .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    NavigationLink {
+                        WatchSharingView()
+                    } label: {
+                        Label("Sharing", systemImage: "person.2.fill")
+                    }
+                }
                 if tabSelection != .weight {
                     // Render the moving graph here so page blur doesn't duplicate it.
                     ToolbarItem(placement: .topBarLeading) {
@@ -118,6 +126,7 @@ struct ContentView: View {
         }
         .environment(Interface)
         .environment(weightHistory)
+        .modifier(WatchSharingReceiver(store: sharing, connectivity: Watch))
     }
 
 }
@@ -200,4 +209,5 @@ private enum WatchTab {
 #Preview {
     ContentView(Interface: HealthInterface(.example(for: .now, balance: .deficit)))
         .environmentObject(Settings.shared)
+        .environment(WatchSharingStore())
 }

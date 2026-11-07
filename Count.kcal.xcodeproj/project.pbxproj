@@ -322,6 +322,19 @@
 		CEA3603574849BF146FE40B8 /* SharingCloudCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9E154BF7E394C41C8A2BF4 /* SharingCloudCache.swift */; };
 		47A74F77A1422804C410DC6C /* SharingCloudReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C78DA0A75E46B5EBA5BD72D /* SharingCloudReader.swift */; };
 		AC040AF5BC67B3324E41415C /* SharingFreshness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2110466D7FAACF14CA3F4B20 /* SharingFreshness.swift */; };
+		EFDD09B7D2ED4CB79C5433A2 /* WatchSharingSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C3F9C27DF4A69B10C55D7 /* WatchSharingSnapshot.swift */; };
+		F967EE7B5DAF4E8DB91DAA04 /* WatchSharingSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C3F9C27DF4A69B10C55D7 /* WatchSharingSnapshot.swift */; };
+		AACE35F50021483BB1232644 /* WatchSharingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF56111D90AF4A819913ABF3 /* WatchSharingStore.swift */; };
+		29AAC04CB4C94F969DC5DCA4 /* WatchSharingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF56111D90AF4A819913ABF3 /* WatchSharingStore.swift */; };
+		E37CE3C479DE43ED913A75C9 /* WatchSharingPhone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014C6D11CD47404C91277888 /* WatchSharingPhone.swift */; };
+		031CAA002D304BE3A4B78C49 /* CalorieCardSnapshotPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8727D48C2C204B00A588C44D /* CalorieCardSnapshotPresentation.swift */; };
+		74D6FBB6966748CDA45F5D02 /* CalorieCardSnapshotPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8727D48C2C204B00A588C44D /* CalorieCardSnapshotPresentation.swift */; };
+		F58FF8C63E214A5C831A24FF /* WatchSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F35E364D01450C80673B60 /* WatchSharingView.swift */; };
+		F3AC8CA7468C4C77AB31A9D7 /* WatchSharingSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60055AE12A274A468699ABF8 /* WatchSharingSync.swift */; };
+		9F5294AC4B674681A6F8A04A /* CalorieCardSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEC42B4C4E5758DABA1A74 /* CalorieCardSnapshot.swift */; };
+		16291F8B22AB4F04BEEB11F5 /* SharingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC04ABCEBB04B25E25E2752 /* SharingModels.swift */; };
+		06E4694806FE4E00856BD90A /* WatchSharingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5689876C9EF042E79811CB08 /* WatchSharingTests.swift */; };
+		B6C60AB951CD4109AC23EFA6 /* WatchSharingFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C40D6F67843289A5D5E0A /* WatchSharingFixtures.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -603,6 +616,14 @@
 		2D9E154BF7E394C41C8A2BF4 /* SharingCloudCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingCloudCache.swift; sourceTree = "<group>"; };
 		2C78DA0A75E46B5EBA5BD72D /* SharingCloudReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingCloudReader.swift; sourceTree = "<group>"; };
 		2110466D7FAACF14CA3F4B20 /* SharingFreshness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingFreshness.swift; sourceTree = "<group>"; };
+		431C3F9C27DF4A69B10C55D7 /* WatchSharingSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSharingSnapshot.swift; sourceTree = "<group>"; };
+		EF56111D90AF4A819913ABF3 /* WatchSharingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSharingStore.swift; sourceTree = "<group>"; };
+		014C6D11CD47404C91277888 /* WatchSharingPhone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSharingPhone.swift; sourceTree = "<group>"; };
+		8727D48C2C204B00A588C44D /* CalorieCardSnapshotPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieCardSnapshotPresentation.swift; sourceTree = "<group>"; };
+		B9F35E364D01450C80673B60 /* WatchSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sharing/WatchSharingView.swift; sourceTree = "<group>"; };
+		60055AE12A274A468699ABF8 /* WatchSharingSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sharing/WatchSharingSync.swift; sourceTree = "<group>"; };
+		5689876C9EF042E79811CB08 /* WatchSharingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSharingTests.swift; sourceTree = "<group>"; };
+		7A8C40D6F67843289A5D5E0A /* WatchSharingFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sharing/WatchSharingFixtures.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -663,6 +684,10 @@
 			isa = PBXGroup;
 			children = (
 				4CEEC42B4C4E5758DABA1A74 /* CalorieCardSnapshot.swift */,
+				8727D48C2C204B00A588C44D /* CalorieCardSnapshotPresentation.swift */,
+				014C6D11CD47404C91277888 /* WatchSharingPhone.swift */,
+				EF56111D90AF4A819913ABF3 /* WatchSharingStore.swift */,
+				431C3F9C27DF4A69B10C55D7 /* WatchSharingSnapshot.swift */,
 				E190BF656D70701C1EA0DE11 /* CalorieCardSnapshotBuilder.swift */,
 				08FF97493DA9D6302C36BF0C /* CloudKitSharingTransport.swift */,
 				2110466D7FAACF14CA3F4B20 /* SharingFreshness.swift */,
@@ -1039,6 +1064,9 @@
 				9A4B72952C13BFF2004853F0 /* Count.kcal.watch.entitlements */,
 				9AC2E2812C12742500B07EBE /* WatchApp.swift */,
 				9AC2E2832C12742500B07EBE /* ContentView.swift */,
+				7A8C40D6F67843289A5D5E0A /* WatchSharingFixtures.swift */,
+				60055AE12A274A468699ABF8 /* WatchSharingSync.swift */,
+				B9F35E364D01450C80673B60 /* WatchSharingView.swift */,
 				9A0BAC042C244C4F00622F9F /* Tab.Calories */,
 				F50C04B06AD541A8B94EB373 /* Tab.Weight */,
 			);
@@ -1161,6 +1189,7 @@
 			isa = PBXGroup;
 			children = (
 				AA13A4C78455308895DAB357 /* SharingRuntimeTests.swift */,
+				5689876C9EF042E79811CB08 /* WatchSharingTests.swift */,
 				E3D49E48BE284C45CDE9E333 /* SharingRequestAlertTests.swift */,
 				ED8E95625CF89C0DD6B63BFE /* SharingControlLedgerTests.swift */,
 				E4D6988770F81DAAA179566A /* SharingProtocolTests.swift */,
@@ -1415,6 +1444,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				031CAA002D304BE3A4B78C49 /* CalorieCardSnapshotPresentation.swift in Sources */,
+				E37CE3C479DE43ED913A75C9 /* WatchSharingPhone.swift in Sources */,
+				AACE35F50021483BB1232644 /* WatchSharingStore.swift in Sources */,
+				EFDD09B7D2ED4CB79C5433A2 /* WatchSharingSnapshot.swift in Sources */,
 				1AD8B4738F121EC171D9E20A /* SharingPublisherDevice.swift in Sources */,
 				D08A4C729E26C8D0FE30ED69 /* SharingControlLedger.swift in Sources */,
 				7EC3D09B506A0C25433FBF6B /* SharingHealthObserver.swift in Sources */,
@@ -1676,6 +1709,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6C60AB951CD4109AC23EFA6 /* WatchSharingFixtures.swift in Sources */,
+				16291F8B22AB4F04BEEB11F5 /* SharingModels.swift in Sources */,
+				9F5294AC4B674681A6F8A04A /* CalorieCardSnapshot.swift in Sources */,
+				F3AC8CA7468C4C77AB31A9D7 /* WatchSharingSync.swift in Sources */,
+				F58FF8C63E214A5C831A24FF /* WatchSharingView.swift in Sources */,
+				74D6FBB6966748CDA45F5D02 /* CalorieCardSnapshotPresentation.swift in Sources */,
+				29AAC04CB4C94F969DC5DCA4 /* WatchSharingStore.swift in Sources */,
+				F967EE7B5DAF4E8DB91DAA04 /* WatchSharingSnapshot.swift in Sources */,
 				79DA7A94C1494E6FA15A80AD /* CalorieGraphRendering.swift in Sources */,
 				C34610991F72455AAAFCC5DD /* CalorieGraphAnimation.swift in Sources */,
 				EA1FF0C0F000498B98C04910 /* EnergyGraphValues.swift in Sources */,
@@ -1718,6 +1759,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06E4694806FE4E00856BD90A /* WatchSharingTests.swift in Sources */,
 				7AE061DF0EFCB653153007B4 /* SharingRuntimeTests.swift in Sources */,
 				10BCBBD65FDA2F1A6F344C95 /* SharingRequestAlertTests.swift in Sources */,
 				9C7C632927DA0B5457C522FB /* SharingControlLedgerTests.swift in Sources */,
