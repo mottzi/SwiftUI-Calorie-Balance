@@ -178,6 +178,9 @@ private struct CalendarPaging: ViewModifier {
             .onScrollGeometryChange(for: CGFloat.self) { geometry in
                 geometry.contentOffset.x
             } action: { _, offset in
+                // Only gesture paging consumes this offset. Publishing it during
+                // scrollTo animations needlessly invalidates the scrolling view.
+                guard phase == .tracking || phase == .interacting || phase == .decelerating else { return }
                 self.offset = offset
             }
             .onScrollTargetVisibilityChange(idType: Date.self, threshold: 0.5) { ids in
@@ -194,6 +197,8 @@ private struct CalendarPaging: ViewModifier {
             .onScrollPhaseChange { _, phase, context in
                 if phase == .tracking || (phase == .interacting && dragOrigin == nil) {
                     dragOrigin = context.geometry.contentOffset.x
+                    // A new gesture can begin after an untracked programmatic scroll.
+                    offset = context.geometry.contentOffset.x
                 } else if phase == .idle {
                     dragOrigin = nil
                 }
