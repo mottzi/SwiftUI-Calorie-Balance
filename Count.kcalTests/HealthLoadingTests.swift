@@ -7,6 +7,89 @@ import SQLiteData
 @Suite(.serialized)
 struct HealthLoadingTests {
 
+    @MainActor @Test func explicitRefreshBypassesAFreshDayCache() async {
+        let source = RefreshHealthSource()
+        let repository = HealthRepository(source: source)
+        let day = HealthInterface(.empty(for: .now), repository: repository)
+        await day.updateMetrics(animated: false)
+        await source.setFood(2000)
+
+        await day.updateMetrics(animated: false)
+        #expect(day.sample.consumed == 1000)
+        #expect(await source.foodReads == 1)
+
+        await day.updateMetrics(animated: false, force: true)
+        #expect(day.sample.consumed == 2000)
+        #expect(await source.foodReads == 2)
+    }
+
+    @MainActor @Test func invalidationRefreshesCachedCalendarDaysWithoutForce() async {
+        let source = RefreshHealthSource()
+        let repository = HealthRepository(source: source)
+        let date = Calendar.current.date(byAdding: .day, value: -20, to: .now)!
+        let cell = HealthInterface(.empty(for: date), repository: repository)
+        await cell.updateMetrics(animated: false)
+        await source.setFood(2000)
+
+        repository.invalidateMeasurements()
+        #expect(!cell.hasCurrentSnapshot)
+        #expect(cell.sample.consumed == 1000)
+        // Calendar cells use the same ordinary load path after the refresh revision changes.
+        await cell.updateMetrics(animated: false)
+        #expect(cell.hasCurrentSnapshot)
+        #expect(cell.sample.consumed == 2000)
+        #expect(await source.foodReads == 2)
+    }
+
+    @MainActor @Test(.timeLimit(.minutes(1)), arguments: [false, true])
+    func updateDuringAReadCannotPublishTheOlderMeasurements(healthChange: Bool) async {
+        let source = RefreshHealthSource()
+        let repository = HealthRepository(source: source)
+        let day = HealthInterface(.empty(for: .now), repository: repository)
+        let observation = Task { await repository.observeMeasurementChanges() }
+        await source.holdFoodReads()
+        let older = Task { await day.updateMetrics(animated: false) }
+        await source.waitForFoodReads(1)
+        await source.setFood(2000)
+
+        if healthChange {
+            source.sendChange()
+            while repository.measurementRevision == 0 { await Task.yield() }
+        }
+        let newer = Task { await day.updateMetrics(animated: false, force: !healthChange) }
+        await source.waitForFoodReads(2)
+        await source.finishFoodRead(1)
+        await newer.value
+        #expect(day.sample.consumed == 2000)
+        #expect(day.hasCurrentSnapshot)
+
+        await source.finishFoodRead(0)
+        await older.value
+        #expect(day.sample.consumed == 2000)
+        #expect(day.hasCurrentSnapshot)
+        observation.cancel()
+        await observation.value
+        let revision = repository.measurementRevision
+        source.sendChange()
+        #expect(repository.measurementRevision == revision)
+    }
+
+    @MainActor @Test func authorizationCompletionInvalidatesCachedZero() async {
+        let source = RefreshHealthSource()
+        await source.setFood(0)
+        let repository = HealthRepository(source: source)
+        let day = HealthInterface(.empty(for: .now), repository: repository)
+        await day.updateMetrics(animated: false)
+        #expect(day.hasCurrentSnapshot)
+        #expect(day.sample.consumed == 0)
+
+        await source.setFood(2000)
+        _ = await repository.requestPermission()
+        await day.updateMetrics(animated: false)
+        #expect(day.sample.consumed == 2000)
+        #expect(await source.foodReads == 2)
+    }
+
     @MainActor @Test func completedProgressStaysVisibleDuringForegroundRefresh() async {
         let source = SuspendedHealthSource(queryCount: 1)
         let repository = HealthRepository(source: source)
@@ -439,6 +522,43 @@ struct HealthLoadingTests {
         #expect(settings.stepsGoal == 12000)
     }
 
+}
+
+/// Captures a food total when each query starts and releases reads in a chosen order.
+private actor RefreshHealthSource: HealthDataSource {
+    private var food = 1000.0
+    private(set) var foodReads = 0
+    private var holdsFood = false
+    private var pending: [CheckedContinuation<Void, Never>?] = []
+    private nonisolated let changes = AsyncStream<Void>.makeStream(bufferingPolicy: .bufferingNewest(1))
+
+    func setFood(_ value: Double) { food = value }
+    func holdFoodReads() { holdsFood = true }
+    nonisolated func sendChange() { changes.continuation.yield(()) }
+    nonisolated func measurementChanges() -> AsyncStream<Void> { changes.stream }
+
+    func dailySums(_ type: HKQuantityTypeIdentifier, from start: Date, to end: Date, unit: HKUnit) async -> [Date: Double] {
+        guard type == .dietaryEnergyConsumed else { return [:] }
+        let value = food
+        foodReads += 1
+        if holdsFood {
+            await withCheckedContinuation { pending.append($0) }
+        }
+        return [start: value]
+    }
+
+    func waitForFoodReads(_ count: Int) async {
+        while foodReads < count { await Task.yield() }
+    }
+
+    func finishFoodRead(_ index: Int) {
+        pending[index]?.resume()
+        pending[index] = nil
+    }
+
+    func weights(from start: Date, to end: Date, unit: HKUnit) async throws -> [WeightChartData] { [] }
+    func latestWeight(before end: Date, unit: HKUnit) async throws -> (Double?, Date?) { (nil, nil) }
+    func requestPermission() async -> Bool { true }
 }
 
 /// Holds the real daily-query path open without timers or HealthKit permissions.

@@ -15,6 +15,7 @@ protocol HealthDataSource: Sendable {
     func latestWeight(before end: Date, unit: HKUnit) async throws -> (Double?, Date?)
     var earliestWeightSampleDate: Date? { get }
     func weightChanges() -> AsyncStream<Void>
+    func measurementChanges() -> AsyncStream<Void>
     func requestPermission() async -> Bool
 
 }
@@ -37,5 +38,6 @@ extension HealthDataSource {
     // Sample fixtures have no platform retention limit or external updates.
     var earliestWeightSampleDate: Date? { nil }
     func weightChanges() -> AsyncStream<Void> { AsyncStream { $0.finish() } }
+    func measurementChanges() -> AsyncStream<Void> { AsyncStream { $0.finish() } }
 
 }

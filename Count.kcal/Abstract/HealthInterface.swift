@@ -42,7 +42,7 @@ final class HealthInterface: Identifiable, Hashable {
 
         guard !Task.isCancelled else { return }
         let key = snapshotKey
-        if pendingKey == key, let pendingLoad {
+        if !force, pendingKey == key, let pendingLoad {
             await pendingLoad.value
             return
         }
@@ -79,6 +79,7 @@ final class HealthInterface: Identifiable, Hashable {
     private var snapshotKey: SnapshotKey {
         SnapshotKey(
             revision: repository.revision,
+            measurementRevision: repository.measurementRevision,
             timeZoneIdentifier: Calendar.current.timeZone.identifier,
             source: settings.dataSource.rawValue,
             unit: settings.energyUnit.rawValue,
@@ -91,6 +92,7 @@ final class HealthInterface: Identifiable, Hashable {
 
     private struct SnapshotKey: Equatable {
         let revision: String
+        let measurementRevision: Int
 
         /// Time zone used to calculate the loaded day.
         let timeZoneIdentifier: String

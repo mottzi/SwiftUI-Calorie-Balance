@@ -7,8 +7,6 @@ struct WeekBalanceGraph: View {
     @EnvironmentObject private var settings: Settings
     @Environment(\.scenePhase) private var scenePhase
 
-    @State private var completedRefreshRevision = 0
-
     @FetchAll private var dayChoices: [StoredDayChoice]
 
     let navigation: DayPager
@@ -81,7 +79,6 @@ struct WeekBalanceGraph: View {
     private func refreshWeek() async {
         let key = refreshKey
         guard key.active else { return }
-        let force = completedRefreshRevision != key.revision
 
         let calendar = Calendar.current
         // Load all five buffered weeks, nearest first. Scrolling can change the
@@ -104,14 +101,13 @@ struct WeekBalanceGraph: View {
                     for day in batch {
                         group.addTask {
                             guard !Task.isCancelled else { return }
-                            await day.updateMetrics(animated: false, force: force)
+                            await day.updateMetrics(animated: false)
                         }
                     }
                 }
             }
             guard !Task.isCancelled else { return }
         }
-        completedRefreshRevision = key.revision
     }
 
 }

@@ -98,6 +98,7 @@ struct Pager: View {
                 .onChange(of: scenePhase) { _, newPhase in
                     if newPhase == .active {
                         navigation.rolloverIfNeeded()
+                        repository.invalidateMeasurements()
                     } else if newPhase == .inactive {
                         WidgetCenter.shared.reloadAllTimelines()
                     }
@@ -118,16 +119,25 @@ struct Pager: View {
                     manualRefresh += 1
                     calendarRefresh += 1
                 }
+                .onChange(of: repository.measurementRevision) {
+                    manualRefresh += 1
+                    calendarRefresh += 1
+                }
                 .onChange(of: currentMonth) { _, month in
                     guard showCalendar else { return }
                     calendarDays = navigation.calendarPages(for: month)
                 }
                 .task(id: selectedRefreshKey) { await refreshSelectedDay() }
                 .task(id: summaryRefreshKey) { await refreshSummary() }
+                .task(id: HealthObservationKey(active: scenePhase == .active, source: repository.revision)) {
+                    guard scenePhase == .active else { return }
+                    await repository.observeMeasurementChanges()
+                }
                 .refreshable {
-                    await refreshSelectedDay(force: true)
-                    await refreshSummary(force: true)
-                    calendarRefresh += 1
+                    // All cached days, including calendar cells, belong to this new read generation.
+                    repository.invalidateMeasurements()
+                    await refreshSelectedDay()
+                    await refreshSummary()
                     SharingRuntime.shared.schedulePublication(settings: AppSettings)
                 }
             }
@@ -177,9 +187,9 @@ extension Pager {
     }
 
     /// Prioritizes the visible day while shared loads survive rapid swipes.
-    private func refreshSelectedDay(force: Bool = false) async {
+    private func refreshSelectedDay() async {
         guard scenePhase == .active, let selectedPage else { return }
-        await selectedPage.updateMetrics(animated: false, force: force)
+        await selectedPage.updateMetrics(animated: false)
         guard !Task.isCancelled else { return }
         if selectedPage.id == Calendar.current.startOfDay(for: .now) {
             WidgetCenter.shared.reloadAllTimelines()
@@ -205,7 +215,7 @@ extension Pager {
     }
 
     /// Refreshes Today summary data when its inputs change, independent of historical swipes.
-    private func refreshSummary(force: Bool = false) async {
+    private func refreshSummary() async {
         guard scenePhase == .active else { return }
         let weekPages = navigation.weekPages.filter { $0.id != navigation.selectedDay }
         // Marketing nutrients use the goals derived from the sample energy budget.
@@ -221,7 +231,7 @@ extension Pager {
             for page in weekPages {
                 group.addTask {
                     guard !Task.isCancelled else { return }
-                    await page.updateMetrics(force: force)
+                    await page.updateMetrics()
                 }
             }
         }
@@ -248,8 +258,7 @@ extension Pager {
             .environment(SliderData)
             .onDisappear {
                 AppSettings.closedSettings += 1
-                manualRefresh += 1
-                calendarRefresh += 1
+                repository.invalidateMeasurements()
                 Task {
                     #if !DEBUG
                     if AppSettings.isSettingsInputValid && AppSettings.closedSettings >= 1 {
@@ -262,6 +271,11 @@ extension Pager {
             }
     }
 
+}
+
+private struct HealthObservationKey: Equatable {
+    let active: Bool
+    let source: String
 }
 
 /// Saved exclusions update the streak even if its weekly chart is hidden.

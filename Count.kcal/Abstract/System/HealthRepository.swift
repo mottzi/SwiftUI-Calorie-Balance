@@ -9,6 +9,11 @@ final class HealthRepository {
     @ObservationIgnored private let injectedSource: (any HealthDataSource)?
     @ObservationIgnored private lazy var healthKit = HealthKitDataSource()
 
+    /// Invalidates cached measurements without changing the source or clearing visible data.
+    private(set) var measurementRevision = 0
+
+    func invalidateMeasurements() { measurementRevision += 1 }
+
     #if DEBUG && (os(iOS) || os(watchOS))
     private var developmentRevision = 0
     @ObservationIgnored private var developmentSourceRevision: String?
@@ -219,8 +224,20 @@ extension HealthRepository {
 
     func weightChanges() -> AsyncStream<Void> { dataSource.weightChanges() }
 
+    /// The foreground consumer owns observation and cancels it when it leaves.
+    func observeMeasurementChanges() async {
+        for await _ in dataSource.measurementChanges() {
+            guard !Task.isCancelled else { return }
+            invalidateMeasurements()
+        }
+    }
+
     /// Sample mode never requests HealthKit authorization.
-    func requestPermission() async -> Bool { await dataSource.requestPermission() }
+    func requestPermission() async -> Bool {
+        let completed = await dataSource.requestPermission()
+        invalidateMeasurements()
+        return completed
+    }
 
     /// Returns the prior seven days' average for settings and legacy callers.
     func cumDataWeek(
@@ -360,6 +377,7 @@ extension HealthRepository {
 
         var earliestWeightSampleDate: Date? { base.earliestWeightSampleDate }
         func weightChanges() -> AsyncStream<Void> { base.weightChanges() }
+        func measurementChanges() -> AsyncStream<Void> { base.measurementChanges() }
         func requestPermission() async -> Bool { await base.requestPermission() }
 
         private func replacing(
