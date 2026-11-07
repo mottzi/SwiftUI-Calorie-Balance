@@ -291,13 +291,15 @@ private struct DayPageStrip: View {
     @Binding var todayPageMode: TodayPageMode
     @Namespace private var viewport
     @State private var centeredPage: Date?
+    @State private var alignedPage: Date?
 
     var body: some View {
         CalendarPageReturn(
             selection: selectedDay,
             animated: animated,
-            pageDays: 1
-        ) { selection, animated, onArrival in
+            pageDays: 1,
+            followsGesture: navigation.selectionSource == .dayGesture
+        ) { request, acceptsUserSelection, onArrival in
             ScrollView(.horizontal) {
                 LazyHStack(alignment: .top, spacing: 0) {
                     ForEach(navigation.pages) { page in
@@ -305,8 +307,8 @@ private struct DayPageStrip: View {
                             .containerRelativeFrame(.horizontal)
                             .id(page.id)
                             .calendarPagePosition(
-                                id: page.id, selection: selection, viewport: viewport,
-                                onCenter: { centeredPage = $0 }, onArrival: onArrival
+                                id: page.id, request: request, viewport: viewport,
+                                onCenter: { centeredPage = $0 }, onAlignment: { alignedPage = $0 }, onArrival: onArrival
                             )
                     }
                 }
@@ -315,10 +317,11 @@ private struct DayPageStrip: View {
             .coordinateSpace(name: viewport)
             .scrollIndicators(.hidden)
             .calendarPaging(
-                selection: selection,
+                request: request,
                 centeredPage: centeredPage,
-                animated: animated,
-                onSelect: { navigation.selectDay($0) },
+                alignedPage: alignedPage,
+                acceptsUserSelection: acceptsUserSelection,
+                onSelect: { navigation.selectDay($0, source: .dayGesture) },
                 onActivity: { scrolling in
                     navigation.dayIsScrolling = scrolling
                     navigation.ensureSelectionBuffer()

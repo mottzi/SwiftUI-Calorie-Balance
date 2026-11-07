@@ -10,6 +10,7 @@ struct WeekBalanceGraph: View {
     @State private var completedRefreshRevision = 0
     @Namespace private var viewport
     @State private var centeredPage: Date?
+    @State private var alignedPage: Date?
 
     @FetchAll private var dayChoices: [StoredDayChoice]
 
@@ -22,8 +23,9 @@ struct WeekBalanceGraph: View {
         CalendarPageReturn(
             selection: navigation.balanceWeekStart(for: navigation.selectedDay),
             animated: true,
-            pageDays: 7
-        ) { selection, animated, onArrival in
+            pageDays: 7,
+            followsGesture: navigation.selectionSource == .weekGesture
+        ) { request, acceptsUserSelection, onArrival in
             ScrollView(.horizontal) {
                 LazyHStack(spacing: 0) {
                     ForEach(navigation.balanceWeeks) { week in
@@ -31,8 +33,8 @@ struct WeekBalanceGraph: View {
                             .containerRelativeFrame(.horizontal)
                             .id(week.id)
                             .calendarPagePosition(
-                                id: week.id, selection: selection, viewport: viewport,
-                                onCenter: { centeredPage = $0 }, onArrival: onArrival
+                                id: week.id, request: request, viewport: viewport,
+                                onCenter: { centeredPage = $0 }, onAlignment: { alignedPage = $0 }, onArrival: onArrival
                             )
                     }
                 }
@@ -41,11 +43,12 @@ struct WeekBalanceGraph: View {
             .coordinateSpace(name: viewport)
             .scrollIndicators(.hidden)
             .calendarPaging(
-                selection: selection,
+                request: request,
                 centeredPage: centeredPage,
-                animated: animated,
+                alignedPage: alignedPage,
+                acceptsUserSelection: acceptsUserSelection,
                 onSelect: { start in
-                    navigation.selectDay(navigation.day(inBalanceWeek: start), animated: true)
+                    navigation.selectDay(navigation.day(inBalanceWeek: start), animated: true, source: .weekGesture)
                 },
                 onActivity: { scrolling in
                     navigation.weekIsScrolling = scrolling
@@ -140,17 +143,17 @@ struct WeekBalanceGraph: View {
 extension View {
     @ViewBuilder
     func calendarPaging(
-        selection: Date,
-        centeredPage: Date?,
-        animated: Bool,
+        request: CalendarScrollRequest,
+        centeredPage: Date?, alignedPage: Date?,
+        acceptsUserSelection: Bool,
         onSelect: @escaping (Date) -> Void,
         onActivity: @escaping (Bool) -> Void
     ) -> some View {
         if #available(iOS 18, *) {
-            modifier(CalendarPaging(selection: selection, centeredPage: centeredPage, animated: animated,
+            modifier(CalendarPaging(request: request, centeredPage: centeredPage, alignedPage: alignedPage, acceptsUserSelection: acceptsUserSelection,
                                     onSelect: onSelect, onActivity: onActivity))
         } else {
-            modifier(LegacyCalendarPaging(selection: selection, animated: animated,
+            modifier(LegacyCalendarPaging(request: request, acceptsUserSelection: acceptsUserSelection,
                                           onSelect: onSelect, onActivity: onActivity))
         }
     }
@@ -167,89 +170,121 @@ extension View {
 
 @available(iOS 18, *)
 private struct CalendarPaging: ViewModifier {
-    let selection: Date
+    let request: CalendarScrollRequest
     let centeredPage: Date?
-    let animated: Bool
+    let alignedPage: Date?
+    let acceptsUserSelection: Bool
+    private var selection: Date { request.selection }
+    private var animated: Bool { request.animated }
     let onSelect: (Date) -> Void
     let onActivity: (Bool) -> Void
-    @State private var position: ScrollPosition
+    @State private var position: Date?
     @State private var phase: ScrollPhase = .idle
     @State private var visibleID: Date?
-    @State private var offset: CGFloat = 0
+    @State private var travel: CGFloat = 0
     @State private var dragOrigin: CGFloat?
 
-    init(selection: Date, centeredPage: Date?, animated: Bool,
+    init(request: CalendarScrollRequest, centeredPage: Date?, alignedPage: Date?, acceptsUserSelection: Bool,
          onSelect: @escaping (Date) -> Void, onActivity: @escaping (Bool) -> Void) {
-        self.selection = selection
+        self.request = request
         self.centeredPage = centeredPage
-        self.animated = animated
+        self.alignedPage = alignedPage
+        self.acceptsUserSelection = acceptsUserSelection
         self.onSelect = onSelect
         self.onActivity = onActivity
-        _position = State(initialValue: ScrollPosition(id: selection, anchor: .center))
-        _visibleID = State(initialValue: selection)
+        _position = State(initialValue: request.selection)
+        _visibleID = State(initialValue: request.selection)
     }
 
     func body(content: Content) -> some View {
-        content
-            .calendarScrollTargetBehavior(
-                offset: offset,
-                origin: dragOrigin,
-                isScrolling: phase == .interacting || phase == .decelerating
-            )
-            .scrollPosition($position, anchor: .center)
-            .onScrollGeometryChange(for: CGFloat.self) { geometry in
-                geometry.contentOffset.x
-            } action: { _, offset in
-                // Only gesture paging consumes this offset. Publishing it during
-                // scrollTo animations needlessly invalidates the scrolling view.
-                guard phase == .tracking || phase == .interacting || phase == .decelerating else { return }
-                self.offset = offset
-            }
-            .onChange(of: centeredPage) { _, id in
-                guard let id else { return }
-                visibleID = id
-                guard phase == .interacting || phase == .decelerating, id != selection else { return }
-                onSelect(id)
-            }
-            .onChange(of: selection) { _, day in
-                // A user's midpoint selection already belongs to this scroll.
-                guard visibleID != day else { return }
-                var transaction = Transaction(animation: animated ? .snappy : nil)
-                transaction.disablesAnimations = !animated
-                withTransaction(transaction) {
-                    position.scrollTo(id: day, anchor: .center)
+        ScrollViewReader { proxy in
+            content
+                .calendarScrollTargetBehavior(
+                    offset: (dragOrigin ?? 0) + travel,
+                    origin: dragOrigin,
+                    isScrolling: phase == .interacting || phase == .decelerating
+                )
+                .scrollPosition(id: $position, anchor: .center)
+                .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                    guard let dragOrigin else { return 0 }
+                    return CalendarPagingBehavior.thresholdTravel(geometry.contentOffset.x - dragOrigin)
+                } action: { _, travel in
+                    // The paging rule consumes only direction and the 100-point threshold.
+                    self.travel = travel
                 }
-            }
-            .onScrollPhaseChange { _, phase, context in
-                if phase == .tracking || (phase == .interacting && dragOrigin == nil) {
-                    dragOrigin = context.geometry.contentOffset.x
-                    // A new gesture can begin after an untracked programmatic scroll.
-                    offset = context.geometry.contentOffset.x
-                } else if phase == .idle {
-                    dragOrigin = nil
+                .onChange(of: centeredPage) { _, id in
+                    guard let id else { return }
+                    visibleID = id
+                    guard acceptsUserSelection,
+                          phase == .interacting || phase == .decelerating, id != selection else { return }
+                    onSelect(id)
                 }
-                self.phase = phase
-                onActivity(phase != .idle)
-            }
+                .onChange(of: request) { _, request in
+                    // Acknowledge only the page the native viewport actually reports.
+                    // New commands always replace an older in-flight target.
+                    guard request.requiresScroll(visibleID: visibleID) else { return }
+                    let day = request.selection
+                    var transaction = Transaction(animation: animated ? .snappy : nil)
+                    transaction.disablesAnimations = !animated
+                    withTransaction(transaction) {
+                        if request.followsGesture {
+                            position = day
+                        } else {
+                            proxy.scrollTo(day, anchor: .center)
+                        }
+                    }
+                }
+                .onChange(of: alignedPage) { _, day in
+                    guard request.requiresAlignmentCorrection(
+                        alignedID: day, isUserScrolling: phase != .idle && phase != .animating
+                    ) else { return }
+                    // Geometry is authoritative: a cancelled native animation may
+                    // settle at its former target even after its binding changed.
+                    scroll(to: selection, using: proxy)
+                }
+                .onScrollPhaseChange { _, phase, context in
+                    if phase == .tracking || (phase == .interacting && dragOrigin == nil) {
+                        dragOrigin = context.geometry.contentOffset.x
+                        // A new gesture can begin after an untracked programmatic scroll.
+                        travel = 0
+                    } else if phase == .idle {
+                        dragOrigin = nil
+                    }
+                    self.phase = phase
+                    onActivity(phase != .idle)
+                    if phase == .idle, request.requiresAlignmentCorrection(
+                        alignedID: alignedPage, isUserScrolling: false
+                    ) {
+                        scroll(to: selection, using: proxy)
+                    }
+                }
+        }
     }
+
+    private func scroll(to day: Date, using proxy: ScrollViewProxy) {
+        var transaction = Transaction(animation: animated ? .snappy : nil)
+        transaction.disablesAnimations = !animated
+        withTransaction(transaction) { proxy.scrollTo(day, anchor: .center) }
+    }
+
 }
 
 /// iOS 17 uses SwiftUI's ID binding for native paging and selection.
 private struct LegacyCalendarPaging: ViewModifier {
-    let selection: Date
-    let animated: Bool
+    let request: CalendarScrollRequest
+    let acceptsUserSelection: Bool
     let onSelect: (Date) -> Void
     let onActivity: (Bool) -> Void
     @State private var position: Date?
     @State private var programmaticTarget: Date?
 
-    init(selection: Date, animated: Bool,
+    init(request: CalendarScrollRequest, acceptsUserSelection: Bool,
          onSelect: @escaping (Date) -> Void, onActivity: @escaping (Bool) -> Void) {
-        self.selection = selection
-        self.animated = animated
+        self.request = request
+        self.acceptsUserSelection = acceptsUserSelection
         self.onSelect = onSelect
         self.onActivity = onActivity
-        _position = State(initialValue: selection)
+        _position = State(initialValue: request.selection)
     }
 
     func body(content: Content) -> some View {
@@ -260,16 +295,16 @@ private struct LegacyCalendarPaging: ViewModifier {
                 guard let day else { return }
                 if let target = programmaticTarget {
                     if day == target { programmaticTarget = nil }
-                } else if day != selection {
+                } else if acceptsUserSelection, day != request.selection {
                     onSelect(day)
                 }
             }
-            .onChange(of: selection) { _, day in
-                guard position != day else { return }
-                programmaticTarget = day
-                var transaction = Transaction(animation: animated ? .snappy : nil)
-                transaction.disablesAnimations = !animated
-                withTransaction(transaction) { position = day }
+            .onChange(of: request) { _, request in
+                guard request.requiresScroll(visibleID: position) else { return }
+                programmaticTarget = position == request.selection ? nil : request.selection
+                var transaction = Transaction(animation: request.animated ? .snappy : nil)
+                transaction.disablesAnimations = !request.animated
+                withTransaction(transaction) { position = request.selection }
             }
     }
 }

@@ -3,8 +3,9 @@ import SwiftUI
 /// A distant return has two completion conditions: the slide must finish, then
 /// the persistent native viewport must confirm the destination is aligned.
 struct CalendarReturnState {
-    private(set) var nativeSelection: Date
-    private(set) var animatesNativeScroll = false
+    private(set) var nativeRequest: CalendarScrollRequest
+    var nativeSelection: Date { nativeRequest.selection }
+    var animatesNativeScroll: Bool { nativeRequest.animated }
     private(set) var flight: Flight?
 
     struct Flight: Equatable {
@@ -17,133 +18,123 @@ struct CalendarReturnState {
     var isReanchoring: Bool { flight?.isReanchoring == true }
 
     init(selection: Date) {
-        nativeSelection = selection
+        nativeRequest = CalendarScrollRequest(selection: selection, animated: false)
     }
 
-    mutating func select(_ target: Date, animated: Bool, pageDays: Int, calendar: Calendar = .current) {
-        let interrupted = flight != nil
+    mutating func select(_ target: Date, animated: Bool, pageDays: Int, followsGesture: Bool = false, calendar: Calendar = .current) {
         let distance = abs(calendar.dateComponents([.day], from: nativeSelection, to: target).day ?? 0)
-        animatesNativeScroll = animated && !interrupted && distance <= pageDays
-        if animated && !interrupted && distance > pageDays {
-            flight = Flight(source: nativeSelection, target: target)
+        if animated && (flight != nil || distance > pageDays) {
+            // Keep the overlay alive. SwiftUI retargets its existing move transitions
+            // from their current presentation, including a reversal to the source.
+            flight = Flight(source: flight?.target ?? nativeSelection, target: target)
         } else {
-            // The latest request wins. Keep native animation disabled through
-            // handoff/cancellation, including the visibility callback's update.
             flight = nil
-            nativeSelection = target
+            nativeRequest = CalendarScrollRequest(selection: target, animated: animated, followsGesture: followsGesture)
         }
     }
 
     mutating func completeAnimation(id: UUID) {
         guard flight?.id == id, let target = flight?.target else { return }
         flight?.isReanchoring = true
-        nativeSelection = target
+        nativeRequest = CalendarScrollRequest(selection: target, animated: false)
     }
 
     @discardableResult
-    mutating func arrive(at date: Date) -> Bool {
-        guard isReanchoring, flight?.target == date else { return false }
+    mutating func arrive(at date: Date, requestID: UUID) -> Bool {
+        guard isReanchoring, flight?.target == date, nativeRequest.id == requestID else { return false }
         flight = nil
         return true
     }
 }
 
+/// A command has identity even when its destination matches the old native selection.
+/// This lets cancellation replace an in-flight scroll back to that same destination.
+struct CalendarScrollRequest: Equatable {
+    let id = UUID()
+    let selection: Date
+    let animated: Bool
+    var followsGesture = false
+
+    func requiresScroll(visibleID: Date?) -> Bool {
+        !followsGesture || visibleID != selection
+    }
+
+    func requiresAlignmentCorrection(alignedID: Date?, isUserScrolling: Bool) -> Bool {
+        !isUserScrolling && alignedID != nil && alignedID != selection
+    }
+}
+
 /// Keeps the native viewport alive while a distant selection travels one page.
-/// The destination stays in place until the native page reports alignment with the viewport.
+/// SwiftUI owns interruption of the slide; geometry confirms the native handoff.
 struct CalendarPageReturn<Pager: View, Destination: View>: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.layoutDirection) private var layoutDirection
 
     let selection: Date
     let animated: Bool
     let pageDays: Int
-    @ViewBuilder let pager: (Date, Bool, @escaping (Date) -> Void) -> Pager
+    let followsGesture: Bool
+    @ViewBuilder let pager: (CalendarScrollRequest, Bool, @escaping (Date, UUID) -> Void) -> Pager
     @ViewBuilder let destination: (Date) -> Destination
 
     @State private var navigation: CalendarReturnState
-    @State private var progress: CGFloat = 0
 
-    init(selection: Date, animated: Bool, pageDays: Int,
-         @ViewBuilder pager: @escaping (Date, Bool, @escaping (Date) -> Void) -> Pager,
+    init(selection: Date, animated: Bool, pageDays: Int, followsGesture: Bool,
+         @ViewBuilder pager: @escaping (CalendarScrollRequest, Bool, @escaping (Date, UUID) -> Void) -> Pager,
          @ViewBuilder destination: @escaping (Date) -> Destination) {
         self.selection = selection
         self.animated = animated
         self.pageDays = pageDays
+        self.followsGesture = followsGesture
         self.pager = pager
         self.destination = destination
         _navigation = State(initialValue: CalendarReturnState(selection: selection))
     }
 
     var body: some View {
-        pager(navigation.nativeSelection, navigation.animatesNativeScroll, arrived)
+        pager(navigation.nativeRequest, navigation.flight == nil, arrived)
             .opacity(navigation.flight == nil ? 1 : 0)
             .animation(nil, value: navigation.flight == nil)
+            .allowsHitTesting(navigation.flight == nil)
             .overlay(alignment: .topLeading) {
                 if let flight = navigation.flight {
-                    GeometryReader { geometry in
-                        let forward = flight.target > flight.source
-                        HStack(alignment: .top, spacing: 0) {
-                            ForEach(forward ? [flight.source, flight.target] : [flight.target, flight.source], id: \.self) { date in
-                                destination(date)
-                                    .frame(width: geometry.size.width)
-                            }
-                        }
-                        .fixedSize(horizontal: true, vertical: false)
-                        .frame(width: geometry.size.width, alignment: .leading)
-                        .geometryGroup()
-                        .offset(x: ((forward ? 0 : -1) - progress) * geometry.size.width
-                                * (layoutDirection == .leftToRight ? 1 : -1))
-                    }
+                    CalendarReturnOverlay(flight: flight, destination: destination, onCompletion: completed)
                     .transition(.identity)
-                    .accessibilityHidden(true)
-                    .onAppear { depart(flight) }
                 }
             }
-        .clipped()
-        .allowsHitTesting(navigation.flight == nil)
-        .onChange(of: selection) { _, target in
-            var next = navigation
-            next.select(target, animated: animated && !reduceMotion, pageDays: pageDays)
-            if next.flight != nil {
-                var transaction = Transaction(animation: nil)
-                transaction.disablesAnimations = false
-                withTransaction(transaction) {
+            .clipped()
+            .onChange(of: selection) { _, target in
+                var next = navigation
+                next.select(target, animated: !followsGesture && animated && !reduceMotion,
+                            pageDays: pageDays, followsGesture: followsGesture)
+                if followsGesture {
+                    withTransaction(Transaction(animation: nil)) { navigation = next }
+                } else if next.animatesNativeScroll {
+                    // A normal selection must preserve other strips' active gestures.
                     navigation = next
-                    progress = 0
-                }
-            } else if next.animatesNativeScroll {
-                navigation = next
-            } else {
-                withoutAnimation {
-                    navigation = next
-                    progress = 0
+                } else if next.flight != nil {
+                    withTransaction(Transaction(animation: nil)) { navigation = next }
+                } else {
+                    withoutAnimation { navigation = next }
                 }
             }
-        }
-        .onChange(of: reduceMotion) { _, reduced in
-            if reduced {
-                withoutAnimation {
-                    navigation.select(selection, animated: false, pageDays: pageDays)
-                    progress = 0
+            .onChange(of: reduceMotion) { _, reduced in
+                if reduced {
+                    withoutAnimation {
+                        navigation.select(selection, animated: false, pageDays: pageDays)
+                    }
                 }
             }
-        }
     }
 
-    private func depart(_ departing: CalendarReturnState.Flight) {
-        var transaction = Transaction(animation: .snappy)
-        transaction.addAnimationCompletion(criteria: .removed) {
-            withoutAnimation { navigation.completeAnimation(id: departing.id) }
-        }
-        withTransaction(transaction) {
-            progress = departing.target > departing.source ? 1 : -1
-        }
+    private func completed(_ id: UUID) {
+        guard navigation.flight?.id == id, !navigation.isReanchoring else { return }
+        withoutAnimation { navigation.completeAnimation(id: id) }
     }
 
-    private func arrived(_ date: Date) {
-        withoutAnimation {
-            if navigation.arrive(at: date) { progress = 0 }
-        }
+    private func arrived(_ date: Date, requestID: UUID) {
+        var next = navigation
+        guard next.arrive(at: date, requestID: requestID) else { return }
+        withoutAnimation { navigation = next }
     }
 
     private func withoutAnimation(_ changes: () -> Void) {
@@ -153,25 +144,96 @@ struct CalendarPageReturn<Pager: View, Destination: View>: View {
     }
 }
 
+/// Stable container identity lets SwiftUI reverse or replace an unfinished slide.
+/// Removed pages live only for the duration of their native move transition.
+private struct CalendarReturnOverlay<Destination: View>: View {
+    let flight: CalendarReturnState.Flight
+    @ViewBuilder let destination: (Date) -> Destination
+    let onCompletion: (UUID) -> Void
+    @State private var displayedDay: Date
+
+    init(flight: CalendarReturnState.Flight,
+         @ViewBuilder destination: @escaping (Date) -> Destination,
+         onCompletion: @escaping (UUID) -> Void) {
+        self.flight = flight
+        self.destination = destination
+        self.onCompletion = onCompletion
+        _displayedDay = State(initialValue: flight.source)
+    }
+
+    var body: some View {
+        GeometryReader { geometry in
+            let forward = flight.target > flight.source
+            ZStack(alignment: .topLeading) {
+                destination(displayedDay)
+                    .frame(width: geometry.size.width)
+                    .id(displayedDay)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: forward ? .trailing : .leading),
+                        removal: .move(edge: forward ? .leading : .trailing)
+                    ))
+            }
+            .frame(width: geometry.size.width, alignment: .leading)
+            .geometryGroup()
+        }
+        .onAppear { depart() }
+        .onChange(of: flight.id) { depart() }
+    }
+
+    private func depart() {
+        let id = flight.id
+        var transaction = Transaction(animation: .snappy)
+        transaction.disablesAnimations = false
+        transaction.addAnimationCompletion(criteria: .removed) { onCompletion(id) }
+        withTransaction(transaction) { displayedDay = flight.target }
+    }
+}
+
 private enum CalendarPageLocation: Equatable {
     case outside, centered, aligned
 }
 
+private struct CalendarPagePosition: ViewModifier {
+    let id: Date
+    let request: CalendarScrollRequest
+    let viewport: Namespace.ID
+    let onCenter: (Date) -> Void
+    let onAlignment: (Date) -> Void
+    let onArrival: (Date, UUID) -> Void
+    @State private var location = CalendarPageLocation.outside
+
+    func body(content: Content) -> some View {
+        content
+            .onGeometryChange(for: CalendarPageLocation.self) { geometry in
+                let width = geometry.size.width
+                let offset = abs(geometry.frame(in: .named(viewport)).minX)
+                guard width > 0, offset < width / 2 else { return .outside }
+                return offset < 1 ? .aligned : .centered
+            } action: { location in
+                self.location = location
+                if location != .outside { onCenter(id) }
+                if location == .aligned {
+                    onAlignment(id)
+                    reportArrival()
+                }
+            }
+            .onChange(of: request.id) { reportArrival() }
+    }
+
+    private func reportArrival() {
+        guard location == .aligned, id == request.selection else { return }
+        onArrival(id, request.id)
+    }
+}
+
 extension View {
-    /// Track horizontal selection independently of vertical clipping or large text.
-    /// Only midpoint crossings and arrival leave geometry, never per-frame offsets.
+    /// Geometry describes presentation only. Command changes cannot manufacture
+    /// midpoint crossings, but can acknowledge an already-aligned destination.
     func calendarPagePosition(
-        id: Date, selection: Date, viewport: Namespace.ID,
-        onCenter: @escaping (Date) -> Void, onArrival: @escaping (Date) -> Void
+        id: Date, request: CalendarScrollRequest, viewport: Namespace.ID,
+        onCenter: @escaping (Date) -> Void, onAlignment: @escaping (Date) -> Void, onArrival: @escaping (Date, UUID) -> Void
     ) -> some View {
-        onGeometryChange(for: CalendarPageLocation.self) { geometry in
-            let width = geometry.size.width
-            let offset = abs(geometry.frame(in: .named(viewport)).minX)
-            guard width > 0, offset < width / 2 else { return .outside }
-            return id == selection && offset < 1 ? .aligned : .centered
-        } action: { location in
-            if location != .outside { onCenter(id) }
-            if location == .aligned { onArrival(id) }
-        }
+        modifier(CalendarPagePosition(id: id, request: request, viewport: viewport,
+                                      onCenter: onCenter, onAlignment: onAlignment, onArrival: onArrival))
     }
 }

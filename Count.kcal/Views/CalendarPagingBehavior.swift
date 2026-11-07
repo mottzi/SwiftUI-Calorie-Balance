@@ -31,6 +31,11 @@ struct CalendarPagingBehavior: ScrollTargetBehavior {
         )
     }
 
+    /// Geometry publishes only the three values consumed by the slow-drag rule.
+    static func thresholdTravel(_ travel: CGFloat) -> CGFloat {
+        abs(travel) >= 100 ? (travel > 0 ? 100 : -100) : 0
+    }
+
     /// Keeps native flick targets and accepts slow drags of at least 100 points.
     static func destination(
         original: CGFloat,
