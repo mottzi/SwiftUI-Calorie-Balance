@@ -28,7 +28,7 @@ struct SharingLifecycleModifier: ViewModifier {
                 await runtime.expireWhileActive()
             }
             .onChange(of: dayChoices) { runtime.schedulePublication(settings: settings) }
-            .onChange(of: HealthDataMode.shared.revision) { runtime.schedulePublication(settings: settings) }
+            .onChange(of: HealthRepository.shared.revision) { runtime.schedulePublication(settings: settings) }
             .onReceive(settings.objectWillChange) { _ in runtime.schedulePublication(settings: settings) }
             .onReceive(
                 NotificationCenter.default.publisher(for: .NSSystemTimeZoneDidChange)

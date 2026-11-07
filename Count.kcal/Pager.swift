@@ -128,6 +128,7 @@ struct Pager: View {
                     await refreshSelectedDay(force: true)
                     await refreshSummary(force: true)
                     calendarRefresh += 1
+                    SharingRuntime.shared.schedulePublication(settings: AppSettings)
                 }
             }
         }
@@ -179,7 +180,6 @@ extension Pager {
     private func refreshSelectedDay(force: Bool = false) async {
         guard scenePhase == .active, let selectedPage else { return }
         await selectedPage.updateMetrics(animated: false, force: force)
-        SharingRuntime.shared.schedulePublication(settings: AppSettings)
         guard !Task.isCancelled else { return }
         if selectedPage.id == Calendar.current.startOfDay(for: .now) {
             WidgetCenter.shared.reloadAllTimelines()
