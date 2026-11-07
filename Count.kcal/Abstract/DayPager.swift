@@ -12,10 +12,7 @@ final class DayPager {
     var dayIsScrolling = false
     var weekIsScrolling = false
     var isScrolling: Bool { dayIsScrolling || weekIsScrolling }
-    private(set) var selectedDay: Date
-
-    enum SelectionSource { case programmatic, dayGesture, weekGesture }
-    @ObservationIgnored private(set) var selectionSource: SelectionSource = .programmatic
+    var selectedDay: Date
 
     /// The day strip applies this intent to its own scroll-position update.
     @ObservationIgnored private(set) var animatesDayScroll = false
@@ -37,8 +34,7 @@ final class DayPager {
     }
 
     /// Keeps programmatic navigation intent with the selected date.
-    func selectDay(_ date: Date, animated: Bool = false, source: SelectionSource = .programmatic) {
-        selectionSource = source
+    func selectDay(_ date: Date, animated: Bool = false) {
         animatesDayScroll = animated
         selectedDay = Calendar.current.startOfDay(for: date)
     }

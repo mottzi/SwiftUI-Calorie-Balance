@@ -3,7 +3,7 @@ import SwiftUI
 /// Calendar paging that accepts native flicks and 100-point slow drags.
 struct CalendarPagingBehavior: ScrollTargetBehavior {
 
-    let offset: CGFloat
+    let travel: CGFloat
     let origin: CGFloat?
     let isScrolling: Bool
 
@@ -25,13 +25,13 @@ struct CalendarPagingBehavior: ScrollTargetBehavior {
         target.rect.origin.x = Self.destination(
             original: context.originalTarget.rect.minX,
             native: target.rect.minX,
-            travel: offset - origin,
+            travel: travel,
             pageWidth: width,
             contentWidth: context.contentSize.width
         )
     }
 
-    /// Geometry publishes only the three values consumed by the slow-drag rule.
+    /// Only direction and crossing 100 points affect the slow-drag rule.
     static func thresholdTravel(_ travel: CGFloat) -> CGFloat {
         abs(travel) >= 100 ? (travel > 0 ? 100 : -100) : 0
     }

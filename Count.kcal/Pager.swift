@@ -65,8 +65,6 @@ struct Pager: View {
                                 case .daily:
                                     DayPageStrip(
                                         navigation: navigation,
-                                        selectedDay: navigation.selectedDay,
-                                        animated: navigation.animatesDayScroll,
                                         todayPageMode: $todayPageMode
                                     )
                                 case .progress:
@@ -154,7 +152,7 @@ extension Pager {
             navigation.ensurePagesForSelection(day)
         }
         if animated {
-            withAnimation(.snappy) { navigation.selectDay(day, animated: true) }
+            withAnimation(.smooth) { navigation.selectDay(day, animated: true) }
         } else {
             var transaction = Transaction(animation: nil)
             transaction.disablesAnimations = true
@@ -285,61 +283,33 @@ private struct StreakDayChoices: ViewModifier {
 /// Horizontal day targets that keep their calendar-day identity while browsing.
 private struct DayPageStrip: View {
     let navigation: DayPager
-    let selectedDay: Date
-    let animated: Bool
 
     @Binding var todayPageMode: TodayPageMode
-    @Namespace private var viewport
-    @State private var centeredPage: Date?
-    @State private var alignedPage: Date?
 
     var body: some View {
-        CalendarPageReturn(
-            selection: selectedDay,
-            animated: animated,
-            pageDays: 1,
-            followsGesture: navigation.selectionSource == .dayGesture
-        ) { request, acceptsUserSelection, onArrival in
-            ScrollView(.horizontal) {
-                LazyHStack(alignment: .top, spacing: 0) {
-                    ForEach(navigation.pages) { page in
-                        dashboard(page)
-                            .containerRelativeFrame(.horizontal)
-                            .id(page.id)
-                            .calendarPagePosition(
-                                id: page.id, request: request, viewport: viewport,
-                                onCenter: { centeredPage = $0 }, onAlignment: { alignedPage = $0 }, onArrival: onArrival
-                            )
-                    }
+        ScrollView(.horizontal) {
+            LazyHStack(alignment: .top, spacing: 0) {
+                ForEach(navigation.pages) { page in
+                    Dashboard(todayPageMode: $todayPageMode)
+                        .containerRelativeFrame(.horizontal)
+                        .environment(page)
+                        .id(page.id)
                 }
-                .scrollTargetLayout()
             }
-            .coordinateSpace(name: viewport)
-            .scrollIndicators(.hidden)
-            .calendarPaging(
-                request: request,
-                centeredPage: centeredPage,
-                alignedPage: alignedPage,
-                acceptsUserSelection: acceptsUserSelection,
-                onSelect: { navigation.selectDay($0, source: .dayGesture) },
-                onActivity: { scrolling in
-                    navigation.dayIsScrolling = scrolling
-                    navigation.ensureSelectionBuffer()
-                }
-            )
-        } destination: { date in
-            if let page = navigation.page(for: date) {
-                dashboard(page)
-            }
+            .scrollTargetLayout()
         }
         .padding(.bottom, 20)
+        .scrollIndicators(.hidden)
+        .calendarPaging(
+            selection: navigation.selectedDay,
+            animated: navigation.animatesDayScroll,
+            onSelect: { navigation.selectDay($0) },
+            onActivity: { scrolling in
+                navigation.dayIsScrolling = scrolling
+                navigation.ensureSelectionBuffer()
+            }
+        )
     }
-
-    private func dashboard(_ page: HealthInterface) -> some View {
-        Dashboard(todayPageMode: $todayPageMode)
-            .environment(page)
-    }
-
 }
 
 #Preview { PreviewPager }

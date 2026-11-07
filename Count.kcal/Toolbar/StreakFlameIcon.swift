@@ -5,13 +5,33 @@ struct StreakFlameIcon: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.layoutDirection) private var layoutDirection
-    @Environment(\.streakAnimationClock) private var clock
-
     @ScaledMetric(relativeTo: .body) private var size = 29.04
 
     let color: Color
     var isAnimating = true
+
+    var body: some View {
+        // Clock updates belong to the drawing view, so brightness conversion
+        // runs when this view's inputs change rather than on every frame.
+        AnimatedStreakFlame(
+            gradient: Gradient(colors: [color.brighten(0.2), color, color.brighten(-0.18)]),
+            animates: isAnimating && !reduceMotion && scenePhase == .active
+        )
+        .frame(width: size * 0.82, height: size)
+        .offset(y: -2)
+        .accessibilityHidden(true)
+    }
+
+}
+
+private struct AnimatedStreakFlame: View {
+    @Environment(\.layoutDirection) private var layoutDirection
+    @Environment(\.streakAnimationClock) private var clock
+
+    let gradient: Gradient
+    let animates: Bool
+
+    private static let coreGradient = Gradient(colors: [.white.opacity(0.85), .white.opacity(0.3)])
 
     var body: some View {
         Group {
@@ -24,24 +44,17 @@ struct StreakFlameIcon: View {
                 }
             }
         }
-        .frame(width: size * 0.82, height: size)
-        .offset(y: -2)
-        .accessibilityHidden(true)
     }
 
 }
 
-extension StreakFlameIcon {
+private extension AnimatedStreakFlame {
 
     private func flame(at time: TimeInterval) -> some View {
         Canvas { context, size in
             draw(in: &context, size: size, time: time)
         }
         .scaleEffect(pulseScale(at: time))
-    }
-
-    private var animates: Bool {
-        isAnimating && !reduceMotion && scenePhase == .active
     }
 
     private func pulseScale(at time: TimeInterval) -> Double {
@@ -68,7 +81,7 @@ extension StreakFlameIcon {
         context.fill(
             outline,
             with: .linearGradient(
-                Gradient(colors: [color.brighten(0.2), color, color.brighten(-0.18)]),
+                gradient,
                 startPoint: CGPoint(x: 7, y: 2),
                 endPoint: CGPoint(x: 17, y: 23)
             )
@@ -76,7 +89,7 @@ extension StreakFlameIcon {
         context.fill(
             core(sway: sway, flutter: flutter),
             with: .linearGradient(
-                Gradient(colors: [.white.opacity(0.85), .white.opacity(0.3)]),
+                Self.coreGradient,
                 startPoint: CGPoint(x: 10, y: 11),
                 endPoint: CGPoint(x: 14, y: 22)
             )

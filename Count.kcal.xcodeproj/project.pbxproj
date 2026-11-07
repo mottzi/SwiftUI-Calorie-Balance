@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C20261107000000000000002 /* CalendarPageReturn.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20261107000000000000001 /* CalendarPageReturn.swift */; };
 		A01120260000000000000004 /* SharingSentInvitationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01120260000000000000003 /* SharingSentInvitationsView.swift */; };
 		A01120260000000000000002 /* SharingPermissionDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01120260000000000000001 /* SharingPermissionDraft.swift */; };
 		C08E16B50000000000000001 /* StreakAnimationScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08E16B50000000000000002 /* StreakAnimationScope.swift */; };
@@ -392,7 +391,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C20261107000000000000001 /* CalendarPageReturn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPageReturn.swift; sourceTree = "<group>"; };
 		A01120260000000000000003 /* SharingSentInvitationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingSentInvitationsView.swift; sourceTree = "<group>"; };
 		A01120260000000000000001 /* SharingPermissionDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingPermissionDraft.swift; sourceTree = "<group>"; };
 		C08E16B50000000000000002 /* StreakAnimationScope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakAnimationScope.swift; sourceTree = "<group>"; };
@@ -1085,7 +1083,6 @@
 				F8B624ACFA054284816E9769 /* CalorieGraph */,
 				9AA785262B21CD9D007305F6 /* CircleProgressView.swift */,
 				9ABBD8FE2BE8213F003EC608 /* WeekBalanceGraph.swift */,
-				C20261107000000000000001 /* CalendarPageReturn.swift */,
 				C170F1A00000000000000003 /* DiagonalShine.swift */,
 				A81F00000000000000000001 /* CalendarPagingBehavior.swift */,
 				9AE3D3A42B7970EC00483339 /* CDatePicker.swift */,
@@ -1480,7 +1477,6 @@
 				9A206D7D2C5838E50079DE3D /* AppleHealthView.swift in Sources */,
 				9A6DA88F2B361B3400585788 /* CaloriesCardTopRowCenter.swift in Sources */,
 				9ABBD8FF2BE8213F003EC608 /* WeekBalanceGraph.swift in Sources */,
-				C20261107000000000000002 /* CalendarPageReturn.swift in Sources */,
 				C170F1A00000000000000004 /* DiagonalShine.swift in Sources */,
 				A81F00000000000000000002 /* CalendarPagingBehavior.swift in Sources */,
 				9A206D7B2C5838C40079DE3D /* MainGoalVew.swift in Sources */,
