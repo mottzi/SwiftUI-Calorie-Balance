@@ -6,6 +6,68 @@ import Testing
 /// Coordinator and fake transport protocol tests.
 struct SharingProtocolTests {
 
+    @Test(arguments: [SharingScope.history, .goals])
+    func summaryTimestampIgnoresNewerUpdatesToOtherScopes(_ scope: SharingScope) async throws {
+        let pair = try SharingTestPair()
+        let id = try await pair.connect(scopes: [.today, .history, .goals])
+        try await pair.alice.takeOverPublisher()
+        let today = pair.snapshot()
+        try await pair.alice.publish(snapshot: today)
+        pair.time.now += 120
+        let update = SharingFixtures.snapshot(
+            day: scope == .history ? pair.time.now.addingTimeInterval(-86400) : pair.time.now,
+            capturedAt: pair.time.now, includeProjection: scope != .history
+        )
+        if scope == .goals {
+            try await pair.alice.publish(snapshots: [], streakSnapshot: update)
+        } else {
+            try await pair.alice.publish(snapshot: update)
+        }
+        await pair.bob.refresh()
+
+        #expect(pair.bob.snapshots(connectionID: id, scope: scope).contains {
+            $0.snapshot.capturedAt == update.capturedAt
+        })
+        #expect(pair.bob.summarySnapshot(connectionID: id)?.id == today.id)
+        #expect(pair.bob.summaryUpdatedAt(connectionID: id) == today.capturedAt)
+    }
+
+    @Test
+    func historySummaryTimestampBelongsToTheNewestDisplayedDay() async throws {
+        let pair = try SharingTestPair()
+        let id = try await pair.connect(scopes: [.history])
+        try await pair.alice.takeOverPublisher()
+        let yesterday = SharingFixtures.snapshot(day: pair.time.now.addingTimeInterval(-86400),
+            capturedAt: pair.time.now, includeProjection: false)
+        try await pair.alice.publish(snapshot: yesterday)
+        pair.time.now += 120
+        let olderDay = SharingFixtures.snapshot(day: pair.time.now.addingTimeInterval(-2 * 86400),
+            capturedAt: pair.time.now, includeProjection: false)
+        try await pair.alice.publish(snapshot: olderDay)
+        await pair.bob.refresh()
+
+        #expect(pair.bob.summarySnapshot(connectionID: id)?.id == yesterday.id)
+        #expect(pair.bob.summaryUpdatedAt(connectionID: id) == yesterday.capturedAt)
+    }
+
+    @Test
+    func missingTodayKeepsLastSharedTimestampUntilSharingStops() async throws {
+        let pair = try SharingTestPair()
+        let id = try await pair.connect(scopes: [.today, .history])
+        #expect(pair.bob.summaryUpdatedAt(connectionID: id) == nil)
+        try await pair.alice.takeOverPublisher()
+        let today = pair.snapshot()
+        try await pair.alice.publish(snapshot: today)
+        await pair.bob.refresh()
+        pair.time.now += 86400
+        pair.bob.purgeExpiredCache()
+
+        #expect(pair.bob.summarySnapshot(connectionID: id) == nil)
+        #expect(pair.bob.summaryUpdatedAt(connectionID: id) == today.capturedAt)
+        try pair.bob.enqueueScopeChange(connectionID: id, to: [])
+        #expect(pair.bob.summaryUpdatedAt(connectionID: id) == nil)
+    }
+
     @Test(arguments: [false, true])
     func removedStreakGrantIsRevokedWithoutLosingCalorieConsent(_ failsRevocation: Bool) async throws {
         let pair = try SharingTestPair()

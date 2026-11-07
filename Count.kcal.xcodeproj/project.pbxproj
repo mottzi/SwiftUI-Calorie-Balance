@@ -15,6 +15,7 @@
 		C08E16B20000000000000001 /* SharingSamplePeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08E16B20000000000000002 /* SharingSamplePeople.swift */; };
 		C08E16B10000000000000001 /* SharingPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08E16B10000000000000002 /* SharingPerson.swift */; };
 		D03120260000000000000002 /* SharingDurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03120260000000000000001 /* SharingDurationView.swift */; };
+		F07120260000000000000002 /* SharingUpdateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07120260000000000000001 /* SharingUpdateLabel.swift */; };
 		7AE061DF0EFCB653153007B4 /* SharingRuntimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA13A4C78455308895DAB357 /* SharingRuntimeTests.swift */; };
 		C10D20261024000000000002 /* CloudSharingValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C10D20261024000000000001 /* CloudSharingValidation.swift */; };
 		00802B3EF27B4087ADA9BA43 /* CalorieGraphRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C22D79D56BF4652B8B520AE /* CalorieGraphRendering.swift */; };
@@ -399,6 +400,7 @@
 		C08E16B20000000000000002 /* SharingSamplePeople.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingSamplePeople.swift; sourceTree = "<group>"; };
 		C08E16B10000000000000002 /* SharingPerson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingPerson.swift; sourceTree = "<group>"; };
 		D03120260000000000000001 /* SharingDurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingDurationView.swift; sourceTree = "<group>"; };
+		F07120260000000000000001 /* SharingUpdateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingUpdateLabel.swift; sourceTree = "<group>"; };
 		AA13A4C78455308895DAB357 /* SharingRuntimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingRuntimeTests.swift; sourceTree = "<group>"; };
 		C10D20261024000000000001 /* CloudSharingValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingValidation.swift; sourceTree = "<group>"; };
 		00B9F8B8C7AE409C9D8D82F0 /* DayChoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayChoice.swift; sourceTree = "<group>"; };
@@ -680,6 +682,7 @@
 				F5B983237A4C7E5912800135 /* SharingOverviewView.swift */,
 				F7DF1C99010F8B2B306CAFF2 /* SharingPersonDetail.swift */,
 				D03120260000000000000001 /* SharingDurationView.swift */,
+				F07120260000000000000001 /* SharingUpdateLabel.swift */,
 				356A6009569E118D382CC5F8 /* SharingPublisherDevice.swift */,
 				41834EB82CE2DB9884AA52E1 /* SharingRuntime.swift */,
 				C08E16B40000000000000002 /* SharingStreakBadge.swift */,
@@ -1420,6 +1423,7 @@
 				EE352EAB2D152B6342D42195 /* SharingInvitationView.swift in Sources */,
 				B8F8E2642752C0909F315567 /* SharingPersonDetail.swift in Sources */,
 				D03120260000000000000002 /* SharingDurationView.swift in Sources */,
+				F07120260000000000000002 /* SharingUpdateLabel.swift in Sources */,
 				4F8B5ADE76E8510EEDF8DEA3 /* SharingOverviewView.swift in Sources */,
 				13736DCC2EBBE7B67C3AA4B7 /* SharingRuntime.swift in Sources */,
 				C08E16B40000000000000001 /* SharingStreakBadge.swift in Sources */,

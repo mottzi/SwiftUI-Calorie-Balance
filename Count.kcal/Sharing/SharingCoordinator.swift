@@ -342,6 +342,23 @@ final class SharingCoordinator {
         return snapshots.sorted { $0.snapshot.senderLocalDate > $1.snapshot.senderLocalDate }
     }
 
+    /// The card represented by both the overview and the detail's update label.
+    func summarySnapshot(connectionID: UUID) -> CalorieCardSnapshot? {
+        guard let connection = connections.first(where: { $0.id == connectionID }) else { return nil }
+        let scope: SharingScope = connection.scopes.contains(.today) ? .today : .history
+        return snapshots(connectionID: connectionID, scope: scope).first?.snapshot
+    }
+
+    /// History and goal updates must not make the displayed calorie card appear fresher.
+    func summaryUpdatedAt(connectionID: UUID) -> Date? {
+        if let snapshot = summarySnapshot(connectionID: connectionID) {
+            return snapshot.isSupported ? snapshot.capturedAt : nil
+        }
+        guard connections.first(where: { $0.id == connectionID })?.scopes.contains(.today) == true
+        else { return nil }
+        return senderMetadata(connectionID: connectionID)?.capturedAt
+    }
+
     /// Full sender count is available only through its own current consent grant.
     func streak(connectionID: UUID) -> CalorieCardSnapshot.StreakSummary? {
         snapshots(connectionID: connectionID, scope: .goals).first {

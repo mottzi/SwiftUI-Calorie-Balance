@@ -132,11 +132,10 @@ extension SharingPersonDetail {
                 Text(peerName)
                     .font(.headline)
                     .accessibilityAddTraits(.isHeader)
-                if let updatedAt {
-                    Text(updatedAt, format: .relative(presentation: .named))
+                if let updatedAt = coordinator.summaryUpdatedAt(connectionID: connectionID) {
+                    SharingUpdateLabel(date: updatedAt)
                         .font(.caption)
                         .foregroundStyle(isMissingToday ? Color.red : Color.secondary)
-                        .accessibilityLabel(Text("Last shared \(Text(updatedAt, format: .relative(presentation: .named)))"))
                         .accessibilityValue(isMissingToday ? Text("No update yet today") : Text(""))
                 }
             }
@@ -181,13 +180,6 @@ extension SharingPersonDetail {
         guard let latest = presentation.max(by: { $0.snapshot.capturedAt < $1.snapshot.capturedAt })?.snapshot,
               let background = latest.appearance.pageBackground else { return settings.AppBackground }
         return background.color(in: scheme)
-    }
-
-    private var updatedAt: Date? {
-        if isMissingToday, let lastShared = coordinator.senderMetadata(connectionID: connectionID)?.capturedAt {
-            return lastShared
-        }
-        return (snapshots + coordinator.snapshots(connectionID: connectionID, scope: .goals)).map(\.snapshot.capturedAt).max()
     }
 
     private var isMissingToday: Bool {

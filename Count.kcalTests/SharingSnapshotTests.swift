@@ -10,6 +10,24 @@ import UIKit
 /// Calorie snapshot freshness, privacy, date windows, and card rendering coverage.
 struct SharingSnapshotTests {
 
+    @MainActor @Test(arguments: ["en_US", "de_DE", "fr_FR", "es_ES", "zh_Hans"])
+    func sharingAgeUsesCompletedMinutesWithoutSeconds(_ identifier: String) {
+        let capturedAt = date("2026-11-07T12:00:00Z")
+        let locale = Locale(identifier: identifier)
+        let calendar = calendar("Europe/Zurich")
+        func label(after seconds: Double) -> String {
+            SharingUpdateLabel.relativeTime(from: capturedAt,
+                to: capturedAt.addingTimeInterval(seconds), locale: locale, calendar: calendar)
+        }
+        #expect(label(after: 0) == label(after: 13))
+        #expect(label(after: 0) == label(after: 59))
+        #expect(label(after: 59) != label(after: 60))
+        #expect(label(after: 60) == label(after: 90))
+        #expect(label(after: 60) == label(after: 119))
+        #expect(label(after: 119) != label(after: 120))
+        #expect(label(after: 3600) != label(after: 60))
+    }
+
     @Test
     func streakSummaryRoundTripsAndRejectsInvalidCounts() throws {
         let now = date("2026-11-01T12:00:00Z")

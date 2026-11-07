@@ -248,9 +248,11 @@ private struct SharingMeSection: View {
             NavigationLink {
                 SharingMeDetail(runtime: runtime, card: card)
             } label: {
+                let snapshot = card.snapshot(settings: settings)
                 SharingCardSummary(
                     name: runtime.hasDisplayName ? runtime.displayName : String(localized: "Me"),
-                    snapshot: card.snapshot(settings: settings),
+                    snapshot: snapshot,
+                    updatedAt: snapshot?.capturedAt,
                     mode: mode,
                     status: card.day.sample.isUnavailable ? "Card unavailable" : "Loading calories…",
                     streak: card.streak,
@@ -615,23 +617,18 @@ struct SharingPersonRow: View {
     var mode: GraphMode = .now
 
     var body: some View {
-        let snapshot = snapshot
+        let snapshot = coordinator.summarySnapshot(connectionID: connection.id)
         let isMissingToday = connection.scopes.contains(.today) && snapshot == nil
         SharingCardSummary(
             name: connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "",
             snapshot: snapshot,
+            updatedAt: coordinator.summaryUpdatedAt(connectionID: connection.id),
             mode: connection.scopes.contains(.today) ? mode : .now,
             status: isMissingToday ? "No update yet today" : connection.sharingStatus,
             streak: coordinator.streak(connectionID: connection.id),
             isMissingToday: isMissingToday,
-            senderMetadata: coordinator.senderMetadata(connectionID: connection.id),
             placeholderNameColor: coordinator.senderNameColor(connectionID: connection.id)?.color(in: scheme)
         )
-    }
-
-    private var snapshot: CalorieCardSnapshot? {
-        let scope: SharingScope = connection.scopes.contains(.today) ? .today : .history
-        return coordinator.snapshots(connectionID: connection.id, scope: scope).first?.snapshot
     }
 
 }
@@ -652,11 +649,11 @@ private struct SharingCardSummary: View {
 
     let name: String
     let snapshot: CalorieCardSnapshot?
+    let updatedAt: Date?
     var mode = GraphMode.now
     let status: LocalizedStringResource
     var streak: CalorieCardSnapshot.StreakSummary? = nil
     var isMissingToday = false
-    var senderMetadata: SharingSenderCalendar? = nil
     var placeholderNameColor: Color? = nil
 
     var body: some View {
@@ -715,14 +712,10 @@ private struct SharingCardSummary: View {
                             .font(.body)
                             .foregroundStyle(.secondary)
                     }
-                    if let snapshot, snapshot.isSupported {
-                        Text("Updated \(Text(snapshot.capturedAt, format: .relative(presentation: .named)))")
+                    if let updatedAt {
+                        SharingUpdateLabel(date: updatedAt, style: isMissingToday ? .lastShared : .updated)
                             .font(.caption.weight(.regular))
-                            .foregroundStyle(.secondary)
-                    } else if isMissingToday, let lastShared = senderMetadata?.capturedAt {
-                        Text("Last shared \(Text(lastShared, format: .relative(presentation: .named)))")
-                            .font(.caption.weight(.regular))
-                            .foregroundStyle(.red)
+                            .foregroundStyle(isMissingToday ? Color.red : Color.secondary)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -965,7 +958,8 @@ struct SharingRowStatesGallery: View {
             NavigationLink {
                 Text("Sample row")
             } label: {
-                SharingCardSummary(name: "Berken", snapshot: snapshot, status: status,
+                SharingCardSummary(name: "Berken", snapshot: snapshot,
+                                   updatedAt: snapshot?.isSupported == true ? snapshot?.capturedAt : nil, status: status,
                                    placeholderNameColor: settings.weightGoal == .lose ? settings.burnedColor : settings.consumedColor)
             }
             .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
