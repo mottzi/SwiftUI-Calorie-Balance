@@ -164,14 +164,7 @@ private struct SharingPeopleSection: View {
                     NavigationLink {
                         SharingPersonDetail(runtime: runtime, coordinator: coordinator, connectionID: connection.id)
                     } label: {
-                        HStack(spacing: 12) {
-                            SharingPersonRow(connection: connection, coordinator: coordinator, mode: mode)
-                            if person.isSample && runtime.showsSampleLabels {
-                                Text("Sample")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
+                        SharingPersonRow(connection: connection, coordinator: coordinator, mode: mode)
                     }
                     .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
                 }
