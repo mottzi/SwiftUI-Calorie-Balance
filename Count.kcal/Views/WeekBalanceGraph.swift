@@ -8,6 +8,8 @@ struct WeekBalanceGraph: View {
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var completedRefreshRevision = 0
+    @Namespace private var viewport
+    @State private var centeredPage: Date?
 
     @FetchAll private var dayChoices: [StoredDayChoice]
 
@@ -17,39 +19,47 @@ struct WeekBalanceGraph: View {
 
     var body: some View {
         let excludedDayIDs = Set(dayChoices.filter { $0.choice == DayChoice.excluded.rawValue }.map(\.id))
-        ScrollView(.horizontal) {
-            // Loaded weeks retain their identities; SwiftUI creates only nearby charts.
-            LazyHStack(spacing: 0) {
-                ForEach(navigation.balanceWeeks) { week in
-                    WeekBalanceChart(
-                        dataPoints: week.days,
-                        selectedDay: navigation.selectedDay,
-                        selectDay: selectDay,
-                        excludedDayIDs: excludedDayIDs
-                    )
-                    // Keep chart insets inside each page so the pager clips at the screen edge.
-                    .padding(.horizontal, CardMetrics.horizontalInset + 4)
-                    .containerRelativeFrame(.horizontal)
-                    .id(week.id)
-                }
-            }
-            .scrollTargetLayout()
-        }
-        .scrollIndicators(.hidden)
-        .calendarPaging(
+        CalendarPageReturn(
             selection: navigation.balanceWeekStart(for: navigation.selectedDay),
             animated: true,
-            onSelect: { start in
-                navigation.selectDay(navigation.day(inBalanceWeek: start), animated: true)
-            },
-            onActivity: { scrolling in
-                navigation.weekIsScrolling = scrolling
-                navigation.ensureSelectionBuffer()
+            pageDays: 7
+        ) { selection, animated, onArrival in
+            ScrollView(.horizontal) {
+                LazyHStack(spacing: 0) {
+                    ForEach(navigation.balanceWeeks) { week in
+                        chart(week, excludedDayIDs: excludedDayIDs)
+                            .containerRelativeFrame(.horizontal)
+                            .id(week.id)
+                            .calendarPagePosition(
+                                id: week.id, selection: selection, viewport: viewport,
+                                onCenter: { centeredPage = $0 }, onArrival: onArrival
+                            )
+                    }
+                }
+                .scrollTargetLayout()
             }
-        )
-        // Keep pager initialization stable; animate ancestor movement as one transform.
-        .transaction { $0.animation = nil }
-        .geometryGroup()
+            .coordinateSpace(name: viewport)
+            .scrollIndicators(.hidden)
+            .calendarPaging(
+                selection: selection,
+                centeredPage: centeredPage,
+                animated: animated,
+                onSelect: { start in
+                    navigation.selectDay(navigation.day(inBalanceWeek: start), animated: true)
+                },
+                onActivity: { scrolling in
+                    navigation.weekIsScrolling = scrolling
+                    navigation.ensureSelectionBuffer()
+                }
+            )
+            // CalendarPaging owns scroll transactions, including the unanimated
+            // long-return handoff. Clearing animation here also cancels week changes.
+            .geometryGroup()
+        } destination: { date in
+            if let week = navigation.balanceWeeks.first(where: { $0.id == date }) {
+                chart(week, excludedDayIDs: excludedDayIDs)
+            }
+        }
         .accessibilityScrollAction { edge in
             let offset = edge == .leading ? -7 : edge == .trailing ? 7 : 0
             guard offset != 0 else { return }
@@ -60,6 +70,16 @@ struct WeekBalanceGraph: View {
             navigation.selectDay(day, animated: true)
         }
         .task(id: refreshKey) { await refreshWeek() }
+    }
+
+    private func chart(_ week: BalanceWeek, excludedDayIDs: Set<String>) -> some View {
+        WeekBalanceChart(
+            dataPoints: week.days,
+            selectedDay: navigation.selectedDay,
+            selectDay: selectDay,
+            excludedDayIDs: excludedDayIDs
+        )
+        .padding(.horizontal, CardMetrics.horizontalInset + 4)
     }
 
     private var refreshKey: WeekRefreshKey {
@@ -121,12 +141,13 @@ extension View {
     @ViewBuilder
     func calendarPaging(
         selection: Date,
+        centeredPage: Date?,
         animated: Bool,
         onSelect: @escaping (Date) -> Void,
         onActivity: @escaping (Bool) -> Void
     ) -> some View {
         if #available(iOS 18, *) {
-            modifier(CalendarPaging(selection: selection, animated: animated,
+            modifier(CalendarPaging(selection: selection, centeredPage: centeredPage, animated: animated,
                                     onSelect: onSelect, onActivity: onActivity))
         } else {
             modifier(LegacyCalendarPaging(selection: selection, animated: animated,
@@ -147,6 +168,7 @@ extension View {
 @available(iOS 18, *)
 private struct CalendarPaging: ViewModifier {
     let selection: Date
+    let centeredPage: Date?
     let animated: Bool
     let onSelect: (Date) -> Void
     let onActivity: (Bool) -> Void
@@ -156,9 +178,10 @@ private struct CalendarPaging: ViewModifier {
     @State private var offset: CGFloat = 0
     @State private var dragOrigin: CGFloat?
 
-    init(selection: Date, animated: Bool,
+    init(selection: Date, centeredPage: Date?, animated: Bool,
          onSelect: @escaping (Date) -> Void, onActivity: @escaping (Bool) -> Void) {
         self.selection = selection
+        self.centeredPage = centeredPage
         self.animated = animated
         self.onSelect = onSelect
         self.onActivity = onActivity
@@ -174,7 +197,6 @@ private struct CalendarPaging: ViewModifier {
                 isScrolling: phase == .interacting || phase == .decelerating
             )
             .scrollPosition($position, anchor: .center)
-            .animation(animated ? .snappy : nil, value: position)
             .onScrollGeometryChange(for: CGFloat.self) { geometry in
                 geometry.contentOffset.x
             } action: { _, offset in
@@ -183,8 +205,8 @@ private struct CalendarPaging: ViewModifier {
                 guard phase == .tracking || phase == .interacting || phase == .decelerating else { return }
                 self.offset = offset
             }
-            .onScrollTargetVisibilityChange(idType: Date.self, threshold: 0.5) { ids in
-                guard ids.count == 1, let id = ids.first else { return }
+            .onChange(of: centeredPage) { _, id in
+                guard let id else { return }
                 visibleID = id
                 guard phase == .interacting || phase == .decelerating, id != selection else { return }
                 onSelect(id)
@@ -192,7 +214,11 @@ private struct CalendarPaging: ViewModifier {
             .onChange(of: selection) { _, day in
                 // A user's midpoint selection already belongs to this scroll.
                 guard visibleID != day else { return }
-                position.scrollTo(id: day, anchor: .center)
+                var transaction = Transaction(animation: animated ? .snappy : nil)
+                transaction.disablesAnimations = !animated
+                withTransaction(transaction) {
+                    position.scrollTo(id: day, anchor: .center)
+                }
             }
             .onScrollPhaseChange { _, phase, context in
                 if phase == .tracking || (phase == .interacting && dragOrigin == nil) {
@@ -230,7 +256,6 @@ private struct LegacyCalendarPaging: ViewModifier {
         content
             .scrollTargetBehavior(.paging)
             .scrollPosition(id: $position, anchor: .center)
-            .animation(animated ? .snappy : nil, value: position)
             .onChange(of: position) { _, day in
                 guard let day else { return }
                 if let target = programmaticTarget {
@@ -242,7 +267,9 @@ private struct LegacyCalendarPaging: ViewModifier {
             .onChange(of: selection) { _, day in
                 guard position != day else { return }
                 programmaticTarget = day
-                position = day
+                var transaction = Transaction(animation: animated ? .snappy : nil)
+                transaction.disablesAnimations = !animated
+                withTransaction(transaction) { position = day }
             }
     }
 }

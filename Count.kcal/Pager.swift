@@ -65,6 +65,8 @@ struct Pager: View {
                                 case .daily:
                                     DayPageStrip(
                                         navigation: navigation,
+                                        selectedDay: navigation.selectedDay,
+                                        animated: navigation.animatesDayScroll,
                                         todayPageMode: $todayPageMode
                                     )
                                 case .progress:
@@ -283,33 +285,58 @@ private struct StreakDayChoices: ViewModifier {
 /// Horizontal day targets that keep their calendar-day identity while browsing.
 private struct DayPageStrip: View {
     let navigation: DayPager
+    let selectedDay: Date
+    let animated: Bool
 
     @Binding var todayPageMode: TodayPageMode
+    @Namespace private var viewport
+    @State private var centeredPage: Date?
 
     var body: some View {
-        ScrollView(.horizontal) {
-            LazyHStack(alignment: .top, spacing: 0) {
-                ForEach(navigation.pages) { page in
-                    Dashboard(todayPageMode: $todayPageMode)
-                        .containerRelativeFrame(.horizontal)
-                        .environment(page)
-                        .id(page.id)
+        CalendarPageReturn(
+            selection: selectedDay,
+            animated: animated,
+            pageDays: 1
+        ) { selection, animated, onArrival in
+            ScrollView(.horizontal) {
+                LazyHStack(alignment: .top, spacing: 0) {
+                    ForEach(navigation.pages) { page in
+                        dashboard(page)
+                            .containerRelativeFrame(.horizontal)
+                            .id(page.id)
+                            .calendarPagePosition(
+                                id: page.id, selection: selection, viewport: viewport,
+                                onCenter: { centeredPage = $0 }, onArrival: onArrival
+                            )
+                    }
                 }
+                .scrollTargetLayout()
             }
-            .scrollTargetLayout()
+            .coordinateSpace(name: viewport)
+            .scrollIndicators(.hidden)
+            .calendarPaging(
+                selection: selection,
+                centeredPage: centeredPage,
+                animated: animated,
+                onSelect: { navigation.selectDay($0) },
+                onActivity: { scrolling in
+                    navigation.dayIsScrolling = scrolling
+                    navigation.ensureSelectionBuffer()
+                }
+            )
+        } destination: { date in
+            if let page = navigation.page(for: date) {
+                dashboard(page)
+            }
         }
         .padding(.bottom, 20)
-        .scrollIndicators(.hidden)
-        .calendarPaging(
-            selection: navigation.selectedDay,
-            animated: navigation.animatesDayScroll,
-            onSelect: { navigation.selectDay($0) },
-            onActivity: { scrolling in
-                navigation.dayIsScrolling = scrolling
-                navigation.ensureSelectionBuffer()
-            }
-        )
     }
+
+    private func dashboard(_ page: HealthInterface) -> some View {
+        Dashboard(todayPageMode: $todayPageMode)
+            .environment(page)
+    }
+
 }
 
 #Preview { PreviewPager }

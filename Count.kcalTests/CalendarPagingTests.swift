@@ -155,4 +155,91 @@ struct CalendarPagingTests {
         ) == 804)
     }
 
+    @Test(arguments: [-21, -7, 7, 21])
+    func distantReturnWaitsForAnimationAndVisibleDestination(distance: Int) {
+        let source = Date(timeIntervalSince1970: 1_800_000_000)
+        let target = Calendar.current.date(byAdding: .day, value: distance, to: source)!
+        var state = CalendarReturnState(selection: source)
+        state.select(target, animated: true, pageDays: 1)
+        let flight = state.flight!
+        #expect(state.nativeSelection == source)
+        #expect(!state.animatesNativeScroll)
+        let ignoredArrival = state.arrive(at: target)
+        #expect(!ignoredArrival)
+
+        state.completeAnimation(id: flight.id)
+        #expect(state.nativeSelection == target)
+        #expect(state.isReanchoring)
+        let wrongArrival = state.arrive(at: source)
+        let correctArrival = state.arrive(at: target)
+        #expect(!wrongArrival)
+        #expect(correctArrival)
+        #expect(state.flight == nil)
+        // Enabling this in the arrival callback can animate the native handoff.
+        #expect(!state.animatesNativeScroll)
+    }
+
+    @Test(arguments: [false, true])
+    func newerSelectionWinsDuringSlideOrHandoff(afterAnimation: Bool) {
+        let source = Date(timeIntervalSince1970: 1_800_000_000)
+        let target = Calendar.current.date(byAdding: .day, value: 21, to: source)!
+        let latest = Calendar.current.date(byAdding: .day, value: -14, to: source)!
+        var state = CalendarReturnState(selection: source)
+        state.select(target, animated: true, pageDays: 1)
+        let oldID = state.flight!.id
+        if afterAnimation { state.completeAnimation(id: oldID) }
+        state.select(latest, animated: true, pageDays: 1)
+        state.completeAnimation(id: oldID)
+        let ignoredArrival = state.arrive(at: target)
+        #expect(!ignoredArrival)
+        #expect(state.nativeSelection == latest)
+        #expect(state.flight == nil)
+        #expect(!state.animatesNativeScroll)
+
+        state.select(target, animated: true, pageDays: 1)
+        let newID = state.flight!.id
+        state.completeAnimation(id: oldID)
+        #expect(state.flight?.id == newID)
+        #expect(!state.isReanchoring)
+    }
+
+    @Test func shortReturnStillUsesNativeAnimationAfterLongReturn() {
+        let source = Date(timeIntervalSince1970: 1_800_000_000)
+        let target = Calendar.current.date(byAdding: .day, value: 21, to: source)!
+        let adjacent = Calendar.current.date(byAdding: .day, value: -1, to: target)!
+        var state = CalendarReturnState(selection: source)
+        state.select(target, animated: true, pageDays: 1)
+        state.completeAnimation(id: state.flight!.id)
+        state.arrive(at: target)
+        state.select(adjacent, animated: true, pageDays: 1)
+        #expect(state.flight == nil)
+        #expect(state.nativeSelection == adjacent)
+        #expect(state.animatesNativeScroll)
+    }
+
+    @Test func disablingMotionSettlesAnActiveReturnImmediately() {
+        let source = Date(timeIntervalSince1970: 1_800_000_000)
+        let target = Calendar.current.date(byAdding: .day, value: 21, to: source)!
+        var state = CalendarReturnState(selection: source)
+        state.select(target, animated: true, pageDays: 1)
+        let oldID = state.flight!.id
+        state.select(target, animated: false, pageDays: 1)
+        state.completeAnimation(id: oldID)
+        #expect(state.nativeSelection == target)
+        #expect(state.flight == nil)
+        #expect(!state.animatesNativeScroll)
+    }
+
+    @Test(arguments: [1, 7])
+    func adjacentCalendarPageAcrossDSTUsesNativeScroll(pageDays: Int) {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Europe/Zurich")!
+        let source = calendar.date(from: DateComponents(year: 2026, month: 10, day: 24))!
+        let target = calendar.date(byAdding: .day, value: pageDays, to: source)!
+        var state = CalendarReturnState(selection: source)
+        state.select(target, animated: true, pageDays: pageDays, calendar: calendar)
+        #expect(state.flight == nil)
+        #expect(state.animatesNativeScroll)
+    }
+
 }
