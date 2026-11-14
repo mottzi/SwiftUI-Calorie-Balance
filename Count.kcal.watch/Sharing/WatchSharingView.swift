@@ -115,11 +115,14 @@ private struct WatchSharingPersonContent: View {
         ScrollView {
             VStack(spacing: 16) {
                 if let today = person.today {
-                    WatchSharingDayCard(snapshot: today, mode: mode, hidesGoalStatus: hidesGoalStatus)
+                    WatchSharingDayCard(
+                        snapshot: today, mode: mode, hidesGoalStatus: hidesGoalStatus,
+                        toggleMode: today.midnight == nil ? nil : toggleMode
+                    )
                 } else {
                     WatchSharingEmptyPerson(person: person)
                 }
-                if let streak = person.streak {
+                if let streak = person.streak, streak.days > 0 {
                     Label {
                         Text("\(streak.days) day streak")
                     } icon: {
@@ -144,18 +147,23 @@ private struct WatchSharingPersonContent: View {
         .toolbar {
             if person.today?.midnight != nil {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        withAnimation(reduceMotion ? nil : .smooth) {
-                            mode = mode == .now ? .midnight : .now
-                        }
-                    } label: {
+                    Button(action: toggleMode) {
                         Label(mode == .now ? "Show midnight estimate" : "Show current balance",
                               systemImage: mode == .now ? "sun.min.fill" : "moon.stars.fill")
+                            .labelStyle(.iconOnly)
+                            .foregroundStyle(.white.opacity(0.9))
+                            .contentTransition(.symbolEffect(.replace))
                     }
                 }
             }
         }
         .sensoryFeedback(.selection, trigger: mode)
+    }
+
+    private func toggleMode() {
+        withAnimation(reduceMotion ? nil : .bouncy(duration: 0.6)) {
+            mode = mode == .now ? .midnight : .now
+        }
     }
 }
 
@@ -188,65 +196,93 @@ private struct WatchSharingDayCard: View {
     let snapshot: CalorieCardSnapshot
     let mode: GraphMode
     let hidesGoalStatus: Bool
+    var toggleMode: (() -> Void)? = nil
+
+    private var values: CalorieCardSnapshot.ModeValues {
+        mode == .midnight ? snapshot.midnight ?? snapshot.now : snapshot.now
+    }
+
+    private var goalReached: Bool? {
+        hidesGoalStatus || values.energy.isEmpty ? nil : values.visibleGoalReached
+    }
+
+    var body: some View {
+        VStack(spacing: 16) {
+            if dynamicType.isAccessibilitySize {
+                WatchSharingLargeBalance(values: values, unit: snapshot.energyUnit.rawValue, hidesGoalStatus: hidesGoalStatus)
+                WatchSharingEnergyTotal(title: "Burned", symbol: "bolt.fill", value: values.burned,
+                                        color: snapshot.appearance.burned.color(in: .dark))
+                WatchSharingEnergyTotal(title: "Eaten", symbol: "fork.knife", value: values.consumed,
+                                        color: snapshot.appearance.consumed.color(in: .dark))
+            } else {
+                GeometryReader { _ in
+                    WatchCalorieDashboard(
+                        burned: values.burned,
+                        consumed: values.consumed,
+                        burnedColor: snapshot.appearance.burned.color(in: .dark),
+                        consumedColor: snapshot.appearance.consumed.color(in: .dark),
+                        unit: snapshot.energyUnit.rawValue,
+                        totalsOffset: -2
+                    ) {
+                        if let toggleMode {
+                            Button(action: toggleMode) {
+                                WatchSharingDashboardBalance(snapshot: snapshot, mode: mode, goalReached: goalReached)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityHint(mode == .now ? "Show midnight estimate" : "Show current balance")
+                        } else {
+                            WatchSharingDashboardBalance(snapshot: snapshot, mode: mode, goalReached: goalReached)
+                        }
+                    }
+                }
+                .aspectRatio(1.15, contentMode: .fit)
+                .padding(.top, 24)
+                .padding(.bottom, 10)
+            }
+
+            // A shared card is a captured reading, not a live HealthKit dashboard.
+            WatchSharingTimestamp(date: snapshot.capturedAt, isMissing: false)
+        }
+        .animation(reduceMotion || isLuminanceReduced ? nil : .smooth, value: values)
+    }
+}
+
+private struct WatchSharingDashboardBalance: View {
+    let snapshot: CalorieCardSnapshot
+    let mode: GraphMode
+    let goalReached: Bool?
 
     private var values: CalorieCardSnapshot.ModeValues {
         mode == .midnight ? snapshot.midnight ?? snapshot.now : snapshot.now
     }
 
     var body: some View {
-        VStack(spacing: 6) {
-            HStack {
-                Text(snapshot.dayTitle())
-                Spacer(minLength: 4)
-                if snapshot.midnight != nil { Text(mode == .now ? "Now" : "Midnight") }
-            }
-            .font(.caption2).foregroundStyle(.secondary)
-
-            if dynamicType.isAccessibilitySize {
-                WatchSharingLargeBalance(values: values, unit: snapshot.energyUnit.rawValue, hidesGoalStatus: hidesGoalStatus)
-            } else {
-                WatchSharingRing(snapshot: snapshot, mode: mode, hidesGoalStatus: true)
-                .frame(height: 104)
-                .overlay {
-                    VStack(spacing: 0) {
-                        Text("\(Text(abs(values.balance), format: .number).font(.system(.title2, design: .rounded, weight: .semibold))) \(Text(snapshot.energyUnit.rawValue).font(.caption2))")
-                            .contentTransition(.numericText(value: Double(abs(values.balance))))
-                            .lineLimit(1).minimumScaleFactor(0.65)
-                        Text(values.balanceTitle)
-                            .font(.caption2).foregroundStyle(.secondary)
-                            .lineLimit(1).minimumScaleFactor(0.75)
-                    }
-                    .frame(maxWidth: 64)
-                    .offset(y: 2)
-                }
-                .overlay(alignment: .bottom) {
-                    if !hidesGoalStatus, !values.energy.isEmpty, let reached = values.visibleGoalReached {
-                        Image(systemName: reached ? "checkmark" : "xmark")
-                            .font(.caption.weight(.semibold)).foregroundStyle(.secondary)
-                            .accessibilityLabel(reached ? "Goal reached" : "Goal not reached")
-                            .padding(.bottom, 9)
-                    }
-                }
-                .accessibilityHidden(false)
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(Text("\(abs(values.balance)) \(snapshot.energyUnit.rawValue) \(Text(values.balanceTitle))"))
-                .accessibilityValue(goalAccessibility)
-            }
-
-            HStack(alignment: .top, spacing: 12) {
-                WatchSharingEnergyTotal(title: "Burned", symbol: "bolt.fill", value: values.burned,
-                                        color: snapshot.appearance.burned.color(in: .dark))
-                WatchSharingEnergyTotal(title: "Eaten", symbol: "fork.knife", value: values.consumed,
-                                        color: snapshot.appearance.consumed.color(in: .dark))
-            }
-            WatchSharingTimestamp(date: snapshot.capturedAt, isMissing: false)
+        WatchCalorieDashboardRing(
+            energy: values.energy,
+            palette: .init(
+                burned: snapshot.appearance.burned.color(in: .dark),
+                consumed: snapshot.appearance.consumed.color(in: .dark),
+                empty: snapshot.appearance.graphEmpty.color(in: .dark)
+            )
+        )
+        .overlay {
+            CircleBalanceGraphOverlay(
+                balance: values.balance,
+                unit: snapshot.energyUnit.rawValue,
+                goalReached: goalReached
+            )
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 32)
         }
-        .animation(reduceMotion || isLuminanceReduced ? nil : .smooth, value: values)
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("\(abs(values.balance)) \(snapshot.energyUnit.rawValue) \(Text(values.balanceTitle))"))
+        .accessibilityValue(goalAccessibility)
     }
 
     private var goalAccessibility: Text {
-        guard !hidesGoalStatus, !values.energy.isEmpty, let reached = values.visibleGoalReached else { return Text("") }
-        return reached ? Text("Goal reached") : Text("Goal not reached")
+        guard let goalReached else { return Text("") }
+        return goalReached ? Text("Goal reached") : Text("Goal not reached")
     }
 }
 

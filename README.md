@@ -165,8 +165,10 @@ do not remove weights or change daily Health readings. An excluded day breaks th
 and does not receive a streak highlight in the chart or calendar.
 
 The Calories heading offers an option to exclude a completed day or restore its recorded data.
-Manual exclusions remain saved until the user changes them. The coverage row opens the calculation
-explanation and day list. Automatic exclusions can resolve when missing readings arrive.
+Manual exclusions remain saved until the user changes them. The coverage row opens a compact sheet
+with inline calculation guidance and only the omitted days. Manual exclusions can be undone there;
+the separate day picker offers included days to exclude. Both screens fit their content and scroll
+for longer periods or larger text. Automatic exclusions can resolve when missing readings arrive.
 
 SQLiteData 1.12.0 stores only explicit choices in the iPhone App Group's Application Support folder,
 with a versioned migration and file protection. Sample-mode choices use a separate record namespace.

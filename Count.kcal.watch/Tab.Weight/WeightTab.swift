@@ -1,6 +1,10 @@
 import SwiftUI
 import Charts
 
+private let weightChartLabelSpacing: CGFloat = 4
+private let weightChartValueLabelSize: CGFloat = 11
+private let weightChartAxisLabelColor = Color(white: 0.75)
+
 /// Shared weekly and monthly weight, read locally with older phone history when available.
 struct WeightTab: View {
 
@@ -43,22 +47,6 @@ struct WeightTab: View {
 
 }
 
-extension WeightSection {
-
-    private func latestDescription(_ weight: Double) -> Text {
-        if let date = history.latestWeightDate {
-            return Text(
-                """
-                \(weight, format: .number.precision(.fractionLength(1))) \(settings.weightUnit.rawValue), \
-                \(date, format: .dateTime.month().day().year())
-                """
-            )
-        }
-        return Text("\(weight, format: .number.precision(.fractionLength(1))) \(settings.weightUnit.rawValue)")
-    }
-
-}
-
 private struct WeightSection: View {
 
     @Environment(WeightHistory.self) private var history
@@ -69,29 +57,36 @@ private struct WeightSection: View {
 
     @ScaledMetric(relativeTo: .body) private var chartHeight = 120
 
+    @State private var plotInsets = EdgeInsets()
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            VStack(alignment: .leading, spacing: 0) {
-                Label {
-                    Text(period == .weekly ? "Weekly" : "Monthly")
-                } icon: {
-                    Image(systemName: "circle.slash")
-                        .rotationEffect(.degrees(-90))
-                }
-                    .font(.headline)
+        VStack(alignment: .leading, spacing: weightChartLabelSpacing) {
+            HStack(alignment: .center, spacing: 4) {
+                Image(systemName: "circle.slash")
+                    .font(.caption2.weight(.medium))
+                    .imageScale(.small)
+                    .rotationEffect(.degrees(-90))
                     .foregroundStyle(.secondary)
+                let title = Text(period == .weekly ? "Weekly" : "Monthly")
+                    .foregroundStyle(weightChartAxisLabelColor)
                 if history.dataLoaded, !history.validData(period).isEmpty {
-                    HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Text(history.average(for: period), format: .number.precision(.fractionLength(1)))
-                            .font(.system(.largeTitle, design: .rounded, weight: .semibold))
-                            .monospacedDigit()
-                        Text(settings.weightUnit.rawValue)
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                    }
+                    let average = Text(history.average(for: period), format: .number.precision(.fractionLength(1)))
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                    let unit = Text(settings.weightUnit.rawValue)
+                        .font(.system(size: weightChartValueLabelSize, weight: .regular))
+                        .foregroundStyle(.white)
+                    Text("\(title) \(average)\u{2009}\(unit)")
+                        .monospacedDigit()
+                } else {
+                    title
                 }
+                Spacer(minLength: 0)
             }
-            .scenePadding(.horizontal)
+            .font(.subheadline.weight(.medium))
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+            .padding(plotInsets)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(period == .weekly ? Text("Weekly average") : Text("Monthly average"))
             .accessibilityValue(
@@ -107,9 +102,8 @@ private struct WeightSection: View {
 
             if let dateRange = history.chartDateRange(for: period),
                history.dataLoaded, !history.validData(period).isEmpty {
-                WeightChart(period: period, dateRange: dateRange)
+                WeightChart(period: period, dateRange: dateRange, plotInsets: $plotInsets)
                     .frame(height: chartHeight)
-                    .padding(.horizontal, 4)
             } else {
                 Text("No weight data")
                     .font(.body)
@@ -117,34 +111,15 @@ private struct WeightSection: View {
                     .scenePadding(.horizontal)
             }
 
-            if period == .weekly, let weight = history.latestWeight {
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text(weight, format: .number.precision(.fractionLength(1)))
-                        .font(.system(.body, design: .rounded, weight: .semibold))
-                        .monospacedDigit()
-                    Text(settings.weightUnit.rawValue)
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                    Spacer(minLength: 4)
-                    if let date = history.latestWeightDate {
-                        Text(date.relative)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .scenePadding(.horizontal)
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(Text("Last Sample"))
-                .accessibilityValue(latestDescription(weight))
-            }
-
             if history.hasLimitedHistory(for: period) {
                 Text("Limited history")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                    .scenePadding(.horizontal)
+                    .padding(plotInsets)
             }
         }
+        .padding(.leading, 4)
+        .padding(.trailing, 12)
     }
 
 }
@@ -158,10 +133,19 @@ private struct WeightChart: View {
     let period: WeightPage
     let dateRange: ClosedRange<Date>
 
+    @Binding var plotInsets: EdgeInsets
+
+    @State private var plotHeight: CGFloat = 0
+    @State private var labelHeight: CGFloat = 0
+
     var body: some View {
         Chart {
             let data = history.validData(period)
-            let labelledDates = Set(history.labelledData(period).map(\.id))
+            let labelledData = history.labelledData(period)
+            let labelledDates = Set(labelledData.map(\.id))
+            let valueLabelDates = Set(labelledData.enumerated().compactMap { index, day in
+                period == .monthly || (labelledData.count - 1 - index).isMultiple(of: 2) ? day.id : nil
+            })
             let gradient = LinearGradient(
                 stops: [.init(color: trendColor, location: 0.5), .init(color: .clear, location: 1.5)],
                 startPoint: .trailing,
@@ -211,6 +195,19 @@ private struct WeightChart: View {
                         )
                         .foregroundStyle(.white.opacity(day.id == data.last?.id ? 1 : 0.6))
                         .symbolSize(day.id == data.last?.id ? 80 : 28)
+                        .annotation(position: labelPosition(for: weight), spacing: 8) {
+                            if valueLabelDates.contains(day.id) {
+                                Text(weight, format: .number.precision(.fractionLength(1)))
+                                    .font(.system(size: weightChartValueLabelSize, weight: .semibold))
+                                    .foregroundStyle(.white.opacity(day.id == data.last?.id ? 1 : 0.6))
+                                    .fixedSize()
+                                    .onGeometryChange(for: CGFloat.self) { geometry in
+                                        geometry.size.height
+                                    } action: { height in
+                                        labelHeight = height
+                                    }
+                            }
+                        }
                         .accessibilityHidden(true)
 
                         PointMark(
@@ -234,34 +231,60 @@ private struct WeightChart: View {
         }
         .chartXScale(domain: dateRange)
         .chartYScale(domain: history.getYRange(period))
+        .chartPlotStyle { plot in
+            plot
+                .onGeometryChange(for: CGFloat.self) { geometry in
+                    geometry.size.height
+                } action: { height in
+                    plotHeight = height
+                }
+                .overlay {
+                    Rectangle()
+                        .strokeBorder(.white.opacity(0.2), lineWidth: 0.5)
+                        .allowsHitTesting(false)
+                }
+        }
         .chartXAxis {
-            AxisMarks(values: .stride(by: .day, count: period == .weekly ? 1 : 7)) {
-                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [1, 3]))
-                .foregroundStyle(.white.opacity(0.15))
+            AxisMarks(values: .stride(by: .day, count: period == .weekly ? 1 : 7)) { value in
+                if let date = value.as(Date.self), date > dateRange.lowerBound, date < dateRange.upperBound {
+                    AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [2, 2]))
+                        .foregroundStyle(.white.opacity(0.3))
+                }
 
                 if period == .weekly {
-                    AxisValueLabel(format: .dateTime.weekday(.narrow), centered: true)
+                    AxisValueLabel(
+                        format: .dateTime.weekday(.narrow),
+                        centered: true,
+                        verticalSpacing: weightChartLabelSpacing
+                    )
                         .font(.system(.caption, design: .rounded, weight: .medium))
+                        .foregroundStyle(weightChartAxisLabelColor)
                 } else {
-                    AxisValueLabel(format: .dateTime.day(.twoDigits))
+                    AxisValueLabel(
+                        format: .dateTime.day(.twoDigits),
+                        verticalSpacing: weightChartLabelSpacing
+                    )
                         .font(.system(.caption, design: .rounded, weight: .medium))
+                        .foregroundStyle(weightChartAxisLabelColor)
                 }
             }
         }
-        .chartYAxis {
-            AxisMarks(
-                preset: .inset,
-                position: .trailing,
-                values: history.createYRangeArray(period)
-            ) {
-                AxisValueLabel()
-                    .font(.system(.caption, design: .rounded, weight: .medium))
-            }
-
-            AxisMarks(values: [history.getYBottomRange(period), history.getYTopRange(period)]) {
-                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
-                    .foregroundStyle(.white.opacity(0.15))
-            }
+        .chartYAxis(.hidden)
+        .chartOverlay { proxy in
+            Color.clear
+                .onGeometryChange(for: EdgeInsets.self) { geometry in
+                    guard let anchor = proxy.plotFrame else { return EdgeInsets() }
+                    let frame = geometry[anchor]
+                    return EdgeInsets(
+                        top: 0,
+                        leading: frame.minX,
+                        bottom: 0,
+                        trailing: geometry.size.width - frame.maxX
+                    )
+                } action: { insets in
+                    plotInsets = insets
+                }
+                .allowsHitTesting(false)
         }
         .font(.caption)
         .accessibilityLabel(period == .weekly ? Text("Weekly weight") : Text("Monthly weight"))
@@ -270,6 +293,15 @@ private struct WeightChart: View {
 }
 
 extension WeightChart {
+
+    /// Matches the phone: prefer above, moving below when only that side has room.
+    private func labelPosition(for weight: Double) -> AnnotationPosition {
+        guard plotHeight > 0, labelHeight > 0 else { return .top }
+        let range = history.getYRange(period)
+        let spaceAbove = CGFloat((Double(range.upperBound) - weight) / Double(range.upperBound - range.lowerBound)) * plotHeight
+        let requiredSpace = labelHeight + 8 + 6
+        return spaceAbove < requiredSpace && plotHeight - spaceAbove >= requiredSpace ? .bottom : .top
+    }
 
     private var trendColor: Color {
         switch history.trend(for: period) {

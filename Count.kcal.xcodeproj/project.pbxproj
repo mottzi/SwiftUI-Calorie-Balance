@@ -52,6 +52,9 @@
 		4E015F66A1034D988F0DE47A /* CalorieCircleGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = B521FF9AAD6B465985641C0E /* CalorieCircleGraph.swift */; };
 		569E7BBC28AE49AABDC7EDE2 /* SampleHealthDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385A13964874208A838B836 /* SampleHealthDataSource.swift */; };
 		6AB4983DAA32421CBD303058 /* ProgressDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = C682D9D0C89F41D1A4BD0CCC /* ProgressDetails.swift */; };
+		89F06BA4EEEC48D4A1493A4B /* ProgressDayPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0CE3DD4D6049F79FCAA69B /* ProgressDayPicker.swift */; };
+		154BC07254A746B2AF712AAF /* ProgressExcludedDays.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D9DAB01CB648EC99EBA3F7 /* ProgressExcludedDays.swift */; };
+		BE05E9E385DC4D5892548BF3 /* ProgressSheetContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6F81A6B6EF4E618F8E4A7D /* ProgressSheetContent.swift */; };
 		73E6F7B46C2748558A7DFC00 /* CalorieGraphDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0645D5F5417C44B2879DFA0C /* CalorieGraphDrawing.swift */; };
 		75D3F0221DC84CABAAEF36C7 /* CalorieRoomComplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9ACA931D5C48A78D794374 /* CalorieRoomComplication.swift */; };
 		79DA7A94C1494E6FA15A80AD /* CalorieGraphRendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C22D79D56BF4652B8B520AE /* CalorieGraphRendering.swift */; };
@@ -335,6 +338,9 @@
 		16291F8B22AB4F04BEEB11F5 /* SharingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC04ABCEBB04B25E25E2752 /* SharingModels.swift */; };
 		06E4694806FE4E00856BD90A /* WatchSharingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5689876C9EF042E79811CB08 /* WatchSharingTests.swift */; };
 		B6C60AB951CD4109AC23EFA6 /* WatchSharingFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8C40D6F67843289A5D5E0A /* WatchSharingFixtures.swift */; };
+		C79A11000000000000000002 /* WatchCalorieDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79A11000000000000000001 /* WatchCalorieDashboard.swift */; };
+		C79A11000000000000000004 /* WatchCalorieDashboardRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79A11000000000000000003 /* WatchCalorieDashboardRing.swift */; };
+		C79A11000000000000000005 /* WatchCalorieDashboardRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79A11000000000000000003 /* WatchCalorieDashboardRing.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -566,6 +572,9 @@
 		C4A27A000000000000000002 /* WeightChartGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightChartGallery.swift; sourceTree = "<group>"; };
 		C4A27A000000000000000003 /* WeightChartScenarioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightChartScenarioView.swift; sourceTree = "<group>"; };
 		C682D9D0C89F41D1A4BD0CCC /* ProgressDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDetails.swift; sourceTree = "<group>"; };
+		AC0CE3DD4D6049F79FCAA69B /* ProgressDayPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDayPicker.swift; sourceTree = "<group>"; };
+		C0D9DAB01CB648EC99EBA3F7 /* ProgressExcludedDays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressExcludedDays.swift; sourceTree = "<group>"; };
+		EC6F81A6B6EF4E618F8E4A7D /* ProgressSheetContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSheetContent.swift; sourceTree = "<group>"; };
 		C8F4A0010000000000000002 /* OtherSettingsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherSettingsCard.swift; sourceTree = "<group>"; };
 		D0A496372CD0407F880F1B24 /* CalorieGraphPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieGraphPalette.swift; sourceTree = "<group>"; };
 		D419EC4A82544CCFB66103F5 /* RecessedCardStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecessedCardStyle.swift; path = Count.kcal/Dashboard/RecessedCardStyle.swift; sourceTree = SOURCE_ROOT; };
@@ -624,6 +633,8 @@
 		60055AE12A274A468699ABF8 /* WatchSharingSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sharing/WatchSharingSync.swift; sourceTree = "<group>"; };
 		5689876C9EF042E79811CB08 /* WatchSharingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSharingTests.swift; sourceTree = "<group>"; };
 		7A8C40D6F67843289A5D5E0A /* WatchSharingFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sharing/WatchSharingFixtures.swift; sourceTree = "<group>"; };
+		C79A11000000000000000001 /* WatchCalorieDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchCalorieDashboard.swift; sourceTree = "<group>"; };
+		C79A11000000000000000003 /* WatchCalorieDashboardRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchCalorieDashboardRing.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -751,6 +762,9 @@
 				D5932B5624094397BA49636F /* DayChoiceButton.swift */,
 				368EE330C63D41D1A746FEB6 /* ProgressMetrics.swift */,
 				C682D9D0C89F41D1A4BD0CCC /* ProgressDetails.swift */,
+				AC0CE3DD4D6049F79FCAA69B /* ProgressDayPicker.swift */,
+				C0D9DAB01CB648EC99EBA3F7 /* ProgressExcludedDays.swift */,
+				EC6F81A6B6EF4E618F8E4A7D /* ProgressSheetContent.swift */,
 			);
 			path = Progress;
 			sourceTree = "<group>";
@@ -831,6 +845,8 @@
 				9A16C8D82C389E5200ED3B7E /* BarBalanceGraphWatch.swift */,
 				9A0BAC072C244D0E00622F9F /* CircleBalanceGraphOverlay.swift */,
 				9A0BAC0A2C244D6800622F9F /* CaloricTotalsView.swift */,
+				C79A11000000000000000003 /* WatchCalorieDashboardRing.swift */,
+				C79A11000000000000000001 /* WatchCalorieDashboard.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1500,6 +1516,9 @@
 				358D645EC04143EBAB48D635 /* DayChoiceButton.swift in Sources */,
 				F929F3EB33D943D3A537E637 /* ProgressMetrics.swift in Sources */,
 				6AB4983DAA32421CBD303058 /* ProgressDetails.swift in Sources */,
+				89F06BA4EEEC48D4A1493A4B /* ProgressDayPicker.swift in Sources */,
+				154BC07254A746B2AF712AAF /* ProgressExcludedDays.swift in Sources */,
+				BE05E9E385DC4D5892548BF3 /* ProgressSheetContent.swift in Sources */,
 				9A3F8EAA2B348C1F00B0DC74 /* CaloriesMidnightCard.swift in Sources */,
 				289AE5A61255430F997770B1 /* RecessedCardStyle.swift in Sources */,
 				A6CA10000000000000000004 /* RecessedPress.swift in Sources */,
@@ -1681,6 +1700,7 @@
 				9A16C8DA2C389EC100ED3B7E /* BarBalanceGraphWatch.swift in Sources */,
 				9AA413112C264C4D005B9D73 /* Extensions.swift in Sources */,
 				9A6DBD592C28D35A000920DA /* CircleBalanceGraphWatch.swift in Sources */,
+				C79A11000000000000000005 /* WatchCalorieDashboardRing.swift in Sources */,
 				9A6DBD5D2C28D46F000920DA /* CircleProgressView.swift in Sources */,
 				9AF309ED2C32AF7B0081FDCE /* BalanceCircleFullGraph.swift in Sources */,
 				9A34AD4B2C2A1F4A00A0C5A6 /* Connectivity.swift in Sources */,
@@ -1745,6 +1765,8 @@
 				9A4B728E2C13B63E004853F0 /* HealthInterface.swift in Sources */,
 				9A3B60152C1E77E0006000B4 /* EnergyBalance.swift in Sources */,
 				9A0BAC0B2C244D6800622F9F /* CaloricTotalsView.swift in Sources */,
+				C79A11000000000000000004 /* WatchCalorieDashboardRing.swift in Sources */,
+				C79A11000000000000000002 /* WatchCalorieDashboard.swift in Sources */,
 				9A4B728D2C13B639004853F0 /* HealthData.swift in Sources */,
 				9A0D04FF2C165E6B00AF7247 /* Connectivity.swift in Sources */,
 				21AEC54E8D864BA79114FC92 /* WatchSettingsSnapshot.swift in Sources */,

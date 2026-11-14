@@ -16,6 +16,7 @@ enum WatchSharingFixtures {
         let defaults = UserDefaults(suiteName: "watch.sharing.qa")!
         defaults.removePersistentDomain(forName: "watch.sharing.qa")
         let store = WatchSharingStore(defaults: defaults)
+        let args = ProcessInfo.processInfo.arguments
         let now = Date.now.addingTimeInterval(-300)
         let calendar = Calendar.current
         let start = calendar.startOfDay(for: now)
@@ -32,10 +33,15 @@ enum WatchSharingFixtures {
             timeZoneIdentifier: calendar.timeZone.identifier, dayStart: start, dayEnd: end, capturedAt: now,
             now: .init(energy: .init(active: 700, resting: 1610, consumed: 2120), visibleGoalReached: false),
             midnight: .init(energy: .init(active: 700, resting: 1610, restingRemaining: 410, consumed: 2120), visibleGoalReached: true),
-            energyUnit: .kcal,
+            energyUnit: args.contains("--watch-sharing-large-values") ? .kJ : .kcal,
             appearance: .init(burned: purple, consumed: color(0.3, 0.85, 0.46),
                               cardBackground: color(0.1, 0.1, 0.1), graphEmpty: color(0.25, 0.25, 0.25), nameColor: purple)
         )
+        if args.contains("--watch-sharing-large-values") {
+            card.now = .init(energy: .init(active: 3000, resting: 6800, consumed: 8071), visibleGoalReached: false)
+            card.midnight = .init(energy: .init(active: 3000, resting: 6800, restingRemaining: 1700, consumed: 8071),
+                                  visibleGoalReached: true)
+        }
         let history = (1...6).map { offset -> CalorieCardSnapshot in
             let day = calendar.date(byAdding: .day, value: -offset, to: start)!
             return .init(senderLocalDate: CalorieCardSnapshot.localDate(for: day, calendar: calendar),
@@ -64,7 +70,6 @@ enum WatchSharingFixtures {
         people.append(.init(id: UUID(), name: "Maya", revision: 4, scopes: [], isReady: true,
                             nameColor: purple, today: nil, history: [], streak: nil, streakExpiresAt: nil,
                             senderTimeZone: nil, lastSharedAt: nil))
-        let args = ProcessInfo.processInfo.arguments
         store.receive(.init(accountID: "watch-qa", people: args.contains("--watch-sharing-empty") ? [] : people,
                             hidesGoalStatus: args.contains("--watch-sharing-hide-goals")))
         return store

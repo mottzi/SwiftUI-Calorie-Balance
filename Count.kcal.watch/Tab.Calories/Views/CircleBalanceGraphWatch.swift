@@ -15,21 +15,29 @@ struct CircleBalanceGraphWatch: View {
     var cutout = 0.28
 
     var body: some View {
-        GeometryReader { geometry in
-            let diameter = context == .app ? geometry.size.width : min(geometry.size.width, geometry.size.height)
-
-            CalorieCircleGraph(
+        if context == .app {
+            WatchCalorieDashboardRing(
                 energy: mode == .now ? day.sample.now : day.sample.midnight,
-                configuration: CalorieCircleConfiguration(
-                    lineWidth: lineWidth(for: diameter),
-                    ringSpacing: ringSpacing(for: diameter),
-                    openAngle: .degrees(cutout * 360)
-                ),
                 palette: palette,
-                rendering: context == .app || context == .toolbar ? .live : .widget
+                cutout: cutout
             )
-            .frame(width: diameter, height: diameter)
-            .frame(width: geometry.size.width, height: geometry.size.height)
+        } else {
+            GeometryReader { geometry in
+                let diameter = min(geometry.size.width, geometry.size.height)
+
+                CalorieCircleGraph(
+                    energy: mode == .now ? day.sample.now : day.sample.midnight,
+                    configuration: CalorieCircleConfiguration(
+                        lineWidth: lineWidth(for: diameter),
+                        ringSpacing: ringSpacing(for: diameter),
+                        openAngle: .degrees(cutout * 360)
+                    ),
+                    palette: palette,
+                    rendering: context == .app || context == .toolbar ? .live : .widget
+                )
+                .frame(width: diameter, height: diameter)
+                .frame(width: geometry.size.width, height: geometry.size.height)
+            }
         }
     }
 

@@ -41,16 +41,12 @@ struct ContentView: View {
 
                 WeightTab()
                     .tag(WatchTab.weight)
+
+                WatchSharingView()
+                    .tag(WatchTab.sharing)
             }
             .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                    NavigationLink {
-                        WatchSharingView()
-                    } label: {
-                        Label("Sharing", systemImage: "person.2.fill")
-                    }
-                }
-                if tabSelection != .weight {
+                if tabSelection == .calories || tabSelection == .macros {
                     // Render the moving graph here so page blur doesn't duplicate it.
                     ToolbarItem(placement: .topBarLeading) {
                         CircleBalanceGraphWatch(mode: modeSelection)
@@ -67,10 +63,10 @@ struct ContentView: View {
                     }
                 }
             }
-            .opacity(Interface.sample.isUnavailable && tabSelection != .weight ? 0 : 1)
-            .accessibilityHidden(Interface.sample.isUnavailable && tabSelection != .weight)
+            .opacity(Interface.sample.isUnavailable && tabSelection.needsHealthData ? 0 : 1)
+            .accessibilityHidden(Interface.sample.isUnavailable && tabSelection.needsHealthData)
             .overlay {
-                if Interface.sample.isUnavailable, tabSelection != .weight {
+                if Interface.sample.isUnavailable, tabSelection.needsHealthData {
                     Text("Health data unavailable")
                         .font(.caption)
                         .padding()
@@ -124,6 +120,7 @@ struct ContentView: View {
                 }
             }
         }
+        .fontDesign(.rounded)
         .environment(Interface)
         .environment(weightHistory)
         .modifier(WatchSharingReceiver(store: sharing, connectivity: Watch))
@@ -204,6 +201,11 @@ private enum WatchTab {
     case calories
     case macros
     case weight
+    case sharing
+
+    var needsHealthData: Bool {
+        self == .calories || self == .macros
+    }
 }
 
 #Preview {

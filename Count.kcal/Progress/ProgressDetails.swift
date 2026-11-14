@@ -1,146 +1,134 @@
 import SwiftUI
 import SQLiteData
 
-/// Coverage and reversible day choices for the selected completed period.
+/// Coverage and reversible exclusions for the selected completed period.
 struct ProgressDetails: View {
 
-    @Environment(\.dismiss) private var dismiss
-
+    @Environment(\.dynamicTypeSize) private var dynamicType
+    @EnvironmentObject private var settings: Settings
+    @ScaledMetric(relativeTo: .body) private var summaryHeight: CGFloat = 380
+    @ScaledMetric(relativeTo: .body) private var omittedSectionHeight: CGFloat = 66
+    @ScaledMetric(relativeTo: .body) private var omittedRowHeight: CGFloat = 56
     @State private var saveFailed = false
-
+    @State private var showsPicker = false
+    @State private var summaryWhilePicking: ProgressSummary?
     @FetchAll private var records: [StoredDayChoice]
 
     let history: ProgressHistory
     let period: ProgressPeriod
 
     var body: some View {
-        let summary = history.summary(
+        let liveSummary = history.summary(
             for: period,
             choices: AppDatabase.choices(records, sampleData: HealthDataMode.isSampleDataEnabled)
         )
-        NavigationStack {
-            List {
-                if $records.loadError != nil {
-                    Section {
-                        Text("Saved choices unavailable")
-                        Text("Close this sheet and reopen the app to try again. Your saved choices have not been changed.")
-                            .foregroundStyle(.secondary)
+        // Keep the presenting sheet at the same height while the picker is open.
+        let summary = summaryWhilePicking ?? liveSummary
+        let omittedDays = summary.days.reversed().filter { !$0.eligibility.isIncluded }
+        let editableDays = liveSummary.days.reversed().filter {
+            $0.eligibility.isIncluded || $0.eligibility == .excluded
+        }
+        ProgressSheetContent(title: "Balance average", detent: detent(omittedCount: omittedDays.count)) {
+            if $records.loadError != nil {
+                Text("Saved choices unavailable").font(.headline)
+                Text("Reopen the app to try again. Your choices are unchanged.")
+                    .foregroundStyle(.secondary)
+            } else if history.energyFailed {
+                Text("Calorie data unavailable").font(.headline)
+                Text("Pull down on the dashboard to try again.")
+                    .foregroundStyle(.secondary)
+            } else if history.isLoading || $records.isLoading {
+                ProgressView("Loading days…")
+                    .frame(maxWidth: .infinity)
+            } else {
+                Text("Your average daily calorie deficit or surplus, based on the days included.")
+                    .font(.subheadline)
+
+                balanceCard(summary)
+
+                if !omittedDays.isEmpty {
+                    ProgressExcludedDays(days: omittedDays) { date in
+                        do {
+                            try saveChoice(.automatic, for: date)
+                        } catch {
+                            saveFailed = true
+                        }
                     }
-                } else if history.energyFailed {
-                    Section {
-                        Label("Calorie data unavailable", systemImage: "exclamationmark.circle")
-                        Text("Close this sheet and pull down on the dashboard to try again.")
-                            .foregroundStyle(.secondary)
+                }
+
+                if !editableDays.isEmpty {
+                    Button {
+                        summaryWhilePicking = liveSummary
+                        showsPicker = true
+                    } label: {
+                        Label("Exclude days", systemImage: "calendar.badge.minus")
+                            .frame(maxWidth: .infinity, minHeight: 32)
                     }
+                    .buttonStyle(.bordered)
+                    .buttonBorderShape(.roundedRectangle(radius: 14))
+                }
+            }
+        }
+        .sheet(isPresented: $showsPicker, onDismiss: { summaryWhilePicking = nil }) {
+            ProgressDayPicker(
+                days: editableDays,
+                dateRange: dateRange,
+                canEdit: !history.isLoading && !$records.isLoading && $records.loadError == nil && !history.energyFailed,
+                saveChoice: saveChoice
+            )
+        }
+        .alert("Could not save", isPresented: $saveFailed) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Your choice is unchanged. Try again.")
+        }
+    }
+
+    private func detent(omittedCount: Int) -> PresentationDetent {
+        if dynamicType.isAccessibilitySize || omittedCount > 6 { return .large }
+        guard omittedCount > 0 else { return .height(summaryHeight) }
+        return .height(summaryHeight + omittedSectionHeight + omittedRowHeight * CGFloat(omittedCount))
+    }
+
+    private func balanceCard(_ summary: ProgressSummary) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if let average = summary.averageDeficit {
+                let balance = average.rounded()
+                let direction: LocalizedStringResource = balance > 0 ? "Daily deficit" : balance < 0 ? "Daily surplus" : "Daily balance"
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("\(abs(balance), format: .number.precision(.fractionLength(0))) \(Text(settings.energyUnit.rawValue).font(.title3).foregroundStyle(.secondary))")
+                        .font(.largeTitle.weight(.semibold))
+                        .monospacedDigit()
+                    Text(direction)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                .accessibilityElement(children: .combine)
+            } else {
+                Text("At least 2 days needed for an average.")
+                    .font(.subheadline)
+            }
+
+            Divider()
+
+            VStack(alignment: .leading, spacing: 3) {
+                if summary.includedDays == period.rawValue {
+                    Text("All \(period.rawValue) days included")
                 } else {
-                    Section {
-                        ForEach(summary.days.reversed(), id: \.day.id) { item in
-                            Menu {
-                                Section("Affects your average deficit and streak") {
-                                    if item.eligibility == .excluded {
-                                        Button("Use recorded data", systemImage: "arrow.uturn.backward") {
-                                            saveChoice(.automatic, for: item.day.date)
-                                        }
-                                    } else {
-                                        Button("Exclude this day", systemImage: "minus.circle", role: .destructive) {
-                                            saveChoice(.excluded, for: item.day.date)
-                                        }
-                                    }
-                                }
-                            } label: {
-                                HStack(spacing: 12) {
-                                    Image(systemName: symbol(for: item.eligibility))
-                                        .foregroundStyle(color(for: item.eligibility))
-                                        .accessibilityHidden(true)
-                                    VStack(alignment: .leading, spacing: 3) {
-                                        Text(
-                                            item.day.date,
-                                            format: .dateTime.weekday(.abbreviated).day().month(.abbreviated)
-                                        )
-                                            .foregroundStyle(.primary)
-                                        Text(item.eligibility.title)
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
-                                    }
-                                    Spacer()
-                                    Image(systemName: "ellipsis")
-                                        .font(.caption.weight(.semibold))
-                                        .foregroundStyle(.tertiary)
-                                        .accessibilityHidden(true)
-                                }
-                                .frame(minHeight: 44)
-                                .contentShape(.rect)
-                            }
-                            .menuStyle(.borderlessButton)
-                            .disabled($records.isLoading || $records.loadError != nil)
-                        }
-                    } header: {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(dateRange)
-                            Text("\(summary.includedDays) of \(period.rawValue) completed days included")
-                        }
-                    } footer: {
-                        Text("""
-                        At least two included days are needed for an average. Recorded data can \
-                        still be incomplete. Exclude any day you know is unreliable.
-                        """)
-                    }
+                    Text("\(summary.includedDays) of \(period.rawValue) days included")
                 }
-                Section {
-                    Text("""
-                    Average deficit is energy burned minus food intake, averaged over included days. \
-                    A negative value means a surplus. Today is still in progress and stays out.
-                    """)
-                    Text("""
-                    Weight change compares average recorded weight with the previous period. Missing \
-                    weigh-ins are skipped. At least two recorded days are needed in each period.
-                    """)
-                } header: {
-                    Text("Calculation")
-                }
-                .font(.subheadline)
-
-                if history.weightFailed {
-                    Section { Text("Weight data unavailable") }
-                }
+                Text(dateRange).foregroundStyle(.secondary)
             }
-            .navigationTitle("Days included")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done", systemImage: "checkmark") { dismiss() }
-                }
-            }
-            .alert("Could not save this choice", isPresented: $saveFailed) {
-                Button("OK", role: .cancel) { }
-            } message: {
-                Text("Your previous choice is unchanged. Please try again.")
-            }
+            .font(.subheadline)
+            .accessibilityElement(children: .combine)
         }
-        .presentationDetents([.large])
-        .presentationDragIndicator(.visible)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(Color(uiColor: .secondarySystemGroupedBackground), in: .rect(cornerRadius: 20))
     }
 
-}
-
-extension ProgressDetails {
-
-    private func saveChoice(_ choice: DayChoice, for date: Date) {
-        do {
-            try AppDatabase.setChoice(choice, for: date, sampleData: HealthDataMode.isSampleDataEnabled)
-        } catch {
-            saveFailed = true
-        }
-    }
-
-    private func symbol(for eligibility: DayEligibility) -> String {
-        if eligibility == .fastingConflict { return "exclamationmark.circle" }
-        return eligibility.isIncluded ? "checkmark.circle" : "minus.circle"
-    }
-
-    private func color(for eligibility: DayEligibility) -> Color {
-        if eligibility == .fastingConflict { return .orange }
-        return eligibility.isIncluded ? .accentColor : .secondary
+    private func saveChoice(_ choice: DayChoice, for date: Date) throws {
+        try AppDatabase.setChoice(choice, for: date, sampleData: HealthDataMode.isSampleDataEnabled)
     }
 
     private var dateRange: String {

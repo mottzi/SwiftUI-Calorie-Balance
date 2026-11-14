@@ -20,6 +20,15 @@ struct WatchApp: App {
             ContentView(Interface: HealthInterface(.empty(for: .now)))
                 .environmentObject(AppSettings)
                 .environment(sharing)
+                #if DEBUG
+                .transformEnvironment(\.dynamicTypeSize) { size in
+                    if WatchSharingFixtures.isActive {
+                        let args = ProcessInfo.processInfo.arguments
+                        if args.contains("--watch-sharing-large-text") { size = .xxxLarge }
+                        if args.contains("--watch-sharing-accessibility-text") { size = .accessibility3 }
+                    }
+                }
+                #endif
         }
     }
 

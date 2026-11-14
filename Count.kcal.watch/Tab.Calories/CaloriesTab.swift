@@ -14,7 +14,12 @@ struct CaloriesTab: View {
     let balanceInToolbar: Bool
     
     var body: some View {
-        VStack {
+        WatchCalorieDashboard(
+            burned: mode == .now ? Interface.sample.now.burned : Interface.sample.midnight.burned,
+            consumed: Interface.sample.consumed,
+            burnedColor: AppSettings.burnedColor,
+            consumedColor: AppSettings.consumedColor
+        ) {
             Button(action: toggleMode) {
                 CircleBalanceGraphWatch(mode: mode)
                     .matchedGeometryEffect(
@@ -36,15 +41,9 @@ struct CaloriesTab: View {
             }
             .buttonStyle(.plain)
             .accessibilityHint(mode == .now ? "Midnight" : "Now")
-            
-            CaloricTotalsView(mode: mode)
-                .offset(y: 10)
         }
-        .lineLimit(1)
-        .minimumScaleFactor(0.5)
         .containerBackground(bgColor.brighten(-0.3).gradient, for: .tabView)
         .padding(.top, 18)
-        .padding(.bottom, 20)
         .scenePadding(.horizontal)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

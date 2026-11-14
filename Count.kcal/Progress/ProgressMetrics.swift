@@ -39,7 +39,7 @@ struct ProgressMetrics: View {
             }
             .buttonStyle(.plain)
             .disabled(history.isLoading || $records.isLoading)
-            .accessibilityHint("Shows the calculation and lets you review individual days")
+            .accessibilityHint("Review omitted days and manage exclusions")
         }
         .sheet(isPresented: $showDetails) {
             ProgressDetails(history: history, period: period)
@@ -104,7 +104,7 @@ extension ProgressMetrics {
     private func coverage(_ summary: ProgressSummary) -> LocalizedStringResource {
         if $records.loadError != nil { return "Saved choices unavailable" }
         if history.energyFailed { return "Calorie data unavailable" }
-        return "\(summary.includedDays) of \(period.rawValue) completed days included"
+        return "\(summary.includedDays) of \(period.rawValue) days included"
     }
 
 }
