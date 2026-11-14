@@ -97,7 +97,8 @@ struct SharingPersonDetail: View {
         .sheet(isPresented: $showsRequest) {
             SharingRequestConsentView(runtime: runtime, coordinator: coordinator, connectionID: connectionID)
         }
-        .confirmationDialog("Remove \(peerName)?", isPresented: $confirmsRemoval, titleVisibility: .visible) {
+        .alert("Remove \(peerName)?", isPresented: $confirmsRemoval) {
+            Button("Cancel", role: .cancel) { }
             Button("Remove person", role: .destructive) {
                 if runtime.applyPermissionChange(on: coordinator, {
                     try coordinator.enqueueRemoval(connectionID: connectionID)
@@ -106,7 +107,8 @@ struct SharingPersonDetail: View {
         } message: {
             Text("Sharing ends for both of you. Reconnecting needs a new invitation. Removing iCloud access may take longer. Saved copies cannot be erased.")
         }
-        .confirmationDialog("Pause sharing with \(peerName)?", isPresented: $confirmsPause, titleVisibility: .visible) {
+        .alert("Pause sharing with \(peerName)?", isPresented: $confirmsPause) {
+            Button("Cancel", role: .cancel) { }
             Button("Pause sharing") {
                 runtime.applyPermissionChange(on: coordinator) {
                     try coordinator.enqueueScopeChange(connectionID: connectionID, to: [])
