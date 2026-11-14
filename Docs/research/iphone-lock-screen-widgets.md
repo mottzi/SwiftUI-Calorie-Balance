@@ -8,7 +8,7 @@ Proceed with one circular Lock Screen widget. The open two-ring shape, lightning
 
 The drawing is a modest addition to this project. Reliable health data while the phone is locked is the larger engineering concern. This is a feasibility review, with no implementation or device verification.
 
-The reference inspected was [watch-complication-01.png](../../Marketing/archive/legacy-app-store/watch/exports/watch-complication-01.png). The bottom circular complications offer a more direct starting point than the large central composition.
+The reference inspected was [watch-complication-01.png](https://github.com/mottzi/Count.kcal-Marketing/blob/main/Marketing/archive/legacy-app-store/watch/exports/watch-complication-01.png). The bottom circular complications offer a more direct starting point than the large central composition.
 
 ## What Apple allows
 

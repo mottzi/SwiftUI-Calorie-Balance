@@ -1,5 +1,9 @@
 # Count.kcal
 
+Campaign artwork, source files, and App Store metadata are maintained in the
+[private Count.kcal-Marketing repository](https://github.com/mottzi/Count.kcal-Marketing).
+
+
 Count.kcal is a calorie balance, body weight and macro-nutrition visualization app that integrates with Apple Health to help users monitor their weight loss or gain over time.
 
 <img width="535" alt="1" src="https://github.com/user-attachments/assets/ebe81322-0781-432c-ac82-599dfff6efa1" />
