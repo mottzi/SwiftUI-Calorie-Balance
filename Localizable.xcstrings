@@ -4,6 +4,37 @@
     "" : {
       "shouldTranslate" : false
     },
+    "-/-" : {
+
+    },
+    ", use ..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ", verwende ..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ", utilizar ..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ", utilisez ..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "，使用…"
+          }
+        }
+      }
+    },
     "%@" : {
       "localizations" : {
         "de" : {
@@ -32,6 +63,53 @@
         }
       }
     },
+    "%@ · Waiting for acceptance" : {
+      "comment" : "Calorie card sharing interface and consent.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · Warten auf Zustimmung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · Waiting for acceptance"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · Esperando aceptación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · En attente d'acceptation"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · 等待接受"
+          }
+        }
+      }
+    },
+    "%@ / %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ / %2$@ %3$@"
+          }
+        }
+      },
+      "shouldTranslate" : false
+    },
     "%@ %@" : {
       "localizations" : {
         "en" : {
@@ -42,6 +120,26 @@
         }
       },
       "shouldTranslate" : false
+    },
+    "%@ %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@ %3$@"
+          }
+        }
+      }
+    },
+    "%@ %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@ %3$@"
+          }
+        }
+      }
     },
     "%@ %@ balance" : {
       "comment" : "Calorie card sharing. A zero difference between energy burned and eaten.",
@@ -147,28 +245,6 @@
           }
         }
       }
-    },
-    "%@ %@, %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@, %3$@"
-          }
-        }
-      },
-      "shouldTranslate" : false
-    },
-    "%@ / %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ / %2$@ %3$@"
-          }
-        }
-      },
-      "shouldTranslate" : false
     },
     "%@ budget" : {
       "localizations" : {
@@ -284,6 +360,7 @@
     },
     "%@ stays shared while you wait." : {
       "comment" : "Calorie card sharing interface and consent.",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -489,42 +566,6 @@
         }
       }
     },
-    "%@ · Waiting for acceptance" : {
-      "comment" : "Calorie card sharing interface and consent.",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Warten auf Zustimmung"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Waiting for acceptance"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Esperando aceptación"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · En attente d'acceptation"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · 等待接受"
-          }
-        }
-      }
-    },
     "%@, %lld grams, goal %lld grams" : {
       "localizations" : {
         "de" : {
@@ -618,6 +659,109 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : ""
+          }
+        }
+      }
+    },
+    "%lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld %2$@"
+          }
+        }
+      }
+    },
+    "%lld %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld %2$@ %3$@"
+          }
+        }
+      }
+    },
+    "%lld day streak" : {
+      "comment" : "Consecutive completed goal days shown on Apple Watch.",
+      "localizations" : {
+        "de" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Tag in Folge"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Tage in Folge"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld day streak"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld day streak"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Racha de %lld día"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Racha de %lld días"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Série de %lld jour"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Série de %lld jours"
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "连续 %lld 天"
           }
         }
       }
@@ -734,6 +878,16 @@
         }
       }
     },
+    "%lld of %lld days included" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld days included"
+          }
+        }
+      }
+    },
     "%lld steps today, goal %lld, %lld steps to go" : {
       "localizations" : {
         "de" : {
@@ -796,47 +950,16 @@
         }
       }
     },
-    ", use ..." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ", verwende ..."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ", utilizar ..."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ", utilisez ..."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "，使用…"
-          }
-        }
-      }
-    },
-    "-/-" : {
-
-    },
     "00" : {
       "shouldTranslate" : false
+    },
+    "7D" : {
+
     },
     "24" : {
       "shouldTranslate" : false
     },
     "30D" : {
-
-    },
-    "7D" : {
 
     },
     "A new card could not be published. Count.kcal will retry." : {
@@ -1156,76 +1279,6 @@
         }
       }
     },
-    "Add Previous 6 Days?" : {
-      "comment" : "Calorie card sharing interface and consent.",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vorherige 6 Tage hinzufügen?"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add Previous 6 Days?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Añadir los 6 días anteriores?"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ajouter les 6 jours précédents ?"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "添加前 6 天？"
-          }
-        }
-      }
-    },
-    "Add Today?" : {
-      "comment" : "Calorie card sharing interface and consent.",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Heute hinzufügen?"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add Today?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Añadir Hoy?"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ajouter Aujourd'hui ?"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "添加今天？"
-          }
-        }
-      }
-    },
     "Add contrast behind bar values in the app and widgets" : {
 
     },
@@ -1264,19 +1317,54 @@
         }
       }
     },
-    "Add sharing options?" : {
-      "comment" : "Calorie card sharing scope selection.",
+    "Add Previous 6 Days?" : {
+      "comment" : "Calorie card sharing interface and consent.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorherige 6 Tage hinzufügen?"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add sharing options?"
+            "value" : "Add Previous 6 Days?"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Añadir los 6 días anteriores?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter les 6 jours précédents ?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加前 6 天？"
+          }
+        }
+      }
+    },
+    "Add sharing options?" : {
+      "comment" : "Calorie card sharing scope selection.",
+      "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Weitere Freigaben hinzufügen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add sharing options?"
           }
         },
         "es" : {
@@ -1295,6 +1383,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "添加共享选项？"
+          }
+        }
+      }
+    },
+    "Add Today?" : {
+      "comment" : "Calorie card sharing interface and consent.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute hinzufügen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Today?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Añadir Hoy?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter Aujourd'hui ?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加今天？"
           }
         }
       }
@@ -1399,6 +1522,9 @@
           }
         }
       }
+    },
+    "All %lld days included" : {
+
     },
     "Allow" : {
       "localizations" : {
@@ -1779,6 +1905,9 @@
         }
       }
     },
+    "At least 2 days needed for an average." : {
+
+    },
     "At least two included days are needed for an average. Recorded data can still be incomplete. Exclude any day you know is unreliable." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2007,6 +2136,9 @@
         }
       }
     },
+    "Balance average" : {
+
+    },
     "Below daily cards" : {
 
     },
@@ -2204,6 +2336,34 @@
         }
       }
     },
+    "burned calories" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "verbrannte Kalorien"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "calorías quemadas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "calories brûlées"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "消耗的热量"
+          }
+        }
+      }
+    },
     "Burned Calories" : {
       "localizations" : {
         "de" : {
@@ -2289,6 +2449,7 @@
       }
     },
     "Calculation" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2368,90 +2529,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "日历与设置"
-          }
-        }
-      }
-    },
-    "Calorie Dashboard" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kalorienübersicht"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Panel de Calorías"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bord des calories"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "卡路里仪表板"
-          }
-        }
-      }
-    },
-    "Calorie Deficit" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kaloriendefizit"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Déficit de Calorías"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Déficit calorique"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "卡路里赤字"
-          }
-        }
-      }
-    },
-    "Calorie Surplus" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kalorienüberschuss"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exceso de Calorías"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Excédent calorique"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "卡路里盈余"
           }
         }
       }
@@ -2554,6 +2631,34 @@
         }
       }
     },
+    "Calorie Dashboard" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalorienübersicht"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panel de Calorías"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bord des calories"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡路里仪表板"
+          }
+        }
+      }
+    },
     "Calorie data incomplete" : {
       "localizations" : {
         "de" : {
@@ -2611,6 +2716,34 @@
         }
       }
     },
+    "Calorie Deficit" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaloriendefizit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déficit de Calorías"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déficit calorique"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡路里赤字"
+          }
+        }
+      }
+    },
     "Calorie label backgrounds" : {
 
     },
@@ -2644,6 +2777,7 @@
     },
     "Calorie sharing hasn't started. Waiting for the other iPhone." : {
       "comment" : "Calorie card sharing interface and consent.",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2673,6 +2807,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "热量共享尚未开始。正在等待另一台 iPhone。"
+          }
+        }
+      }
+    },
+    "Calorie Surplus" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalorienüberschuss"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exceso de Calorías"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excédent calorique"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡路里盈余"
           }
         }
       }
@@ -2813,16 +2975,16 @@
     "Cancel request?" : {
       "comment" : "Calorie card sharing request workflow.",
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel request?"
-          }
-        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anfrage zurückziehen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel request?"
           }
         },
         "es" : {
@@ -3337,6 +3499,7 @@
       }
     },
     "Checkmark or cross on calorie cards" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3576,6 +3739,9 @@
           }
         }
       }
+    },
+    "Close" : {
+
     },
     "Close this sheet and pull down on the dashboard to try again." : {
       "extractionState" : "manual",
@@ -3925,6 +4091,41 @@
         }
       }
     },
+    "Could not pause. Open Sharing on your iPhone or try again." : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause nicht möglich. Öffne Teilen auf deinem iPhone oder versuche es erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not pause. Open Sharing on your iPhone or try again."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo pausar. Abre Compartir en tu iPhone o inténtalo de nuevo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de mettre en pause. Ouvrez Partage sur votre iPhone ou réessayez."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法暂停。请在 iPhone 上打开“共享”或重试。"
+          }
+        }
+      }
+    },
     "Could not refresh weight" : {
       "localizations" : {
         "de" : {
@@ -3952,6 +4153,9 @@
           }
         }
       }
+    },
+    "Could not save" : {
+
     },
     "Could not save this choice" : {
       "extractionState" : "manual",
@@ -4128,6 +4332,7 @@
     },
     "Currently sharing %@" : {
       "comment" : "Calorie card sharing interface and consent.",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4224,33 +4429,8 @@
         }
       }
     },
-    "Daily Goal" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tägliches Ziel"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Objetivo diario"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Objectif quotidien"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "每日目标"
-          }
-        }
-      }
+    "Daily balance" : {
+
     },
     "Daily cards" : {
 
@@ -4288,6 +4468,40 @@
           }
         }
       }
+    },
+    "Daily deficit" : {
+
+    },
+    "Daily Goal" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tägliches Ziel"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objetivo diario"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif quotidien"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每日目标"
+          }
+        }
+      }
+    },
+    "Daily surplus" : {
+
     },
     "Dark" : {
       "localizations" : {
@@ -5330,6 +5544,9 @@
         }
       }
     },
+    "Exclude days" : {
+
+    },
     "Exclude this day" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5453,6 +5670,12 @@
         }
       }
     },
+    "Exclusions affect your average and streak, not weight." : {
+
+    },
+    "Exclusions affect your calorie average and streak." : {
+
+    },
     "Expansion requested" : {
       "comment" : "Calorie card sharing.",
       "extractionState" : "stale",
@@ -5491,6 +5714,7 @@
     },
     "Expires %@" : {
       "comment" : "Calorie card sharing.",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5701,6 +5925,9 @@
         }
       }
     },
+    "Finishing invitation…" : {
+
+    },
     "Food was recorded after fasting was confirmed." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5822,6 +6049,9 @@
         }
       }
     },
+    "g" : {
+      "shouldTranslate" : false
+    },
     "Gain Weight" : {
       "localizations" : {
         "de" : {
@@ -5846,6 +6076,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "增重"
+          }
+        }
+      }
+    },
+    "goal" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziel"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "objetivo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "objectif"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目标"
           }
         }
       }
@@ -6258,6 +6516,183 @@
         }
       }
     },
+    "iCloud access removal is pending. Your iPhone will retry automatically." : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der iCloud-Zugriff wird noch entfernt. Dein iPhone versucht es automatisch erneut."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud access removal is pending. Your iPhone will retry automatically."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La retirada del acceso a iCloud está pendiente. Tu iPhone lo reintentará automáticamente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La suppression de l’accès iCloud est en attente. Votre iPhone réessaiera automatiquement."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在等待移除 iCloud 访问权限。iPhone 会自动重试。"
+          }
+        }
+      }
+    },
+    "iCloud access removal is still pending. The other person may still be able to access earlier cloud copies." : {
+      "comment" : "Calorie card sharing interface and consent.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Zugriffsentzug in iCloud steht noch aus. Die andere Person kann möglicherweise noch auf ältere Cloud-Kopien zugreifen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud access removal is still pending. The other person may still be able to access earlier cloud copies."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no se ha retirado el acceso de iCloud. La otra persona podría seguir accediendo a copias anteriores en la nube."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le retrait de l'accès iCloud est encore en attente. L'autre personne peut encore accéder aux anciennes copies dans le cloud."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仍在等待移除 iCloud 访问权限。对方可能仍能访问较早的云端副本。"
+          }
+        }
+      }
+    },
+    "iCloud access removal may take longer. Saved copies cannot be erased." : {
+      "comment" : "Calorie card sharing interface and consent.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Zugriffsentzug in iCloud kann länger dauern. Gespeicherte Kopien können nicht gelöscht werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud access removal may take longer. Saved copies cannot be erased."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirar el acceso de iCloud puede tardar más. No se pueden borrar las copias guardadas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le retrait de l'accès iCloud peut prendre plus de temps. Les copies enregistrées ne peuvent pas être effacées."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除 iCloud 访问权限可能需要更长时间。已保存的副本无法删除。"
+          }
+        }
+      }
+    },
+    "iCloud is unavailable. Sharing will retry when your account is available." : {
+      "comment" : "Calorie card sharing.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud ist nicht verfügbar. Das Teilen wird erneut versucht, sobald dein Account verfügbar ist."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud is unavailable. Sharing will retry when your account is available."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud no está disponible. Se volverá a intentar compartir cuando tu cuenta esté disponible."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud est indisponible. Le partage réessaiera lorsque votre compte sera disponible."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud 不可用。账户可用后，共享将重试。"
+          }
+        }
+      }
+    },
+    "iCloud protects shared data. End-to-end protection depends on iCloud settings and sharing conditions. Updates depend on the publishing iPhone and may be delayed." : {
+      "comment" : "Calorie card sharing.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud schützt geteilte Daten. Der Ende-zu-Ende-Schutz hängt von den iCloud-Einstellungen und den Bedingungen des Teilens ab. Aktualisierungen hängen vom veröffentlichenden iPhone ab und können sich verzögern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud protects shared data. End-to-end protection depends on iCloud settings and sharing conditions. Updates depend on the publishing iPhone and may be delayed."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud protege los datos compartidos. La protección de extremo a extremo depende de los ajustes de iCloud y de las condiciones del uso compartido. Las actualizaciones dependen del iPhone que publica y pueden retrasarse."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud protège les données partagées. La protection de bout en bout dépend des réglages iCloud et des conditions du partage. Les mises à jour dépendent de l'iPhone qui publie et peuvent être retardées."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud 会保护共享数据。端到端保护取决于 iCloud 设置和共享条件。更新依赖于负责发布的 iPhone，可能会有延迟。"
+          }
+        }
+      }
+    },
     "Include goal results for shared days and your full streak. Your numeric goal target stays private." : {
       "comment" : "Calorie card sharing. Goal consent and local display preferences.",
       "localizations" : {
@@ -6495,6 +6930,7 @@
     },
     "Invitation ready" : {
       "comment" : "Calorie card sharing interface and consent.",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6740,6 +7176,41 @@
         }
       }
     },
+    "Invite people from Sharing on your iPhone." : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lade Personen unter Teilen auf deinem iPhone ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invite people from Sharing on your iPhone."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invita a personas desde Compartir en tu iPhone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invitez des personnes depuis Partage sur votre iPhone."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 iPhone 的“共享”中邀请他人。"
+          }
+        }
+      }
+    },
     "Invite someone" : {
       "comment" : "Calorie card sharing.",
       "localizations" : {
@@ -6810,6 +7281,34 @@
         }
       }
     },
+    "is to ..." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ist ..."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "es ..."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "est de ..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "是…"
+          }
+        }
+      }
+    },
     "Last Sample" : {
       "localizations" : {
         "de" : {
@@ -6838,37 +7337,65 @@
         }
       }
     },
-    "Last shared %@": {
-      "comment": "Status of a shared person whose update for today is missing.",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zuletzt geteilt %@"
+    "Last shared %@" : {
+      "comment" : "Status of a shared person whose update for today is missing.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zuletzt geteilt %@"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Last shared %@"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last shared %@"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Última vez compartido %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Última vez compartido %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dernier partage %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernier partage %@"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上次共享于%@"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次共享于%@"
+          }
+        }
+      }
+    },
+    "left" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "übrig"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "restantes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "restantes"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "剩余"
           }
         }
       }
@@ -6993,6 +7520,9 @@
           }
         }
       }
+    },
+    "Loading days…" : {
+
     },
     "Loading nutrient data" : {
       "comment" : "VoiceOver status for dashboard health data.",
@@ -7878,6 +8408,41 @@
         }
       }
     },
+    "No recent cards" : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine aktuellen Karten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No recent cards"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin tarjetas recientes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune carte récente"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂无近期卡片"
+          }
+        }
+      }
+    },
     "No shared days yet" : {
       "comment" : "Calorie card sharing.",
       "localizations" : {
@@ -7913,37 +8478,107 @@
         }
       }
     },
-    "No update yet today": {
-      "comment": "Status of a shared person whose update for today is missing.",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Heute noch keine Aktualisierung"
+    "No shared people" : {
+      "comment" : "Empty people list on Apple Watch.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Personen"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No update yet today"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No shared people"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hoy aún no hay actualizaciones"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay personas"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pas encore de mise à jour aujourd'hui"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune personne"
           }
         },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "今天尚无更新"
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂无共享联系人"
+          }
+        }
+      }
+    },
+    "No update today" : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute kein Update"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No update today"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin actualización hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune mise à jour aujourd’hui"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天暂无更新"
+          }
+        }
+      }
+    },
+    "No update yet today" : {
+      "comment" : "Status of a shared person whose update for today is missing.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute noch keine Aktualisierung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No update yet today"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoy aún no hay actualizaciones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas encore de mise à jour aujourd'hui"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今天尚无更新"
           }
         }
       }
@@ -8033,6 +8668,9 @@
           }
         }
       }
+    },
+    "Not included" : {
+
     },
     "Notifications" : {
       "comment" : "Calorie card sharing.",
@@ -8153,30 +8791,30 @@
         }
       }
     },
-    "OK" : {
+    "of %lld g" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "OK"
+            "value" : "von %lld g"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aceptar"
+            "value" : "de %lld g"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "OK"
+            "value" : "sur %lld g"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "好"
+            "value" : "目标 %lld g"
           }
         }
       }
@@ -8212,6 +8850,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "关闭"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aceptar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好"
           }
         }
       }
@@ -8286,6 +8952,77 @@
         }
       }
     },
+    "Open Count.kcal on your iPhone to sync sharing." : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffne Count.kcal auf deinem iPhone, um geteilte Daten zu laden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Count.kcal on your iPhone to sync sharing."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre Count.kcal en tu iPhone para sincronizar los datos compartidos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrez Count.kcal sur votre iPhone pour synchroniser le partage."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 iPhone 上打开 Count.kcal 以同步共享数据。"
+          }
+        }
+      }
+    },
+    "Open notification settings" : {
+      "comment" : "Calorie card sharing interface and consent.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitteilungseinstellungen öffnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open notification settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir ajustes de notificaciones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les réglages de notifications"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开通知设置"
+          }
+        }
+      }
+    },
     "Open Settings" : {
       "comment" : "Calorie card sharing interface and consent.",
       "localizations" : {
@@ -8317,6 +9054,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打开设置"
+          }
+        }
+      }
+    },
+    "Open shared calorie cards and requests" : {
+      "comment" : "Calorie card sharing.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geteilte Kalorienkarten und Anfragen öffnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open shared calorie cards and requests"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abrir tarjetas de calorías compartidas y solicitudes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les cartes de calories partagées et les demandes"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开共享的卡路里卡片和请求"
           }
         }
       }
@@ -8392,77 +9164,6 @@
         }
       }
     },
-    "Open notification settings" : {
-      "comment" : "Calorie card sharing interface and consent.",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mitteilungseinstellungen öffnen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open notification settings"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abrir ajustes de notificaciones"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvrir les réglages de notifications"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开通知设置"
-          }
-        }
-      }
-    },
-    "Open shared calorie cards and requests" : {
-      "comment" : "Calorie card sharing.",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geteilte Kalorienkarten und Anfragen öffnen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open shared calorie cards and requests"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abrir tarjetas de calorías compartidas y solicitudes"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvrir les cartes de calories partagées et les demandes"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开共享的卡路里卡片和请求"
-          }
-        }
-      }
-    },
     "Other" : {
       "localizations" : {
         "de" : {
@@ -8487,6 +9188,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "其他"
+          }
+        }
+      }
+    },
+    "over" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "darüber"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "de más"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "en trop"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "超出"
           }
         }
       }
@@ -8586,6 +9315,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "暂停双方的热量卡片共享。"
+          }
+        }
+      }
+    },
+    "Pause requested" : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause angefragt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause requested"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pausa solicitada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause demandée"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已请求暂停"
           }
         }
       }
@@ -9175,6 +9939,9 @@
         }
       }
     },
+    "Pull down on the dashboard to try again." : {
+
+    },
     "Pull down to try again." : {
       "localizations" : {
         "de" : {
@@ -9233,6 +10000,7 @@
     },
     "Raw Health samples, meals, weight, steps and hidden goal targets are not shared." : {
       "comment" : "Sharing sheet summary and detailed explanation.",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9691,6 +10459,9 @@
         }
       }
     },
+    "Reopen the app to try again. Your choices are unchanged." : {
+
+    },
     "Request %@ from %@. %@ stops when you send. Adding or restoring days requires %@'s approval." : {
       "comment" : "Mixed change confirmation. Arguments are added scopes, recipient name, removed scopes, and recipient name again. Removals apply when sending; additions and restoring removed scopes need approval.",
       "localizations" : {
@@ -9728,6 +10499,7 @@
     },
     "Request awaiting approval" : {
       "comment" : "Pending sharing request status in the Settings menu and accessibility values of badged controls.",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9903,16 +10675,16 @@
     "Requested" : {
       "comment" : "Calorie card sharing request workflow.",
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Requested"
-          }
-        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Angefragt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requested"
           }
         },
         "es" : {
@@ -9937,6 +10709,7 @@
     },
     "Requests" : {
       "comment" : "Calorie card sharing interface and consent.",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -10099,19 +10872,54 @@
         }
       }
     },
-    "Resume sharing" : {
-      "comment" : "Calorie card sharing request workflow.",
+    "Resume on iPhone" : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf iPhone fortsetzen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Resume sharing"
+            "value" : "Resume on iPhone"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reanudar en el iPhone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reprendre sur iPhone"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 iPhone 上恢复"
+          }
+        }
+      }
+    },
+    "Resume sharing" : {
+      "comment" : "Calorie card sharing request workflow.",
+      "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Teilen fortsetzen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume sharing"
           }
         },
         "es" : {
@@ -10130,6 +10938,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "恢复共享"
+          }
+        }
+      }
+    },
+    "Resume sharing on your iPhone." : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Setze das Teilen auf deinem iPhone fort."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume sharing on your iPhone."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reanuda el uso compartido en tu iPhone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reprenez le partage sur votre iPhone."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 iPhone 上恢复共享。"
           }
         }
       }
@@ -10244,6 +11087,7 @@
     },
     "Review" : {
       "comment" : "Calorie card sharing interface and consent.",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -10276,6 +11120,9 @@
           }
         }
       }
+    },
+    "Review omitted days and manage exclusions" : {
+
     },
     "Review request" : {
       "comment" : "Calorie card sharing.",
@@ -11581,6 +12428,41 @@
         }
       }
     },
+    "Sharing ended" : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen beendet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sharing ended"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uso compartido finalizado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partage terminé"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "共享已结束"
+          }
+        }
+      }
+    },
     "Sharing ends for both of you. Reconnecting needs a new invitation. Removing iCloud access may take longer. Saved copies cannot be erased." : {
       "comment" : "Shared person cards and sharing controls.",
       "localizations" : {
@@ -11612,42 +12494,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "双方的共享将结束。重新建立共享需要新的邀请。移除 iCloud 访问权限可能需要更长时间。已保存的副本无法删除。"
-          }
-        }
-      }
-    },
-    "Sharing ends for both people. Connecting again needs a new invitation. Server removal may remain pending while offline." : {
-      "comment" : "Calorie card sharing.",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Das Teilen endet für beide Personen. Für eine neue Verbindung ist eine neue Einladung erforderlich. Die Entfernung auf dem Server kann offline ausstehend bleiben."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sharing ends for both people. Connecting again needs a new invitation. Server removal may remain pending while offline."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "El uso compartido termina para ambas personas. Para volver a conectar se necesita una nueva invitación. La eliminación en el servidor puede quedar pendiente sin conexión."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Le partage prend fin pour les deux personnes. Une nouvelle invitation est nécessaire pour se reconnecter. La suppression sur le serveur peut rester en attente hors ligne."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "双方的共享均将结束。重新连接需要新的邀请。离线时，服务器端移除操作可能仍处于待处理状态。"
           }
         }
       }
@@ -11684,6 +12530,42 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "双方都将停止共享。重新连接需要新的邀请。移除 iCloud 访问权限可能需要更长时间。"
+          }
+        }
+      }
+    },
+    "Sharing ends for both people. Connecting again needs a new invitation. Server removal may remain pending while offline." : {
+      "comment" : "Calorie card sharing.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Teilen endet für beide Personen. Für eine neue Verbindung ist eine neue Einladung erforderlich. Die Entfernung auf dem Server kann offline ausstehend bleiben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sharing ends for both people. Connecting again needs a new invitation. Server removal may remain pending while offline."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El uso compartido termina para ambas personas. Para volver a conectar se necesita una nueva invitación. La eliminación en el servidor puede quedar pendiente sin conexión."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le partage prend fin pour les deux personnes. Une nouvelle invitation est nécessaire pour se reconnecter. La suppression sur le serveur peut rester en attente hors ligne."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "双方的共享均将结束。重新连接需要新的邀请。离线时，服务器端移除操作可能仍处于待处理状态。"
           }
         }
       }
@@ -12218,6 +13100,41 @@
         }
       }
     },
+    "Sharing will pause when your iPhone connects. You can leave this screen." : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen wird pausiert, sobald dein iPhone verbunden ist. Du kannst diese Ansicht verlassen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sharing will pause when your iPhone connects. You can leave this screen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se pausará al conectar tu iPhone. Puedes salir de esta pantalla."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le partage sera mis en pause à la connexion de votre iPhone. Vous pouvez quitter cet écran."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone 连接后将暂停共享。你可以离开此屏幕。"
+          }
+        }
+      }
+    },
     "Sharing with %@" : {
       "comment" : "Calorie card sharing interface and consent.",
       "localizations" : {
@@ -12249,6 +13166,111 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "与%@共享"
+          }
+        }
+      }
+    },
+    "sharing.card.date" : {
+      "comment" : "Already localized sender calendar date. Keep the %@ placeholder unchanged.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        }
+      }
+    },
+    "Show current balance" : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelle Bilanz anzeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show current balance"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar balance actual"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher le bilan actuel"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示当前平衡"
+          }
+        }
+      }
+    },
+    "Show midnight estimate" : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitternachtsschätzung anzeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show midnight estimate"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar estimación a medianoche"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher l’estimation à minuit"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示午夜估算"
           }
         }
       }
@@ -12788,6 +13810,41 @@
         }
       }
     },
+    "Stops sharing both ways when your iPhone connects. Resume on iPhone." : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stoppt das Teilen in beide Richtungen, sobald dein iPhone verbunden ist. Fortsetzen auf dem iPhone."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stops sharing both ways when your iPhone connects. Resume on iPhone."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detiene el uso compartido en ambos sentidos al conectar tu iPhone. Reanuda en el iPhone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrête le partage dans les deux sens à la connexion de votre iPhone. Reprise sur iPhone."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone 连接后将停止双向共享。可在 iPhone 上恢复。"
+          }
+        }
+      }
+    },
     "Streak" : {
       "comment" : "Toolbar control that shows or hides the weekly calorie chart.",
       "localizations" : {
@@ -12909,17 +13966,18 @@
     },
     "The full streak can extend beyond Previous 6 Days." : {
       "comment" : "Calorie card sharing scope selection.",
+      "extractionState" : "stale",
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The full streak can extend beyond Previous 6 Days."
-          }
-        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die vollständige Serie kann über die vorherigen 6 Tage hinausgehen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The full streak can extend beyond Previous 6 Days."
           }
         },
         "es" : {
@@ -13485,6 +14543,76 @@
         }
       }
     },
+    "This invitation belongs to a different iCloud account." : {
+      "comment" : "Calorie card sharing.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Einladung gehört zu einem anderen iCloud-Account."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This invitation belongs to a different iCloud account."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta invitación pertenece a otra cuenta de iCloud."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette invitation appartient à un autre compte iCloud."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此邀请属于另一个 iCloud 账户。"
+          }
+        }
+      }
+    },
+    "This invitation has expired. Ask for a new invitation." : {
+      "comment" : "Calorie card sharing.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Einladung ist abgelaufen. Bitte um eine neue Einladung."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This invitation has expired. Ask for a new invitation."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta invitación ha caducado. Pide una nueva invitación."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette invitation a expiré. Demandez une nouvelle invitation."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此邀请已过期。请对方重新邀请。"
+          }
+        }
+      }
+    },
     "This iPhone" : {
       "comment" : "Calorie card sharing interface and consent.",
       "extractionState" : "stale",
@@ -13553,76 +14681,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "这部 iPhone 负责发布你的卡片"
-          }
-        }
-      }
-    },
-    "This invitation belongs to a different iCloud account." : {
-      "comment" : "Calorie card sharing.",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese Einladung gehört zu einem anderen iCloud-Account."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This invitation belongs to a different iCloud account."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta invitación pertenece a otra cuenta de iCloud."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cette invitation appartient à un autre compte iCloud."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此邀请属于另一个 iCloud 账户。"
-          }
-        }
-      }
-    },
-    "This invitation has expired. Ask for a new invitation." : {
-      "comment" : "Calorie card sharing.",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese Einladung ist abgelaufen. Bitte um eine neue Einladung."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This invitation has expired. Ask for a new invitation."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta invitación ha caducado. Pide una nueva invitación."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cette invitation a expiré. Demandez une nouvelle invitation."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此邀请已过期。请对方重新邀请。"
           }
         }
       }
@@ -14008,62 +15066,6 @@
         }
       }
     },
-    "Today's intake and expenditure in one contour, with a midnight estimate." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die heutige Aufnahme und der Verbrauch als Kurve, mit einer Schätzung für Mitternacht."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La ingesta y el gasto de hoy en una curva, con una estimación a medianoche."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les apports et les dépenses du jour en une courbe, avec une estimation à minuit."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一条曲线显示今日摄入与消耗，并估算午夜的消耗。"
-          }
-        }
-      }
-    },
-    "Today's steps, your daily goal, and the steps still to go." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deine heutigen Schritte, dein Tagesziel und die noch verbleibenden Schritte."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tus pasos de hoy, tu objetivo diario y los pasos que faltan."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vos pas d’aujourd’hui, votre objectif quotidien et les pas restants."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今日步数、每日目标和剩余步数。"
-          }
-        }
-      }
-    },
     "Today, %@" : {
       "comment" : "Calorie card sharing interface and consent.",
       "extractionState" : "stale",
@@ -14131,6 +15133,62 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "今天、前6天及目标状态与连续达标"
+          }
+        }
+      }
+    },
+    "Today's intake and expenditure in one contour, with a midnight estimate." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die heutige Aufnahme und der Verbrauch als Kurve, mit einer Schätzung für Mitternacht."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La ingesta y el gasto de hoy en una curva, con una estimación a medianoche."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les apports et les dépenses du jour en une courbe, avec une estimation à minuit."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一条曲线显示今日摄入与消耗，并估算午夜的消耗。"
+          }
+        }
+      }
+    },
+    "Today's steps, your daily goal, and the steps still to go." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine heutigen Schritte, dein Tagesziel und die noch verbleibenden Schritte."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tus pasos de hoy, tu objetivo diario y los pasos que faltan."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos pas d’aujourd’hui, votre objectif quotidien et les pas restants."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日步数、每日目标和剩余步数。"
           }
         }
       }
@@ -14251,6 +15309,12 @@
         }
       }
     },
+    "Undo" : {
+
+    },
+    "Undo exclusion for %@" : {
+
+    },
     "Units" : {
       "localizations" : {
         "de" : {
@@ -14282,16 +15346,16 @@
     "Update request" : {
       "comment" : "Calorie card sharing request workflow.",
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Update request"
-          }
-        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anfrage aktualisieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update request"
           }
         },
         "es" : {
@@ -14317,16 +15381,16 @@
     "Update request?" : {
       "comment" : "Calorie card sharing request workflow.",
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Update request?"
-          }
-        },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Anfrage aktualisieren?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update request?"
           }
         },
         "es" : {
@@ -14558,19 +15622,54 @@
         }
       }
     },
-    "Use current settings" : {
-      "comment" : "Calorie card sharing request workflow.",
+    "Updates from iPhone" : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updates vom iPhone"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Use current settings"
+            "value" : "Updates from iPhone"
           }
         },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizaciones del iPhone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mises à jour de l’iPhone"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "来自 iPhone 的更新"
+          }
+        }
+      }
+    },
+    "Use current settings" : {
+      "comment" : "Calorie card sharing request workflow.",
+      "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aktuelle Einstellungen verwenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use current settings"
           }
         },
         "es" : {
@@ -14785,6 +15884,64 @@
         }
       }
     },
+    "vs previous 7 days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "zu vorherigen 7 Tagen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vs. 7 días anteriores"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vs 7 jours précédents"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与前 7 天相比"
+          }
+        }
+      }
+    },
+    "vs previous 30 days" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "zu den vorherigen 30 Tagen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vs. 30 días anteriores"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "vs 30 jours précédents"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "与前 30 天相比"
+          }
+        }
+      }
+    },
     "Waiting for %@" : {
       "comment" : "Calorie card sharing interface and consent.",
       "extractionState" : "stale",
@@ -14926,6 +16083,41 @@
         }
       }
     },
+    "Waiting for iPhone" : {
+      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warten auf iPhone"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waiting for iPhone"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esperando al iPhone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente de l’iPhone"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在等待 iPhone"
+          }
+        }
+      }
+    },
     "Waiting for the invitation to be opened" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -14963,6 +16155,7 @@
     },
     "Waiting for today's update" : {
       "comment" : "Calorie card sharing.",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -15140,9 +16333,6 @@
         }
       }
     },
-    "Weight Progress" : {
-
-    },
     "Weight change" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -15231,6 +16421,9 @@
       }
     },
     "Weight graph period" : {
+
+    },
+    "Weight Progress" : {
 
     },
     "Weight unavailable" : {
@@ -15695,6 +16888,7 @@
     },
     "You both share daily calorie cards with burned and eaten energy, active and resting calories, balance, and any visible goal result." : {
       "comment" : "Sharing sheet summary and detailed explanation.",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -15966,6 +17160,9 @@
         }
       }
     },
+    "Your average daily calorie deficit or surplus, based on the days included." : {
+
+    },
     "Your calorie card includes burned and eaten energy, their active and resting parts, deficit or surplus, and any visible goal result. Today also includes the Midnight estimate. Cards use your selected energy unit and colors." : {
       "comment" : "Calorie card sharing.",
       "extractionState" : "stale",
@@ -16037,6 +17234,9 @@
           }
         }
       }
+    },
+    "Your choice is unchanged. Try again." : {
+
     },
     "Your display name" : {
       "comment" : "Calorie card sharing.",
@@ -16311,1090 +17511,6 @@
     },
     "Your weekly or monthly weight graph." : {
 
-    },
-    "burned calories" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "verbrannte Kalorien"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "calorías quemadas"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "calories brûlées"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "消耗的热量"
-          }
-        }
-      }
-    },
-    "g" : {
-      "shouldTranslate" : false
-    },
-    "goal" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ziel"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "objetivo"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "objectif"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "目标"
-          }
-        }
-      }
-    },
-    "iCloud access removal is still pending. The other person may still be able to access earlier cloud copies." : {
-      "comment" : "Calorie card sharing interface and consent.",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Der Zugriffsentzug in iCloud steht noch aus. Die andere Person kann möglicherweise noch auf ältere Cloud-Kopien zugreifen."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud access removal is still pending. The other person may still be able to access earlier cloud copies."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aún no se ha retirado el acceso de iCloud. La otra persona podría seguir accediendo a copias anteriores en la nube."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Le retrait de l'accès iCloud est encore en attente. L'autre personne peut encore accéder aux anciennes copies dans le cloud."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "仍在等待移除 iCloud 访问权限。对方可能仍能访问较早的云端副本。"
-          }
-        }
-      }
-    },
-    "iCloud access removal may take longer. Saved copies cannot be erased." : {
-      "comment" : "Calorie card sharing interface and consent.",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Der Zugriffsentzug in iCloud kann länger dauern. Gespeicherte Kopien können nicht gelöscht werden."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud access removal may take longer. Saved copies cannot be erased."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Retirar el acceso de iCloud puede tardar más. No se pueden borrar las copias guardadas."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Le retrait de l'accès iCloud peut prendre plus de temps. Les copies enregistrées ne peuvent pas être effacées."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "移除 iCloud 访问权限可能需要更长时间。已保存的副本无法删除。"
-          }
-        }
-      }
-    },
-    "iCloud is unavailable. Sharing will retry when your account is available." : {
-      "comment" : "Calorie card sharing.",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud ist nicht verfügbar. Das Teilen wird erneut versucht, sobald dein Account verfügbar ist."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud is unavailable. Sharing will retry when your account is available."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud no está disponible. Se volverá a intentar compartir cuando tu cuenta esté disponible."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud est indisponible. Le partage réessaiera lorsque votre compte sera disponible."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud 不可用。账户可用后，共享将重试。"
-          }
-        }
-      }
-    },
-    "iCloud protects shared data. End-to-end protection depends on iCloud settings and sharing conditions. Updates depend on the publishing iPhone and may be delayed." : {
-      "comment" : "Calorie card sharing.",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud schützt geteilte Daten. Der Ende-zu-Ende-Schutz hängt von den iCloud-Einstellungen und den Bedingungen des Teilens ab. Aktualisierungen hängen vom veröffentlichenden iPhone ab und können sich verzögern."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud protects shared data. End-to-end protection depends on iCloud settings and sharing conditions. Updates depend on the publishing iPhone and may be delayed."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud protege los datos compartidos. La protección de extremo a extremo depende de los ajustes de iCloud y de las condiciones del uso compartido. Las actualizaciones dependen del iPhone que publica y pueden retrasarse."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud protège les données partagées. La protection de bout en bout dépend des réglages iCloud et des conditions du partage. Les mises à jour dépendent de l'iPhone qui publie et peuvent être retardées."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud 会保护共享数据。端到端保护取决于 iCloud 设置和共享条件。更新依赖于负责发布的 iPhone，可能会有延迟。"
-          }
-        }
-      }
-    },
-    "is to ..." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ist ..."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "es ..."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "est de ..."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "是…"
-          }
-        }
-      }
-    },
-    "left" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "übrig"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "restantes"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "restantes"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "剩余"
-          }
-        }
-      }
-    },
-    "of %lld g" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "von %lld g"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "de %lld g"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "sur %lld g"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "目标 %lld g"
-          }
-        }
-      }
-    },
-    "over" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "darüber"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "de más"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "en trop"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "超出"
-          }
-        }
-      }
-    },
-    "sharing.card.date" : {
-      "comment" : "Already localized sender calendar date. Keep the %@ placeholder unchanged.",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@"
-          }
-        }
-      }
-    },
-    "vs previous 30 days" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "zu den vorherigen 30 Tagen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "vs. 30 días anteriores"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "vs 30 jours précédents"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "与前 30 天相比"
-          }
-        }
-      }
-    },
-    "vs previous 7 days" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "zu vorherigen 7 Tagen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "vs. 7 días anteriores"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "vs 7 jours précédents"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "与前 7 天相比"
-          }
-        }
-      }
-    },
-    "%lld day streak" : {
-      "comment" : "Consecutive completed goal days shown on Apple Watch.",
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld day streak"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld day streak"
-                }
-              }
-            }
-          }
-        },
-        "de" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld Tag in Folge"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld Tage in Folge"
-                }
-              }
-            }
-          }
-        },
-        "es" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Racha de %lld día"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Racha de %lld días"
-                }
-              }
-            }
-          }
-        },
-        "fr" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Série de %lld jour"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Série de %lld jours"
-                }
-              }
-            }
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "连续 %lld 天"
-          }
-        }
-      }
-    },
-    "Could not pause. Open Sharing on your iPhone or try again." : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Could not pause. Open Sharing on your iPhone or try again."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pause nicht möglich. Öffne Teilen auf deinem iPhone oder versuche es erneut."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se pudo pausar. Abre Compartir en tu iPhone o inténtalo de nuevo."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Impossible de mettre en pause. Ouvrez Partage sur votre iPhone ou réessayez."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法暂停。请在 iPhone 上打开“共享”或重试。"
-          }
-        }
-      }
-    },
-    "Invite people from Sharing on your iPhone." : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invite people from Sharing on your iPhone."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lade Personen unter Teilen auf deinem iPhone ein."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invita a personas desde Compartir en tu iPhone."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invitez des personnes depuis Partage sur votre iPhone."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 iPhone 的“共享”中邀请他人。"
-          }
-        }
-      }
-    },
-    "No recent cards" : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No recent cards"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keine aktuellen Karten"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sin tarjetas recientes"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aucune carte récente"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "暂无近期卡片"
-          }
-        }
-      }
-    },
-    "No update today" : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No update today"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Heute kein Update"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sin actualización hoy"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aucune mise à jour aujourd’hui"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今天暂无更新"
-          }
-        }
-      }
-    },
-    "Open Count.kcal on your iPhone to sync sharing." : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Count.kcal on your iPhone to sync sharing."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Öffne Count.kcal auf deinem iPhone, um geteilte Daten zu laden."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abre Count.kcal en tu iPhone para sincronizar los datos compartidos."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvrez Count.kcal sur votre iPhone pour synchroniser le partage."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 iPhone 上打开 Count.kcal 以同步共享数据。"
-          }
-        }
-      }
-    },
-    "Pause requested" : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pause requested"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pause angefragt"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pausa solicitada"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pause demandée"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已请求暂停"
-          }
-        }
-      }
-    },
-    "Resume on iPhone" : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Resume on iPhone"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Auf iPhone fortsetzen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reanudar en el iPhone"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reprendre sur iPhone"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 iPhone 上恢复"
-          }
-        }
-      }
-    },
-    "Resume sharing on your iPhone." : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Resume sharing on your iPhone."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Setze das Teilen auf deinem iPhone fort."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reanuda el uso compartido en tu iPhone."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reprenez le partage sur votre iPhone."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 iPhone 上恢复共享。"
-          }
-        }
-      }
-    },
-    "Sharing ended" : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sharing ended"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Teilen beendet"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uso compartido finalizado"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Partage terminé"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "共享已结束"
-          }
-        }
-      }
-    },
-    "Sharing will pause when your iPhone connects. You can leave this screen." : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sharing will pause when your iPhone connects. You can leave this screen."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Teilen wird pausiert, sobald dein iPhone verbunden ist. Du kannst diese Ansicht verlassen."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se pausará al conectar tu iPhone. Puedes salir de esta pantalla."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Le partage sera mis en pause à la connexion de votre iPhone. Vous pouvez quitter cet écran."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhone 连接后将暂停共享。你可以离开此屏幕。"
-          }
-        }
-      }
-    },
-    "Show current balance" : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show current balance"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aktuelle Bilanz anzeigen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar balance actual"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afficher le bilan actuel"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "显示当前平衡"
-          }
-        }
-      }
-    },
-    "Show midnight estimate" : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show midnight estimate"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mitternachtsschätzung anzeigen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostrar estimación a medianoche"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Afficher l’estimation à minuit"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "显示午夜估算"
-          }
-        }
-      }
-    },
-    "Stops sharing both ways when your iPhone connects. Resume on iPhone." : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stops sharing both ways when your iPhone connects. Resume on iPhone."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stoppt das Teilen in beide Richtungen, sobald dein iPhone verbunden ist. Fortsetzen auf dem iPhone."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Detiene el uso compartido en ambos sentidos al conectar tu iPhone. Reanuda en el iPhone."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Arrête le partage dans les deux sens à la connexion de votre iPhone. Reprise sur iPhone."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhone 连接后将停止双向共享。可在 iPhone 上恢复。"
-          }
-        }
-      }
-    },
-    "Updates from iPhone" : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Updates from iPhone"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Updates vom iPhone"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Actualizaciones del iPhone"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mises à jour de l’iPhone"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "来自 iPhone 的更新"
-          }
-        }
-      }
-    },
-    "Waiting for iPhone" : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Waiting for iPhone"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Warten auf iPhone"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esperando al iPhone"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En attente de l’iPhone"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在等待 iPhone"
-          }
-        }
-      }
-    },
-    "iCloud access removal is pending. Your iPhone will retry automatically." : {
-      "comment" : "Apple Watch sharing. Keep wording concise for the watch display.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud access removal is pending. Your iPhone will retry automatically."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Der iCloud-Zugriff wird noch entfernt. Dein iPhone versucht es automatisch erneut."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La retirada del acceso a iCloud está pendiente. Tu iPhone lo reintentará automáticamente."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "La suppression de l’accès iCloud est en attente. Votre iPhone réessaiera automatiquement."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在等待移除 iCloud 访问权限。iPhone 会自动重试。"
-          }
-        }
-      }
-    },
-    "No shared people" : {
-      "comment" : "Empty people list on Apple Watch.",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No shared people"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Noch keine Personen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aún no hay personas"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aucune personne"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "暂无共享联系人"
-          }
-        }
-      }
     }
   },
   "version" : "1.0"
