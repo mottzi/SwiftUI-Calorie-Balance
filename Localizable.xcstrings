@@ -10907,6 +10907,41 @@
         }
       }
     },
+    "Resume sharing?" : {
+      "comment" : "Title of an incoming request row in Sharing.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen fortsetzen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume sharing?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Reanudar el intercambio?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reprendre le partage ?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "继续共享？"
+          }
+        }
+      }
+    },
     "Resume sharing" : {
       "comment" : "Calorie card sharing request workflow.",
       "localizations" : {
@@ -11898,6 +11933,41 @@
         }
       }
     },
+    "Share calorie cards?" : {
+      "comment" : "Title of an incoming request row in Sharing.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalorienkarten teilen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share calorie cards?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Compartir tarjetas de calorías?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager les cartes de calories ?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "共享热量卡片？"
+          }
+        }
+      }
+    },
     "Share calorie cards" : {
       "comment" : "Calorie card sharing interface and consent.",
       "localizations" : {
@@ -11964,6 +12034,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "共享目标状态与连续达标"
+          }
+        }
+      }
+    },
+    "Share streaks?" : {
+      "comment" : "Title of an incoming request row in Sharing.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serien teilen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share streaks?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Compartir las rachas?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager les séries ?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "共享连续达标记录？"
           }
         }
       }

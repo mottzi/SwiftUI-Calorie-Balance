@@ -166,7 +166,7 @@ private struct SharingPeopleSection: View {
                     } label: {
                         SharingPersonRow(connection: connection, coordinator: coordinator, mode: mode)
                     }
-                    .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
+                    .listRowInsets(SharingSummaryRowMetrics.insets)
                 }
             }
         } header: { Text("People").textCase(nil) }
@@ -178,6 +178,7 @@ private struct SharingPeopleSection: View {
 private struct SharingRequestsSection: View {
 
     @Environment(\.colorScheme) private var scheme
+    @ScaledMetric(relativeTo: .body) private var progressDiameter: CGFloat = 40
 
     @Binding var selectedRequest: SharingConnection?
 
@@ -185,7 +186,10 @@ private struct SharingRequestsSection: View {
     let coordinator: SharingCoordinator
 
     var body: some View {
-        let requests = coordinator.connections.filter { $0.proposal?.recipientID == coordinator.identity?.id }
+        let requests = coordinator.connections.filter { connection in
+            guard let proposal = connection.proposal else { return false }
+            return proposal.recipientID == coordinator.identity?.id
+        }
         let preparing = runtime.pendingInvitations.filter {
             if case .awaitingInviter = $0.stage { return true }
             return false
@@ -193,23 +197,29 @@ private struct SharingRequestsSection: View {
         if !requests.isEmpty || !preparing.isEmpty {
             Section {
                 ForEach(preparing) { _ in
-                    ProgressView("Finishing invitation…")
+                    SharingSummaryColumns {
+                        ProgressView()
+                            .frame(width: progressDiameter, height: progressDiameter)
+                            .background(.primary.opacity(0.08), in: .circle)
+                            .accessibilityHidden(true)
+                    } content: {
+                        Text("Finishing invitation…")
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .listRowInsets(SharingSummaryRowMetrics.insets)
                 }
                 ForEach(requests) { connection in
                     Button { selectedRequest = connection } label: {
-                        HStack(spacing: 12) {
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text(connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "")
-                                    .font(.headline).foregroundStyle(nameColor(for: connection))
-                                Text(connection.requestTitle).font(.subheadline).foregroundStyle(Color.primary)
-                            }
-                            Spacer(minLength: 0)
-                            Image(systemName: "chevron.right").foregroundStyle(Color.secondary)
-                                .accessibilityHidden(true)
-                        }
-                        .frame(minHeight: 44, alignment: .leading)
-                        .padding(.vertical, 6)
+                        SharingIncomingRequestRow(
+                            connection: connection,
+                            name: connection.peer(of: coordinator.identity?.id ?? "")?.displayName ?? "",
+                            nameColor: nameColor(for: connection)
+                        )
+                        .contentShape(.rect)
                     }
+                    .buttonStyle(.plain)
+                    .listRowInsets(SharingSummaryRowMetrics.insets)
                     .accessibilityElement(children: .combine)
                     .accessibilityHint("Review the requested change before accepting or declining")
                 }
@@ -217,14 +227,75 @@ private struct SharingRequestsSection: View {
         }
     }
 
-    private func nameColor(for connection: SharingConnection) -> Color {
+    private func nameColor(for connection: SharingConnection) -> Color? {
         let scope: SharingScope = connection.scopes.contains(.today) ? .today : .history
         let snapshot = coordinator.snapshots(connectionID: connection.id, scope: scope).first?.snapshot
         guard let color = snapshot?.appearance.resolvedNameColor
-                ?? coordinator.senderNameColor(connectionID: connection.id) else { return .primary }
+                ?? coordinator.senderNameColor(connectionID: connection.id) else { return nil }
         return color.color(in: scheme)
     }
 
+}
+
+private struct SharingIncomingRequestRow: View {
+
+    @Environment(\.colorScheme) private var scheme
+    @ScaledMetric(relativeTo: .body) private var envelopeWidth: CGFloat = 50
+
+    let connection: SharingConnection
+    let name: String
+    let nameColor: Color?
+
+    private var title: LocalizedStringResource {
+        if connection.isInitialRequest {
+            return connection.proposal?.scopes == [.goals] ? "Share streaks?" : "Share calorie cards?"
+        }
+        return connection.scopes.isEmpty ? "Resume sharing?" : connection.requestTitle
+    }
+
+    private var scopeSummary: LocalizedStringResource? {
+        guard let proposed = connection.proposal?.scopes else { return nil }
+        if connection.scopes.isEmpty {
+            return connection.isInitialRequest && proposed == [.goals] ? nil : proposed.sharingDescription
+        }
+        let additions = proposed.subtracting(connection.scopes)
+        return additions.count > 1 ? additions.sharingDescription : nil
+    }
+
+    var body: some View {
+        let tintBrightness = scheme == .dark && nameColor != nil
+            ? BrightnessLevel.secondary.amount(in: .circlegraphMidnight) : 0
+        HStack(spacing: 8) {
+            SharingSummaryColumns {
+                Image(systemName: "envelope.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: envelopeWidth)
+                    .foregroundStyle(nameColor ?? .secondary)
+                    .brightness(tintBrightness)
+                    .accessibilityHidden(true)
+            } content: {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(name)
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(nameColor ?? .primary)
+                        .brightness(tintBrightness)
+                    Text(title)
+                        .font(.body)
+                    if let scopeSummary {
+                        Text(scopeSummary)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            Image(systemName: "chevron.forward")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(.tertiary)
+                .accessibilityHidden(true)
+        }
+    }
 }
 
 /// Your own local calorie card, using the same summary as shared people.
@@ -252,7 +323,7 @@ private struct SharingMeSection: View {
                     placeholderNameColor: settings.weightGoal == .lose ? settings.burnedColor : settings.consumedColor
                 )
             }
-            .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
+            .listRowInsets(SharingSummaryRowMetrics.insets)
         } header: {
             Text("Me", comment: "Section for the person's own calorie card in Sharing.")
                 .textCase(nil)
@@ -631,14 +702,8 @@ private struct SharingCardSummary: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.colorScheme) private var scheme
-    @Environment(\.dynamicTypeSize) private var dynamicType
-    @Environment(\.layoutDirection) private var layoutDirection
     @EnvironmentObject private var settings: Settings
-    // Preserve the original two-line summary's visible arc height.
-    @ScaledMetric(relativeTo: .body) private var ringVisibleHeight: CGFloat = 49
     @ScaledMetric(relativeTo: .body) private var goalSymbolSize: CGFloat = 10
-    // Keep the row stable while centering only the text that is actually shown.
-    @ScaledMetric(relativeTo: .body) private var minimumContentHeight: CGFloat = 58
 
     let name: String
     let snapshot: CalorieCardSnapshot?
@@ -654,8 +719,8 @@ private struct SharingCardSummary: View {
         let goalReached = snapshot?.isSupported == true && !settings.hideCalorieStatusIcons
             && values?.energy.isEmpty == false ? values?.visibleGoalReached : nil
         HStack(alignment: .center, spacing: 12) {
-            SharingPersonLayout(layoutDirection: layoutDirection, ringVisibleHeight: ringVisibleHeight) {
-                if let snapshot, let values, snapshot.isSupported, !dynamicType.isAccessibilitySize {
+            SharingSummaryColumns(alignsRingArc: true) {
+                if let snapshot, let values, snapshot.isSupported {
                     CalorieCircleGraph(
                         energy: values.energy,
                         configuration: CalorieCircleConfiguration(lineWidth: 6, ringSpacing: 2, segmentGap: 2),
@@ -675,7 +740,7 @@ private struct SharingCardSummary: View {
                         }
                     }
                     .accessibilityHidden(true)
-                } else if !dynamicType.isAccessibilitySize {
+                } else {
                     CalorieCircleGraph(
                         energy: EnergyBalance(active: 0, resting: 0, restingRemaining: 0, consumed: 0),
                         configuration: CalorieCircleConfiguration(lineWidth: 6, ringSpacing: 2, segmentGap: 2),
@@ -687,6 +752,7 @@ private struct SharingCardSummary: View {
                     .opacity(0.65)
                     .accessibilityHidden(true)
                 }
+            } content: {
                 VStack(alignment: .leading, spacing: 1) {
                     Text(name)
                         .font(.body.weight(.semibold))
@@ -713,7 +779,6 @@ private struct SharingCardSummary: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(maxWidth: .infinity, minHeight: minimumContentHeight, alignment: .leading)
             if let streak { SharingStreakBadge(streak: streak, placement: .overview) }
         }
         .animation(rowAnimation, value: mode)
@@ -737,12 +802,38 @@ private struct SharingCardSummary: View {
 
 }
 
-/// Keeps the original arc proportions and optical center independently of text row count.
+private enum SharingSummaryRowMetrics {
+    static let insets = EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16)
+}
+
+private struct SharingSummaryColumns<Graphic: View, Content: View>: View {
+
+    @Environment(\.dynamicTypeSize) private var dynamicType
+    @Environment(\.layoutDirection) private var layoutDirection
+    @ScaledMetric(relativeTo: .body) private var ringVisibleHeight: CGFloat = 49
+    @ScaledMetric(relativeTo: .body) private var minimumContentHeight: CGFloat = 58
+
+    var alignsRingArc = false
+    @ViewBuilder let graphic: Graphic
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        SharingPersonLayout(layoutDirection: layoutDirection, ringVisibleHeight: ringVisibleHeight,
+                            alignsRingArc: alignsRingArc) {
+            if !dynamicType.isAccessibilitySize { graphic }
+            content
+        }
+        .frame(maxWidth: .infinity, minHeight: minimumContentHeight, alignment: .leading)
+    }
+}
+
+/// Keeps graphics visually centered independently of text row count.
 /// Captions and wrapped names can grow the text without enlarging the graph.
 private struct SharingPersonLayout: Layout {
 
     let layoutDirection: LayoutDirection
     let ringVisibleHeight: CGFloat
+    let alignsRingArc: Bool
     private let spacing: CGFloat = 16
     // The 90° opening leaves the bottom of the square unused.
     private let visibleRingHeightRatio: CGFloat = (1 + sqrt(0.5)) / 2
@@ -766,7 +857,7 @@ private struct SharingPersonLayout: Layout {
         if subviews.count > 1 {
             subviews[0].place(
                 at: CGPoint(x: isRightToLeft ? bounds.maxX - diameter / 2 : bounds.minX + diameter / 2,
-                            y: bounds.midY + diameter * (1 - visibleRingHeightRatio) / 2),
+                            y: bounds.midY + (alignsRingArc ? (diameter - ringVisibleHeight) / 2 : 0)),
                 anchor: .center,
                 proposal: ProposedViewSize(width: diameter, height: diameter)
             )

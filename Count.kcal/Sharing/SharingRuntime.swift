@@ -877,6 +877,12 @@ extension SharingRuntime {
         await peer.verifyAccount()
         do {
             let arguments = ProcessInfo.processInfo.arguments
+            if arguments.contains("--sharing-qa-initial-request"), let recipient = coordinator.identity {
+                let scopes: Set<SharingScope> = arguments.contains("--sharing-qa-goals-only") ? [.goals] : [.today, .history]
+                try await peer.propose(to: recipient, scopes: scopes)
+                await coordinator.refresh()
+                return
+            }
             if arguments.contains("--sharing-qa-empty") {
                 if arguments.contains("--sharing-qa-received-invitation") { receivedInvitationID = UUID() }
                 return
