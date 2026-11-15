@@ -109,7 +109,7 @@ struct SharingPersonDetail: View {
         }
         .alert("Pause sharing with \(peerName)?", isPresented: $confirmsPause) {
             Button("Cancel", role: .cancel) { }
-            Button("Pause sharing") {
+            Button("Pause sharing", role: .destructive) {
                 runtime.applyPermissionChange(on: coordinator) {
                     try coordinator.enqueueScopeChange(connectionID: connectionID, to: [])
                 }
@@ -305,35 +305,41 @@ private struct SharingPermissionsView: View {
     private var hasOutgoingRequest: Bool { draft.proposal?.proposerID == coordinator.identity?.id }
     private var isStale: Bool { connection.map { !draft.matches($0) } ?? true }
     private var actionIsDisabled: Bool { !draft.isEdited || isStale }
+    private var cancelsRequest: Bool { hasOutgoingRequest && scopes == originalScopes }
 
     private var actionTitle: LocalizedStringResource {
-        if hasOutgoingRequest && scopes == originalScopes { return "Cancel request" }
+        if cancelsRequest { return "Cancel request" }
         if scopes.isEmpty { return "Pause sharing" }
+        if !additions.isEmpty && !reductions.isEmpty { return "Save and send request" }
         if hasOutgoingRequest && !additions.isEmpty { return "Update request" }
         if originalScopes.isEmpty { return "Request to resume" }
-        if !additions.isEmpty { return reductions.isEmpty ? "Send request" : "Save and send request" }
-        return "Save changes"
+        return additions.isEmpty ? "Reduce sharing" : "Send request"
     }
 
     private var confirmationTitle: LocalizedStringResource {
-        if hasOutgoingRequest && scopes == originalScopes { return "Cancel request?" }
+        if cancelsRequest { return "Cancel request?" }
         if scopes.isEmpty { return "Pause sharing with \(peerName)?" }
-        if hasOutgoingRequest && !additions.isEmpty { return "Update request?" }
-        if !additions.isEmpty { return "Send a request to \(peerName)?" }
         return "Reduce sharing with \(peerName)?"
     }
 
-    private var confirmationActionTitle: LocalizedStringResource {
-        if hasOutgoingRequest && scopes == originalScopes { return "Cancel request" }
-        if hasOutgoingRequest && !additions.isEmpty { return "Update request" }
-        if scopes.isEmpty { return "Pause sharing" }
-        if !additions.isEmpty { return reductions.isEmpty ? "Send request" : "Save and send request" }
-        return "Reduce sharing"
-    }
-
-    private var confirmationRole: ButtonRole? {
-        if #available(iOS 26, *) { return .confirm }
-        return nil
+    private var editConsequence: Text {
+        if cancelsRequest {
+            if originalScopes.isEmpty { return Text("Sharing is paused") }
+            return Text("Still sharing \(Text(originalScopes.sharingDescription))")
+        }
+        if scopes.isEmpty {
+            return Text("Sharing pauses for both of you. Resuming requires \(peerName)'s approval.")
+        }
+        if originalScopes.isEmpty {
+            return Text("Ask \(peerName) to resume sharing \(Text(scopes.sharingDescription)). Sharing stays paused until the request is accepted.")
+        }
+        if additions.isEmpty {
+            return Text("Both of you stop sharing \(Text(reductions.sharingDescription)). \(Text(scopes.sharingDescription)) stays shared. Restoring removed days requires \(peerName)'s approval.")
+        }
+        if reductions.isEmpty {
+            return Text("Ask \(peerName) to add \(Text(additions.sharingDescription)). \(Text(originalScopes.sharingDescription)) stays shared until the request is accepted.")
+        }
+        return Text("Ask \(peerName) to add \(Text(additions.sharingDescription)). \(Text(reductions.sharingDescription)) stops when you send the request. New sharing starts only after the request is accepted.")
     }
 
     var body: some View {
@@ -372,19 +378,21 @@ private struct SharingPermissionsView: View {
                         }
                         .padding(.vertical, 4)
                         .background(.background.secondary, in: .rect(cornerRadius: 24))
-                        if draft.goals && !draft.today && !draft.history {
-                            Text("Only your full streak is shared.")
-                                .font(.footnote).foregroundStyle(.secondary).padding(.horizontal, 16)
-                        } else {
-                            Text("Include goal results for shared days and your full streak. Your numeric goal target stays private.")
-                                .font(.footnote).foregroundStyle(.secondary).padding(.horizontal, 16)
-                        }
                         Group {
-                            if originalScopes.isEmpty {
-                                Text("Sharing is paused")
-                            } else if let connection = coordinator.connections.first(where: { $0.id == connectionID }),
-                                      !connection.scopes.isEmpty, let startedAt = connection.sharingStartedAt {
-                                SharingDurationView(peerName: peerName, startedAt: startedAt)
+                            if draft.isEdited && !isStale {
+                                editConsequence
+                            } else {
+                                if draft.goals && !draft.today && !draft.history {
+                                    Text("Only your full streak is shared.")
+                                } else if draft.goals {
+                                    Text("Include goal results for shared days and your full streak. Your numeric goal target stays private.")
+                                }
+                                if originalScopes.isEmpty {
+                                    Text("Sharing is paused")
+                                } else if let connection, !connection.scopes.isEmpty,
+                                          let startedAt = connection.sharingStartedAt {
+                                    SharingDurationView(peerName: peerName, startedAt: startedAt)
+                                }
                             }
                         }
                         .font(.footnote)
@@ -403,6 +411,17 @@ private struct SharingPermissionsView: View {
                         Text(error)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
+                    }
+                    if draft.isEdited {
+                        Button {
+                            if reductions.isEmpty && !cancelsRequest { apply() }
+                            else { confirmsChanges = true }
+                        } label: {
+                            Text(actionTitle)
+                                .frame(maxWidth: .infinity, minHeight: 44)
+                        }
+                        .modifier(SharingPrimaryActionAppearance())
+                        .disabled(actionIsDisabled)
                     }
                 }
                 .padding(.horizontal, 16)
@@ -428,40 +447,12 @@ private struct SharingPermissionsView: View {
                         Button("Cancel", role: .cancel) { dismiss() }
                     }
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(role: confirmationRole) {
-                        confirmsChanges = true
-                    } label: {
-                        Image(systemName: additions.isEmpty ? "checkmark" : "paperplane")
-                            .foregroundStyle(confirmationRole == nil ? Color.accentColor : .white)
-                            .opacity(actionIsDisabled ? 0.35 : 1)
-                            .contentTransition(reduceMotion ? .identity : .symbolEffect(.replace))
-                            .animation(reduceMotion ? nil : .default, value: additions.isEmpty)
-                            // Keep the symbol in SwiftUI so its replacement transition can run.
-                            .overlay { Color.clear.allowsHitTesting(false) }
-                    }
-                    .accessibilityLabel(Text(actionTitle))
-                    .disabled(actionIsDisabled)
-                    .confirmationDialog(Text(confirmationTitle), isPresented: $confirmsChanges, titleVisibility: .visible) {
-                        Button(confirmationActionTitle) { apply() }
-                            .keyboardShortcut(.defaultAction)
-                        Button("Cancel", role: .cancel) { }
-                    } message: {
-                        if hasOutgoingRequest && scopes == originalScopes {
-                            Text(originalScopes.sharingDescription)
-                        } else if scopes.isEmpty {
-                            Text("Sharing pauses for both of you. Resuming requires \(peerName)'s approval.")
-                        } else if originalScopes.isEmpty {
-                            Text("Ask \(peerName) to resume sharing \(Text(scopes.sharingDescription)). Sharing stays paused until the request is accepted.")
-                        } else if additions.isEmpty {
-                            Text("Both of you stop sharing \(Text(reductions.sharingDescription)). \(Text(scopes.sharingDescription)) stays shared. Restoring removed days requires \(peerName)'s approval.")
-                        } else if reductions.isEmpty {
-                            Text("Ask \(peerName) to add \(Text(additions.sharingDescription)). \(Text(originalScopes.sharingDescription)) stays shared until the request is accepted.")
-                        } else {
-                            Text("Request \(Text(additions.sharingDescription)) from \(peerName). \(Text(reductions.sharingDescription)) stops when you send. Adding or restoring days requires \(peerName)'s approval.")
-                        }
-                    }
-                }
+            }
+            .alert(Text(confirmationTitle), isPresented: $confirmsChanges) {
+                Button("Cancel", role: .cancel) { }
+                Button(actionTitle, role: reductions.isEmpty ? nil : .destructive) { apply() }
+            } message: {
+                editConsequence
             }
             .sheet(isPresented: $showsDisclosure) { SharingDisclosureView() }
         }

@@ -532,7 +532,7 @@ private struct SharingCompactSheetBody<Content: View, Actions: View>: View {
 
 }
 
-private struct SharingPrimaryActionAppearance: ViewModifier {
+struct SharingPrimaryActionAppearance: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 26, *) {
             content.buttonStyle(.glassProminent)
