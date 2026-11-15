@@ -112,7 +112,7 @@ private struct WatchSharingPersonContent: View {
     let hidesGoalStatus: Bool
 
     var body: some View {
-        ScrollView {
+        List {
             VStack(spacing: 16) {
                 if let today = person.today {
                     WatchSharingDayCard(
@@ -134,14 +134,21 @@ private struct WatchSharingPersonContent: View {
                     .padding(.vertical, 10)
                     .background(.quaternary, in: .capsule)
                 }
-                if !person.history.isEmpty {
-                    WatchSharingHistory(snapshots: person.history, hidesGoalStatus: hidesGoalStatus)
-                }
-                WatchSharingPauseControl(person: person)
             }
+            .frame(maxWidth: .infinity)
             .scenePadding(.horizontal)
-            .padding(.bottom, 12)
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
+
+            if !person.history.isEmpty {
+                WatchSharingHistory(snapshots: person.history, hidesGoalStatus: hidesGoalStatus)
+            }
+
+            WatchSharingPauseControl(person: person)
+                .frame(maxWidth: .infinity)
+                .listRowBackground(Color.clear)
         }
+        .listStyle(.plain)
         .navigationTitle(person.name)
         .containerBackground((person.nameColor?.color(in: .dark) ?? .gray).opacity(0.18).gradient, for: .navigation)
         .toolbar {
@@ -335,8 +342,7 @@ private struct WatchSharingHistory: View {
     let hidesGoalStatus: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Previous 6 Days").font(.caption2).foregroundStyle(.secondary)
+        Section("Previous 6 Days") {
             ForEach(snapshots) { snapshot in
                 NavigationLink {
                     ScrollView {
