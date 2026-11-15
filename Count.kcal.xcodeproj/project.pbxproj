@@ -247,6 +247,9 @@
 		C0BDD2111A03435F8F3D46CE /* CalorieDataState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8E936F873F43B48DDEAD5D /* CalorieDataState.swift */; };
 		C170F1A00000000000000002 /* StreakFlameIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170F1A00000000000000001 /* StreakFlameIcon.swift */; };
 		C170F1A00000000000000004 /* DiagonalShine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170F1A00000000000000003 /* DiagonalShine.swift */; };
+		F3477D510000000000000001 /* StreakFlameIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170F1A00000000000000001 /* StreakFlameIcon.swift */; };
+		F3477D510000000000000002 /* DiagonalShine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C170F1A00000000000000003 /* DiagonalShine.swift */; };
+		F3477D510000000000000003 /* StreakAnimationScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08E16B50000000000000002 /* StreakAnimationScope.swift */; };
 		C272A1B9BD56492DBEB00C6B /* CalorieBarGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5291882B33A042CAAEB3F2AF /* CalorieBarGraph.swift */; };
 		C31708DD86F64A809AC0005C /* CalorieBarRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48543904A61A44158900D848 /* CalorieBarRow.swift */; };
 		C34610991F72455AAAFCC5DD /* CalorieGraphAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6431EAA3DE14B1FBF925FC5 /* CalorieGraphAnimation.swift */; };
@@ -1734,6 +1737,9 @@
 				9F5294AC4B674681A6F8A04A /* CalorieCardSnapshot.swift in Sources */,
 				F3AC8CA7468C4C77AB31A9D7 /* WatchSharingSync.swift in Sources */,
 				F58FF8C63E214A5C831A24FF /* WatchSharingView.swift in Sources */,
+				F3477D510000000000000001 /* StreakFlameIcon.swift in Sources */,
+				F3477D510000000000000002 /* DiagonalShine.swift in Sources */,
+				F3477D510000000000000003 /* StreakAnimationScope.swift in Sources */,
 				74D6FBB6966748CDA45F5D02 /* CalorieCardSnapshotPresentation.swift in Sources */,
 				29AAC04CB4C94F969DC5DCA4 /* WatchSharingStore.swift in Sources */,
 				F967EE7B5DAF4E8DB91DAA04 /* WatchSharingSnapshot.swift in Sources */,

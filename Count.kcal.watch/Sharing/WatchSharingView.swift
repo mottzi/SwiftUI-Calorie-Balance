@@ -106,6 +106,7 @@ struct WatchSharingPersonView: View {
 
 private struct WatchSharingPersonContent: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.isLuminanceReduced) private var isLuminanceReduced
     @State private var mode = GraphMode.now
 
     let person: WatchSharingSnapshot.Person
@@ -123,16 +124,19 @@ private struct WatchSharingPersonContent: View {
                     WatchSharingEmptyPerson(person: person)
                 }
                 if let streak = person.streak, streak.days > 0 {
-                    Label {
-                        Text("\(streak.days) day streak")
-                    } icon: {
-                        Image(systemName: "flame.fill")
-                            .foregroundStyle(streak.color.color(in: .dark))
+                    HStack(spacing: 5) {
+                        StreakFlameIcon(
+                            color: streak.color.color(in: .dark),
+                            isAnimating: !isLuminanceReduced
+                        )
+                        Text(streak.days, format: .number)
+                            .font(.callout.weight(.medium))
                     }
-                    .font(.callout.weight(.medium))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
                     .background(.quaternary, in: .capsule)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text("\(streak.days) day streak"))
                 }
             }
             .frame(maxWidth: .infinity)

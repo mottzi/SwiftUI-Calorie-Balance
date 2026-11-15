@@ -179,6 +179,7 @@ private extension AnimatedStreakFlame {
 
 }
 
+#if os(iOS)
 #Preview("Toolbar flame") {
     NavigationStack {
         Color.backGround.ignoresSafeArea()
@@ -200,3 +201,4 @@ private extension AnimatedStreakFlame {
     }
     .preferredColorScheme(.dark)
 }
+#endif
