@@ -70,8 +70,14 @@ struct SharingInvitationView: View {
                             Text("Choose at least one option to continue.")
                         } else if goals && !today && !history {
                             Text("Only your full streak is shared.")
-                        } else {
+                        } else if goals {
                             Text("Include goal results for shared days and your full streak. Your numeric goal target stays private.")
+                        } else if today && history {
+                            Text("You’ll both share today’s card and cards for the previous six completed days.")
+                        } else if today {
+                            Text("You’ll both share today’s calorie card, including a midnight estimate when available.")
+                        } else {
+                            Text("You’ll both share cards for the six completed days before today, including days before you connected.")
                         }
                     }
                     .font(.footnote)

@@ -15517,6 +15517,111 @@
         }
       }
     },
+    "You’ll both share cards for the six completed days before today, including days before you connected." : {
+      "comment" : "Footer explaining selected calorie-card days in the Sharing invitation.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ihr teilt beide die Karten der sechs abgeschlossenen Tage vor heute, auch für Tage vor eurer Verbindung."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You’ll both share cards for the six completed days before today, including days before you connected."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambos compartiréis las tarjetas de los seis días completos anteriores a hoy, incluidos los días previos a vuestra conexión."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous partagerez tous les deux les cartes des six jours complets précédant aujourd’hui, y compris les jours avant votre connexion."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你们都会分享今天之前 6 个完整日的卡片，包括建立连接之前的日期。"
+          }
+        }
+      }
+    },
+    "You’ll both share today’s calorie card, including a midnight estimate when available." : {
+      "comment" : "Footer explaining selected calorie-card days in the Sharing invitation.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ihr teilt beide die heutige Kalorienkarte, falls verfügbar mit einer Schätzung für Mitternacht."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You’ll both share today’s calorie card, including a midnight estimate when available."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambos compartiréis la tarjeta de calorías de hoy, con una estimación para medianoche si está disponible."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous partagerez tous les deux la carte de calories du jour, avec une estimation à minuit si elle est disponible."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你们都会分享今天的热量卡片，其中会包含午夜估算值（如有）。"
+          }
+        }
+      }
+    },
+    "You’ll both share today’s card and cards for the previous six completed days." : {
+      "comment" : "Footer explaining selected calorie-card days in the Sharing invitation.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ihr teilt beide die heutige Karte und die Karten der vorherigen sechs abgeschlossenen Tage."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You’ll both share today’s card and cards for the previous six completed days."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ambos compartiréis la tarjeta de hoy y las de los seis días completos anteriores."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous partagerez tous les deux la carte du jour et celles des six jours complets précédents."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你们都会分享今天的卡片以及之前 6 个完整日的卡片。"
+          }
+        }
+      }
+    },
     "You both share calorie cards privately through iCloud." : {
       "comment" : "Sharing sheet summary and detailed explanation.",
       "extractionState" : "stale",
