@@ -82,9 +82,7 @@ private struct WatchSharingRow: View {
     }
 
     private var goalAccessibility: Text {
-        guard !hidesGoalStatus, let values = person.summary?.now,
-              !values.energy.isEmpty, let reached = values.visibleGoalReached else { return Text("") }
-        return reached ? Text("Goal reached") : Text("Goal not reached")
+        person.summary?.now.goalAccessibility(hidesGoalStatus: hidesGoalStatus) ?? Text("")
     }
 }
 
@@ -356,15 +354,42 @@ private struct WatchSharingHistory: View {
                     .navigationTitle(Text(snapshot.dayTitle()))
                     .toolbarTitleDisplayMode(.inline)
                 } label: {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(snapshot.dayTitle()).font(.caption2).foregroundStyle(.secondary)
-                        WatchSharingBalanceText(values: snapshot.now, unit: snapshot.energyUnit.rawValue)
-                            .font(.callout).lineLimit(1).minimumScaleFactor(0.8)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    WatchSharingHistoryRow(snapshot: snapshot, hidesGoalStatus: hidesGoalStatus)
                 }
             }
         }
+    }
+}
+
+private struct WatchSharingHistoryRow: View {
+    @Environment(\.dynamicTypeSize) private var dynamicType
+    let snapshot: CalorieCardSnapshot
+    let hidesGoalStatus: Bool
+
+    var body: some View {
+        HStack(spacing: 8) {
+            if !dynamicType.isAccessibilitySize {
+                WatchSharingRing(
+                    snapshot: snapshot, mode: .now, hidesGoalStatus: hidesGoalStatus,
+                    style: .history
+                )
+                .frame(width: 28, height: 28)
+                .offset(y: 2)
+            }
+            VStack(alignment: .leading, spacing: 0) {
+                Text(snapshot.dayTitle())
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                WatchSharingBalanceText(values: snapshot.now, unit: snapshot.energyUnit.rawValue)
+                    .font(.footnote)
+            }
+            .lineLimit(dynamicType.isAccessibilitySize ? nil : 1)
+            .minimumScaleFactor(dynamicType.isAccessibilitySize ? 1 : 0.8)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityValue(snapshot.now.goalAccessibility(hidesGoalStatus: hidesGoalStatus))
     }
 }
 
@@ -413,30 +438,47 @@ private struct WatchSharingPauseControl: View {
 }
 
 private struct WatchSharingRing: View {
+    enum Style {
+        case summary, history
+    }
+
     let snapshot: CalorieCardSnapshot?
     let mode: GraphMode
     let hidesGoalStatus: Bool
+    var style: Style = .summary
 
     var body: some View {
         GeometryReader { geometry in
             let size = min(geometry.size.width, geometry.size.height)
             let values = mode == .midnight ? snapshot?.midnight ?? snapshot?.now : snapshot?.now
+            let configuration = configuration(for: size)
             CalorieCircleGraph(
                 energy: values?.energy ?? EnergyBalance(active: 0, resting: 0, consumed: 0),
-                configuration: .init(lineWidth: size * 0.09, ringSpacing: size * 0.025, segmentGap: size * 0.025),
+                configuration: configuration,
                 palette: .init(burned: snapshot?.appearance.burned.color(in: .dark) ?? .clear,
                                consumed: snapshot?.appearance.consumed.color(in: .dark) ?? .clear,
                                empty: snapshot?.appearance.graphEmpty.color(in: .dark) ?? Color(white: 0.28))
             )
             .overlay {
                 if !hidesGoalStatus, let values, !values.energy.isEmpty, let reached = values.visibleGoalReached {
+                    let outerRadius = (size - configuration.fitted(to: size).lineWidth) / 2
                     Image(systemName: reached ? "checkmark" : "xmark")
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(.secondary).offset(y: 2)
+                        .font(.system(size: style == .history ? 6 : 10, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                        .offset(y: style == .history ? outerRadius - 2 : 2)
                 }
             }
         }
         .accessibilityHidden(true)
+    }
+
+    private func configuration(for size: CGFloat) -> CalorieCircleConfiguration {
+        if style == .history {
+            var configuration = GraphContext.circle.configuration(for: size, cutout: 0.2)
+            configuration.segmentGap = configuration.ringSpacing
+            return configuration
+        }
+        return .init(lineWidth: size * 0.09, ringSpacing: size * 0.025, segmentGap: size * 0.025)
     }
 }
 
@@ -465,6 +507,11 @@ private struct WatchSharingTimestamp: View {
 private extension CalorieCardSnapshot.ModeValues {
     var balanceTitle: LocalizedStringResource {
         balance == 0 ? "Balance" : balance > 0 ? "Deficit" : "Surplus"
+    }
+
+    func goalAccessibility(hidesGoalStatus: Bool) -> Text {
+        guard !hidesGoalStatus, !energy.isEmpty, let reached = visibleGoalReached else { return Text("") }
+        return reached ? Text("Goal reached") : Text("Goal not reached")
     }
 }
 

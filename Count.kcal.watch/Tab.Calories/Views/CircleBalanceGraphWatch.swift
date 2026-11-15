@@ -27,41 +27,13 @@ struct CircleBalanceGraphWatch: View {
 
                 CalorieCircleGraph(
                     energy: mode == .now ? day.sample.now : day.sample.midnight,
-                    configuration: CalorieCircleConfiguration(
-                        lineWidth: lineWidth(for: diameter),
-                        ringSpacing: ringSpacing(for: diameter),
-                        openAngle: .degrees(cutout * 360)
-                    ),
+                    configuration: context.configuration(for: diameter, cutout: cutout),
                     palette: palette,
                     rendering: context == .app || context == .toolbar ? .live : .widget
                 )
                 .frame(width: diameter, height: diameter)
                 .frame(width: geometry.size.width, height: geometry.size.height)
             }
-        }
-    }
-
-}
-
-extension CircleBalanceGraphWatch {
-
-    private func lineWidth(for diameter: CGFloat) -> CGFloat {
-        switch context {
-            case .app: diameter * 0.08
-            case .toolbar: diameter * 0.13
-            case .circle: 4
-            case .circleFull: 8
-            case .circleFuller: 10
-            case .circleThick: 6
-        }
-    }
-
-    private func ringSpacing(for diameter: CGFloat) -> CGFloat {
-        switch context {
-            case .app, .toolbar: lineWidth(for: diameter) * 0.25
-            case .circle: 1
-            case .circleFull, .circleFuller: 2
-            case .circleThick: 2.5
         }
     }
 
@@ -97,4 +69,16 @@ enum GraphContext {
     case circleThick
     case circleFull
     case circleFuller
+
+    func configuration(for diameter: CGFloat, cutout: Double) -> CalorieCircleConfiguration {
+        let (lineWidth, ringSpacing): (CGFloat, CGFloat) = switch self {
+            case .app: (diameter * 0.08, diameter * 0.08 * 0.25)
+            case .toolbar: (diameter * 0.13, diameter * 0.13 * 0.25)
+            case .circle: (4, 1)
+            case .circleThick: (6, 2.5)
+            case .circleFull: (8, 2)
+            case .circleFuller: (10, 2)
+        }
+        return .init(lineWidth: lineWidth, ringSpacing: ringSpacing, openAngle: .degrees(cutout * 360))
+    }
 }
