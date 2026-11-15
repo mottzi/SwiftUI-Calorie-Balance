@@ -640,25 +640,25 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ""
+            "value" : "%lld"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ""
+            "value" : "%lld"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ""
+            "value" : "%lld"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : ""
+            "value" : "%lld"
           }
         }
       }
@@ -2234,37 +2234,37 @@
         }
       }
     },
-    "Both of you stop sharing %@. %@ stays shared. Restoring removed days requires %@'s approval." : {
+    "Both of you stop sharing %@. %@ stays shared. To restore removed options, %@ must agree." : {
       "comment" : "Partial reduction confirmation. Arguments are removed scopes, retained scopes, and the person who must approve restoring removed scopes.",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ihr teilt %1$@ nicht mehr miteinander. %2$@ bleibt geteilt. Um entfernte Tage wieder zu teilen, muss %3$@ zustimmen."
+            "value" : "Ihr teilt %1$@ nicht mehr miteinander. %2$@ bleibt geteilt. Um entfernte Optionen wieder zu aktivieren, muss %3$@ zustimmen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Both of you stop sharing %@. %@ stays shared. Restoring removed days requires %@'s approval."
+            "value" : "Both of you stop sharing %@. %@ stays shared. To restore removed options, %@ must agree."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ambos dejaréis de compartir %1$@. %2$@ seguirá compartiéndose. Para volver a compartir los días retirados se necesita la aprobación de %3$@."
+            "value" : "Ambos dejaréis de compartir %1$@. %2$@ seguirá compartiéndose. Para volver a activar las opciones retiradas se necesita la aprobación de %3$@."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vous cessez tous les deux de partager %1$@. %2$@ reste partagé. Partager à nouveau les jours retirés nécessite l'accord de %3$@."
+            "value" : "Vous cessez tous les deux de partager %1$@. %2$@ reste partagé. Réactiver les options retirées nécessite l'accord de %3$@."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "双方将停止分享%1$@。%2$@仍将继续分享。重新分享已移除的日期需要%3$@同意。"
+            "value" : "双方将停止分享%1$@。%2$@仍将继续分享。恢复已移除的共享选项需要%3$@同意。"
           }
         }
       }
@@ -3141,7 +3141,32 @@
       }
     },
     "Cards appear when both iPhones finish setting up sharing." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Karten erscheinen, sobald das Teilen auf beiden iPhones eingerichtet ist."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las tarjetas aparecerán cuando ambos iPhone terminen de configurar el uso compartido."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les cartes apparaissent une fois le partage configuré sur les deux iPhone."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "两部 iPhone 都完成共享设置后，卡片就会显示。"
+          }
+        }
+      }
     },
     "Cards appear when both iPhones finish setting up sharing. Pull down to try again." : {
       "comment" : "Calorie card sharing interface and consent.",
@@ -5219,7 +5244,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aktiviere Heute oder Letzte 6 Tage, um tägliche Zielergebnisse zu teilen."
+            "value" : "Aktiviere Heute oder Vorherige 6 Tage, um tägliche Zielergebnisse zu teilen."
           }
         },
         "en" : {
@@ -5926,7 +5951,32 @@
       }
     },
     "Finishing invitation…" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einladung wird abgeschlossen …"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalizando invitación…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finalisation de l’invitation…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在完成邀请…"
+          }
+        }
+      }
     },
     "Food was recorded after fasting was confirmed." : {
       "extractionState" : "manual",
@@ -9538,7 +9588,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Letzte 6 Tage und Zielstatus & Serie"
+            "value" : "Vorherige 6 Tage und Zielstatus & Serie"
           }
         },
         "en" : {
@@ -10832,7 +10882,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Repos calories"
+            "value" : "Calories au repos"
           }
         },
         "zh-Hans" : {
@@ -15213,7 +15263,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Heute, letzte 6 Tage und Zielstatus & Serie"
+            "value" : "Heute, Vorherige 6 Tage und Zielstatus & Serie"
           }
         },
         "en" : {
@@ -15653,7 +15703,32 @@
       }
     },
     "Updates arrive when the other person's iPhone sends them." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktualisierungen kommen an, sobald das iPhone der anderen Person sie sendet."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las actualizaciones llegan cuando el iPhone de la otra persona las envía."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les mises à jour arrivent lorsque l’iPhone de l’autre personne les envoie."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "对方的 iPhone 发送更新后，你就会收到。"
+          }
+        }
+      }
     },
     "Updates arrive when the other person's iPhone sends them. Pull down to check for an update." : {
       "comment" : "Calorie card sharing interface and consent.",
@@ -17099,6 +17174,41 @@
         }
       }
     },
+    "You started sharing with %@ today." : {
+      "comment" : "Sharing duration on the day both people accepted sharing. The argument is the other person's name.",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du teilst seit heute mit %@."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You started sharing with %@ today."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartes con %@ desde hoy."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous partagez avec %@ depuis aujourd’hui."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你从今天开始与%@共享。"
+          }
+        }
+      }
+    },
     "You will share calorie cards with each other through iCloud." : {
       "comment" : "Calorie card sharing interface and consent.",
       "extractionState" : "stale",
@@ -17135,7 +17245,7 @@
         }
       }
     },
-    "You've been sharing your calorie balance with %@ for %lld days." : {
+    "You've been sharing with %@ for %lld days." : {
       "comment" : "Uninterrupted sharing duration. First argument is the other person's name; second is the number of local calendar days since acceptance.",
       "localizations" : {
         "de" : {
@@ -17144,13 +17254,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Du teilst deine Kalorienbilanz seit %2$lld Tag mit %1$@."
+                  "value" : "Du teilst seit %2$lld Tag mit %1$@."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Du teilst deine Kalorienbilanz seit %2$lld Tagen mit %1$@."
+                  "value" : "Du teilst seit %2$lld Tagen mit %1$@."
                 }
               }
             }
@@ -17162,13 +17272,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "You've been sharing your calorie balance with %1$@ for %2$lld day."
+                  "value" : "You've been sharing with %1$@ for %2$lld day."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "You've been sharing your calorie balance with %1$@ for %2$lld days."
+                  "value" : "You've been sharing with %1$@ for %2$lld days."
                 }
               }
             }
@@ -17180,13 +17290,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Compartes tu balance calórico con %1$@ desde hace %2$lld día."
+                  "value" : "Compartes con %1$@ desde hace %2$lld día."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Compartes tu balance calórico con %1$@ desde hace %2$lld días."
+                  "value" : "Compartes con %1$@ desde hace %2$lld días."
                 }
               }
             }
@@ -17198,13 +17308,13 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Tu partages ton bilan calorique avec %1$@ depuis %2$lld jour."
+                  "value" : "Vous partagez avec %1$@ depuis %2$lld jour."
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "Tu partages ton bilan calorique avec %1$@ depuis %2$lld jours."
+                  "value" : "Vous partagez avec %1$@ depuis %2$lld jours."
                 }
               }
             }
@@ -17216,51 +17326,16 @@
               "one" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "你已与%1$@分享热量平衡%2$lld天。"
+                  "value" : "你已与%1$@共享%2$lld天。"
                 }
               },
               "other" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "你已与%1$@分享热量平衡%2$lld天。"
+                  "value" : "你已与%1$@共享%2$lld天。"
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "You've been sharing your calorie balance with %@ since today." : {
-      "comment" : "Sharing duration on the day both people accepted sharing. The argument is the other person's name.",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du teilst deine Kalorienbilanz seit heute mit %@."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You've been sharing your calorie balance with %@ since today."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compartes tu balance calórico con %@ desde hoy."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tu partages ton bilan calorique avec %@ depuis aujourd’hui."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "从今天起，你一直在与%@分享热量平衡。"
           }
         }
       }

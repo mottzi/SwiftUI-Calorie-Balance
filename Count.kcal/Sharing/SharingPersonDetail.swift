@@ -334,7 +334,7 @@ private struct SharingPermissionsView: View {
             return Text("Ask \(peerName) to resume sharing \(Text(scopes.sharingDescription)). Sharing stays paused until the request is accepted.")
         }
         if additions.isEmpty {
-            return Text("Both of you stop sharing \(Text(reductions.sharingDescription)). \(Text(scopes.sharingDescription)) stays shared. Restoring removed days requires \(peerName)'s approval.")
+            return Text("Both of you stop sharing \(Text(reductions.sharingDescription)). \(Text(scopes.sharingDescription)) stays shared. To restore removed options, \(peerName) must agree.")
         }
         if reductions.isEmpty {
             return Text("Ask \(peerName) to add \(Text(additions.sharingDescription)). \(Text(originalScopes.sharingDescription)) stays shared until the request is accepted.")
