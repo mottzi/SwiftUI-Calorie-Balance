@@ -1,6 +1,6 @@
 # Prose output
 
-Use `/Users/berken/.agents/skills/unslop/SKILL.md` for prose presented to the user.
+Use `~/.agents/skills/unslop/SKILL.md` for prose presented to the user when the skill is installed on the current Mac. If it is missing, follow the session's writing instructions.
 
 ## Downloads folder
 
